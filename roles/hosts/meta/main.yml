@@ -1,0 +1,16 @@
+galaxy_info:
+  author: Andrew Savchenko
+  description: Hosts sanitizer
+  company: stoptracking.net
+
+  issue_tracker_url: https://github.com/stoptracking/playbook/issues
+  license: MIT
+  min_ansible_version: 2.4
+  # github_branch:
+
+  galaxy_tags:
+    - hosts
+    - dns
+    - stoptracking
+
+dependencies: []

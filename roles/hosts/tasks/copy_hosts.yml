@@ -1,0 +1,11 @@
+---
+- name: Copy /etc/hosts.blocked
+  become: yes
+  become_user: root
+  copy:
+    src: "{{st_hosts}}/hosts_blocked"
+    dest: /etc/hosts.blocked
+    owner: root
+    mode: 0644
+  notify:
+    - restart {{resolver}}

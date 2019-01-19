@@ -1,0 +1,10 @@
+---
+- name: Download latest hosts from the mirrors
+  include: fetch_hosts
+  force: yes
+
+- name: Assemble hosts in the single file and clean-up afterwards
+  include: assemble_hosts
+
+- name: Copy new `hosts.blocked` to the /etc
+  include: copy_hosts

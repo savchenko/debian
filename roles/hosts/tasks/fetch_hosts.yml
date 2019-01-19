@@ -1,0 +1,51 @@
+---
+- name: Create hosts directory under /tmp
+  file: path={{st_hosts}} state=directory
+  run_once: true
+
+- name: Update Malwaredomains hosts (malwaredomains.com)
+  get_url:
+    url: https://malwaredomains.usu.edu/justdomains
+    dest: {{st_hosts_in}}/hosts_malware
+
+- name: Update Spam404 hosts (spam404.com)
+  get_url:
+    url: https://raw.githubusercontent.com/Dawsey21/Lists/master/main-blacklist.txt
+    dest: {{st_hosts_in}}/hosts_404
+
+- name: Disconnect simple tracking
+  get_url:
+    url: https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+    dest: {{st_hosts_in}}/hosts_disconnect_t
+
+- name: Disconnect simple ads
+  get_url:
+    url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+    dest: {{st_hosts_in}}/hosts_disconnect_ad
+
+- name: Disconnect simple malvertising
+  get_url:
+    url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+    dest: {{st_hosts_in}}/hosts_disconnect_mt
+
+- name: Disconnect simple malware
+  get_url:
+    url: https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt
+    dest: {{st_hosts_in}}/hosts_disconnect_m
+
+- name: StevenBlack
+  get_url:
+    url: https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-social/hosts
+    dest: {{st_hosts_in}}/hosts_black
+
+- name: OpenPhish
+  get_url:
+    url: https://openphish.com/feed.txt
+    dest: {{st_hosts_in}}/hosts_fish
+
+- name: Update YoYo hosts (yoyo.org)
+  get_url:
+    url: https://pgl.yoyo.org/as/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+    dest: {{st_hosts_in}}/hosts_yoyo
+
+

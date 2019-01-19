@@ -1,0 +1,6 @@
+---
+resolver: "kresd"
+st_hosts: "/tmp/st-hosts"
+st_hosts_in: "{{st_hosts}}/incoming"
+st_hosts_blacklist: "{{playbook_dir}}/files/blacklist"
+st_hosts_whitelist: "{{playbook_dir}}/files/whitelist"
