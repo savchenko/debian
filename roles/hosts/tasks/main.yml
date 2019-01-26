@@ -1,10 +1,13 @@
 ---
 - name: Download latest hosts from the mirrors
-  include: fetch_hosts
-  force: yes
+  include_tasks: fetch_hosts.yml
+  run_once: yes
+  delegate_to: localhost
 
 - name: Assemble hosts in the single file and clean-up afterwards
-  include: assemble_hosts
+  include_tasks: assemble_hosts.yml
+  run_once: yes
+  delegate_to: localhost
 
 - name: Copy new `hosts.blocked` to the /etc
-  include: copy_hosts
+  include_tasks: copy_hosts.yml

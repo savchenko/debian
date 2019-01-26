@@ -8,6 +8,6 @@
     dest: "{{st_hosts}}/hosts_combined"
 
 - name: Cleanup hosts file, add our favourites and remove questionable entries
-  shell: python {{playbook_dir}}/files/make_hosts.py -i hosts_combined -f {{st_hosts_blacklist}} -w {{st_hosts_whitelist}} -o hosts_blocked
+  shell: python {{playbook_dir}}/roles/hosts/files/make_hosts.py -i hosts_combined -b {{st_hosts_blacklist}} -w {{st_hosts_whitelist}} -o hosts_blocked
   args:
     chdir: "{{st_hosts}}"

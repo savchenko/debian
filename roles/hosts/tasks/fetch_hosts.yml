@@ -1,51 +1,64 @@
 ---
-- name: Create hosts directory under /tmp
-  file: path={{st_hosts}} state=directory
-  run_once: true
+- name: Create directories under /tmp
+  file:
+    path: "{{item}}"
+    state: directory
+  loop:
+    - "{{st_hosts}}"
+    - "{{st_hosts_in}}"
 
 - name: Update Malwaredomains hosts (malwaredomains.com)
   get_url:
     url: https://malwaredomains.usu.edu/justdomains
-    dest: {{st_hosts_in}}/hosts_malware
+    dest: "{{st_hosts_in}}/hosts_malware"
+    force: yes
 
 - name: Update Spam404 hosts (spam404.com)
   get_url:
     url: https://raw.githubusercontent.com/Dawsey21/Lists/master/main-blacklist.txt
-    dest: {{st_hosts_in}}/hosts_404
+    dest: "{{st_hosts_in}}/hosts_404"
+    force: yes
 
 - name: Disconnect simple tracking
   get_url:
     url: https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
-    dest: {{st_hosts_in}}/hosts_disconnect_t
+    dest: "{{st_hosts_in}}/hosts_disconnect_t"
+    force: yes
 
 - name: Disconnect simple ads
   get_url:
     url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-    dest: {{st_hosts_in}}/hosts_disconnect_ad
+    dest: "{{st_hosts_in}}/hosts_disconnect_ad"
+    force: yes
 
 - name: Disconnect simple malvertising
   get_url:
     url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
-    dest: {{st_hosts_in}}/hosts_disconnect_mt
+    dest: "{{st_hosts_in}}/hosts_disconnect_mt"
+    force: yes
 
 - name: Disconnect simple malware
   get_url:
     url: https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt
-    dest: {{st_hosts_in}}/hosts_disconnect_m
+    dest: "{{st_hosts_in}}/hosts_disconnect_m"
+    force: yes
 
 - name: StevenBlack
   get_url:
     url: https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-social/hosts
-    dest: {{st_hosts_in}}/hosts_black
+    dest: "{{st_hosts_in}}/hosts_black"
+    force: yes
 
 - name: OpenPhish
   get_url:
     url: https://openphish.com/feed.txt
-    dest: {{st_hosts_in}}/hosts_fish
+    dest: "{{st_hosts_in}}/hosts_fish"
+    force: yes
 
 - name: Update YoYo hosts (yoyo.org)
   get_url:
     url: https://pgl.yoyo.org/as/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
-    dest: {{st_hosts_in}}/hosts_yoyo
+    dest: "{{st_hosts_in}}/hosts_yoyo"
+    force: yes
 
 

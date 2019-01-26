@@ -87,6 +87,7 @@ hosts_data.insert(0, '# ' + str(timestamp) + '\n')
 output.writelines(hosts_data)
 output.close()
 
+# TODO: Replace faux A record with NXDOMAIN
 if args.unbound:
     try:
         unbound = open(args.unbound, 'w+')
