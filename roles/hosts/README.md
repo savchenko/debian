@@ -5,22 +5,28 @@ Can include arbitrary websites you don't like.
 
 Requirements
 ------------
-By default restarts `kresd` (knot-resolver), can be easility adapted for DNS server of your choice.
+Ansible >=2.4  
+Python 2.X to run `./files/make_hosts.py`
 
 Role Variables
 --------------
-resolver: DNS resolver
+`resolver` DNS resolver
 
 Dependencies
 ------------
-Uses python to run `./files/make_hosts.py`
+None
 
 Example Playbook
 ----------------
-```
-    - hosts: localnet
-      roles:
-         - { role: username.rolename, resolver: kresd }
+```yaml
+---
+- hosts: laptop, server
+  tasks:
+  - name: Execute `hosts` role
+    include_role:
+      name: hosts
+    vars:
+      resolver: dnsmasq
 ```
 
 License
@@ -29,5 +35,5 @@ MIT
 
 Author Information
 ------------------
-Andrew Savchenko
+Andrew Savchenko  
 https://savchenko.net
