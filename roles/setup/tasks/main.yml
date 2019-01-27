@@ -1,0 +1,24 @@
+---
+- name: Remove unwanted packages
+  include_tasks:
+    file: remove_packages.yml
+    apply:
+      tags:
+        - packages_remove
+      become: yes
+
+- name: Prepare repositories
+  include_tasks:
+    file: packages_setup_repos.yml
+    apply:
+      tags:
+        - packages_setup_repos
+      become: yes
+
+# - name: Install packages
+#   include_tasks:
+#     file: remove_packages.yml
+#     apply:
+#       tags:
+#         - packages_install
+#       become: yes
