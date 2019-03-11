@@ -1,0 +1,49 @@
+---
+- name: Stop SSH connections from being marked as invalid
+  # Fails when using "copy" module
+  shell: echo 1 > /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
+
+- name: Ensure UFW is installed
+  apt:
+    name: ufw
+    state: present
+
+- name: Stop UFW to prevent casualties
+  service:
+    name: ufw
+    state: stopped
+
+- name: Remove all rules
+  shell: ufw --force reset
+
+- name: Limit SSH connections
+  ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+    comment: Limit SSH
+
+- name: Disable ipv6
+  lineinfile:
+    path: /etc/ufw/ufw.conf
+    line: "IPV6=no"
+    insertafter: EOF
+
+- name: Don't autoconfigure ipv6
+  # Note: single-quoted for a reason
+  replace:
+    path: /etc/ufw/sysctl.conf
+    regexp: '^#(net\/ipv6\/conf\/\w*\/autoconf\=0)'
+    replace: '\1'
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+    logging: no
+
+- name: Ensure UFW is up and running
+  service:
+    name: ufw
+    state: started

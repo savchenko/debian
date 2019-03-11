@@ -1,0 +1,12 @@
+---
+- name: Purge contradictionary packages
+  apt:
+    state: absent
+    purge: yes
+    name:
+    - rpcbind
+    - exim4
+    - bind9
+    - avahi-daemon
+    - dnsmasq
+    - ntp

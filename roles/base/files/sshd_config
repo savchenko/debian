@@ -1,0 +1,57 @@
+#
+# Mon 11 Mar 17:45:03 ACDT 2019
+# Debian-specific SSHD
+#
+
+Port 22
+Protocol 2
+UseDNS no
+AddressFamily inet
+Compression delayed
+
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
+
+LogLevel ERROR
+UsePrivilegeSeparation sandbox
+
+StrictModes yes
+LoginGraceTime 5
+MaxAuthTries 1
+MaxSessions 3
+MaxStartups 10:50:100
+ClientAliveInterval 60
+ClientAliveCountMax 5
+
+PubkeyAuthentication yes
+HostbasedAuthentication no
+PasswordAuthentication no
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+KerberosAuthentication no
+GSSAPIAuthentication no
+IgnoreRhosts yes
+GatewayPorts no
+AllowTcpForwarding no
+X11Forwarding no
+
+UsePAM no
+PrintMotd no
+PrintLastLog no
+VersionAddendum none
+DebianBanner no
+Banner /dev/null
+
+Subsystem sftp internal-sftp
+
+Match Group agents
+    PasswordAuthentication no
+    ChrootDirectory %h
+    AllowTcpForwarding no
+    AllowAgentForwarding no
+    PermitTunnel no
+    X11Forwarding no

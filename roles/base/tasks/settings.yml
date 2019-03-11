@@ -1,0 +1,33 @@
+---
+- name: Copy /etc/ssh/sshd_config
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    mode: 0644
+  notify:
+    - restart sshd
+
+- name: Copy /etc/sysctl.conf
+  copy:
+    src: sysctl.conf
+    dest: /etc/sysctl.conf
+    owner: root
+    mode: 0644
+  notify:
+    - reload sysctl
+
+- name: Blacklist SPECK module
+  copy:
+    content: "blacklist CONFIG_CRYPTO_SPECK"
+    dest: /etc/modprobe.d/blacklist.conf
+  become: yes
+  when: ansible_distribution == 'Debian'
+
+- name: Modify /etc/issue
+  copy:
+    dest: "{{item}}"
+    content: 'Access to this computer is prohibited.'
+  with_items:
+    - /etc/issue
+    - /etc/issue.net

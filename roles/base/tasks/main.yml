@@ -1,0 +1,39 @@
+---
+# - name: Boostrap vital settings
+#   include_tasks: bootstrap.yml
+#   become: yes
+
+# - name: Remove unwanted packages
+#   include_tasks: packages_remove.yml
+#   become: yes
+
+# - name: Prepare repositories
+#   include_tasks: packages_setup_repos.yml
+#   become: yes
+
+# - name: Update system
+#   include_role:
+#     name: maintenance
+#     tasks_from: apt_upgrade
+#     apply:
+#       become: yes
+
+# - name: Set various settings in "/etc"
+#   include_tasks: settings.yml
+#   become: yes
+
+# - name: Set timezone, locale and "timesyncd"
+#   include_tasks: time.yml
+#   become: yes
+
+# - name: Create unique DH moduli
+#   include_tasks: moduli.yml
+#   become: yes
+
+# - name: Configure UFW
+#   include_tasks: ufw.yml
+#   become: yes
+
+- name: Install packages
+  include_tasks: packages_install.yml
+  become: yes

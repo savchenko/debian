@@ -1,0 +1,10 @@
+# Main
+deb https://deb.debian.org/debian/ stretch main contrib non-free
+deb-src https://deb.debian.org/debian/ stretch main contrib non-free
+
+# Security
+deb http://security.debian.org/debian-security/ stretch/updates main contrib non-free
+deb-src http://security.debian.org/debian-security/ stretch/updates main contrib non-free
+
+# Backports
+deb https://deb.debian.org/debian/ stretch-backports main contrib non-free

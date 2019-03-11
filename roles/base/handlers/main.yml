@@ -1,0 +1,23 @@
+---
+- name: restart sshd
+  service: name=sshd state=restarted
+  listen: "restart sshd"
+
+- name: restart ufw
+  service: name=ufw state=restarted
+  listen: "restart ufw"
+
+- name: reload sysctl
+  shell: sysctl --system
+  listen: "reload sysctl"
+
+- name: restart timesyncd
+  service: name=systemd-timesyncd state=restarted
+  listen: "restart timesyncd"
+
+- name: reboot
+  shell: sleep 2 && shutdown -r now 'Ansible maintenance reboot'
+  async: 1
+  poll: 0
+  ignore_errors: true
+  listen: "reboot computer"
