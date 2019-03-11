@@ -1,5 +1,0 @@
----
-- name: Add 3rd party GPG keys
-  shell: "{{item}}"
-  with_items:
-    - "apt-key add {{playbook_dir}}/roles/setup/files/cz-nic.key"
