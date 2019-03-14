@@ -4,7 +4,14 @@ Install via `ansible-galaxy install stoptracking.playbook` or by cloning this re
 
 ## Currently available roles
 
+### Base
+Basic preparation of the target host: updating some of the system settings and packages installation.  
+Unequivocally, this is opinionated role, please review `packages_install.yml` to ensure it is in line with your preferences.
+
 ### Hosts
-Creates `/etc/hosts.blocked` list to supress advertisement and tracking.
+Creates `/etc/hosts.blocked` list to suppress advertisement and tracking.
 Can include arbitrary websites you don't like.  
 After the file is updated, attempts to restart service defined in `resolver` variable, by default `dnsmasq`.
+
+### Maintenance
+Currently contains only `apt_upgrade` task which is sourced from the "Base" role. Stay tuned.

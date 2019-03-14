@@ -4,12 +4,12 @@ Setup some basic packages and settings that will be needed irrespective of targe
 
 Requirements
 ------------
-Ansible >=2.4
+Ansible >=2.4  
 Debian 9 (might work on its derivatives, however this is not guaranteed)
 
 Role Variables
 --------------
-`timezone` self-explanatory. Default is "UTC"
+`timezone` self-explanatory. Default is "UTC"  
 `locale` for example, "en_GB.UTF-8"
 
 Dependencies
