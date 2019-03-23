@@ -12,11 +12,8 @@
   become: yes
 
 - name: Update system
-  include_role:
-    name: maintenance
-    tasks_from: apt_upgrade
-    apply:
-      become: yes
+  include_tasks: apt_upgrade.yml
+  become: yes
 
 - name: Set various settings in "/etc"
   include_tasks: settings.yml
