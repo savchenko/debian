@@ -16,6 +16,3 @@ Supports automatic SSH keys propagation to the remote hosts.
 Creates `/etc/hosts.blocked` list to suppress advertisement and tracking.
 Can include arbitrary websites you don't like.  
 After the file is updated, attempts to restart service defined in `resolver` variable, by default `dnsmasq`.
-
-### Maintenance
-Currently contains only `apt_upgrade` task. Stay tuned.
