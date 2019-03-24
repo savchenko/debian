@@ -106,3 +106,4 @@ venv.bak/
 # tests
 /test_*.yml
 /roles/transfer-agent/files/id_rsa.pub
+inventory.ini
