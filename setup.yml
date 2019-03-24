@@ -1,8 +1,0 @@
----
-- hosts: laptop, server
-  tasks:
-  - name: Execute `setup` role
-    include_role:
-      name: setup
-    vars:
-      resolver: dnsmasq
