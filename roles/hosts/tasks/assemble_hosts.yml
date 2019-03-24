@@ -1,13 +1,13 @@
 ---
 - name: Be sure previous hosts-assembly is deleted
-  file: path={{st_hosts}}/hosts_combined state=absent
+  file: path={{ st_hosts }}/hosts_combined state=absent
 
 - name: Assemble downloaded host files into one
   assemble:
-    src: "{{st_hosts_in}}"
-    dest: "{{st_hosts}}/hosts_combined"
+    src: "{{ st_hosts_in }}"
+    dest: "{{ st_hosts }}/hosts_combined"
 
 - name: Cleanup hosts file, add our favourites and remove questionable entries
-  shell: python {{playbook_dir}}/roles/hosts/files/make_hosts.py -i hosts_combined -b {{st_hosts_blacklist}} -w {{st_hosts_whitelist}} -o hosts_blocked
+  shell: python {{ playbook_dir }}/roles/hosts/files/make_hosts.py -i hosts_combined -b {{ st_hosts_blacklist }} -w {{ st_hosts_whitelist }} -o hosts_blocked
   args:
-    chdir: "{{st_hosts}}"
+    chdir: "{{ st_hosts }}"

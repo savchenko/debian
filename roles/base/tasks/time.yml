@@ -1,20 +1,20 @@
 ---
-- name: Set default locale to "{{locale}}"
+- name: Set default locale to "{{ locale }}"
   debconf:
     name: locales
     question: locales/default_environment_locale
-    value: "{{locale}}"
+    value: "{{ locale }}"
     vtype: select
 
 - name: Generate locales
   debconf:
     name: locales
     question: locales/locales_to_be_generated
-    value: en_US.UTF-8 UTF-8, "{{locale}}" UTF-8
+    value: en_US.UTF-8 UTF-8, "{{ locale }}" UTF-8
     vtype: multiselect
 
 - name: Set timezone
-  shell: timedatectl set-timezone "{{timezone}}"
+  shell: timedatectl set-timezone "{{ timezone }}"
 
 - name: Ensure timesyncd is on
   shell: timedatectl set-ntp true

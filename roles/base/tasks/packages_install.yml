@@ -1,7 +1,7 @@
 ---
 - name: Install list of packages
   apt:
-    name: "{{pkg}}"
+    name: "{{ pkg }}"
   vars:
     pkg:
       - apt-listchanges

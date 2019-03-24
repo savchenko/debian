@@ -1,4 +1,4 @@
 ---
-- name: restart {{resolver}}
-  service: name={{resolver}} state=restarted
+- name: restart {{ resolver }}
+  service: name={{ resolver }} state=restarted
   become: yes

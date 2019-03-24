@@ -16,11 +16,11 @@
 
 - name: Set hostname to the value in inventory
   hostname:
-    name: "{{inventory_hostname}}"
+    name: "{{ inventory_hostname }}"
 
 - name: Add hostname to /etc/hosts
   lineinfile:
     dest: /etc/hosts
     regexp: '^127\.0\.0\.1[ \t]+localhost'
-    line: '127.0.0.1 localhost {{inventory_hostname}}'
+    line: '127.0.0.1 localhost {{ inventory_hostname }}'
     state: present
