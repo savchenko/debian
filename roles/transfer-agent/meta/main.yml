@@ -10,7 +10,8 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - Stretch
+        - stretch
+        - buster
 
   galaxy_tags:
     - rsync
