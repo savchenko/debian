@@ -1,0 +1,93 @@
+---
+- name: Create agents group
+  group:
+    name: "{{agent_group}}"
+    state: present
+
+- name: Create xfer user
+  user:
+    name: "{{agent_name}}"
+    shell: /bin/sh
+    groups: agents
+
+- name: Add pubkeys from current user
+  authorized_key:
+    user: "{{agent_name}}"
+    state: present
+    key: "{{item}}"
+  with_file:
+    - "~/.ssh/id_rsa.pub"
+  when: pubkey_from_current_user
+
+- name: Add other pubkeys
+  authorized_key:
+    user: "{{agent_name}}"
+    state: present
+    # Lookup is necessary as `authorized_key` expects content, not file.
+    key: "{{lookup('file',item)}}"
+  with_fileglob:
+    - "*.pub"
+  when: pubkey_from_others
+
+- name: chmod/chown homedir to make jail valid
+  file:
+    path: /home/{{agent_name}}
+    state: directory
+    mode: 0755
+    owner: root
+
+- name: Create data exchange directory
+  file:
+    path: /home/{{agent_name}}/data
+    state: directory
+    mode: 0755
+    owner: "{{agent_name}}"
+
+- name: Create system root dirs within chroot
+  file:
+    path: /home/{{agent_name}}/{{item}}
+    state: directory
+    owner: root
+  with_items:
+    - usr
+    - usr/bin
+    - bin
+    - lib
+    - lib/x86_64-linux-gnu
+    - lib64
+
+- name: Copy sh to chroot /bin
+  copy:
+    src: "/bin/{{item.src}}"
+    dest: "/home/{{agent_name}}/bin/{{item.dest}}"
+    mode: 0755
+  with_items:
+    - { src: "sh", dest: "sh" }
+
+- name: Copy rsync to chroot /usr/bin
+  copy:
+    src: "/usr/bin/{{item.src}}"
+    dest: "/home/{{agent_name}}/usr/bin/{{item.dest}}"
+    mode: 0755
+  with_items:
+    - { src: "rsync", dest: "rsync" }
+  when: rsync
+
+- name: Copy libs from /lib/x86_64-linux-gnu
+  copy:
+    src: "/lib/x86_64-linux-gnu/{{item.src}}"
+    dest: "/home/{{agent_name}}/lib/x86_64-linux-gnu/{{item.dest}}"
+    mode: 0755
+  with_items:
+    - { src: "libattr.so.1", dest: "libattr.so.1" }
+    - { src: "libacl.so.1", dest: "libacl.so.1" }
+    - { src: "libpopt.so.0", dest: "libpopt.so.0" }
+    - { src: "libc.so.6", dest: "libc.so.6" }
+
+- name: Copy ld-linux-x86-64.so
+  copy:
+    src: "/lib64/{{item.src}}"
+    dest: "/home/{{agent_name}}/lib64/{{item.dest}}"
+    mode: 0755
+  with_items:
+    - { src: "ld-linux-x86-64.so.2", dest: "ld-linux-x86-64.so.2" }

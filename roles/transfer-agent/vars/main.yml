@@ -1,0 +1,6 @@
+---
+agent_group: "agents"
+agent_name: "xfer"
+rsync: true
+pubkey_from_current_user: true
+pubkey_from_others: true
