@@ -8,6 +8,10 @@ Install via `ansible-galaxy install stoptracking.playbook` or by cloning this re
 Basic preparation of the target host: updating some of the system settings and packages installation.  
 Unequivocally, this is opinionated role, please review `packages_install.yml` to ensure it is in line with your preferences.
 
+### Transfer-agent
+Creates jailed user that has access only to the limited set of binaries (sh and rsync).
+Supports automatic SSH keys propagation to the remote hosts.
+
 ### Hosts
 Creates `/etc/hosts.blocked` list to suppress advertisement and tracking.
 Can include arbitrary websites you don't like.  

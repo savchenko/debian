@@ -1,6 +1,23 @@
 Transfer-agent
 =========
-Setup jailed user, useful for rsync/sftp.
+Setup jailed user, useful for rsync/sftp. Chroot example:  
+```
+.
+|-- bin
+|   `-- sh
+|-- data
+|-- lib
+|   `-- x86_64-linux-gnu
+|       |-- libacl.so.1
+|       |-- libattr.so.1
+|       |-- libc.so.6
+|       `-- libpopt.so.0
+|-- lib64
+|   `-- ld-linux-x86-64.so.2
+`-- usr
+    `-- bin
+        `-- rsync
+```
 
 Requirements
 ------------
