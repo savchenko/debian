@@ -9,5 +9,5 @@
   run_once: yes
   delegate_to: localhost
 
-- name: Copy new `hosts.blocked` to the /etc
+- name: Copy new `hosts_blocked` to the /etc
   include_tasks: copy_hosts.yml
