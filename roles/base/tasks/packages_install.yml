@@ -15,7 +15,8 @@
       - dfc
       - dnsutils
       - git
-      - gpgv2
+      - gnupg
+      - gnupg2
       - grc
       - htop
       - ioping
@@ -46,3 +47,6 @@
       - tree
       - unattended-upgrades
       - wget
+
+- name: Ensure ~/.gnupg is initialized
+  shell: gpg2 -k
