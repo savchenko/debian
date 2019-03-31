@@ -1,0 +1,38 @@
+---
+- name: Hush login message
+  file:
+    path: "{{ ansible_env.HOME }}/.hushlogin"
+    state: touch
+
+- name: Copy primary dotfiles to the remote machine
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.{{ item}}"
+  with_items:
+    - bash_profile
+    - bashrc
+    - curlrc
+    - gitconfig
+    - gitignore
+    - inputrc
+    - profile
+    - tmux.conf
+  when: ansible_connection != "local"
+
+- name: Copy SSH client config
+  copy:
+    src: ssh_config
+    dest: "{{ ansible_env.HOME }}/.ssh/config"
+
+- name: Don't use the same prefix in remote tmux
+  # This is normally done via `template`, but due to the small change required
+  # in the whole config, I have decided to keep handle it with `lineinfile` module
+  lineinfile:
+    path: ~/.tmux.conf
+    line: "# -- Replaced by Ansible --"
+    regexp: "{{ item }}"
+  with_items:
+    - "^unbind\ C-b"
+    - "^set\ -g\ prefix"
+    - "^bind\ C-Space"
+  when: ansible_connection != "local"
