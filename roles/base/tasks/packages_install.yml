@@ -14,17 +14,20 @@
       - debsums
       - dfc
       - dnsutils
+      - fzf
       - git
       - gnupg
       - gnupg2
       - grc
       - htop
       - ioping
+      - keychain
       - knot-resolver
       - knot-resolver-module-http
       - libpam-tmpdir
       - lshw
       - lsof
+      - lua5.3
       - man-db
       - mc
       - ncdu
@@ -50,3 +53,26 @@
 
 - name: Ensure ~/.gnupg is initialized
   shell: gpg2 -k
+
+- name: Set lua5.3 as default `lua` command
+  shell: {{ item }}
+    with_items:
+      - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.3 1
+      - sudo update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.3 130 --slave /usr/share/man man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.3.1.gz
+      - sudo update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.3.1.gz
+  become: yes
+
+- name: Copy z.lua into `/usr/local/bin` and make it executable
+  copy:
+    src: z.lua
+    dest: /usr/local/bin/z.lua
+    attr: +x
+
+- name: Install .deb packages that are currently not in Debian repos
+  apt:
+    allow_unauthenticated: yes
+    deb: {{ item }}
+    with_items:
+      - hstr_2.0.0-1_amd64.deb
+      - bat_0.10.0_amd64.deb
+    when: ansible_architecture == "x86_64"
