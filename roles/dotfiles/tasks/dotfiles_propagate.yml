@@ -26,7 +26,7 @@
 
 - name: Don't use the same prefix in remote tmux
   # This is normally done via `template`, but due to the small change required
-  # in the whole config, I have decided to keep handle it with `lineinfile` module
+  # in the whole config, I have decided to handle it with `lineinfile` module
   lineinfile:
     path: ~/.tmux.conf
     line: "# -- Replaced by Ansible --"
