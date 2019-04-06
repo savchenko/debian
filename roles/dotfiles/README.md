@@ -9,13 +9,8 @@ Corresponding application (see below).
 
 Role Variables
 --------------
-Variables below define if dotfiles for the corresponding application should be installed.  
-If variable is declared - respective settings will be copied to the target host.  
-`tmux`
-`weechat`
-`neovim`
-`neomutt`
-
+`link_to_localhost` - defines if Ansible should link dotfiles to the _local_ $HOME.
+`neovim` - all-inclusive, 5-stars neovim setup.
 
 Dependencies
 ------------
@@ -25,16 +20,14 @@ Example Playbook
 ----------------
 ```yaml
 ---
-- hosts: laptop, server
+- hosts: server, another_server
   tasks:
   - name: Execute `dotfiles` role
     include_role:
       name: dotfiles
     vars:
-      tmux: true
-      weechat: true
       neovim: true
-      neomutt: true
+      link_to_localhost: false
 ```
 
 License

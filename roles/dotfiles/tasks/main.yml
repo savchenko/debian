@@ -4,9 +4,9 @@
 
 - name: Setup NeoVim
   include_tasks: dotfiles_neovim.yml
-  when: neovim
+  when: neovim == true
 
 - name: Link dotfiles to $HOME
   import_tasks: dotfiles_link.yml
   delegate_to: localhost
-  when: link_at_localhost
+  when: link_to_localhost == true
