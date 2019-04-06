@@ -8,6 +8,9 @@ Install via `ansible-galaxy install stoptracking.playbook` or by cloning this re
 Basic preparation of the target host: updating some of the system settings and packages installation.  
 Unequivocally, this is opinionated role, please review `packages_install.yml` to ensure it is in line with your preferences.
 
+### Dotfiles
+Propagates dotfiles (aka "settings") to the remote host. Optionally links to the local $HOME.
+
 ### Transfer-agent
 Creates jailed user that has access only to the limited set of binaries (sh and rsync).  
 Supports automatic SSH keys propagation to the remote hosts.

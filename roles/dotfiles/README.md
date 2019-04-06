@@ -9,7 +9,7 @@ Corresponding application (see below).
 
 Role Variables
 --------------
-`link_to_localhost` - defines if Ansible should link dotfiles to the _local_ $HOME.
+`link_to_localhost` - defines if Ansible should link dotfiles to the _local_ $HOME.  
 `neovim` - all-inclusive, 5-stars neovim setup.
 
 Dependencies
