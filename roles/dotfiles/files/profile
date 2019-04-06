@@ -1,0 +1,20 @@
+#
+# TL;DR:
+#
+#     ~/.bash_profile should be super-simple and just load .profile and .bashrc (in that order)
+#     ~/.profile has the stuff NOT specifically related to bash, such as environment variables (PATH and friends)
+#     ~/.bashrc has anything you'd want at an interactive command line. Command prompt, EDITOR variable, bash aliases
+#
+export PATH=$PATH:$HOME/.local/bin
+export EDITOR="nvim -u $HOME/.config/nvim/init.vim"
+export MP_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
+export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
+export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
+export GNC_DATA_HOME="$HOME/.local/share/gnucash"
+export GNC_CONFIG_HOME="$HOME/.config/gnucash"
+export CCACHE_DIR="$HOME/.cache/ccache"
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export NVIM_GTK_NO_WINDOW_DECORATION=1
+export NVIM_GTK_PREFER_DARK_THEME=1
+export NVIM_GTK_NO_HEADERBAR=1
+export HSTR_CONFIG=hicolor
