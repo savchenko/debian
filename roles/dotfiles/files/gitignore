@@ -1,0 +1,24 @@
+# Python
+*.pyc
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+vim_session
+shutdown_session.vim
+
+# Cache files
+._*
+*~
+*.swo
+*.swp
+[Tt]humbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Specific paths
+vim/bundle/
+vim/undo/
+vim/tmp/

@@ -1,0 +1,576 @@
+"
+" Shameless compilation of different tips found over the Internet
+"
+" ----------------------------------------------------------------------------
+" Plugins
+" ----------------------------------------------------------------------------
+"
+call plug#begin('~/.vim/plugins')
+
+" Autoformat
+Plug 'Chiel92/vim-autoformat'
+
+" Git status SL
+Plug 'airblade/vim-gitgutter'
+
+" CTRL+F file search and CTRL+G grep
+Plug 'cloudhead/neovim-fuzzy'
+
+" 'Smart' file auto re-read
+Plug 'djoshea/vim-autoread'
+
+" Motions
+Plug 'easymotion/vim-easymotion'
+
+" Resume file editing from the previous position
+Plug 'farmergreg/vim-lastplace'
+
+" Highlighted yank.
+Plug 'machakann/vim-highlightedyank'
+
+" Fancy welcome screen
+Plug 'mhinz/vim-startify'
+
+" Better quotes closure
+Plug 'tmsvg/pear-tree'
+
+" ysW"
+Plug 'tpope/vim-surround'
+
+" Theme
+Plug 'scwood/vim-hybrid'
+
+" <Leader>+cc/cu
+Plug 'scrooloose/nerdcommenter'
+
+" <F2>
+Plug 'scrooloose/nerdtree'
+
+" syntax, indent, ftplugin...
+Plug 'sheerun/vim-polyglot'
+
+" Whitespace trimmer
+Plug 'asvc/vim-whitespace'
+
+" Up/bottom status-lines
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" Draws indent-line
+Plug 'yggdroot/indentLine'
+
+" <Leader>+z
+Plug 'dhruvasagar/vim-zoom'
+
+" Incremental search via `/`
+Plug 'haya14busa/incsearch.vim'
+
+call plug#end()
+
+
+"
+" ----------------------------------------------------------------------------
+" System
+" ----------------------------------------------------------------------------
+"
+set ttyfast
+set nocompatible
+set shell=/bin/bash
+set modelines=0
+
+set termencoding=utf-8
+set encoding=utf8
+set fileformat=unix
+set clipboard=unnamedplus
+
+" Experimental, hopefully fixes intendation
+filetype indent on
+set autoindent
+set smartindent
+
+" This will be handled by the plugin
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
+
+" Menu next to the airline
+set wildmenu
+set wildmode=longest:full,full
+set wildignore+=.git,.hg,.svn
+set wildignore+=*.aux,*.out,*.toc
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.rbc,*.class,*.pyc
+set wildignore+=*.ai,*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.psd,*.webp
+set wildignore+=*.avi,*.divx,*.mp4,*.webm,*.mov,*.m2ts,*.mkv,*.vob,*.mpg,*.mpeg
+set wildignore+=*.mp3,*.oga,*.ogg,*.wav,*.flac
+set wildignore+=*.eot,*.otf,*.ttf,*.woff
+set wildignore+=*.doc,*.pdf,*.cbr,*.cbz
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz,*.kgb
+set wildignore+=*.swp,.lock,.DS_Store,._*
+
+" Leave it, needed for regexp
+set magic
+
+" Window's title (i3 tab for example)
+set title
+
+" Enable mouse with tmux 2.4
+set mouse=a
+
+" Allow switching buffers w/o saving
+set hidden
+
+" reveal already opened files instead of opening new buffers
+set switchbuf=useopen
+
+" Don't join spaces on paste
+set nojoinspaces
+
+" Don't autoextend comments, join comment characters
+set formatoptions-=r formatoptions-=c formatoptions-=o formatoptions+=j
+
+" Autosaves
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+set undodir=~/.vim/undo
+set backup
+set undofile
+set noswapfile
+set undolevels=1000
+set undoreload=10000
+set history=1000
+
+" Search is incremental and case-sensitive if UpperCase is present
+set incsearch
+set smartcase
+
+" Highlight brackets
+set showmatch
+
+" Don't highlight search results after search is done
+set hlsearch
+let g:incsearch#auto_nohlsearch = 1
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
+
+" Smart tabs, pythonic setup moved to `Macros` section
+set smarttab
+set smartindent
+set autoindent
+set shiftround
+
+" default <tab> is two spaces
+set expandtab
+
+" Add space before comments
+let NERDSpaceDelims=1
+
+" Don't fold at all.
+set nofoldenable
+
+" Fix trailing whitespace on save
+let g:whitespace_autostrip=0
+let g:whitespace_ignore_splits=0
+let g:whitespace_highlight='Error'
+let g:whitespace_ignore_tabs = [
+            \ 'git',
+            \ 'gitcommit',
+            \ 'gitconfig',
+            \ 'gitrebase',
+            \ 'gitsendemail',
+            \ ]
+
+" Smart pairs are disabled by default:
+let g:pear_tree_smart_openers = 1
+let g:pear_tree_smart_closers = 1
+let g:pear_tree_smart_backspace = 1
+
+
+"
+" ----------------------------------------------------------------------------
+" Visuals
+" ----------------------------------------------------------------------------
+"
+set background=dark
+set synmaxcol=256
+
+if has("termguicolors")
+    set termguicolors
+else
+    set t_Co=256
+endif
+
+" BG colour fix for tmux
+if &term =~# '^screen'
+    set t_ut=
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+" Colorscheme theme
+colorscheme hybrid
+
+" -------- GitGutter ---------
+let g:gitgutter_override_sign_column_highlight = 0
+highlight clear SignColumn
+highlight GitGutterAdd ctermfg=green guifg=#B5BD68
+highlight GitGutterChange ctermfg=yellow guifg=#81A2BE
+highlight GitGutterDelete ctermfg=red guifg=#CC6666
+highlight GitGutterChangeDelete ctermfg=yellow guifg=#DE935F
+
+" Nice highlight of the current line, turned off by  default
+highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+set nocul
+
+" Briefly blink after yank
+let g:highlightedyank_highlight_duration = 250
+highlight HighlightedyankRegion term=bold ctermbg=0 guibg=#13354A
+
+" Airline
+let g:airline_minimalist_showmod = 1
+let g:airline_theme='distinguished'
+let g:airline_powerline_fonts=1
+let g:airline_skip_empty_sections = 1
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline_symbols = {}
+let g:airline_symbols.linenr = ''
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = '⎇ '
+
+function! AirlineInit()
+    let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()}%3l%#__restore__#/%L :%3v')
+endfunction
+
+autocmd User AirlineAfterInit call AirlineInit()
+
+let g:airline_mode_map = {
+            \ '__' : '-',
+            \ 'n'  : 'N',
+            \ 'i'  : 'I',
+            \ 'R'  : 'R',
+            \ 'c'  : 'C',
+            \ 'v'  : 'V',
+            \ 'V'  : 'V',
+            \ '' : 'V',
+            \ 's'  : 'S',
+            \ 'S'  : 'S',
+            \ '' : 'S',
+            \ }
+
+" Show tabline only if >1 file is open
+let g:airline#extensions#tabline#show_buffers=1
+let g:airline#extensions#tabline#buffer_min_count=2
+let g:airline#extensions#tabline#tab_min_count=2
+
+" Disable buffer type SR
+let g:airline#extensions#tabline#show_tab_type=0
+let g:airline#extensions#tabline#fnamemod=':t'
+
+" AleLinter
+let g:ale_enabled = 0
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] [%severity%] %s '
+let g:airline#extensions#ale#enabled = 1
+let g:ale_set_balloons = 1
+let g:ale_python_pylint_options = ''
+let g:ale_cache_executable_check_failure = 1
+let g:ale_change_sign_column_color = 0
+
+" As we already show it in airline..
+set noshowmode
+
+" Show typed command in normal mode
+set showcmd
+
+" Line numbers by default
+set number
+
+" Don't show startup message
+set shortmess+=Ic
+
+" Wrap long lines and don't break words
+set wrap
+set linebreak
+
+" indent wrapped lines, by...
+set breakindent
+set breakindentopt=shift:2,sbr
+set showbreak=↪
+
+" Better vertical split visualization
+set fillchars+=vert:\┃
+
+" Natural splits
+set splitbelow
+set splitright
+
+" Split vertical by default
+set diffopt+=vertical
+
+" Highlight search results and brackets
+set hlsearch
+set showmatch
+
+" Disable all bells and don't blink with the cursor
+set noerrorbells
+set novisualbell
+set vb t_vb=
+set guicursor=a:blinkon0
+
+" Always show airline
+set laststatus=2
+
+" Completion options, don't show preview window with additional information,
+" show completion menu even if there is one option available,
+" don't insert text until explicitly asked to.
+set completeopt-=preview
+set completeopt+=menuone
+set completeopt+=noinsert,noselect
+
+" Always show SignColumn
+set signcolumn=yes
+
+" Prettier GiGutter glyphs
+let g:gitgutter_realtime = 1
+let g:gitgutter_eager = 1
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '•'
+let g:gitgutter_sign_removed = '-'
+let g:gitgutter_sign_removed_first_line = '-'
+let g:gitgutter_sign_modified_removed = '~'
+
+" Enable tab indentation by default
+let g:indentLine_enabled = 1
+let g:indentLine_setColors = 1
+let g:indentLine_char = '┊'
+let g:indentLine_leadingSpaceEnabled = 0
+let g:indentLine_leadingSpaceChar = '·'
+
+" Change cursor shape
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+
+" Invisible characters
+set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶
+
+let g:startify_custom_header = [
+            \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
+            \ ' │ ├─┤││││├┴┐ ',
+            \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
+            \ ]
+
+let g:startify_lists = [
+            \ { 'type': 'files',     'header': ['MRU'] },
+            \ ]
+
+"
+" ----------------------------------------------------------------------------
+" Hotkeys
+" ----------------------------------------------------------------------------
+"
+" F1 does _absolutely_ nothing
+nnoremap <F1> <nop>
+inoremap <F1> <nop>
+map <F1> <nop>
+
+" Tree
+nnoremap <F2> :NERDTreeToggle<cr>
+
+" F3 yanks all
+map <F3> :%y+<cr>
+
+" Line numbers
+map <silent> <F4> :set nonumber!<cr>
+
+" Toggle indentation
+map <silent> <F5> :IndentLinesToggle<cr>
+
+" Toggle invisible chars
+map <silent> <F6> :set list!<cr>
+
+" Toggle spell-check
+map <silent> <F7> :set spell!<cr>
+
+" Go back into normal mode by `ii`
+inoremap ii <esc>
+
+" Remap leader from `\` to `Space`
+let mapleader = "\<Space>"
+
+" <leader>+m toggles "scroll mode"
+map <leader>m :call ToggleScrollMode()<cr>
+
+" Save as usual
+map <C-s> :w!<CR>
+imap <C-s> <Esc>:w!<CR>a
+
+" Close __WINDOW__ as usual
+map <C-w> :close<CR>
+
+" Select all as usual (skips to the last symbol)
+map <C-a> <esc>gg0vG$<CR>
+
+" Don't copy result of 'dd', 's' and 'c' into buffer
+nnoremap d "_d
+vnoremap d "_d
+nnoremap s "_s
+vnoremap s "_s
+vnoremap c "_c
+vnoremap C "_C
+
+" Add new lines and spaces without changing the mode
+nmap <Leader><Leader>j mvo<Esc>`v
+nmap <Leader><Leader>k mvO<Esc>`v
+nmap <Leader><Leader>h i<space><esc>l
+nmap <Leader><Leader>l a<space><esc>h
+
+" Save is forced by default (don't nag about "file exists")
+map :w<cr> :w!<cr>
+map :x<cr> :x!<cr>
+
+" cd into file's directory
+map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Clear all highlights
+nnoremap <esc><esc> :noh<return><esc>
+
+" Don't use Ex mode, exit on QQ
+nnoremap Q <nop>
+nnoremap QQ ZZ
+
+" Switch splits using Ctrl+hjkl (TODO: use NeoVim's ALT support)
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Buffer management
+nmap <leader>. :bn<CR>
+nmap <leader>, :bp<CR>
+nmap <leader>q :bp <BAR> bd #<CR>
+
+" Leave text selected after changing intendation with <>
+vnoremap < <gv
+vnoremap > >gv
+
+" Change folding levels
+nmap <leader>f1 :set foldlevel=0<CR>
+nmap <leader>f2 :set foldlevel=1<CR>
+nmap <leader>f3 :set foldlevel=2<CR>
+nmap <leader>f4 :set foldlevel=3<CR>
+
+" Move to another line with arrow keys
+set whichwrap+=<,>
+
+" Resize splits with +-
+if bufwinnr(1)
+    map + <C-W>+
+    map - <C-W>-
+endif
+
+" Move a line of text using Shift+[jk]
+nmap <S-j> mz:m+<cr>`z
+nmap <S-k> mz:m-2<cr>`z
+vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+" Easymotion search
+let g:EasyMotion_smartcase = 1
+nmap <Leader>s <Plug>(easymotion-bd-f)
+nmap <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader><Leader>s <Plug>(easymotion-bd-f2)
+
+" HJKL easymotion
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+
+" keep cursor column when JK motion
+let g:EasyMotion_startofline = 0
+
+" Open fzy or rgrep finders
+nnoremap <C-f> :FuzzyOpen<CR>
+nnoremap <C-g> :FuzzyGrep<CR>
+
+" Git
+nnoremap <Leader>hn :GitGutterNextHunk<CR>
+nnoremap <Leader>hp :GitGutterPrevHunk<CR>
+
+" Don't use hotkeys from `whitespace` plugin
+let g:whitespace_default_hotkeys = 0
+
+" Zoom
+nmap <Leader>z <Plug>(zoom-toggle)
+
+
+"
+" ----------------------------------------------------------------------------
+" Macros
+" ----------------------------------------------------------------------------
+"
+" Emulate any other editor with tabs (copypasted from somewhere)
+set switchbuf=useopen,usetab,newtab
+
+" Mostly use 2 spaces as <Tab>
+autocmd FileType text,markdown,vim,ini,gitconfig,*.yml setlocal tabstop=2 shiftwidth=2 softtabstop=2
+
+" Keep Web documents to 2 spaces as <Tab>
+autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth=2 softtabstop=2
+
+" Pythonic tabs are limited to *.py
+autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+
+" format JSON code
+com! FormatJSON %!python -m json.tool
+
+" Resize splits when VIM is resized
+autocmd VimResized * wincmd =
+
+" Close NERDTree if it's the only window left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Scroll mode, keeps cursor centered and horizontally unchanged
+function! ToggleScrollMode()
+    if exists("s:scroll_mode")
+        unmap k
+        unmap j
+        set startofline
+        set virtualedit=""
+        unlet s:scroll_mode
+        echom "scroll mode OFF"
+    else
+        nnoremap j <C-e>j
+        nnoremap k <C-y>k
+        set virtualedit=all
+        set nostartofline
+        let s:scroll_mode = 1
+        echom "scroll mode ON"
+    endif
+endfunction
+
+" Prevent opening files in NERDTree
+let g:fzf_layout = { 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew' }
+
+autocmd FileType nerdtree let t:nerdtree_winnr = bufwinnr('%')
+autocmd BufWinEnter * call PreventBuffersInNERDTree()
+
+function! PreventBuffersInNERDTree()
+  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
+    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
+    \ && &buftype == '' && !exists('g:launching_fzf')
+    let bufnum = bufnr('%')
+    close
+    exe 'b ' . bufnum
+  endif
+  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
+endfunction

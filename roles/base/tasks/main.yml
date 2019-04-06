@@ -34,3 +34,7 @@
 - name: Install packages
   include_tasks: packages_install.yml
   become: yes
+
+- name: Configure Knot-resolver
+  include_tasks: packages_resolver.yml
+  become: yes

@@ -1,6 +1,6 @@
 Hosts
 =========
-Creates "hosts.blocked" list to supress advertisement and tracking.
+Creates "hosts_blocked" list to supress advertisement and tracking.
 Can include arbitrary websites you don't like.
 
 Requirements

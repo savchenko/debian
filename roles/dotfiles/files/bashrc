@@ -1,0 +1,101 @@
+#
+# TL;DR:
+#
+# ~/.bash_profile should be super-simple and just load .profile and .bashrc (in that order)
+# ~/.profile has the stuff NOT specifically related to bash, such as environment variables (PATH and friends)
+# ~/.bashrc has anything you'd want at an interactive command line: command prompt, EDITOR variable, bash aliases
+#
+
+# Check if we are interactive enough...
+if [ -t 1 ]; then
+
+  # z `dirname` - telephatic cd with fzf support ----------------------------------
+  if [ -x /usr/local/bin/z.lua ] && [ -x /usr/bin/fzf ]; then
+      eval "$(lua '/usr/local/bin/z.lua' --init bash enhanced once fzf)";
+  fi
+
+  # Check if we are root by any chance --------------------------------------------
+  if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
+
+  # Automatically initialize keychain in tmux -------------------------------------
+  if [ $root -eq 0 ]; then
+    if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
+      eval "$(keychain --eval --agents ssh,gpg --timeout 360 --quiet 0xDEED803629B6FA56 ~/.ssh/id_rsa)"
+    fi
+  fi
+
+  # Try to load git-completion ----------------------------------------------------
+  if [ -f /etc/bash_completion.d/git-prompt ]; then . /etc/bash_completion.d/git-prompt; fi
+
+  #
+  # PS inputs ---------------------------------------------------------------------
+  #
+  if [[ $TERM == xterm ]]; then
+    TERM=xterm-256color
+  fi
+
+  red="\[\e[38;5;160m\]"
+  green="\[\e[38;5;70m\]"
+  blue="\[\e[38;5;67m\]"
+  grey="\[\e[38;5;245m\]"
+  light_grey="\[\e[38;5;249m\]"
+  dark_grey="\[\e[38;5;242m\]"
+
+  if [ $root -eq 1 ]; then user_color="${red}"; else user_color="${green}"; fi
+
+  PS1="${dark_grey}╭${user_color}\u"              # user
+  PS1+=" ${blue}\h"                               # hostname
+  PS1+="${grey} \w"                               # work dir
+  PS1+="${light_grey}\$(__git_ps1)"               # git branch
+  PS1+="\n${dark_grey}╰▶ \[$(tput sgr0)\]"        # input symbol
+
+  export PS1
+  export PS2='> '
+
+  #
+  # Tweaks ------------------------------------------------------------------------
+  #
+  bind 'set show-all-if-ambiguous on'             # Auto-completion on first tab
+  bind '"\C-r": "\C-a hstr -- \C-j"'              # ...in HSTR by CTRL+R
+
+  complete -d cd                                  # cd only into directory
+
+  shopt -s nocaseglob                             # Case-insensitive globbing (used in pathname expansion)
+  shopt -s histappend                             # Append to the Bash history file, rather than overwriting
+  shopt -s cdspell                                # Autocorrect typos in path names when using `cd`
+  shopt -s checkwinsize                           # should help with overlapping lines
+  shopt -s no_empty_cmd_completion                # No empty command completion.
+  shopt -s histverify histreedit                  # Check expansions before submitting command
+
+  export HISTCONTROL=ignoreboth:erasedups         # Don't store duplicated entries in history
+  export HISTFILESIZE=5000                        # Increase history file size (default is 500)
+  export HISTSIZE=${HISTFILESIZE}                 # Increase history size (default is 500)
+  export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
+
+  #
+  # Coreutils tweaks --------------------------------------------------------------
+  #
+  alias less="less -FXc"                          # -F automatically exit if file fits in one screen
+                                                  # -X disables sending the termcap init/deinit strings to the term
+                                                  # -c full screen repaints to be painted from the top line down
+
+  alias ls="ls -G --color=auto"                   # -G don't print group names
+
+  alias ll="ls -FlAhp --group-directories-first"  # -F append indicator to entries
+                                                  # -l long listing format
+                                                  # -A don't show ./ and ../
+                                                  # -h human-readable sizes
+                                                  # -p append / indicator to directories
+
+  alias lt="ls -lt"                               # newest first
+
+  alias cp="cp -iv"                               # prompt before overwrite, be verbose
+
+  alias mkdir="mkdir -pv"                         # -p create intermediate directories as required
+
+  alias mv="mv -iv"                               # -i ask before overwriting a file
+
+  # Source aliases here -----------------------------------------------------------
+  if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
+
+fi
