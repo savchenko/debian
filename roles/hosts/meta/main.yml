@@ -6,7 +6,12 @@ galaxy_info:
   issue_tracker_url: https://github.com/stoptracking/playbook/issues
   license: MIT
   min_ansible_version: 2.4
-  # github_branch:
+
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+        - buster
 
   galaxy_tags:
     - hosts

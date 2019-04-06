@@ -7,7 +7,7 @@
 - name: Copy primary dotfiles to the remote machine
   copy:
     src: "{{ item }}"
-    dest: "{{ ansible_env.HOME }}/.{{ item}}"
+    dest: "{{ ansible_env.HOME }}/.{{ item }}"
   with_items:
     - bash_profile
     - bashrc

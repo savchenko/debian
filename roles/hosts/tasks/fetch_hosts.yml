@@ -60,5 +60,3 @@
     url: https://pgl.yoyo.org/as/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
     dest: "{{ st_hosts_in }}/hosts_yoyo"
     force: yes
-
-

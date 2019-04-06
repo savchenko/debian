@@ -9,7 +9,7 @@
   file:
     path: "{{ ansible_env.HOME }}/.vim/{{ item }}"
     state: directory
-    mode: 755
+    mode: 0755
   with_items:
     - backup
     - tmp
