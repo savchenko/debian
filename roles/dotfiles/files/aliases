@@ -2,15 +2,16 @@
 # Functions -----------------------------------------------------------------------------
 #
 
+# Grep for a process without showing `grep` command itself
 function psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
 
 # Make directory and cd into it
 function mcd() { mkdir "$1" && cd "$1" || exit; }
 
-# Find siles not owned by current user in pwd
+# Find files not owned by current user in pwd
 function notusr() { find . \! -user "$@" -print; }
 
-# Create tmux-split and closes it after $editor is terminated
+# Create tmux-split and close it after $editor is terminated
 if { [ -n "$TMUX" ]; }; then peek() { tmux split-window -p 40 "$EDITOR" "$@" || exit; }; fi
 
 #
