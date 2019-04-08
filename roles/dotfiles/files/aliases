@@ -14,6 +14,9 @@ function notusr() { find . \! -user "$@" -print; }
 # Create tmux-split and close it after $editor is terminated
 if { [ -n "$TMUX" ]; }; then peek() { tmux split-window -p 40 "$EDITOR" "$@" || exit; }; fi
 
+# Compress file or directory
+function rmx() { rar a -m5 -s -md64m "${1%/}.rar" "${1%/}"; }
+
 #
 # Aliases -------------------------------------------------------------------------------
 #
@@ -60,9 +63,9 @@ alias dp='sudo intel_reg write 0x00061254 0x60003000' # You probably don't need 
 alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
 alias mount_gocrypt=". <(gpg2 -dq $HOME/.local/bin/mount_gocrypt.sh.asc)"
 alias mount_usb='udisksctl mount -b /dev/sdb'
-alias t='task'
 alias mp3guess="mp3guessenc -v -r -f -i -s"
 alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (\$n=\$_) while <IN>;print \$n'"
+alias t='task'
 
 # Wireless
 alias wifimon='wavemon -g'
