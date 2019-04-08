@@ -95,6 +95,9 @@ if [ -t 1 ]; then
 
   alias mv="mv -iv"                               # -i ask before overwriting a file
 
+  alias grep="grep --color=auto"                  # colorize grep by default
+  alias egrep="egrep --color=auto"
+
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
 
