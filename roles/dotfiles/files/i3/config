@@ -117,6 +117,9 @@ bindsym Mod4+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # Keep these window roles floating (pop-ups)
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="TfrmFileOp"] floating enable
+for_window [window_role="notification_banner"] floating enable
+for_window [window_role="NetspliceGuiApp"] floating enable
+for_window [class="XCalc"] floating enable
 
 # Resize...
 bindsym Mod4+r mode "resize"
