@@ -65,6 +65,12 @@ Plug 'dhruvasagar/vim-zoom'
 " Incremental search via `/`
 Plug 'haya14busa/incsearch.vim'
 
+" Presumably better markdown
+Plug 'gabrielelana/vim-markdown'
+
+" Theme
+Plug 'nightsense/rusticated'
+
 call plug#end()
 
 
@@ -233,8 +239,8 @@ let g:highlightedyank_highlight_duration = 250
 highlight HighlightedyankRegion term=bold ctermbg=0 guibg=#13354A
 
 " Airline
-let g:airline_minimalist_showmod = 1
-let g:airline_theme='distinguished'
+let g:airline_minimalist_showmod = 0
+let g:airline_theme='minimalist'
 let g:airline_powerline_fonts=1
 let g:airline_skip_empty_sections = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
@@ -358,6 +364,11 @@ let g:indentLine_leadingSpaceChar = '·'
 
 " Change cursor shape
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+
+" ...for VTE
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
 
 " Invisible characters
 set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶
