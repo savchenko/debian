@@ -32,10 +32,11 @@
 - name: Install tmux terminfo
   shell: tic -x "{{ ansible_env.HOME }}/.tmux_terminfo"
   register: terminfo_installed
-  when: terminfo_test is search("Reconstructed")
+  when: terminfo_test['stdout'].splitlines()[0] is search("Reconstructed")
 
 - name: Delete terminfo file
-  file: "{{ ansible_env.HOME }}/.tmux_terminfo"
+  file:
+    path: "{{ ansible_env.HOME }}/.tmux_terminfo"
     state: absent
   when: terminfo_installed
 
