@@ -1,78 +1,97 @@
 ---
-- name: Install list of packages
-  apt:
-    name: "{{ pkg }}"
-  vars:
-    pkg:
-      - apt-listchanges
-      - apt-transport-https
-      - bash-completion
-      - ca-certificates
-      - curl
-      - debian-goodies
-      - debsecan
-      - debsums
-      - dfc
-      - dnsutils
-      - fzf
-      - git
-      - gnupg
-      - gnupg2
-      - grc
-      - htop
-      - ioping
-      - keychain
-      - knot-resolver
-      - knot-resolver-module-http
-      - libpam-tmpdir
-      - lshw
-      - lsof
-      - lua5.3
-      - man-db
-      - mc
-      - ncdu
-      - needrestart
-      - neovim
-      - neovim-runtime
-      - python
-      - python-pip
-      - python3
-      - python3-pip
-      - rsync
-      - ruby
-      - ruby-dev
-      - silversearcher-ag
-      - sshguard
-      - strace
-      - sudo
-      - sysstat
-      - tmux
-      - tree
-      - unattended-upgrades
-      - wget
+# - name: Install list of packages
+#   apt:
+#     name: "{{ pkg }}"
+#   vars:
+#     pkg:
+#       - apt-listchanges
+#       - apt-transport-https
+#       - bash-completion
+#       - ca-certificates
+#       - curl
+#       - debian-goodies
+#       - debsecan
+#       - debsums
+#       - dfc
+#       - dnsutils
+#       - fzf
+#       - git
+#       - gnupg
+#       - gnupg2
+#       - grc
+#       - htop
+#       - ioping
+#       - keychain
+#       - knot-resolver
+#       - knot-resolver-module-http
+#       - libpam-tmpdir
+#       - lshw
+#       - lsof
+#       - lua5.3
+#       - man-db
+#       - mc
+#       - ncdu
+#       - needrestart
+#       - neovim
+#       - neovim-runtime
+#       - python
+#       - python-pip
+#       - python3
+#       - python3-pip
+#       - rsync
+#       - ruby
+#       - ruby-dev
+#       - silversearcher-ag
+#       - sshguard
+#       - strace
+#       - sudo
+#       - sysstat
+#       - tmux
+#       - tree
+#       - unattended-upgrades
+#       - wget
 
-- name: Ensure ~/.gnupg is initialized
-  shell: gpg2 -k
+# - name: Ensure ~/.gnupg is initialized
+#   shell: gpg2 -k
 
-- name: Set lua5.3 as default `lua` command
-  shell: {{ item }}
-    with_items:
-      - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.3 1
-      - sudo update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.3 130 --slave /usr/share/man man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.3.1.gz
-      - sudo update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.3.1.gz
-  become: yes
+# - name: Set lua5.3 as default `lua` command
+#   shell: "{{ item }}"
+#   with_items:
+#     - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.3 1
+#     - update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.3 130 --slave /usr/share/man/man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.3.1.gz
+#     - update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.3.1.gz
+#   become: yes
 
-- name: Copy z.lua into `/usr/local/bin` and make it executable
+# - name: Copy z.lua into `/usr/local/bin` and make it executable
+#   copy:
+#     src: z.lua
+#     dest: /usr/local/bin/z.lua
+#     mode: a+x
+
+- name: Check if .DEBs are installed
+  command: "dpkg-query -W {{ item }}"mackerman
+  register: dpkg_check
+  failed_when: dpkg_check.rc > 1
+  changed_when: dpkg_check.rc == 1
+  loop:
+    - hstr
+    - bat
+
+# Let's check what's inside...
+- debug:
+    var: debs
+    verbosity: 1
+
+# TODO: Make this work. ----------------------
+- name: Copy .deb packages to the remote host
   copy:
-    src: z.lua
-    dest: /usr/local/bin/z.lua
-    attr: +x
+    src: "{{ debs }}"
+    dest: "/tmp/{{ debs }}"
+  when: dpkg_check is changed
+# --------------------------------------------
 
 - name: Install .deb packages that are currently not in Debian repos
   apt:
     allow_unauthenticated: yes
-    deb: {{ item }}
-    with_items:
-      - hstr_2.0.0-1_amd64.deb
-      - bat_0.10.0_amd64.deb
-    when: ansible_architecture == "x86_64"
+    deb: "{{ debs }}"
+  when: ansible_architecture == "x86_64"

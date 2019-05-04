@@ -32,8 +32,14 @@
   become: yes
 
 - name: Install packages
-  include_tasks: packages_install.yml
+  import_tasks: packages_install.yml
   become: yes
+  tags:
+    - base_pkg_install
+  vars:
+    debs:
+      - hstr_2.0.0-1_amd64.deb
+      - bat_0.10.0_amd64.deb
 
 - name: Configure Knot-resolver
   include_tasks: packages_resolver.yml
