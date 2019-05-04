@@ -1,12 +1,18 @@
 ---
 - name: Copy source dotfiles to the target host
-  include_tasks: dotfiles_propagate.yml
+  import_tasks: dotfiles_propagate.yml
+  tags:
+    - dotfiles_propagate
 
 - name: Setup NeoVim
-  include_tasks: dotfiles_neovim.yml
+  import_tasks: dotfiles_neovim.yml
   when: neovim == true
+  tags:
+    - dotfiles_neovim
 
 - name: Link dotfiles to $HOME
   import_tasks: dotfiles_link.yml
   delegate_to: localhost
   when: link_to_localhost == true
+  tags:
+    - dotfiles_link
