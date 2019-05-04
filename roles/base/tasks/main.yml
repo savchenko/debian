@@ -1,46 +1,60 @@
 ---
 - name: Boostrap vital settings
-  include_tasks: bootstrap.yml
+  import_tasks: bootstrap.yml
   become: yes
+  tags:
+    - base_bootstrap
 
 - name: Remove unwanted packages
-  include_tasks: packages_remove.yml
+  import_tasks: packages_remove.yml
   become: yes
+  tags:
+    - base_pkg_unwanted
 
 - name: Prepare repositories
-  include_tasks: packages_setup_repos.yml
+  import_tasks: packages_setup_repos.yml
   become: yes
+  tags:
+    - base_pkg_repos
 
 - name: Update system
-  include_tasks: apt_upgrade.yml
+  import_tasks: apt_upgrade.yml
   become: yes
+  tags:
+    - base_update_system
 
 - name: Set various settings in "/etc"
-  include_tasks: settings.yml
+  import_tasks: settings.yml
   become: yes
+  tags:
+    - base_etc_settings
 
 - name: Set timezone, locale and "timesyncd"
-  include_tasks: time.yml
+  import_tasks: time.yml
   become: yes
+  tags:
+    - base_timezone
 
 - name: Create unique DH moduli
-  include_tasks: moduli.yml
+  import_tasks: moduli.yml
   become: yes
+  tags:
+    - base_moduli
 
 - name: Configure UFW
-  include_tasks: ufw.yml
+  import_tasks: ufw.yml
   become: yes
+  tags:
+    - base_ufw
 
 - name: Install packages
   import_tasks: packages_install.yml
   become: yes
   tags:
     - base_pkg_install
-  vars:
-    debs:
-      - hstr_2.0.0-1_amd64.deb
-      - bat_0.10.0_amd64.deb
 
 - name: Configure Knot-resolver
-  include_tasks: packages_resolver.yml
+  import_tasks: packages_resolver.yml
   become: yes
+  tags:
+    - base_knot
