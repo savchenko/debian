@@ -3,11 +3,17 @@
   import_tasks: fetch_hosts.yml
   delegate_to: localhost
   run_once: yes
+  tags:
+    - hosts_download
 
 - name: Assemble hosts in the single file and clean-up afterwards
   import_tasks: assemble_hosts.yml
   delegate_to: localhost
   run_once: yes
+  tags:
+    - hosts_assemble
 
 - name: Copy new `hosts_blocked` to the /etc
-  include_tasks: copy_hosts.yml
+  import_tasks: copy_hosts.yml
+  tags:
+    - hosts_copy
