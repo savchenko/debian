@@ -14,7 +14,7 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'airblade/vim-gitgutter'
 
 " CTRL+F file search and CTRL+G grep
-Plug 'cloudhead/neovim-fuzzy'
+Plug 'bosr/fzy.vim'
 
 " 'Smart' file auto re-read
 Plug 'djoshea/vim-autoread'
@@ -39,6 +39,7 @@ Plug 'tpope/vim-surround'
 
 " Theme
 Plug 'scwood/vim-hybrid'
+Plug 'cormacrelf/vim-colors-github'
 
 " <Leader>+cc/cu
 Plug 'scrooloose/nerdcommenter'
@@ -65,11 +66,14 @@ Plug 'dhruvasagar/vim-zoom'
 " Incremental search via `/`
 Plug 'haya14busa/incsearch.vim'
 
-" Presumably better markdown
-Plug 'gabrielelana/vim-markdown'
+" Mediawiki
+Plug 'chikamichi/mediawiki.vim'
 
-" Theme
-Plug 'nightsense/rusticated'
+" Colorizer
+Plug 'chrisbra/Colorizer'
+
+" fuGITive
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -167,8 +171,6 @@ map g# <Plug>(incsearch-nohl-g#)
 
 " Smart tabs, pythonic setup moved to `Macros` section
 set smarttab
-set smartindent
-set autoindent
 set shiftround
 
 " default <tab> is two spaces
@@ -212,23 +214,20 @@ else
     set t_Co=256
 endif
 
-" BG colour fix for tmux
+" BG and italics colour fix for tmux
 if &term =~# '^screen'
     set t_ut=
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set t_ZH=^[[3m
+    set t_ZR=^[[23m
 endif
 
 " Colorscheme theme
-colorscheme hybrid
-
-" -------- GitGutter ---------
-let g:gitgutter_override_sign_column_highlight = 0
-highlight clear SignColumn
-highlight GitGutterAdd ctermfg=green guifg=#B5BD68
-highlight GitGutterChange ctermfg=yellow guifg=#81A2BE
-highlight GitGutterDelete ctermfg=red guifg=#CC6666
-highlight GitGutterChangeDelete ctermfg=yellow guifg=#DE935F
+syntax on
+let g:github_colors_soft = 1
+let g:github_colors_block_diffmark = 1
+colorscheme github
 
 " Nice highlight of the current line, turned off by  default
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
@@ -236,11 +235,11 @@ set nocul
 
 " Briefly blink after yank
 let g:highlightedyank_highlight_duration = 250
-highlight HighlightedyankRegion term=bold ctermbg=0 guibg=#13354A
+highlight HighlightedyankRegion term=bold ctermbg=0 guibg=#D5E1FF
 
 " Airline
 let g:airline_minimalist_showmod = 0
-let g:airline_theme='minimalist'
+let g:airline_theme='github'
 let g:airline_powerline_fonts=1
 let g:airline_skip_empty_sections = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
@@ -299,7 +298,7 @@ set noshowmode
 set showcmd
 
 " Line numbers by default
-set number
+set nonumber
 
 " Don't show startup message
 set shortmess+=Ic
@@ -355,8 +354,8 @@ let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_removed_first_line = '-'
 let g:gitgutter_sign_modified_removed = '~'
 
-" Enable tab indentation by default
-let g:indentLine_enabled = 1
+" Enable indent line by default
+let g:indentLine_enabled = 0
 let g:indentLine_setColors = 1
 let g:indentLine_char = '┊'
 let g:indentLine_leadingSpaceEnabled = 0
@@ -365,13 +364,13 @@ let g:indentLine_leadingSpaceChar = '·'
 " Change cursor shape
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
-" ...for VTE
+" ...and in VTE
 let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
 " Invisible characters
-set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶
+set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 
 let g:startify_custom_header = [
             \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
@@ -434,7 +433,6 @@ map <C-a> <esc>gg0vG$<CR>
 nnoremap d "_d
 vnoremap d "_d
 nnoremap s "_s
-vnoremap s "_s
 vnoremap c "_c
 vnoremap C "_C
 
@@ -519,6 +517,9 @@ nnoremap <Leader>hp :GitGutterPrevHunk<CR>
 
 " Don't use hotkeys from `whitespace` plugin
 let g:whitespace_default_hotkeys = 0
+
+" ...and from `fzy`
+let g:fuzzy_bindkeys = 0
 
 " Zoom
 nmap <Leader>z <Plug>(zoom-toggle)

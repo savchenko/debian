@@ -15,7 +15,7 @@ function notusr() { find . \! -user "$@" -print; }
 if { [ -n "$TMUX" ]; }; then peek() { tmux split-window -p 40 "$EDITOR" "$@" || exit; }; fi
 
 # Compress file or directory
-function rmx() { rar a -m5 -s -md64m "${1%/}.rar" "${1%/}"; }
+function rmx() { if [ $# -eq 1 ]; then rar a -m5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
 
 #
 # Aliases -------------------------------------------------------------------------------

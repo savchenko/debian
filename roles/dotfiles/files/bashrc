@@ -19,7 +19,7 @@ if [ -t 1 ]; then
 
   # Automatically initialize keychain in tmux -------------------------------------
   if [ $root -eq 0 ]; then
-    if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
+    if [ "$TERM" = "tmux-256color" ] && [ -n "$TMUX" ]; then
       eval "$(keychain --eval --agents ssh,gpg --timeout 360 --quiet 0xDEED803629B6FA56 ~/.ssh/id_rsa)"
     fi
   fi
