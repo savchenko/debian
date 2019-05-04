@@ -1,2 +1,4 @@
 ---
-# defaults file for setup
+debs:
+  - hstr_2.0.0-1_amd64.deb
+  - bat_0.10.0_amd64.deb
