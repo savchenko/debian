@@ -16,6 +16,7 @@
     - gitignore
     - inputrc
     - profile
+    - tmux_terminfo
     - tmux.conf
   when: ansible_connection != "local"
 
@@ -23,6 +24,20 @@
   copy:
     src: ssh_config
     dest: "{{ ansible_env.HOME }}/.ssh/config"
+
+- name: Check if tmux terminfo already installed
+  shell: infocmp -x tmux
+  register: terminfo_test
+
+- name: Install tmux terminfo
+  shell: tic -x "{{ ansible_env.HOME }}/.tmux_terminfo"
+  register: terminfo_installed
+  when: terminfo_test is search("Reconstructed")
+
+- name: Delete terminfo file
+  file: "{{ ansible_env.HOME }}/.tmux_terminfo"
+    state: absent
+  when: terminfo_installed
 
 - name: Don't use the same prefix in remote tmux
   # This is normally done via `template`, but due to the small change required
