@@ -7,9 +7,6 @@
 "
 call plug#begin('~/.vim/plugins')
 
-" Autoformat
-Plug 'Chiel92/vim-autoformat'
-
 " Git status SL
 Plug 'airblade/vim-gitgutter'
 
@@ -19,14 +16,8 @@ Plug 'bosr/fzy.vim'
 " 'Smart' file auto re-read
 Plug 'djoshea/vim-autoread'
 
-" Motions
-Plug 'easymotion/vim-easymotion'
-
 " Resume file editing from the previous position
 Plug 'farmergreg/vim-lastplace'
-
-" Highlighted yank.
-Plug 'machakann/vim-highlightedyank'
 
 " Fancy welcome screen
 Plug 'mhinz/vim-startify'
@@ -37,7 +28,7 @@ Plug 'tmsvg/pear-tree'
 " ysW"
 Plug 'tpope/vim-surround'
 
-" Theme
+" Themes bonanza
 Plug 'scwood/vim-hybrid'
 Plug 'cormacrelf/vim-colors-github'
 
@@ -49,9 +40,6 @@ Plug 'scrooloose/nerdtree'
 
 " syntax, indent, ftplugin...
 Plug 'sheerun/vim-polyglot'
-
-" Whitespace trimmer
-Plug 'asvc/vim-whitespace'
 
 " Up/bottom status-lines
 Plug 'vim-airline/vim-airline'
@@ -70,13 +58,16 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'chikamichi/mediawiki.vim'
 
 " Colorizer
-Plug 'chrisbra/Colorizer'
+" Plug 'chrisbra/Colorizer'
 
 " fuGITive
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
+
+" Pandoc
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
 call plug#end()
-
 
 "
 " ----------------------------------------------------------------------------
@@ -88,6 +79,10 @@ set nocompatible
 set shell=/bin/bash
 set modelines=0
 
+" Write swap every 0.25s and report CursorHold
+" Needed for proper GitGutter functionality
+set updatetime=250
+
 set termencoding=utf-8
 set encoding=utf8
 set fileformat=unix
@@ -97,11 +92,6 @@ set clipboard=unnamedplus
 filetype indent on
 set autoindent
 set smartindent
-
-" This will be handled by the plugin
-let g:autoformat_autoindent = 0
-let g:autoformat_retab = 0
-let g:autoformat_remove_trailing_spaces = 0
 
 " Menu next to the airline
 set wildmenu
@@ -129,9 +119,6 @@ set mouse=a
 " Allow switching buffers w/o saving
 set hidden
 
-" reveal already opened files instead of opening new buffers
-set switchbuf=useopen
-
 " Don't join spaces on paste
 set nojoinspaces
 
@@ -156,9 +143,9 @@ set smartcase
 " Highlight brackets
 set showmatch
 
-" Don't highlight search results after search is done
+" Highlight search results after search is done
 set hlsearch
-let g:incsearch#auto_nohlsearch = 1
+let g:incsearch#auto_nohlsearch = 0
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
@@ -176,13 +163,16 @@ set shiftround
 " default <tab> is two spaces
 set expandtab
 
+" Emulate any other editor with tabs (copypasted from somewhere)
+set switchbuf=useopen,usetab,newtab
+
 " Add space before comments
 let NERDSpaceDelims=1
 
 " Don't fold at all.
 set nofoldenable
 
-" Fix trailing whitespace on save
+" Don't mess with markdown spaces
 let g:whitespace_autostrip=0
 let g:whitespace_ignore_splits=0
 let g:whitespace_highlight='Error'
@@ -205,7 +195,6 @@ let g:pear_tree_smart_backspace = 1
 " Visuals
 " ----------------------------------------------------------------------------
 "
-set background=dark
 set synmaxcol=256
 
 if has("termguicolors")
@@ -227,19 +216,15 @@ endif
 syntax on
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 1
-colorscheme github
+colorscheme hybrid
 
 " Nice highlight of the current line, turned off by  default
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set nocul
 
-" Briefly blink after yank
-let g:highlightedyank_highlight_duration = 250
-highlight HighlightedyankRegion term=bold ctermbg=0 guibg=#D5E1FF
-
 " Airline
 let g:airline_minimalist_showmod = 0
-let g:airline_theme='github'
+let g:airline_theme='minimalist'
 let g:airline_powerline_fonts=1
 let g:airline_skip_empty_sections = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
@@ -279,25 +264,13 @@ let g:airline#extensions#tabline#tab_min_count=2
 let g:airline#extensions#tabline#show_tab_type=0
 let g:airline#extensions#tabline#fnamemod=':t'
 
-" AleLinter
-let g:ale_enabled = 0
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] [%severity%] %s '
-let g:airline#extensions#ale#enabled = 1
-let g:ale_set_balloons = 1
-let g:ale_python_pylint_options = ''
-let g:ale_cache_executable_check_failure = 1
-let g:ale_change_sign_column_color = 0
-
 " As we already show it in airline..
 set noshowmode
 
 " Show typed command in normal mode
 set showcmd
 
-" Line numbers by default
+" No line numbers by default
 set nonumber
 
 " Don't show startup message
@@ -322,10 +295,6 @@ set splitright
 " Split vertical by default
 set diffopt+=vertical
 
-" Highlight search results and brackets
-set hlsearch
-set showmatch
-
 " Disable all bells and don't blink with the cursor
 set noerrorbells
 set novisualbell
@@ -346,8 +315,6 @@ set completeopt+=noinsert,noselect
 set signcolumn=yes
 
 " Prettier GiGutter glyphs
-let g:gitgutter_realtime = 1
-let g:gitgutter_eager = 1
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '•'
 let g:gitgutter_sign_removed = '-'
@@ -407,8 +374,11 @@ map <silent> <F5> :IndentLinesToggle<cr>
 " Toggle invisible chars
 map <silent> <F6> :set list!<cr>
 
-" Toggle spell-check
+" Toggl spell-check
 map <silent> <F7> :set spell!<cr>
+
+" Toggle colours highlight
+" map <silent> <F8> :ColorToggle!<cr>
 
 " Go back into normal mode by `ii`
 inoremap ii <esc>
@@ -418,6 +388,9 @@ let mapleader = "\<Space>"
 
 " <leader>+m toggles "scroll mode"
 map <leader>m :call ToggleScrollMode()<cr>
+
+" <leader>+s is ysW
+map <leader>s ysW
 
 " Save as usual
 map <C-s> :w!<CR>
@@ -437,10 +410,10 @@ vnoremap c "_c
 vnoremap C "_C
 
 " Add new lines and spaces without changing the mode
-nmap <Leader><Leader>j mvo<Esc>`v
-nmap <Leader><Leader>k mvO<Esc>`v
-nmap <Leader><Leader>h i<space><esc>l
-nmap <Leader><Leader>l a<space><esc>h
+nmap <Leader>j mvo<Esc>`v
+nmap <Leader>k mvO<Esc>`v
+nmap <Leader>h i<space><esc>l
+nmap <Leader>l a<space><esc>h
 
 " Save is forced by default (don't nag about "file exists")
 map :w<cr> :w!<cr>
@@ -492,18 +465,6 @@ nmap <S-k> mz:m-2<cr>`z
 vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" Easymotion search
-let g:EasyMotion_smartcase = 1
-nmap <Leader>s <Plug>(easymotion-bd-f)
-nmap <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader><Leader>s <Plug>(easymotion-bd-f2)
-
-" HJKL easymotion
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
-
 " keep cursor column when JK motion
 let g:EasyMotion_startofline = 0
 
@@ -530,8 +491,6 @@ nmap <Leader>z <Plug>(zoom-toggle)
 " Macros
 " ----------------------------------------------------------------------------
 "
-" Emulate any other editor with tabs (copypasted from somewhere)
-set switchbuf=useopen,usetab,newtab
 
 " Mostly use 2 spaces as <Tab>
 autocmd FileType text,markdown,vim,ini,gitconfig,*.yml setlocal tabstop=2 shiftwidth=2 softtabstop=2
@@ -541,6 +500,10 @@ autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth
 
 " Pythonic tabs are limited to *.py
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+
+augroup pandoc_syntax
+    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+augroup END
 
 " format JSON code
 com! FormatJSON %!python -m json.tool
