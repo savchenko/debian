@@ -4,26 +4,21 @@
     name: "{{ pkg }}"
   vars:
     pkg:
-      - apt-listchanges
       - apt-transport-https
       - bash-completion
       - ca-certificates
       - curl
-      - debian-goodies
-      - debsecan
-      - debsums
       - dfc
       - dnsutils
       - fzf
       - git
-      - gnupg
       - gnupg2
       - grc
       - htop
+      - intel-microcode
       - ioping
       - keychain
       - knot-resolver
-      - knot-resolver-module-http
       - libpam-tmpdir
       - lshw
       - lsof
