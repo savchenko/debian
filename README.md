@@ -1,5 +1,5 @@
 # Playbook
-Performs initial setup and maintenance of a \*nix-based computer.  
+Backbone for the "Sensible computing platform". Performs initial setup and maintenance of a \*nix-based computer.  
 Install via `ansible-galaxy install stoptracking.playbook` or by cloning this repository.
 
 ## Currently available roles
