@@ -31,3 +31,11 @@
   with_items:
     - /etc/issue
     - /etc/issue.net
+
+- name: Change CapsLock to Ctrl
+  replace:
+    path: /etc/default/keyboard
+    regexp: '^XKBOPTIONS'
+    replace: 'XKBOPTIONS="caps:ctrl_modifier"'
+  notify:
+    - dpkg_keyboard
