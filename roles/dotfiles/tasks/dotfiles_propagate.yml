@@ -10,6 +10,7 @@
     dest: "{{ ansible_env.HOME }}/.{{ item }}"
   with_items:
     - bash_profile
+    - aliases
     - bashrc
     - curlrc
     - gitconfig
@@ -41,7 +42,7 @@
   when: terminfo_installed
 
 - name: Don't use the same prefix in remote tmux
-  # This is normally done via `template`, but due to the small change required
+  # This is normally done via `template`, but due to the small changes required
   # in the whole config, I have decided to handle it with `lineinfile` module
   lineinfile:
     path: ~/.tmux.conf
@@ -51,4 +52,8 @@
     - "^unbind\ C-b"
     - "^set\ -g\ prefix"
     - "^bind\ C-Space"
+    - "^set-option\ -s\ set-clipboard\ on"
+    - "^bind-key\ -T\ copy-mode-vi"
+    - "^bind-key\ -Tcopy-mode-vi"
+    - "^bind\ p\ paste-buffer"
   when: ansible_connection != "local"
