@@ -107,3 +107,6 @@ venv.bak/
 /test_*.yml
 /roles/transfer-agent/files/id_rsa.pub
 inventory.ini
+
+# Whatever
+/roles/dotfiles/files/doublecmd/
