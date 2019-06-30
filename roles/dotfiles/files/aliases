@@ -15,7 +15,10 @@ function notusr() { find . \! -user "$@" -print; }
 if { [ -n "$TMUX" ]; }; then peek() { tmux split-window -p 40 "$EDITOR" "$@" || exit; }; fi
 
 # Compress file or directory
-function rmx() { if [ $# -eq 1 ]; then rar a -m5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
+function rmx() { if [ $# -eq 1 ]; then rar a -m5 -ma5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
+
+# Whois abuse contact
+function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 
 #
 # Aliases -------------------------------------------------------------------------------
@@ -25,15 +28,19 @@ function rmx() { if [ $# -eq 1 ]; then rar a -m5 -s -md64m "${1%/}.rar" "${1%/}"
 alias ...="cd ../.."
 alias ..="cd .."
 alias c="clear"
-alias ca="bat --style plain"
+alias ca="bat --style plain --theme 1337"
+alias dd="dd bs=4M status=progress oflag=sync"
 alias dmesg="dmesg -Hwx"
 alias symlinks="ls -ltra | grep '\->'"
 alias xc="xclip -selection clipboard"
 alias sup='su --preserve-environment'
-alias openports='lsof -Pni'
+alias openports='lsof -Pni4'
 alias gpg="gpg2"
 alias ap="ansible-playbook"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
+alias bfg="java -jar $HOME/.local/bin/bfg.jar"
+alias remount_nfs="sudo mount -a -t cifs"
+alias find="find -xdev"
 
 # NeoVim
 alias v="nvim"
@@ -48,8 +55,9 @@ alias gc="git commit"
 alias gca='git commit -a'
 alias gco='git checkout'
 alias gd='git diff'
-alias gs='git status'
+alias gt='git status'
 alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset)%C(reset)%C(bold cyan)%d%C(reset)' --all"
+alias gfig="git config --local -e"
 
 # Grc
 alias head='grc head'
@@ -66,6 +74,7 @@ alias mount_usb='udisksctl mount -b /dev/sdb'
 alias mp3guess="mp3guessenc -v -r -f -i -s"
 alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (\$n=\$_) while <IN>;print \$n'"
 alias t='task'
+alias cal='ncal -M -b'
 
 # Wireless
 alias wifimon='wavemon -g'

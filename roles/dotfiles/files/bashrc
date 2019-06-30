@@ -88,6 +88,7 @@ if [ -t 1 ]; then
                                                   # -p append / indicator to directories
 
   alias lt="ls -lt"                               # newest first
+  alias lth="ls -lt | head"                       # newest first
 
   alias cp="cp -iv"                               # prompt before overwrite, be verbose
 
