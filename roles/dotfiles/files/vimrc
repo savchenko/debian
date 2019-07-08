@@ -10,6 +10,9 @@ call plug#begin('~/.vim/plugins')
 " Git status SL
 Plug 'airblade/vim-gitgutter'
 
+" Match quotes automatically
+Plug 'airblade/vim-matchquote'
+
 " CTRL+F file search and CTRL+G grep
 Plug 'bosr/fzy.vim'
 
@@ -54,17 +57,7 @@ Plug 'dhruvasagar/vim-zoom'
 " Incremental search via `/`
 Plug 'haya14busa/incsearch.vim'
 
-" Mediawiki
-Plug 'chikamichi/mediawiki.vim'
-
-" Colorizer
-" Plug 'chrisbra/Colorizer'
-
-" fuGITive
-" Plug 'tpope/vim-fugitive'
-
 " Pandoc
-Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
 call plug#end()
@@ -76,6 +69,7 @@ call plug#end()
 "
 set ttyfast
 set nocompatible
+set lazyredraw
 set shell=/bin/bash
 set modelines=0
 
@@ -136,15 +130,15 @@ set undolevels=1000
 set undoreload=10000
 set history=1000
 
-" Search is incremental and case-sensitive if UpperCase is present
-set incsearch
-set smartcase
-
 " Highlight brackets
 set showmatch
 
-" Highlight search results after search is done
+" Search is incremental and case-sensitive if UpperCase is present
 set hlsearch
+set incsearch
+set smartcase
+
+" Highlight search results after search is done
 let g:incsearch#auto_nohlsearch = 0
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
@@ -160,7 +154,7 @@ map g# <Plug>(incsearch-nohl-g#)
 set smarttab
 set shiftround
 
-" default <tab> is two spaces
+" Expand <tab> into spaces
 set expandtab
 
 " Emulate any other editor with tabs (copypasted from somewhere)
@@ -189,6 +183,8 @@ let g:pear_tree_smart_openers = 1
 let g:pear_tree_smart_closers = 1
 let g:pear_tree_smart_backspace = 1
 
+" Load matchit
+let loaded_matchit = 1
 
 "
 " ----------------------------------------------------------------------------
@@ -321,7 +317,7 @@ let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_removed_first_line = '-'
 let g:gitgutter_sign_modified_removed = '~'
 
-" Enable indent line by default
+" Disable indent line by default
 let g:indentLine_enabled = 0
 let g:indentLine_setColors = 1
 let g:indentLine_char = '┊'
@@ -366,19 +362,16 @@ nnoremap <F2> :NERDTreeToggle<cr>
 map <F3> :%y+<cr>
 
 " Line numbers
-map <silent> <F4> :set nonumber!<cr>
+map <F4> :set nonumber!<cr>
 
 " Toggle indentation
-map <silent> <F5> :IndentLinesToggle<cr>
+map <F5> :IndentLinesToggle<cr>
 
 " Toggle invisible chars
-map <silent> <F6> :set list!<cr>
+map <F6> :set list!<cr>
 
-" Toggl spell-check
-map <silent> <F7> :set spell!<cr>
-
-" Toggle colours highlight
-" map <silent> <F8> :ColorToggle!<cr>
+" Toggle spell-check
+map <F7> :set spell!<cr>
 
 " Go back into normal mode by `ii`
 inoremap ii <esc>
@@ -391,6 +384,9 @@ map <leader>m :call ToggleScrollMode()<cr>
 
 " <leader>+s is ysW
 map <leader>s ysW
+
+" Toggle line numbers between absolute/relative
+map <S-n> :call ToggleNumber()<cr>
 
 " Save as usual
 map <C-s> :w!<CR>
@@ -408,6 +404,16 @@ vnoremap d "_d
 nnoremap s "_s
 vnoremap c "_c
 vnoremap C "_C
+
+" Move up/down using _visual_ lines (e.g. wrapped ones)
+nnoremap j gj
+nnoremap k gk
+nnoremap <Up> gk
+nnoremap <Down> gj
+
+" Move to beginning/end of line
+nnoremap B ^
+nnoremap E $
 
 " Add new lines and spaces without changing the mode
 nmap <Leader>j mvo<Esc>`v
@@ -444,12 +450,6 @@ nmap <leader>q :bp <BAR> bd #<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-" Change folding levels
-nmap <leader>f1 :set foldlevel=0<CR>
-nmap <leader>f2 :set foldlevel=1<CR>
-nmap <leader>f3 :set foldlevel=2<CR>
-nmap <leader>f4 :set foldlevel=3<CR>
-
 " Move to another line with arrow keys
 set whichwrap+=<,>
 
@@ -465,8 +465,8 @@ nmap <S-k> mz:m-2<cr>`z
 vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" keep cursor column when JK motion
-let g:EasyMotion_startofline = 0
+" Don't mess with hotkeys
+let g:fuzzy_bindkeys = 0
 
 " Open fzy or rgrep finders
 nnoremap <C-f> :FuzzyOpen<CR>
@@ -475,12 +475,6 @@ nnoremap <C-g> :FuzzyGrep<CR>
 " Git
 nnoremap <Leader>hn :GitGutterNextHunk<CR>
 nnoremap <Leader>hp :GitGutterPrevHunk<CR>
-
-" Don't use hotkeys from `whitespace` plugin
-let g:whitespace_default_hotkeys = 0
-
-" ...and from `fzy`
-let g:fuzzy_bindkeys = 0
 
 " Zoom
 nmap <Leader>z <Plug>(zoom-toggle)
@@ -548,4 +542,25 @@ function! PreventBuffersInNERDTree()
     exe 'b ' . bufnum
   endif
   if exists('g:launching_fzf') | unlet g:launching_fzf | endif
+endfunction
+
+" toggle between number and relativenumber
+function! ToggleNumber()
+    if(&relativenumber == 1)
+        set norelativenumber
+        set number
+    else
+        set relativenumber
+    endif
+endfunc
+
+" strips trailing whitespace at the end of files.
+function! <SID>WhitespaceStrip()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
 endfunction
