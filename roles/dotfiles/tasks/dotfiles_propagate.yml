@@ -63,3 +63,4 @@
     path: ~/.bashrc
     line: "set -o emacs"
     regexp: "set\ -o\ vi"
+  when: remote_bash_emacs == true
