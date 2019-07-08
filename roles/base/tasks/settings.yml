@@ -30,6 +30,7 @@
     content: 'Access to this computer is prohibited.'
   with_items:
     - /etc/issue
+    - /etc/issue.net
 
 - name: Change CapsLock to Ctrl
   replace:
@@ -101,3 +102,8 @@
   copy:
     dest: /etc/modprobe.d/blacklist_speaker.conf
     content: "blacklist pcspkr"
+
+- name: Enable APT sandboxing
+  copy:
+    dest: /etc/apt/apt.conf.d/02sandboxing
+    content: 'APT::Sandbox::Seccomp "true";'
