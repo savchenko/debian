@@ -38,3 +38,10 @@
     replace: 'XKBOPTIONS="caps:ctrl_modifier"'
   notify:
     - dpkg_keyboard
+
+- name: GRUB settings
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=1"'
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
+  notify: grub_update
