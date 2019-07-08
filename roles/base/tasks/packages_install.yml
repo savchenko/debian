@@ -56,10 +56,10 @@
     - update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.3.3.gz
   become: yes
 
-- name: Copy z.lua into `/usr/local/bin` and make it executable
-  copy:
-    src: z.lua
-    dest: /usr/local/bin/z.lua
+- name: Unarchive z.lua into `/usr/local/bin` and make it executable
+  unarchive:
+    src: z.lua.tgz
+    dest: /usr/local/bin
     mode: a+x
 
 - name: Check if .DEBs are installed
