@@ -56,9 +56,13 @@ if [ -t 1 ]; then
   # Tweaks ------------------------------------------------------------------------
   #
   set -o vi
-  bind 'set show-all-if-ambiguous on'             # Auto-completion on first tab
   bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
   bind '"ii": "\e\e"'                             # the same escape as in vim
+
+  for N in {0..9};                                # Don't use esoteric argument features of the Readline
+    do 
+  bind -m vi $N:
+   done
 
   complete -d cd                                  # cd only into directory
 

@@ -6,6 +6,9 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
+# No bell(s), please
+set bell-style none
+
 # List all matches in case multiple possible completions are possible
 set show-all-if-ambiguous on
 
@@ -28,8 +31,8 @@ set visible-stats on
 ## Readline used by Bash 4.)
 set skip-completed-text on
 
-# Be somewhat protective on paste
-set enable-bracketed-paste on
+# Think before you paste instead of relying on Readline
+set enable-bracketed-paste off
 
 # Show current mode
 set editing-mode vi
