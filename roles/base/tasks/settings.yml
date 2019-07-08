@@ -96,3 +96,8 @@
   copy:
     src: uncommon-network-protocols.conf
     dest: /etc/modprobe.d/uncommon-network-protocols.conf
+
+- name: Disable pc-speaker (don't beep)
+  copy:
+    dest: /etc/modprobe.d/blacklist_speaker.conf
+    content: "blacklist pcspkr"
