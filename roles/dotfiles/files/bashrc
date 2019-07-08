@@ -74,9 +74,6 @@ if [ -t 1 ]; then
   export HISTSIZE=${HISTFILESIZE}                 # Increase history size (default is 500)
   export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 
-  # Bind <Esc> to <ii> as in .vimrc
-  bind '"\ew": "\C-e # "'
-
   #
   # Coreutils tweaks --------------------------------------------------------------
   #
