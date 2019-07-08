@@ -402,7 +402,8 @@ map <C-a> <esc>gg0vG$<CR>
 nnoremap d "_d
 vnoremap d "_d
 nnoremap s "_s
-vnoremap c "_c
+vnoremap s "_s
+nnoremap c "_c
 vnoremap C "_C
 
 " Move up/down using _visual_ lines (e.g. wrapped ones)
