@@ -30,7 +30,6 @@
     content: 'Access to this computer is prohibited.'
   with_items:
     - /etc/issue
-    - /etc/issue.net
 
 - name: Change CapsLock to Ctrl
   replace:
