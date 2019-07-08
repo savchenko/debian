@@ -63,3 +63,26 @@
   copy:
     dest: /etc/systemd/system/systemd-logind.service.d/hidepid.conf
     content: "[Service]\nSupplementaryGroups=proc"
+
+- name: Ensure /etc/systemd/coredump.conf.d exists
+  file:
+    path: /etc/systemd/coredump.conf.d
+    recurse: yes
+    state: directory
+
+- name: Instruct systemd to not store coredumps
+  copy:
+    dest: /etc/systemd/coredump.conf.d/custom.conf
+    content: "[Coredump]\nStorage=none"
+
+- name: Set zero limit to prevent dumps from being written to disk
+  lineinfile:
+    path: /etc/security/limits.conf
+    line: "\n* hard core 0\n"
+    insertbefore: '^#\ End\ of\ file'
+    state: present
+
+- name: Prevent applications with setuid from dumping their memory
+  copy:
+    dest: /etc/sysctl.d/suid_dumpable.conf
+    content: "fs.suid_dumpable=0"
