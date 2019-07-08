@@ -92,3 +92,7 @@
     dest: /etc/pam.d/system-login
     content: "auth optional pam_faildelay.so delay=4000000"
 
+- name: Block unnecessary network protocols
+  copy:
+    src: uncommon-network-protocols.conf
+    dest: /etc/modprobe.d/uncommon-network-protocols.conf
