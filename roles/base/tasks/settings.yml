@@ -45,3 +45,21 @@
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=1"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
+
+- name: Disable acces to /proc in /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "proc /proc proc nosuid,nodev,noexec,hidepid=2,gid=proc 0 0"
+    insertafter: EOF
+    state: present
+
+- name: Ensure systemd-logind.service.d exists
+  file:
+    path: /etc/systemd/system/systemd-logind.service.d
+    recurse: yes
+    state: directory
+
+- name: Update systemd with supplementary "proc" group
+  copy:
+    dest: /etc/systemd/system/systemd-logind.service.d/hidepid.conf
+    content: "[Service]\nSupplementaryGroups=proc"
