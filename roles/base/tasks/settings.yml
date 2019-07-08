@@ -86,3 +86,9 @@
   copy:
     dest: /etc/sysctl.d/suid_dumpable.conf
     content: "fs.suid_dumpable=0"
+
+- name: Add 4s. delay to failed login attempts
+  copy:
+    dest: /etc/pam.d/system-login
+    content: "auth optional pam_faildelay.so delay=4000000"
+
