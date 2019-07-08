@@ -28,9 +28,27 @@ set visible-stats on
 ## Readline used by Bash 4.)
 set skip-completed-text on
 
-## Filtered history search
-"\e[A": history-search-backward
-"\e[B": history-search-forward
-
 # Be somewhat protective on paste
 set enable-bracketed-paste on
+
+# Show current mode
+set editing-mode vi
+set keymap vi-command
+set show-mode-in-prompt on
+set vi-ins-mode-string "\e[38;5;242m╰▶\1\e[6 q\2"
+set vi-cmd-mode-string "\e[38;5;242m╰ \1\e[2 q\2"
+
+# Color files by types
+set colored-stats On
+
+# Append char to indicate type
+set visible-stats On
+
+# Mark symlinked directories
+set mark-symlinked-directories On
+
+# Color the common prefix
+set colored-completion-prefix On
+
+# Color the common prefix in menu-complete
+set menu-complete-display-prefix On

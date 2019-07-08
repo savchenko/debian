@@ -28,6 +28,7 @@ function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 alias ...="cd ../.."
 alias ..="cd .."
 alias c="clear"
+alias rt="reset"
 alias ca="bat --style plain --theme 1337"
 alias dd="dd bs=4M status=progress oflag=sync"
 alias dmesg="dmesg -Hwx"

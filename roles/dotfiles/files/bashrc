@@ -47,7 +47,7 @@ if [ -t 1 ]; then
   PS1+=" ${blue}\h"                               # hostname
   PS1+="${grey} \w"                               # work dir
   PS1+="${light_grey}\$(__git_ps1)"               # git branch
-  PS1+="\n${dark_grey}╰▶ \[$(tput sgr0)\]"        # input symbol
+  PS1+="\n${dark_grey} \[$(tput sgr0)\]"          # input symbol
 
   export PS1
   export PS2='> '
@@ -55,8 +55,10 @@ if [ -t 1 ]; then
   #
   # Tweaks ------------------------------------------------------------------------
   #
+  set -o vi
   bind 'set show-all-if-ambiguous on'             # Auto-completion on first tab
-  bind '"\C-r": "\C-a hstr -- \C-j"'              # ...in HSTR by CTRL+R
+  bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
+  bind '"ii": "\e\e"'                             # the same escape as in vim
 
   complete -d cd                                  # cd only into directory
 
@@ -71,6 +73,9 @@ if [ -t 1 ]; then
   export HISTFILESIZE=5000                        # Increase history file size (default is 500)
   export HISTSIZE=${HISTFILESIZE}                 # Increase history size (default is 500)
   export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
+
+  # Bind <Esc> to <ii> as in .vimrc
+  bind '"\ew": "\C-e # "'
 
   #
   # Coreutils tweaks --------------------------------------------------------------
@@ -98,6 +103,7 @@ if [ -t 1 ]; then
 
   alias grep="grep --color=auto"                  # colorize grep by default
   alias egrep="egrep --color=auto"
+  alias igrep="grep -i"
 
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
