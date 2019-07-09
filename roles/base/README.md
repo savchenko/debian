@@ -10,7 +10,7 @@ Debian 9 (might work on its derivatives, however this is not guaranteed)
 Role Variables
 --------------
 `timezone` self-explanatory. Default is "UTC"  
-`locale` for example, "en_GB.UTF-8"
+`locale` for example, "en_GB.UTF-8"  
 `sshguard_path` path to sshguard config. Default is `/etc/sshguard/sshguard.conf`
 
 Dependencies
@@ -29,6 +29,7 @@ Example Playbook
     vars:
       timezone: Australia/Adelaide
       locale: en_US.UTF-8
+      sshguard_path: /etc/sshguard/sshguard.conf
 ```
 
 License
