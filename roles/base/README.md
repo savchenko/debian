@@ -11,6 +11,7 @@ Role Variables
 --------------
 `timezone` self-explanatory. Default is "UTC"  
 `locale` for example, "en_GB.UTF-8"
+`sshguard_path` path to sshguard config. Default is `/etc/sshguard/sshguard.conf`
 
 Dependencies
 ------------

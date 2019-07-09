@@ -1,8 +1,4 @@
 ---
-# - name: Stop SSH connections from being marked as invalid
-#   # Fails when using "copy" module
-#   shell: echo 1 > /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
-
 - name: Ensure UFW is installed
   apt:
     name: ufw

@@ -1,0 +1,28 @@
+---
+- name: Ensure sshguard is installed and updated
+  apt:
+    package: sshguard
+    state: latest
+  register: sshguard_is_latest
+
+- name: Decrease detection threshold
+  replace:
+    path: "{{ sshguard_path }}"
+    regexp: '^THRESHOLD' 
+    replace: 'THRESHOLD=10'
+  when: sshguard_is_latest is succeeded
+
+- name: Increase block time to 1h
+  replace:
+    path: "{{ sshguard_path }}"
+    regexp: '^BLOCK_TIME'
+    replace: 'BLOCK_TIME=3600'
+  when: sshguard_is_latest is succeeded
+
+- name: Remember attackers for 24h
+  replace:
+    path: "{{ sshguard_path }}"
+    regexp: '^DETECTION_TIME'
+    replace: 'DETECTION_TIME=86400'
+  when: sshguard_is_latest is succeeded
+  notify: restart sshguard

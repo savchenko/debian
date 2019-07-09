@@ -53,6 +53,12 @@
   tags:
     - base_pkg_install
 
+- name: Configure sshguard
+  import_tasks: sshguard.yml
+  become: yes
+  tags:
+    - base_sshguard
+
 - name: Configure Knot-resolver
   import_tasks: packages_resolver.yml
   become: yes
