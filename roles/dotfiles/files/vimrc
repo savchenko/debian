@@ -54,11 +54,11 @@ Plug 'yggdroot/indentLine'
 " <Leader>+z
 Plug 'dhruvasagar/vim-zoom'
 
-" Incremental search via `/`
-Plug 'haya14busa/incsearch.vim'
-
 " Pandoc
 Plug 'vim-pandoc/vim-pandoc-syntax'
+
+" Autocomplete
+Plug 'ajh17/VimCompletesMe'
 
 call plug#end()
 
@@ -136,19 +136,8 @@ set showmatch
 " Search is incremental and case-sensitive if UpperCase is present
 set hlsearch
 set incsearch
+set ignorecase
 set smartcase
-
-" Highlight search results after search is done
-let g:incsearch#auto_nohlsearch = 0
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
 
 " Smart tabs, pythonic setup moved to `Macros` section
 set smarttab
@@ -386,7 +375,7 @@ map <leader>m :call ToggleScrollMode()<cr>
 map <leader>s ysW
 
 " Toggle line numbers between absolute/relative
-map <S-n> :call ToggleNumber()<cr>
+map <S-l> :call ToggleNumber()<cr>
 
 " Save as usual
 map <C-s> :w!<CR>
@@ -496,9 +485,20 @@ autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth
 " Pythonic tabs are limited to *.py
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
+" Fix YAML intendation
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
+
 augroup pandoc_syntax
     au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
+
+" Autocomplete
+au FileType php setl ofu=phpcomplete#CompletePHP
+au FileType ruby,eruby setl ofu=rubycomplete#Complete
+au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
+au FileType c setl ofu=ccomplete#CompleteCpp
+au FileType css setl ofu=csscomplete#CompleteCSS
+autocmd FileType vim let b:vcm_tab_complete = 'vim'
 
 " format JSON code
 com! FormatJSON %!python -m json.tool
@@ -530,7 +530,6 @@ endfunction
 
 " Prevent opening files in NERDTree
 let g:fzf_layout = { 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew' }
-
 autocmd FileType nerdtree let t:nerdtree_winnr = bufwinnr('%')
 autocmd BufWinEnter * call PreventBuffersInNERDTree()
 
