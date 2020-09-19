@@ -26,30 +26,3 @@
   copy:
     src: vimrc
     dest: "{{ ansible_env.HOME }}/.vimrc"
-
-- name: Install NVim plug
-  shell: curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  when: neovim
-
-#
-# TODO:
-# Do we really need Ruby/Python running attached to the text-editor?..
-#
-# - name: Update NVim gem
-#   command: gem update neovim
-
-# - name: Update neovim pip module
-#   pip:
-#     name: neovim
-#     executable: pip
-
-# - name: Update neovim pip3 module
-#   pip:
-#     name: neovim
-#     executable: pip3
-
-- name: Install nVIM plugins and exit
-  shell: nvim +PlugUpdate +sleep1000m +exit +sleep1000m +exit
-  async: 45
-  poll: 5
