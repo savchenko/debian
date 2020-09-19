@@ -26,6 +26,8 @@
       - man-db
       - mc
       - ncdu
+      - ncurses-base
+      - ncurses-term
       - needrestart
       - neovim
       - neovim-runtime
