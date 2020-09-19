@@ -1,2 +1,3 @@
 ---
-# vars file for dotfiles
+kernel_version: "{{ ansible_facts['kernel'] }}"
+WSL: "{{ kernel_version is regex('.*Microsoft$') }}"
