@@ -144,7 +144,7 @@ syntax on
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set nocul
 
-" Don't show typed command, causes glitches in SR-bottom corner, show mode 
+" Don't show typed command, causes glitches in SR-bottom corner, show mode
 set noshowcmd
 set showmode
 
@@ -253,7 +253,7 @@ imap <C-s> <Esc>:w!<CR>a
 " Close window/split as usual
 map <C-w> :close<CR>
 
-" Don't copy result of 'dd', 's' and 'c' into buffer
+"  Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
 vnoremap d "_d
 nnoremap s "_s
@@ -343,15 +343,21 @@ autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 " Fix YAML intendation
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 
-augroup pandoc_syntax
-    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
-augroup END
-
 " format JSON code
 com! FormatJSON %!python -m json.tool
 
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
+
+" Save views automatically
+autocmd BufWinLeave *.* mkview
+" autocmd BufWinEnter *.* silent loadview
+
+" Return to last edit position when opening files
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
 
 " Scroll mode, keeps cursor centered and horizontally unchanged
 function! ToggleScrollMode()
@@ -365,8 +371,6 @@ function! ToggleScrollMode()
     else
         nnoremap j <C-e>j
         nnoremap k <C-y>k
-        nnoremap <Up> <C-y>k  
-        nnoremap <Down> <C-e>j  
         set virtualedit=all
         set nostartofline
         let s:scroll_mode = 1
@@ -386,7 +390,7 @@ function! ToggleNumber()
 endfunc
 
 " strips trailing whitespace at the end of files.
-function! <SID>WhitespaceStrip()
+function! WhitespaceStrip()
     " save last search & cursor position
     let _s=@/
     let l = line(".")
