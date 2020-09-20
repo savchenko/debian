@@ -121,7 +121,9 @@ let loaded_matchit = 1
 " Visuals
 " ----------------------------------------------------------------------------
 "
-set synmaxcol=256
+
+" Highlight up to 512 chars per line
+set synmaxcol=512
 
 if has("termguicolors")
     set termguicolors
@@ -240,7 +242,7 @@ set completeopt+=noinsert,noselect
 " Always show SignColumn
 set signcolumn=yes
 
-" Prettier GiGutter glyphs
+" Prettier GitGutter glyphs
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '•'
 let g:gitgutter_sign_removed = '-'
@@ -248,7 +250,7 @@ let g:gitgutter_sign_removed_first_line = '-'
 let g:gitgutter_sign_modified_removed = '~'
 
 " Disable indent line by default
-let g:indentLine_enabled = 0
+let g:indentLine_enabled = 1
 let g:indentLine_setColors = 1
 let g:indentLine_char = '┊'
 let g:indentLine_leadingSpaceEnabled = 0
