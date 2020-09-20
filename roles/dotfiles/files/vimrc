@@ -55,9 +55,16 @@ set nojoinspaces
 set formatoptions-=r formatoptions-=c formatoptions-=o formatoptions+=j
 
 " Autosaves
-set backupdir=~/.vim/backup
-set directory=~/.vim/tmp
-set undodir=~/.vim/undo
+if has("unix")
+  set backupdir=~/.vim/backup
+  set directory=~/.vim/tmp
+  set undodir=~/.vim/undo
+elseif has("win32")
+  let g:nvim_dir = substitute($HOME, '\\', '\\\', "g").'\\AppData\\Local\\nvim\\'
+  set backupdir=g:nvim_dir.'backup'
+  set directory=g:nvim_dir.'tmp'
+  set undodir=g:nvim_dir.'undo'
+endif
 set backup
 set undofile
 set noswapfile
