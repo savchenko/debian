@@ -3,19 +3,21 @@
 " System
 " ----------------------------------------------------------------------------
 "
+
+" Basics
 set ttyfast
 set nocompatible
 set lazyredraw
 set shell=/bin/bash
 set modelines=0
-
-" Write swap every second and report CursorHold
-set updatetime=1000
-
 set termencoding=utf-8
 set encoding=utf8
 set fileformat=unix
 set clipboard=unnamedplus
+filetype plugin on
+
+" Write swap every second if nothing is typed and report CursorHold
+set updatetime=1000
 
 " Intendation
 filetype indent on
@@ -24,8 +26,8 @@ set smartindent
 
 " Menu next to the airline
 set wildmenu
-set wildmode=longest:full,full
 set wildignore+=.git,.hg,.svn
+set wildmode=longest:full,full
 set wildignore+=*.aux,*.out,*.toc
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.rbc,*.class,*.pyc
 set wildignore+=*.ai,*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.psd,*.webp
@@ -60,10 +62,10 @@ if has("unix")
   set directory=~/.vim/tmp
   set undodir=~/.vim/undo
 elseif has("win32")
-  let g:nvim_dir = substitute($HOME, '\\', '\\\', "g").'\\AppData\\Local\\nvim\\'
-  set backupdir=g:nvim_dir.'backup'
-  set directory=g:nvim_dir.'tmp'
-  set undodir=g:nvim_dir.'undo'
+  let g:nv_dir=substitute($HOME, '\\', '\\\', "g").'\\AppData\\Local\\nvim\\'
+  execute "set backupdir=".g:nv_dir.'backup'
+  execute "set directory=".g:nv_dir.'tmp'
+  execute "set undodir=".g:nv_dir.'undo'
 endif
 set backup
 set undofile
@@ -71,6 +73,13 @@ set noswapfile
 set undolevels=1000
 set undoreload=10000
 set history=1000
+
+
+" NetRW
+let g:netrw_banner = 0
+let g:netrw_browse_split = 3
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 20
 
 " Highlight brackets
 set showmatch
@@ -96,24 +105,8 @@ set switchbuf=useopen,usetab,newtab
 " Add space before comments
 let NERDSpaceDelims=1
 
-" Don't mess with markdown spaces
-let g:whitespace_autostrip=0
-let g:whitespace_ignore_splits=0
-let g:whitespace_highlight='Error'
-let g:whitespace_ignore_tabs = [
-            \ 'git',
-            \ 'gitcommit',
-            \ 'gitconfig',
-            \ 'gitrebase',
-            \ 'gitsendemail',
-            \ ]
-
-" Smart pairs are disabled by default:
-let g:pear_tree_smart_openers = 1
-let g:pear_tree_smart_closers = 1
-let g:pear_tree_smart_backspace = 1
-
 " Load matchit
+packadd! matchit
 let loaded_matchit = 1
 
 "
@@ -125,6 +118,7 @@ let loaded_matchit = 1
 " Highlight up to 512 chars per line
 set synmaxcol=512
 
+" Attempt to show 24-bit palette with 256 colours fallback
 if has("termguicolors")
     set termguicolors
 else
@@ -141,65 +135,21 @@ if &term =~# '^screen'
 endif
 
 " Colorscheme theme
-syntax on
+colorscheme github
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 1
-colorscheme hybrid
+syntax on
 
 " Nice highlight of the current line, turned off by  default
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set nocul
 
-" Airline
-let g:airline_minimalist_showmod = 0
-let g:airline_theme='minimalist'
-let g:airline_powerline_fonts=1
-let g:airline_skip_empty_sections = 1
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline_symbols = {}
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.branch = '⎇ '
+" Don't show typed command, causes glitches in SR-bottom corner, show mode 
+set noshowcmd
+set showmode
 
-function! AirlineInit()
-    let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()}%3l%#__restore__#/%L :%3v')
-endfunction
-
-autocmd User AirlineAfterInit call AirlineInit()
-
-let g:airline_mode_map = {
-            \ '__' : '-',
-            \ 'n'  : 'N',
-            \ 'i'  : 'I',
-            \ 'R'  : 'R',
-            \ 'c'  : 'C',
-            \ 'v'  : 'V',
-            \ 'V'  : 'V',
-            \ '' : 'V',
-            \ 's'  : 'S',
-            \ 'S'  : 'S',
-            \ '' : 'S',
-            \ }
-
-" Show tabline only if >1 file is open
-let g:airline#extensions#tabline#show_buffers=1
-let g:airline#extensions#tabline#buffer_min_count=2
-let g:airline#extensions#tabline#tab_min_count=2
-
-" Disable buffer type SR
-let g:airline#extensions#tabline#show_tab_type=0
-let g:airline#extensions#tabline#fnamemod=':t'
-
-" As we already show it in airline..
-set noshowmode
-
-" Show typed command in normal mode
-set showcmd
-
-" No line numbers by default
-set nonumber
+" Line numbers by default
+set number
 
 " Don't show startup message
 set shortmess+=Ic
@@ -240,69 +190,46 @@ set completeopt+=menuone
 set completeopt+=noinsert,noselect
 
 " Always show SignColumn
-set signcolumn=yes
-
-" Prettier GitGutter glyphs
-let g:gitgutter_sign_added = '+'
-let g:gitgutter_sign_modified = '•'
-let g:gitgutter_sign_removed = '-'
-let g:gitgutter_sign_removed_first_line = '-'
-let g:gitgutter_sign_modified_removed = '~'
-
-" Disable indent line by default
-let g:indentLine_enabled = 1
-let g:indentLine_setColors = 1
-let g:indentLine_char = '┊'
-let g:indentLine_leadingSpaceEnabled = 0
-let g:indentLine_leadingSpaceChar = '·'
+set signcolumn=auto
 
 " Change cursor shape
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " ...and in VTE
-let &t_SI = "\<Esc>[6 q"
-let &t_SR = "\<Esc>[4 q"
-let &t_EI = "\<Esc>[2 q"
+" TODO: Wrap in `if/else`
+" let &t_SI = "\<Esc>[6 q"
+" let &t_SR = "\<Esc>[4 q"
+" let &t_EI = "\<Esc>[2 q"
 
 " Invisible characters
 set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 
-let g:startify_custom_header = [
-            \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
-            \ ' │ ├─┤││││├┴┐ ',
-            \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
-            \ ]
-
-let g:startify_lists = [
-            \ { 'type': 'files',     'header': ['MRU'] },
-            \ ]
 
 "
 " ----------------------------------------------------------------------------
 " Hotkeys
 " ----------------------------------------------------------------------------
 "
+
 " F1 does _absolutely_ nothing
 nnoremap <F1> <nop>
 inoremap <F1> <nop>
 map <F1> <nop>
 
-" Tree
-nnoremap <F2> :NERDTreeToggle<cr>
 " F3 yanks all
 map <F3> :%y+<cr>
 
 " Line numbers
-map <F4> :set nonumber!<cr>
-
-" Toggle indentation
-map <F5> :IndentLinesToggle<cr>
+map <silent> <F4> :set nonumber!<cr>
 
 " Toggle invisible chars
-map <F6> :set list!<cr>
+map <silent> <F5> :set list!<cr>
 
 " Toggle spell-check
-map <F7> :set spell!<cr>
+map <silent> <F7> :set spell!<cr>
 
 " Go back into normal mode by `ii`
 inoremap ii <esc>
@@ -313,21 +240,18 @@ let mapleader = "\<Space>"
 " <leader>+m toggles "scroll mode"
 map <leader>m :call ToggleScrollMode()<cr>
 
-" <leader>+s is ysW
-map <leader>s ysW
+" Insert date header
+map <F12> :call DD()<cr>
 
 " Toggle line numbers between absolute/relative
-map <S-l> :call ToggleNumber()<cr>
+map <S-n> :call ToggleNumber()<cr>
 
 " Save as usual
 map <C-s> :w!<CR>
 imap <C-s> <Esc>:w!<CR>a
 
-" Close __WINDOW__ as usual
+" Close window/split as usual
 map <C-w> :close<CR>
-
-" Select all as usual (skips to the last symbol)
-map <C-a> <esc>gg0vG$<CR>
 
 " Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
@@ -335,6 +259,8 @@ vnoremap d "_d
 nnoremap s "_s
 vnoremap s "_s
 nnoremap c "_c
+vnoremap c "_c
+nnoremap C "_C
 vnoremap C "_C
 
 " Move up/down using _visual_ lines (e.g. wrapped ones)
@@ -367,7 +293,7 @@ nnoremap <esc><esc> :noh<return><esc>
 nnoremap Q <nop>
 nnoremap QQ ZZ
 
-" Switch splits using Ctrl+hjkl (TODO: use NeoVim's ALT support)
+" Switch splits using Ctrl+hjkl
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
@@ -397,22 +323,9 @@ nmap <S-k> mz:m-2<cr>`z
 vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" Don't mess with hotkeys
-let g:fuzzy_bindkeys = 0
+" Backspace over intendation, EOL and outside of current insert
+set backspace=indent,eol,start
 
-" Open fzy or rgrep finders
-nnoremap <C-f> :FuzzyOpen<CR>
-nnoremap <C-g> :FuzzyGrep<CR>
-
-" Git
-nnoremap <Leader>hn :GitGutterNextHunk<CR>
-nnoremap <Leader>hp :GitGutterPrevHunk<CR>
-
-" Zoom
-nmap <Leader>z <Plug>(zoom-toggle)
-
-
-"
 " ----------------------------------------------------------------------------
 " Macros
 " ----------------------------------------------------------------------------
@@ -433,14 +346,6 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 augroup pandoc_syntax
     au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
-
-" Autocomplete
-au FileType php setl ofu=phpcomplete#CompletePHP
-au FileType ruby,eruby setl ofu=rubycomplete#Complete
-au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
-au FileType c setl ofu=ccomplete#CompleteCpp
-au FileType css setl ofu=csscomplete#CompleteCSS
-autocmd FileType vim let b:vcm_tab_complete = 'vim'
 
 " format JSON code
 com! FormatJSON %!python -m json.tool
@@ -476,6 +381,7 @@ function! ToggleNumber()
         set number
     else
         set relativenumber
+        set nocul
     endif
 endfunc
 
@@ -489,3 +395,10 @@ function! <SID>WhitespaceStrip()
     let @/=_s
     call cursor(l, c)
 endfunction
+
+function! DD()
+  let date = strftime('%a %d %b %Y %H:%M')
+  let line = "\n====================="
+  let out = date . line
+  put =out
+endfunc
