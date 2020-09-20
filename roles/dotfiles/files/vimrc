@@ -3,19 +3,21 @@
 " System
 " ----------------------------------------------------------------------------
 "
+
+" Basics
 set ttyfast
 set nocompatible
 set lazyredraw
 set shell=/bin/bash
 set modelines=0
-
-" Write swap every second and report CursorHold
-set updatetime=1000
-
 set termencoding=utf-8
 set encoding=utf8
 set fileformat=unix
 set clipboard=unnamedplus
+filetype plugin on
+
+" Write swap every second if nothing is typed and report CursorHold
+set updatetime=1000
 
 " Intendation
 filetype indent on
@@ -24,8 +26,8 @@ set smartindent
 
 " Menu next to the airline
 set wildmenu
-set wildmode=longest:full,full
 set wildignore+=.git,.hg,.svn
+set wildmode=longest:full,full
 set wildignore+=*.aux,*.out,*.toc
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.rbc,*.class,*.pyc
 set wildignore+=*.ai,*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.psd,*.webp
