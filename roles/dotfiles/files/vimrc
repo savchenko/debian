@@ -105,24 +105,8 @@ set switchbuf=useopen,usetab,newtab
 " Add space before comments
 let NERDSpaceDelims=1
 
-" Don't mess with markdown spaces
-let g:whitespace_autostrip=0
-let g:whitespace_ignore_splits=0
-let g:whitespace_highlight='Error'
-let g:whitespace_ignore_tabs = [
-            \ 'git',
-            \ 'gitcommit',
-            \ 'gitconfig',
-            \ 'gitrebase',
-            \ 'gitsendemail',
-            \ ]
-
-" Smart pairs are disabled by default:
-let g:pear_tree_smart_openers = 1
-let g:pear_tree_smart_closers = 1
-let g:pear_tree_smart_backspace = 1
-
 " Load matchit
+packadd! matchit
 let loaded_matchit = 1
 
 "
@@ -150,65 +134,21 @@ if &term =~# '^screen'
 endif
 
 " Colorscheme theme
-syntax on
+colorscheme github
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 1
-colorscheme hybrid
+syntax on
 
 " Nice highlight of the current line, turned off by  default
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set nocul
 
-" Airline
-let g:airline_minimalist_showmod = 0
-let g:airline_theme='minimalist'
-let g:airline_powerline_fonts=1
-let g:airline_skip_empty_sections = 1
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline_symbols = {}
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.branch = '⎇ '
+" Don't show typed command, causes glitches in SR-bottom corner, show mode 
+set noshowcmd
+set showmode
 
-function! AirlineInit()
-    let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()}%3l%#__restore__#/%L :%3v')
-endfunction
-
-autocmd User AirlineAfterInit call AirlineInit()
-
-let g:airline_mode_map = {
-            \ '__' : '-',
-            \ 'n'  : 'N',
-            \ 'i'  : 'I',
-            \ 'R'  : 'R',
-            \ 'c'  : 'C',
-            \ 'v'  : 'V',
-            \ 'V'  : 'V',
-            \ '' : 'V',
-            \ 's'  : 'S',
-            \ 'S'  : 'S',
-            \ '' : 'S',
-            \ }
-
-" Show tabline only if >1 file is open
-let g:airline#extensions#tabline#show_buffers=1
-let g:airline#extensions#tabline#buffer_min_count=2
-let g:airline#extensions#tabline#tab_min_count=2
-
-" Disable buffer type SR
-let g:airline#extensions#tabline#show_tab_type=0
-let g:airline#extensions#tabline#fnamemod=':t'
-
-" As we already show it in airline..
-set noshowmode
-
-" Show typed command in normal mode
-set showcmd
-
-" No line numbers by default
-set nonumber
+" Line numbers by default
+set number
 
 " Don't show startup message
 set shortmess+=Ic
@@ -249,69 +189,46 @@ set completeopt+=menuone
 set completeopt+=noinsert,noselect
 
 " Always show SignColumn
-set signcolumn=yes
-
-" Prettier GitGutter glyphs
-let g:gitgutter_sign_added = '+'
-let g:gitgutter_sign_modified = '•'
-let g:gitgutter_sign_removed = '-'
-let g:gitgutter_sign_removed_first_line = '-'
-let g:gitgutter_sign_modified_removed = '~'
-
-" Disable indent line by default
-let g:indentLine_enabled = 1
-let g:indentLine_setColors = 1
-let g:indentLine_char = '┊'
-let g:indentLine_leadingSpaceEnabled = 0
-let g:indentLine_leadingSpaceChar = '·'
+set signcolumn=auto
 
 " Change cursor shape
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " ...and in VTE
-let &t_SI = "\<Esc>[6 q"
-let &t_SR = "\<Esc>[4 q"
-let &t_EI = "\<Esc>[2 q"
+" TODO: Wrap in `if/else`
+" let &t_SI = "\<Esc>[6 q"
+" let &t_SR = "\<Esc>[4 q"
+" let &t_EI = "\<Esc>[2 q"
 
 " Invisible characters
 set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 
-let g:startify_custom_header = [
-            \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
-            \ ' │ ├─┤││││├┴┐ ',
-            \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
-            \ ]
-
-let g:startify_lists = [
-            \ { 'type': 'files',     'header': ['MRU'] },
-            \ ]
 
 "
 " ----------------------------------------------------------------------------
 " Hotkeys
 " ----------------------------------------------------------------------------
 "
+
 " F1 does _absolutely_ nothing
 nnoremap <F1> <nop>
 inoremap <F1> <nop>
 map <F1> <nop>
 
-" Tree
-nnoremap <F2> :NERDTreeToggle<cr>
 " F3 yanks all
 map <F3> :%y+<cr>
 
 " Line numbers
-map <F4> :set nonumber!<cr>
-
-" Toggle indentation
-map <F5> :IndentLinesToggle<cr>
+map <silent> <F4> :set nonumber!<cr>
 
 " Toggle invisible chars
-map <F6> :set list!<cr>
+map <silent> <F5> :set list!<cr>
 
 " Toggle spell-check
-map <F7> :set spell!<cr>
+map <silent> <F7> :set spell!<cr>
 
 " Go back into normal mode by `ii`
 inoremap ii <esc>
@@ -322,21 +239,21 @@ let mapleader = "\<Space>"
 " <leader>+m toggles "scroll mode"
 map <leader>m :call ToggleScrollMode()<cr>
 
-" <leader>+s is ysW
-map <leader>s ysW
+" Insert date header
+map <F12> :call DD()<cr>
 
 " Toggle line numbers between absolute/relative
-map <S-l> :call ToggleNumber()<cr>
+map <S-n> :call ToggleNumber()<cr>
 
 " Save as usual
 map <C-s> :w!<CR>
 imap <C-s> <Esc>:w!<CR>a
 
-" Close __WINDOW__ as usual
+" Close window/split as usual
 map <C-w> :close<CR>
 
 " Select all as usual (skips to the last symbol)
-map <C-a> <esc>gg0vG$<CR>
+map <C-a> <esc>call: SelectAll()<CR>
 
 " Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
@@ -344,6 +261,8 @@ vnoremap d "_d
 nnoremap s "_s
 vnoremap s "_s
 nnoremap c "_c
+vnoremap c "_c
+nnoremap C "_C
 vnoremap C "_C
 
 " Move up/down using _visual_ lines (e.g. wrapped ones)
