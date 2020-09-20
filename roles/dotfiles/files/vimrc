@@ -9,16 +9,15 @@ set lazyredraw
 set shell=/bin/bash
 set modelines=0
 
-" Write swap every 0.25s and report CursorHold
-" Needed for proper GitGutter functionality
-set updatetime=250
+" Write swap every second and report CursorHold
+set updatetime=1000
 
 set termencoding=utf-8
 set encoding=utf8
 set fileformat=unix
 set clipboard=unnamedplus
 
-" Experimental, hopefully fixes intendation
+" Intendation
 filetype indent on
 set autoindent
 set smartindent
