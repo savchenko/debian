@@ -395,3 +395,10 @@ function! <SID>WhitespaceStrip()
     let @/=_s
     call cursor(l, c)
 endfunction
+
+function! DD()
+  let date = strftime('%a %d %b %Y %H:%M')
+  let line = "\n====================="
+  let out = date . line
+  put =out
+endfunc
