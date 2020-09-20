@@ -107,10 +107,6 @@ set switchbuf=useopen,usetab,newtab
 " Add space before comments
 let NERDSpaceDelims=1
 
-" Load matchit
-packadd! matchit
-let loaded_matchit = 1
-
 " ----------------------------------------------------------------------------
 " Visuals
 " ----------------------------------------------------------------------------
