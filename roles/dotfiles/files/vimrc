@@ -118,6 +118,7 @@ let loaded_matchit = 1
 " Highlight up to 512 chars per line
 set synmaxcol=512
 
+" Attempt to show 24-bit palette with 256 colours fallback
 if has("termguicolors")
     set termguicolors
 else
@@ -252,9 +253,6 @@ imap <C-s> <Esc>:w!<CR>a
 " Close window/split as usual
 map <C-w> :close<CR>
 
-" Select all as usual (skips to the last symbol)
-map <C-a> <esc>call: SelectAll()<CR>
-
 " Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
 vnoremap d "_d
@@ -295,7 +293,7 @@ nnoremap <esc><esc> :noh<return><esc>
 nnoremap Q <nop>
 nnoremap QQ ZZ
 
-" Switch splits using Ctrl+hjkl (TODO: use NeoVim's ALT support)
+" Switch splits using Ctrl+hjkl
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
@@ -325,22 +323,9 @@ nmap <S-k> mz:m-2<cr>`z
 vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" Don't mess with hotkeys
-let g:fuzzy_bindkeys = 0
+" Backspace over intendation, EOL and outside of current insert
+set backspace=indent,eol,start
 
-" Open fzy or rgrep finders
-nnoremap <C-f> :FuzzyOpen<CR>
-nnoremap <C-g> :FuzzyGrep<CR>
-
-" Git
-nnoremap <Leader>hn :GitGutterNextHunk<CR>
-nnoremap <Leader>hp :GitGutterPrevHunk<CR>
-
-" Zoom
-nmap <Leader>z <Plug>(zoom-toggle)
-
-
-"
 " ----------------------------------------------------------------------------
 " Macros
 " ----------------------------------------------------------------------------
@@ -361,14 +346,6 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 augroup pandoc_syntax
     au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
-
-" Autocomplete
-au FileType php setl ofu=phpcomplete#CompletePHP
-au FileType ruby,eruby setl ofu=rubycomplete#Complete
-au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
-au FileType c setl ofu=ccomplete#CompleteCpp
-au FileType css setl ofu=csscomplete#CompleteCSS
-autocmd FileType vim let b:vcm_tab_complete = 'vim'
 
 " format JSON code
 com! FormatJSON %!python -m json.tool
@@ -404,6 +381,7 @@ function! ToggleNumber()
         set number
     else
         set relativenumber
+        set nocul
     endif
 endfunc
 
