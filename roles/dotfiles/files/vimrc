@@ -283,6 +283,7 @@ nmap <Leader>h i<space><esc>l
 nmap <Leader>l a<space><esc>h
 
 " Save is forced by default (don't nag about "file exists")
+map :W<cr> :w!<cr>
 map :w<cr> :w!<cr>
 map :x<cr> :x!<cr>
 
@@ -310,6 +311,11 @@ nmap <leader>q :bp <BAR> bd #<CR>
 " Leave text selected after changing intendation with <>
 vnoremap < <gv
 vnoremap > >gv
+" Change folding levels
+nmap z1 :set foldlevel=0<CR>
+nmap z2 :set foldlevel=1<CR>
+nmap z3 :set foldlevel=2<CR>
+nmap z4 :set foldlevel=3<CR>
 
 " Move to another line with arrow keys
 set whichwrap+=<,>
