@@ -289,7 +289,6 @@ map <F1> <nop>
 
 " Tree
 nnoremap <F2> :NERDTreeToggle<cr>
-
 " F3 yanks all
 map <F3> :%y+<cr>
 
@@ -461,6 +460,8 @@ function! ToggleScrollMode()
     else
         nnoremap j <C-e>j
         nnoremap k <C-y>k
+        nnoremap <Up> <C-y>k  
+        nnoremap <Down> <C-e>j  
         set virtualedit=all
         set nostartofline
         let s:scroll_mode = 1
