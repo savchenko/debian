@@ -51,8 +51,8 @@ set hidden
 " Don't join spaces on paste
 set nojoinspaces
 
-" Don't autoextend comments, join comment characters
-set formatoptions-=r formatoptions-=c formatoptions-=o formatoptions+=j
+" Don't autoextend comments or join comment characters
+set formatoptions-=r formatoptions-=c formatoptions-=o formatoptions-=j
 
 " Autosaves
 if has("unix")
