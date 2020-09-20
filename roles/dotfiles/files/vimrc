@@ -96,9 +96,6 @@ set switchbuf=useopen,usetab,newtab
 " Add space before comments
 let NERDSpaceDelims=1
 
-" Don't fold at all.
-set nofoldenable
-
 " Don't mess with markdown spaces
 let g:whitespace_autostrip=0
 let g:whitespace_ignore_splits=0
