@@ -24,6 +24,9 @@ filetype indent on
 set autoindent
 set smartindent
 
+" Backspace over intendation, EOL and outside of current insert
+set backspace=indent,eol,start
+
 " Menu next to the airline
 set wildmenu
 set wildignore+=.git,.hg,.svn
@@ -323,8 +326,11 @@ nmap <S-k> mz:m-2<cr>`z
 vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" Backspace over intendation, EOL and outside of current insert
-set backspace=indent,eol,start
+" CTRL+V in insert mode
+inoremap <C-V> <C-r>+
+
+" CTRL+Z in insert mode
+inoremap <C-Z> <Esc>ui
 
 " ----------------------------------------------------------------------------
 " Macros
