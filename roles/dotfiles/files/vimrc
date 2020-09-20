@@ -1,8 +1,7 @@
-"
+
 " ----------------------------------------------------------------------------
 " System
 " ----------------------------------------------------------------------------
-"
 
 " Basics
 set ttyfast
@@ -112,11 +111,9 @@ let NERDSpaceDelims=1
 packadd! matchit
 let loaded_matchit = 1
 
-"
 " ----------------------------------------------------------------------------
 " Visuals
 " ----------------------------------------------------------------------------
-"
 
 " Highlight up to 512 chars per line
 set synmaxcol=512
@@ -210,12 +207,9 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " Invisible characters
 set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 
-
-"
 " ----------------------------------------------------------------------------
 " Hotkeys
 " ----------------------------------------------------------------------------
-"
 
 " F1 does _absolutely_ nothing
 nnoremap <F1> <nop>
@@ -247,7 +241,7 @@ map <leader>m :call ToggleScrollMode()<cr>
 map <F12> :call DD()<cr>
 
 " Toggle line numbers between absolute/relative
-map <S-n> :call ToggleNumber()<cr>
+map <S-l> :call ToggleNumber()<cr>
 
 " Save as usual
 map <C-s> :w!<CR>
@@ -256,7 +250,7 @@ imap <C-s> <Esc>:w!<CR>a
 " Close window/split as usual
 map <C-w> :close<CR>
 
-"  Don't copy result of 'dd', 's' and 'c' into buffer
+" Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
 vnoremap d "_d
 nnoremap s "_s
@@ -341,7 +335,6 @@ inoremap <C-Z> <Esc>ui
 " ----------------------------------------------------------------------------
 " Macros
 " ----------------------------------------------------------------------------
-"
 
 " Mostly use 2 spaces as <Tab>
 autocmd FileType text,markdown,vim,ini,gitconfig,*.yml setlocal tabstop=2 shiftwidth=2 softtabstop=2
@@ -361,15 +354,11 @@ com! FormatJSON %!python -m json.tool
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
 
-" Save views automatically
-autocmd BufWinLeave *.* mkview
-" autocmd BufWinEnter *.* silent loadview
-
 " Return to last edit position when opening files
 autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
+  \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+  \ |   exe "normal! g`\""
+  \ | endif
 
 " Scroll mode, keeps cursor centered and horizontally unchanged
 function! ToggleScrollMode()
@@ -390,7 +379,7 @@ function! ToggleScrollMode()
     endif
 endfunction
 
-" toggle between number and relativenumber
+" Toggle between number and relativenumber
 function! ToggleNumber()
     if(&relativenumber == 1)
         set norelativenumber
@@ -401,7 +390,7 @@ function! ToggleNumber()
     endif
 endfunc
 
-" strips trailing whitespace at the end of files.
+" Strips trailing whitespace at the end of files.
 function! WhitespaceStrip()
     " save last search & cursor position
     let _s=@/
@@ -412,6 +401,7 @@ function! WhitespaceStrip()
     call cursor(l, c)
 endfunction
 
+" Insert date header
 function! DD()
   let date = strftime('%a %d %b %Y %H:%M')
   let line = "\n====================="
