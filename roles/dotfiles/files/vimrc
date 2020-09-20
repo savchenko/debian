@@ -62,10 +62,10 @@ if has("unix")
   set directory=~/.vim/tmp
   set undodir=~/.vim/undo
 elseif has("win32")
-  let g:nvim_dir = substitute($HOME, '\\', '\\\', "g").'\\AppData\\Local\\nvim\\'
-  set backupdir=g:nvim_dir.'backup'
-  set directory=g:nvim_dir.'tmp'
-  set undodir=g:nvim_dir.'undo'
+  let g:nv_dir=substitute($HOME, '\\', '\\\', "g").'\\AppData\\Local\\nvim\\'
+  execute "set backupdir=".g:nv_dir.'backup'
+  execute "set directory=".g:nv_dir.'tmp'
+  execute "set undodir=".g:nv_dir.'undo'
 endif
 set backup
 set undofile
