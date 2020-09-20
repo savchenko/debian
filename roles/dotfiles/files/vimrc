@@ -449,9 +449,6 @@ com! FormatJSON %!python -m json.tool
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
 
-" Close NERDTree if it's the only window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
 " Scroll mode, keeps cursor centered and horizontally unchanged
 function! ToggleScrollMode()
     if exists("s:scroll_mode")
@@ -469,22 +466,6 @@ function! ToggleScrollMode()
         let s:scroll_mode = 1
         echom "scroll mode ON"
     endif
-endfunction
-
-" Prevent opening files in NERDTree
-let g:fzf_layout = { 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew' }
-autocmd FileType nerdtree let t:nerdtree_winnr = bufwinnr('%')
-autocmd BufWinEnter * call PreventBuffersInNERDTree()
-
-function! PreventBuffersInNERDTree()
-  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
-    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
-    \ && &buftype == '' && !exists('g:launching_fzf')
-    let bufnum = bufnr('%')
-    close
-    exe 'b ' . bufnum
-  endif
-  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
 endfunction
 
 " toggle between number and relativenumber
