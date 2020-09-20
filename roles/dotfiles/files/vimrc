@@ -24,6 +24,9 @@ filetype indent on
 set autoindent
 set smartindent
 
+" Backspace over intendation, EOL and outside of current insert
+set backspace=indent,eol,start
+
 " Menu next to the airline
 set wildmenu
 set wildignore+=.git,.hg,.svn
@@ -144,7 +147,7 @@ syntax on
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set nocul
 
-" Don't show typed command, causes glitches in SR-bottom corner, show mode 
+" Don't show typed command, causes glitches in SR-bottom corner, show mode
 set noshowcmd
 set showmode
 
@@ -253,7 +256,7 @@ imap <C-s> <Esc>:w!<CR>a
 " Close window/split as usual
 map <C-w> :close<CR>
 
-" Don't copy result of 'dd', 's' and 'c' into buffer
+"  Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
 vnoremap d "_d
 nnoremap s "_s
@@ -280,6 +283,7 @@ nmap <Leader>h i<space><esc>l
 nmap <Leader>l a<space><esc>h
 
 " Save is forced by default (don't nag about "file exists")
+map :W<cr> :w!<cr>
 map :w<cr> :w!<cr>
 map :x<cr> :x!<cr>
 
@@ -308,6 +312,12 @@ nmap <leader>q :bp <BAR> bd #<CR>
 vnoremap < <gv
 vnoremap > >gv
 
+" Change folding levels
+nmap z1 :set foldlevel=0<CR>
+nmap z2 :set foldlevel=1<CR>
+nmap z3 :set foldlevel=2<CR>
+nmap z4 :set foldlevel=3<CR>
+
 " Move to another line with arrow keys
 set whichwrap+=<,>
 
@@ -323,9 +333,11 @@ nmap <S-k> mz:m-2<cr>`z
 vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" Backspace over intendation, EOL and outside of current insert
-set backspace=indent,eol,start
+" CTRL+V in insert mode
+inoremap <C-V> <C-r>+
 
+" CTRL+Z in insert mode
+inoremap <C-Z> <Esc>ui
 " ----------------------------------------------------------------------------
 " Macros
 " ----------------------------------------------------------------------------
@@ -343,15 +355,21 @@ autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 " Fix YAML intendation
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 
-augroup pandoc_syntax
-    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
-augroup END
-
 " format JSON code
 com! FormatJSON %!python -m json.tool
 
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
+
+" Save views automatically
+autocmd BufWinLeave *.* mkview
+" autocmd BufWinEnter *.* silent loadview
+
+" Return to last edit position when opening files
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
 
 " Scroll mode, keeps cursor centered and horizontally unchanged
 function! ToggleScrollMode()
@@ -365,8 +383,6 @@ function! ToggleScrollMode()
     else
         nnoremap j <C-e>j
         nnoremap k <C-y>k
-        nnoremap <Up> <C-y>k  
-        nnoremap <Down> <C-e>j  
         set virtualedit=all
         set nostartofline
         let s:scroll_mode = 1
@@ -386,7 +402,7 @@ function! ToggleNumber()
 endfunc
 
 " strips trailing whitespace at the end of files.
-function! <SID>WhitespaceStrip()
+function! WhitespaceStrip()
     " save last search & cursor position
     let _s=@/
     let l = line(".")
