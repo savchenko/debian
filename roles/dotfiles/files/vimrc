@@ -76,10 +76,10 @@ set history=1000
 set showmatch
 
 " Search is incremental and case-sensitive if UpperCase is present
-set hlsearch
-set incsearch
 set ignorecase
 set smartcase
+set hlsearch
+set incsearch
 
 " <TAB> at the ^ equals to 'shiftwidth'
 set smarttab
