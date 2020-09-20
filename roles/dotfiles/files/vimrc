@@ -81,14 +81,16 @@ set incsearch
 set ignorecase
 set smartcase
 
-" Smart tabs, pythonic setup moved to `Macros` section
+" <TAB> at the ^ equals to 'shiftwidth'
 set smarttab
+
+" Round indent to multiple of 'shiftwidth`
 set shiftround
 
-" Expand <tab> into spaces
+" Expand <TAB> into spaces
 set expandtab
 
-" Emulate any other editor with tabs (copypasted from somewhere)
+" reveal already opened files instead of opening new buffers
 set switchbuf=useopen,usetab,newtab
 
 " Add space before comments
