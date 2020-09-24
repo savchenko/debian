@@ -15,7 +15,6 @@
       - gnupg2
       - grc
       - htop
-      - intel-microcode
       - ioping
       - keychain
       - knot-resolver
@@ -46,6 +45,11 @@
       - tree
       - unattended-upgrades
       - wget
+
+- name: Install Intel CPU firmware if necessary
+  apt:
+    name: intel-microcode
+  when: ansible_processor[1] == "GenuineIntel"
 
 - name: Ensure ~/.gnupg is initialized
   shell: gpg2 -k
