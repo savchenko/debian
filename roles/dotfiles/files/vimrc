@@ -328,6 +328,13 @@ inoremap <C-V> <C-r>+
 
 " CTRL+Z in insert mode
 inoremap <C-Z> <Esc>ui
+
+" Enable <TAB> and <S-TAB>
+nnoremap <S-Tab> <<
+nnoremap <Tab> >>
+inoremap <S-Tab> <C-d>
+inoremap <S-Tab> <C-t>
+
 " ----------------------------------------------------------------------------
 " Macros
 " ----------------------------------------------------------------------------
