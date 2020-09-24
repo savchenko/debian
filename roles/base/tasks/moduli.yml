@@ -6,12 +6,19 @@
 
 - name: Set fact about our findings
   set_fact:
-    generate_moduli: yes
-  when: (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad")
+    moduli_are_default: True
+  when: (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad" or st_moduli.stat['checksum'] == "77e7851b030f0dfdcddd792890bf7c1f39e63333")
+
+- name: Install non-default moduli
+  unarchive:
+    src: moduli.tar.gz
+    dest: /etc/ssh
+    mode: 0644
+  when: moduli_are_default == True
 
 - name: Generate primes pool
   shell: ssh-keygen -G "{{ ansible_env.HOME }}/moduli.in" -b 4096
-  when: generate_moduli is defined
+  when: moduli_are_default == True and generate_moduli == True
   register: primes_pool_is_ready
 
 - name: Select primes
