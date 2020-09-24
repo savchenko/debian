@@ -3,6 +3,7 @@
   apt:
     state: absent
     purge: yes
+    autoremove: yes
     name:
     - rpcbind
     - exim4
