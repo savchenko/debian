@@ -20,12 +20,13 @@
     - inputrc
     - profile
     - tmux.conf
-  when: ansible_connection != "local"
+  when: copy_dotfiles == true
 
 - name: Copy SSH client config
   copy:
     src: ssh_config
     dest: "{{ ansible_env.HOME }}/.ssh/config"
+    mode: 0644
     
 - name: Copy tmux terminfo
   copy:
