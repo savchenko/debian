@@ -1,0 +1,3 @@
+[submodule "roles/dotfiles/files/fzf"]
+	path = roles/dotfiles/files/fzf
+	url = https://github.com/junegunn/fzf
