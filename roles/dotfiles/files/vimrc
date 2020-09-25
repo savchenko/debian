@@ -185,8 +185,12 @@ set completeopt-=preview
 set completeopt+=menuone
 set completeopt+=noinsert,noselect
 
-" Always show SignColumn
-set signcolumn=auto
+" Automatically show signcolumn and try to accommodate up to 6 sections
+if has('nvim-0.4.0')
+  set signcolumn=auto:6
+elseif has('nvim-0.3.4') || has('signs')
+  set signcolumn=auto
+endif
 
 " Change cursor shape
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
@@ -329,11 +333,9 @@ inoremap <C-V> <C-r>+
 " CTRL+Z in insert mode
 inoremap <C-Z> <Esc>ui
 
-" Enable <TAB> and <S-TAB>
+" Enable <S-TAB> to reduce intendation
 nnoremap <S-Tab> <<
-nnoremap <Tab> >>
 inoremap <S-Tab> <C-d>
-inoremap <S-Tab> <C-t>
 
 " ----------------------------------------------------------------------------
 " Macros
