@@ -63,7 +63,7 @@
     - "^bind-key\ -T\ copy-mode-vi"
     - "^bind-key\ -Tcopy-mode-vi"
     - "^bind\ p\ paste-buffer"
-  when: ansible_connection != "local"
+  when: ansible_connection != "local" and change_prefix == True
 
 - name: Don't use vi mode in remote bash
   lineinfile:

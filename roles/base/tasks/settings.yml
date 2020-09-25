@@ -8,6 +8,20 @@
   notify:
     - restart sshd
 
+- name: Enable less secure ciphers
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Ciphers\s'
+    line: "Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-cbc"
+  when: sshd_less_secure == True
+
+- name: Enable less secure ciphers
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^MACs\s'
+    line: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha-256"
+  when: sshd_less_secure == True
+
 - name: Copy /etc/sysctl.conf
   copy:
     src: sysctl.conf
@@ -43,7 +57,7 @@
 - name: GRUB settings
   lineinfile:
     path: /etc/default/grub
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=1"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 loglevel=5 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 intel_iommu=on amd_iommu=on efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on vsyscall=none page_alloc.shuffle=1 extra_latent_entropy"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
 
