@@ -26,3 +26,34 @@
   copy:
     src: vimrc
     dest: "{{ ansible_env.HOME }}/.vimrc"
+
+- name: Copy colour-schemes
+  copy:
+    src: colors
+    dest: "{{ ansible_env.HOME }}/.vim"
+
+- name: Create site-packages root
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack"
+    state: directory
+
+- name: Create package folders
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}"
+    state: directory
+  with_items:
+    - fzf/start
+    - fzf.vim/start
+
+- name: Copy plugins
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
+  with_items:
+    - fzf
+    - fzf.vim
+
+- name: Make `preview.sh` executable
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/fzf.vim/start/fzf.vim/bin/preview.sh"
+    mode: a+x
