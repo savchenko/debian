@@ -57,7 +57,7 @@
 - name: GRUB settings
   lineinfile:
     path: /etc/default/grub
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=1"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 loglevel=5 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 intel_iommu=on amd_iommu=on efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on vsyscall=none page_alloc.shuffle=1 extra_latent_entropy"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
 
