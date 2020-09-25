@@ -10,8 +10,8 @@ Corresponding application (see below).
 Role Variables
 --------------
 `link_to_localhost` - defines if Ansible should link dotfiles to the _local_ $HOME.  
-`neovim` - all-inclusive, 5-stars neovim setup.
-`remote_bash_emacs` - Boolean, if true, will switch bash to "regular" Emacs-like mode.
+`neovim` - all-inclusive, 5-stars neovim setup.  
+`remote_bash_emacs` - Boolean, if true, will switch bash to "regular" Emacs-like mode.  
 `copy_dotfiles` - Boolean, if true, will copy dotfiles to the remote host instead of symlinking them. 
 
 Dependencies
