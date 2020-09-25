@@ -1,2 +1,3 @@
 ---
 copy_dotfiles: False
+change_prefix: True
