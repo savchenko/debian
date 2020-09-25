@@ -1,3 +1,6 @@
 [submodule ".\\roles\\dotfiles\\files\\fzf.vim"]
 	path = .\\roles\\dotfiles\\files\\fzf.vim
 	url = https://github.com/junegunn/fzf.vim
+[submodule ".\\roles\\dotfiles\\files\\fzf"]
+	path = .\\roles\\dotfiles\\files\\fzf
+	url = https://github.com/junegunn/fzf
