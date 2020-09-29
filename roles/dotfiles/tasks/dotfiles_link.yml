@@ -1,6 +1,6 @@
 ---
 - name: Link dotfiles to the home folder
-  file: src={{role_path}}/files/{{ item.src }}  dest={{ ansible_env.HOME }}/{{ item.dest }} state=link
+  file: src={{role_path}}/files/{{ item.src }}  dest={{ ansible_env.HOME }}/{{ item.dest }} state=link force=yes
   with_items:
     - { src: 'bash_profile', dest: '.bash_profile' }
     - { src: 'bashrc', dest: '.bashrc' }
@@ -16,5 +16,4 @@
     - { src: 'weechat.conf', dest: 'weechat.conf' }
     - { src: 'Xresources', dest: '.Xresources' }
     - { src: 'ssh_config', dest: '.ssh/config' }
-  force: yes
   when: ansible_connection == "local" and not WSL1
