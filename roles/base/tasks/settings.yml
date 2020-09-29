@@ -15,7 +15,7 @@
     line: "Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-cbc"
   when: sshd_less_secure == True
 
-- name: Enable less secure ciphers
+- name: Enable less secure MACs
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^MACs\s'
