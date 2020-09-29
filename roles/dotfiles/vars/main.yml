@@ -1,3 +1,3 @@
 ---
 kernel_version: "{{ ansible_facts['kernel'] }}"
-WSL: "{{ kernel_version is regex('.*Microsoft$') }}"
+WSL1: "{{ kernel_version is regex('.*Microsoft$') }}"
