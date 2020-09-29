@@ -52,7 +52,7 @@
   when: ansible_processor[1] == "GenuineIntel"
 
 - name: Ensure ~/.gnupg is initialized
-  shell: gpg2 -k
+  shell: gpg -k
 
 - name: Set lua5.3 as default `lua` command
   shell: "{{ item }}"
@@ -67,6 +67,12 @@
     src: z.lua.tgz
     dest: /usr/local/bin
     mode: a+x
+
+- name: Copy diff-so-fancy
+  copy:
+    src: "diff-so-fancy.pl"
+    dest: /usr/local/bin/diff-so-fancy
+  mode: a+x
 
 - name: Check if .DEBs are installed
   command: "dpkg-query -W {{ item }}"
