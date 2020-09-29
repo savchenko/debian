@@ -2,6 +2,7 @@
 - name: Link dotfiles to the home folder
   file: src={{role_path}}/files/{{ item.src }}  dest={{ ansible_env.HOME }}/{{ item.dest }} state=link force=yes
   with_items:
+    - { src: 'aliases', dest: '.aliases' }
     - { src: 'bash_profile', dest: '.bash_profile' }
     - { src: 'bashrc', dest: '.bashrc' }
     - { src: 'curlrc', dest: '.curlrc' }
