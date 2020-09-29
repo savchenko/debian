@@ -52,7 +52,7 @@
   when: ansible_processor[1] == "GenuineIntel"
 
 - name: Ensure ~/.gnupg is initialized
-  shell: gpg2 -k
+  shell: gpg -k
 
 - name: Set lua5.3 as default `lua` command
   shell: "{{ item }}"
