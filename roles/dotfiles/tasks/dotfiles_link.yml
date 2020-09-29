@@ -16,4 +16,5 @@
     - { src: 'weechat.conf', dest: 'weechat.conf' }
     - { src: 'Xresources', dest: '.Xresources' }
     - { src: 'ssh_config', dest: '.ssh/config' }
+  force: yes
   when: ansible_connection == "local" and not WSL1
