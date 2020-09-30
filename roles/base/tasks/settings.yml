@@ -72,9 +72,32 @@
   lineinfile:
     path: /etc/default/grub
     # Buster, v4.19+
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy PLACEHOLDER_iommu=on"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
+
+- name: Enable IOMMU for Intel CPU
+		replace:
+			path: /etc/default/grub
+			regexp: "PLACEHOLDER_iommu=on"
+			replace: "intel_iommu=on"
+		when: '"Intel" in cpu_vendor'
+		register: iommu_enabled
+			
+- name: Enable IOMMU for AMD CPU
+		replace:
+			path: /etc/default/grub
+			regexp: "PLACEHOLDER_iommu=on"
+			replace: "amd_iommu=on"
+		when: '"AMD" in cpu_vendor'
+		register: iommu_enabled
+
+- name: Remove placeholder
+		replace:
+			path: /etc/default/grub
+			regexp: "PLACEHOLDER_iommu=on"
+			replace: ""
+		when: not iommu_enabled
 
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
