@@ -5,6 +5,8 @@
   vars:
     pkg:
       - apt-transport-https
+      - apt-listbugs
+      - debian-goodies
       - bash-completion
       - ca-certificates
       - curl
