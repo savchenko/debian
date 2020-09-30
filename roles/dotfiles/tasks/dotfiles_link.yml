@@ -15,6 +15,7 @@
     - { src: 'profile', dest: '.profile' }
     - { src: 'tmux.conf', dest: '.tmux.conf' }
     - { src: 'weechat.conf', dest: 'weechat.conf' }
+    - { src: 'vimrc', dest: '.vimrc' }
     - { src: 'Xresources', dest: '.Xresources' }
     - { src: 'ssh_config', dest: '.ssh/config' }
   when: ansible_connection == "local" and not WSL1
