@@ -55,7 +55,7 @@ if [ -t 1 ]; then
   #
   # Tweaks ------------------------------------------------------------------------
   #
-  set -o vi
+  set -o emacs
   bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
   bind '"ii": "\e\e"'                             # the same escape as in vim
 
