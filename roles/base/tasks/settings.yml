@@ -67,17 +67,27 @@
     - dpkg_keyboard
 
 - name: GRUB settings
+  # Ref.: https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
+  #       https://tails.boum.org/contribute/design/kernel_hardening/
   lineinfile:
     path: /etc/default/grub
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 loglevel=5 security=apparmor ipv6.disable=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 intel_iommu=on amd_iommu=on efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on vsyscall=none page_alloc.shuffle=1 extra_latent_entropy"'
+    # Buster, v4.19+
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
 
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
     path: /etc/fstab
-    line: "proc /proc proc nosuid,nodev,noexec,hidepid=1 0 0"
+    line: "proc /proc proc nosuid,nodev,noexec,hidepid=2 0 0"
     insertafter: EOF
+    state: present
+
+- name: Make systemd-journal volatile
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    line: "Storage=volatile"
+    insertafter: "[Journal]"
     state: present
 
 - name: Ensure systemd-logind.service.d exists
@@ -85,11 +95,6 @@
     path: /etc/systemd/system/systemd-logind.service.d
     recurse: yes
     state: directory
-
-- name: Update systemd with supplementary "proc" group
-  copy:
-    dest: /etc/systemd/system/systemd-logind.service.d/hidepid.conf
-    content: "[Service]\nSupplementaryGroups=proc"
 
 - name: Ensure /etc/systemd/coredump.conf.d exists
   file:
