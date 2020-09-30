@@ -31,17 +31,29 @@
   notify:
     - reload sysctl
 
+- name: Copy system.conf
+  copy:
+    src: system.conf
+    dest: /etc/systemd/system.conf
+    owner: root
+    mode: 0644
+
 - name: Blacklist SPECK module
   copy:
     content: "blacklist CONFIG_CRYPTO_SPECK"
     dest: /etc/modprobe.d/blacklist.conf
   become: yes
-  when: ansible_distribution == 'Debian'
+
+- name: Disable netfilter kernel module
+  lineinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    line: "options nf_conntrack nf_conntrack_helper=0"
+    insertafter: EOF
 
 - name: Modify /etc/issue
   copy:
     dest: "{{ item }}"
-    content: 'Access to this computer is prohibited.'
+    content: 'Access to this computer is prohibited.\n'
   with_items:
     - /etc/issue
     - /etc/issue.net
