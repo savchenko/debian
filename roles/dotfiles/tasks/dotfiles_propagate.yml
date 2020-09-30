@@ -27,6 +27,11 @@
     src: ssh_config
     dest: "{{ ansible_env.HOME }}/.ssh/config"
     mode: 0644
+
+- name: Set proper ~/.ssh permissions
+  file:
+    path: "{{ ansible_env.HOME }}/.ssh/"
+    mode: 0700
     
 - name: Copy tmux terminfo
   copy:
