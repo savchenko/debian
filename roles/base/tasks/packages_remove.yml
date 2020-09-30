@@ -1,5 +1,5 @@
 ---
-- name: Purge contradictionary packages
+- name: Purge contradictory packages
   apt:
     state: absent
     purge: yes
