@@ -70,11 +70,19 @@
     dest: /usr/local/bin
     mode: a+x
 
-- name: Copy diff-so-fancy
+- name: Create Perl modules folder
+  file:
+    path: "/usr/local/lib/site_perl/"
+    state: directory
+
+- name: Copy diff-so-fancy and its dependencies
   copy:
-    src: "diff-so-fancy.pl"
-    dest: /usr/local/bin/diff-so-fancy
-  mode: a+x
+    src: {{ item.src }}
+    dest: {{ item.dest }}
+    mode: {{ item.mode }}
+  with_items:
+    - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
+    - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
 
 - name: Check if .DEBs are installed
   command: "dpkg-query -W {{ item }}"
