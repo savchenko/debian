@@ -52,7 +52,7 @@ if [ -t 1 ]; then
   PS1+="\n${dark_grey} ${clr_reset}"              # input symbol
 
   export PS1
-  export PS2='> '
+  export PS2="> ${clr_reset}"
 
   #
   # Tweaks ------------------------------------------------------------------------
