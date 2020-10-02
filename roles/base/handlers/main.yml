@@ -23,7 +23,8 @@
   listen: "reboot computer"
 
 - name: reconfigure keyboard settings
-  shell: sudo dpkg-reconfigure -f noninteractive keyboard-configuration
+  shell: dpkg-reconfigure -f noninteractive keyboard-configuration
+  become: yes
   listen: "dpkg_keyboard"
 
 - name: Update GRUB
