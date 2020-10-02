@@ -5,6 +5,8 @@
   vars:
     pkg:
       - apt-transport-https
+      - apt-listbugs
+      - debian-goodies
       - bash-completion
       - ca-certificates
       - curl
@@ -49,7 +51,7 @@
 - name: Install Intel CPU firmware if necessary
   apt:
     name: intel-microcode
-  when: ansible_processor[1] == "GenuineIntel"
+  when: ansible_processor[1] == "GenuineIntel" and not WSL2
 
 - name: Ensure ~/.gnupg is initialized
   shell: gpg -k
@@ -67,6 +69,12 @@
     src: z.lua.tgz
     dest: /usr/local/bin
     mode: a+x
+
+- name: Copy diff-so-fancy
+  copy:
+    src: "diff-so-fancy.pl"
+    dest: /usr/local/bin/diff-so-fancy
+  mode: a+x
 
 - name: Check if .DEBs are installed
   command: "dpkg-query -W {{ item }}"

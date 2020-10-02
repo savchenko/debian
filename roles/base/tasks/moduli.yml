@@ -18,7 +18,7 @@
 
 - name: Generate primes pool
   shell: ssh-keygen -G "{{ ansible_env.HOME }}/moduli.in" -b 4096
-  when: moduli_are_default == True and generate_moduli == True
+  when: moduli_are_default == True and generate_moduli == True and not WSL2
   register: primes_pool_is_ready
 
 - name: Select primes

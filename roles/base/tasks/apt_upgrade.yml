@@ -10,8 +10,6 @@
 
 - name: Remove unneeded packages
   become: yes
-  # command: apt-get -y autoremove
-  # force_apt_get: yes
   apt:
     autoremove: yes
 
