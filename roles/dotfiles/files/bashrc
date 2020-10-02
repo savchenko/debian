@@ -35,7 +35,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   #
   # PS inputs ---------------------------------------------------------------------
   #
-
   if [[ $TERM == xterm ]]; then
     TERM=xterm-256color
   fi
@@ -62,21 +61,21 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   #
   # Tweaks ------------------------------------------------------------------------
   #
-  set -o vi
+  set -o vi                                       # Always
   bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
-  bind '"ii": "\e\e"'                             # the same escape as in vim
+  bind '"ii": "\e\e"'                             # The same escape as in vim
 
   for N in {0..9};                                # Don't use esoteric argument features of the Readline
     do 
   bind -m vi $N:
    done
 
-  complete -d cd                                  # cd only into directory
+  complete -d cd                                  # Cd only into directory
 
   shopt -s nocaseglob                             # Case-insensitive globbing (used in pathname expansion)
   shopt -s histappend                             # Append to the Bash history file, rather than overwriting
   shopt -s cdspell                                # Autocorrect typos in path names when using `cd`
-  shopt -s checkwinsize                           # should help with overlapping lines
+  shopt -s checkwinsize                           # Should help with overlapping lines
   shopt -s no_empty_cmd_completion                # No empty command completion.
   shopt -s histverify histreedit                  # Check expansions before submitting command
 
@@ -100,20 +99,21 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
                                                   # -h human-readable sizes
                                                   # -p append / indicator to directories
 
-  alias lt="ls -lt"                               # newest first
-  alias lth="ls -lt | head"                       # newest first
+  alias lt="ls -lt"                               # Newest first
+  alias lth="ls -lt | head"                       # Newest first
 
-  alias cp="cp -iv"                               # prompt before overwrite, be verbose
+  alias cp="cp -iv"                               # Prompt before overwrite, be verbose
 
   alias mkdir="mkdir -pv"                         # -p create intermediate directories as required
 
   alias mv="mv -iv"                               # -i ask before overwriting a file
 
-  alias grep="grep --color=auto"                  # colorize grep by default
+  alias grep="grep --color=auto"                  # Colorize grep by default
   alias egrep="egrep --color=auto"
   alias igrep="grep -i"
 
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
 
+fi
 fi
