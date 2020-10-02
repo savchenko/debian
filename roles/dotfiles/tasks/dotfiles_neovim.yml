@@ -39,19 +39,15 @@
 
 - name: Create package folders
   file:
-    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}"
+    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
     state: directory
-  with_items:
-    - fzf/start
-    - fzf.vim/start
+  with_items: "{{ neovim_plugins }}"
 
 - name: Copy plugins
   copy:
     src: "{{ item }}"
     dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
-  with_items:
-    - fzf
-    - fzf.vim
+  with_items: "{{ neovim_plugins }}"
 
 - name: Make `preview.sh` executable
   file:
