@@ -1,7 +1,7 @@
 [user]
 	name = Andrew Savchenko
 	email = andrew@savchenko.net
-  signingkey = 0xDEED803629B6FA56
+    signingkey = 0xDEED803629B6FA56
 
 [github]
 	user = asvc
@@ -51,7 +51,7 @@
 	decorate = full
 
 [tag]
-	gpgsign = false
+	gpgsign = true
 
 [diff]
 	tool = meld
@@ -90,4 +90,4 @@
 	program = gpg2
 
 [commit]
-	gpgsign = false
+	gpgsign = true
