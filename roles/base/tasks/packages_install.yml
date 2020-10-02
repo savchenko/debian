@@ -51,7 +51,7 @@
 - name: Install Intel CPU firmware if necessary
   apt:
     name: intel-microcode
-  when: ansible_processor[1] == "GenuineIntel" and not WSL2
+  when: '"Intel" in cpu_vendor and not WSL2'
 
 - name: Ensure ~/.gnupg is initialized
   shell: gpg -k
@@ -77,9 +77,9 @@
 
 - name: Copy diff-so-fancy and its dependencies
   copy:
-    src: {{ item.src }}
-    dest: {{ item.dest }}
-    mode: {{ item.mode }}
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
   with_items:
     - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
     - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}

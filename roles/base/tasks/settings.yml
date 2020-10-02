@@ -77,27 +77,27 @@
   notify: grub_update
 
 - name: Enable IOMMU for Intel CPU
-		replace:
-			path: /etc/default/grub
-			regexp: "PLACEHOLDER_iommu=on"
-			replace: "intel_iommu=on"
-		when: '"Intel" in cpu_vendor'
-		register: iommu_enabled
-			
+  replace:
+    path: /etc/default/grub
+    regexp: "PLACEHOLDER_iommu=on"
+    replace: "intel_iommu=on"
+  when: '"Intel" in cpu_vendor'
+  register: iommu_enabled
+      
 - name: Enable IOMMU for AMD CPU
-		replace:
-			path: /etc/default/grub
-			regexp: "PLACEHOLDER_iommu=on"
-			replace: "amd_iommu=on"
-		when: '"AMD" in cpu_vendor'
-		register: iommu_enabled
+  replace:
+    path: /etc/default/grub
+    regexp: "PLACEHOLDER_iommu=on"
+    replace: "amd_iommu=on"
+  when: '"AMD" in cpu_vendor'
+  register: iommu_enabled
 
 - name: Remove placeholder
-		replace:
-			path: /etc/default/grub
-			regexp: "PLACEHOLDER_iommu=on"
-			replace: ""
-		when: not iommu_enabled
+  replace:
+    path: /etc/default/grub
+    regexp: "PLACEHOLDER_iommu=on"
+    replace: ""
+  when: not iommu_enabled
 
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:

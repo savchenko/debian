@@ -1,11 +1,11 @@
 ---
 - name: Register CPU model reliably
-	shell:
-				cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
-	register: cpu_model
+  shell:
+    cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
+  register: cpu_model
 
 - set_fact:
-		cpu_vendor: "{{ cpu_model.stdout_lines[0] | string }}"
+    cpu_vendor: "{{ cpu_model.stdout_lines[0] | string }}"
 
 - name: Boostrap vital settings
   import_tasks: bootstrap.yml
