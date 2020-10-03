@@ -47,6 +47,7 @@
       - tree
       - unattended-upgrades
       - wget
+      - ripgrep
 
 - name: Install Intel CPU firmware if necessary
   apt:
