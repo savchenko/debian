@@ -6,20 +6,17 @@
     modification_time: preserve
     access_time: preserve
 
+- name: Create dotfiles folder
+  file:
+    path: "{{ ansible_env.HOME }}/.local/etc/dotfiles"
+    state: directory
+  when: copy_dotfiles == true
+
 - name: Copy primary dotfiles to the remote machine
   copy:
-    src: "{{ item }}"
-    dest: "{{ ansible_env.HOME }}/.{{ item }}"
-  with_items:
-    - bash_profile
-    - aliases
-    - bashrc
-    - curlrc
-    - gitconfig
-    - gitignore
-    - inputrc
-    - profile
-    - tmux.conf
+    src: "{{ item.src }}"
+    dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
+  with_items: "{{ dotfiles_list }}"
   when: copy_dotfiles == true
 
 - name: Copy SSH client config
@@ -58,7 +55,7 @@
   # in the whole config, I have decided to handle it with `lineinfile` module
   lineinfile:
     path: ~/.tmux.conf
-    line: "# -- Replaced by Ansible --"
+    line: "# -- Don't use the same prefix in remote tmux"
     regexp: "{{ item }}"
   with_items:
     - "^unbind\ C-b"

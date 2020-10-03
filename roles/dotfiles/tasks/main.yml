@@ -12,7 +12,5 @@
 
 - name: Link dotfiles to $HOME
   import_tasks: dotfiles_link.yml
-  delegate_to: localhost
-  when: link_to_localhost == true
   tags:
     - dotfiles_link
