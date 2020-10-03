@@ -22,14 +22,9 @@
               source ~/.vimrc\n"
     dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
 
-- name: Copy .vimrc
-  copy:
-    src: vimrc
-    dest: "{{ ansible_env.HOME }}/.vimrc"
-
 - name: Copy colour-schemes
   copy:
-    src: colors
+    src: vim/colors
     dest: "{{ ansible_env.HOME }}/.vim"
 
 - name: Create site-packages root
@@ -45,7 +40,7 @@
 
 - name: Copy plugins
   copy:
-    src: "{{ item }}"
+    src: "vim/{{ item }}"
     dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
   with_items: "{{ neovim_plugins }}"
 
