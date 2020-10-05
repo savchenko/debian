@@ -1,14 +1,4 @@
 ---
-- name: Link dotfiles from this role to $HOME
-  file:
-    src: "{{role_path}}/files/{{ item.src }}"
-    dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
-    state: link
-    force: yes
-  with_items: "{{ dotfiles_list }}"
-  when: ansible_connection == "local" and not WSL1 and not copy_dotfiles
-  register: dotfiles_linked
-
 - name: Find existing dotfiles
   become: yes
   become_user: "{{ ansible_env.USER }}"
@@ -17,7 +7,6 @@
     file_type: file
     hidden: yes
   register: homedir_files
-  when: copy_dotfiles == true
 
 - name: Sanitize found files
   set_fact:
@@ -83,6 +72,17 @@
     state: link
     force: yes
   with_items: "{{ dotfiles_list }}"
+  register: dotfiles_linked
+  when: copy_dotfiles == true
+
+- name: Link dotfiles from this role to $HOME
+  file:
+    src: "{{role_path}}/files/{{ item.src }}"
+    dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
+    state: link
+    force: yes
+  with_items: "{{ dotfiles_list }}"
+  when: ansible_connection == "local" and not WSL1 and not copy_dotfiles
   register: dotfiles_linked
 
 - name: Set proper ~/.ssh permissions
