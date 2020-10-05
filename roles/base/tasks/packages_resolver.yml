@@ -35,8 +35,9 @@
 - name: Create /etc/hosts_blocked
   file:
     path: /etc/hosts_blocked
-    state: file
-    owner: root
+    state: touch
+    modification_time: preserve
+    access_time: preserve
     mode: 0644
 
 - name: Enable Knot resolver
