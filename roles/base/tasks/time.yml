@@ -13,11 +13,15 @@
     value: en_US.UTF-8 UTF-8, "{{ locale }}" UTF-8
     vtype: multiselect
 
-- name: Set timezone
-  shell: timedatectl set-timezone "{{ timezone }}"
+- name: Set timezone to Asia/Tokyo
+  timezone:
+    name: "{{ timezone }}"
 
-- name: Ensure timesyncd is on
-  shell: timedatectl set-ntp true
+- name: Enable systemd-timesyncd service
+  service:
+    name: systemd-timesyncd
+    enabled: true
+    state: started
 
 - name: Copy /etc/systemd/timesyncd.conf
   copy:

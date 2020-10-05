@@ -1,14 +1,19 @@
 ---
-- name: Check if there is NetworkManager conf.d
-  stat:
-    path: /etc/NetworkManager/conf.d
-  register: check_network_manager
+- name: Create NetworkManager config folder
+  file:
+    path: /etc/NetworkManager/conf.d/
+    state: directory
+    recurse: yes
 
 - name: Ensure NetworkManager won't override resolv.conf
   copy:
     dest: /etc/NetworkManager/conf.d/no-dns.conf
     content: "[main]\ndns=none\n"
-  when: check_network_manager.stat.exists and check_network_manager.stat.isdir
+
+- name: Ensure `resolvconf` package won't override resolv.conf
+  copy:
+    dest: /etc/resolvconf.conf
+    content: "resolvconf=NO"
 
 - name: Copy Knot settings
   copy:
@@ -16,15 +21,6 @@
     dest: /etc/knot-resolver/kresd.conf
     owner: root
     mode: 0644
-
-- name: Enable Knot resolver
-  shell: systemctl enable --now kresd@1.service
-
-- name: Restart Knot-resolver
-  systemd:
-    state: restarted
-    daemon_reload: yes
-    name: kresd@1
 
 - name: Switch to the local resolver
   copy:
@@ -34,11 +30,17 @@
 - name: Make /etc/resolv.conf immutable
   file:
     path: /etc/resolv.conf
-    attr: +i
+    attr: ie
 
 - name: Create /etc/hosts_blocked
   file:
     path: /etc/hosts_blocked
-    state: touch
+    state: file
     owner: root
     mode: 0644
+
+- name: Enable Knot resolver
+  service:
+    name: kresd@1
+    enabled: yes
+

@@ -39,16 +39,20 @@
     mode: 0644
 
 - name: Blacklist SPECK module
-  copy:
-    content: "blacklist CONFIG_CRYPTO_SPECK"
-    dest: /etc/modprobe.d/blacklist.conf
-  become: yes
+  lineinfile:
+    line: "blacklist CONFIG_CRYPTO_SPECK"
+    path: /etc/modprobe.d/blacklist.conf
+    create: true
 
 - name: Disable netfilter kernel module
   lineinfile:
     path: /etc/modprobe.d/blacklist.conf
     line: "options nf_conntrack nf_conntrack_helper=0"
-    insertafter: EOF
+
+- name: Disable pc-speaker (don't beep)
+  lineinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    line: "blacklist pcspkr"
 
 - name: Modify /etc/issue
   copy:
@@ -59,45 +63,24 @@
     - /etc/issue.net
 
 - name: Change CapsLock to Ctrl
-  replace:
+  lineinfile:
     path: /etc/default/keyboard
+    insertafter: 'XKBVARIANT=""'
     regexp: '^XKBOPTIONS'
-    replace: 'XKBOPTIONS="caps:ctrl_modifier"'
+    line: 'XKBOPTIONS="caps:ctrl_modifier"'
+    state: present
   notify:
     - dpkg_keyboard
 
 - name: GRUB settings
-  # Ref.: https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
+  # Refs: https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
   #       https://tails.boum.org/contribute/design/kernel_hardening/
   lineinfile:
     path: /etc/default/grub
     # Buster, v4.19+
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy PLACEHOLDER_iommu=on"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy {{ cpu_iommu }}"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
-
-- name: Enable IOMMU for Intel CPU
-  replace:
-    path: /etc/default/grub
-    regexp: "PLACEHOLDER_iommu=on"
-    replace: "intel_iommu=on"
-  when: '"Intel" in cpu_vendor'
-  register: iommu_enabled
-      
-- name: Enable IOMMU for AMD CPU
-  replace:
-    path: /etc/default/grub
-    regexp: "PLACEHOLDER_iommu=on"
-    replace: "amd_iommu=on"
-  when: '"AMD" in cpu_vendor'
-  register: iommu_enabled
-
-- name: Remove placeholder
-  replace:
-    path: /etc/default/grub
-    regexp: "PLACEHOLDER_iommu=on"
-    replace: ""
-  when: not iommu_enabled
 
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
@@ -128,13 +111,14 @@
 - name: Instruct systemd to not store coredumps
   copy:
     dest: /etc/systemd/coredump.conf.d/custom.conf
-    content: "[Coredump]\nStorage=none"
+    content: "[Coredump]\nStorage=none\n"
 
 - name: Set zero limit to prevent dumps from being written to disk
   lineinfile:
     path: /etc/security/limits.conf
-    line: "\n* hard core 0\n"
+    line: "* hard core 0"
     insertbefore: '^#\ End\ of\ file'
+    firstmatch: yes
     state: present
 
 - name: Prevent applications with setuid from dumping their memory
@@ -151,11 +135,6 @@
   copy:
     src: uncommon-network-protocols.conf
     dest: /etc/modprobe.d/uncommon-network-protocols.conf
-
-- name: Disable pc-speaker (don't beep)
-  copy:
-    dest: /etc/modprobe.d/blacklist_speaker.conf
-    content: "blacklist pcspkr"
 
 - name: Enable APT sandboxing
   copy:
