@@ -19,12 +19,12 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@op
 LogLevel ERROR
 
 StrictModes yes
-LoginGraceTime 5
-MaxAuthTries 1
-MaxSessions 3
-MaxStartups 10:50:100
-ClientAliveInterval 60
-ClientAliveCountMax 5
+LoginGraceTime 20
+MaxAuthTries 3
+MaxSessions 20
+MaxStartups 20:100:100
+ClientAliveInterval 10
+ClientAliveCountMax 6
 
 PubkeyAuthentication yes
 HostbasedAuthentication no
