@@ -1,4 +1,8 @@
 ---
+- name: Add tmux.conf to the list of dotfiles to be linked
+  set_fact:
+    dotfiles_list_with-tmux: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
+
 - name: Find existing dotfiles
   become: yes
   become_user: "{{ ansible_env.USER }}"
@@ -25,7 +29,7 @@
 
 - name: Extract file-names of the new dotfiles we intend to copy
   set_fact:
-    homedir_files_dotfiles: "{{ dotfiles_list | map(attribute='dest') | list | flatten }}"
+    homedir_files_dotfiles: "{{ dotfiles_list_with-tmux | map(attribute='dest') | list | flatten }}"
   when: homedir_files_fnames|length > 0
 
 - name: Intersect found files with the list of dotfiles we are about to copy
@@ -81,7 +85,7 @@
     dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
     state: link
     force: yes
-  with_items: "{{ dotfiles_list }}"
+  with_items: "{{ dotfiles_list_with-tmux }}"
   when: ansible_connection == "local" and not WSL1 and not copy_dotfiles
   register: dotfiles_linked
 

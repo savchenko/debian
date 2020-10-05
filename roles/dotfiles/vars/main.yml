@@ -1,6 +1,8 @@
 ---
 kernel_version: "{{ ansible_facts['kernel'] }}"
 WSL1: "{{ kernel_version is regex('.*Microsoft$') }}"
+dotfiles_list_tmux:
+  - { src: 'tmux.conf', dest: '.tmux.conf' }
 dotfiles_list:
   - { src: 'aliases', dest: '.aliases' }
   - { src: 'bash_profile', dest: '.bash_profile' }
@@ -13,8 +15,15 @@ dotfiles_list:
   - { src: 'inputrc', dest: '.inputrc' }
   - { src: 'muttrc', dest: '.muttrc' }
   - { src: 'profile', dest: '.profile' }
-  - { src: 'tmux.conf', dest: '.tmux.conf' }
   - { src: 'weechat.conf', dest: 'weechat.conf' }
   - { src: 'vimrc', dest: '.vimrc' }
   - { src: 'Xresources', dest: '.Xresources' }
   - { src: 'ssh_config', dest: '.ssh/config' }
+tmux_remove_lines:
+  - "unbind C-b"
+  - "set -g prefix C-Space"
+  - "bind C-Space send-prefix"
+  - "bind -n C-left prev"
+  - "bind -n C-right next"
+  - "bind > swap-pane -D # swap current pane with the next one"
+  - "bind < swap-pane -U # swap current pane with the previous one"

@@ -13,7 +13,7 @@
     value: en_US.UTF-8 UTF-8, "{{ locale }}" UTF-8
     vtype: multiselect
 
-- name: Set timezone to Asia/Tokyo
+- name: Set timezone
   timezone:
     name: "{{ timezone }}"
 
