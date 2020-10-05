@@ -9,10 +9,5 @@
     upgrade: dist
 
 - name: Remove unneeded packages
-  become: yes
   apt:
     autoremove: yes
-
-- name: Clean apt cache
-  apt:
-    autoclean: yes

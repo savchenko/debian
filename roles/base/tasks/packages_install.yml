@@ -64,7 +64,7 @@
 
 - name: Initialise ~/.gnupg
   shell: gpg -k
-  when: gpg_stat.results | json_query( '[*].stat.exists | [0]' ) == gpg_stat.results | json_query( '[*].stat.exists | [1]' ) == true
+  when: gpg_stat.results | json_query( '[*].stat.exists | [0]' ) == gpg_stat.results | json_query( '[*].stat.exists | [1]' ) == false
 
 - name: Check if lua v5.3 is installed and setup properly
   stat:
