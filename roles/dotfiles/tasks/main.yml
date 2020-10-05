@@ -14,3 +14,8 @@
   import_tasks: dotfiles_link.yml
   tags:
     - dotfiles_link
+
+- name: Adapt dotfiles for a remote host
+  import_tasks: dotfiles_remote.yml
+  tags:
+    - dotfiles_remote

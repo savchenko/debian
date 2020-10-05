@@ -19,57 +19,24 @@
   with_items: "{{ dotfiles_list }}"
   when: copy_dotfiles == true
 
-- name: Copy SSH client config
-  copy:
-    src: ssh_config
-    dest: "{{ ansible_env.HOME }}/.ssh/config"
-    mode: 0644
+- name: Check if tmux terminfo already installed
+  shell: infocmp -x tmux
+  register: terminfo_test
+  changed_when: False
 
-- name: Set proper ~/.ssh permissions
-  file:
-    path: "{{ ansible_env.HOME }}/.ssh/"
-    mode: 0700
-    
 - name: Copy tmux terminfo
   copy:
     src: tmux_terminfo
     dest: "{{ ansible_env.HOME }}/.tmux_terminfo"
-
-- name: Check if tmux terminfo already installed
-  shell: infocmp -x tmux
-  register: terminfo_test
+  when: terminfo_test.rc | int != 0
   
 - name: Install tmux terminfo
   shell: tic -x "{{ ansible_env.HOME }}/.tmux_terminfo"
   register: terminfo_installed
-  when: terminfo_test['stdout_lines'][0] is search('Reconstructed via infocmp from file')
+  when: terminfo_test.rc | int != 0
 
 - name: Delete terminfo file
   file:
     path: "{{ ansible_env.HOME }}/.tmux_terminfo"
     state: absent
   when: terminfo_installed.changed and not terminfo_installed.failed
-
-- name: Don't use the same prefix in remote tmux
-  # This is normally done via `template`, but due to the small changes required
-  # in the whole config, I have decided to handle it with `lineinfile` module
-  lineinfile:
-    path: ~/.tmux.conf
-    line: "# -- Don't use the same prefix in remote tmux"
-    regexp: "{{ item }}"
-  with_items:
-    - "^unbind\ C-b"
-    - "^set\ -g\ prefix"
-    - "^bind\ C-Space"
-    - "^set-option\ -s\ set-clipboard\ on"
-    - "^bind-key\ -T\ copy-mode-vi"
-    - "^bind-key\ -Tcopy-mode-vi"
-    - "^bind\ p\ paste-buffer"
-  when: ansible_connection != "local" and change_prefix == True
-
-- name: Don't use vi mode in remote bash
-  lineinfile:
-    path: ~/.bashrc
-    line: "set -o emacs"
-    regexp: "set\ -o\ vi"
-  when: remote_bash_emacs == true

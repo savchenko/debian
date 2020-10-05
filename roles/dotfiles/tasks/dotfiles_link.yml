@@ -84,3 +84,8 @@
     force: yes
   with_items: "{{ dotfiles_list }}"
   register: dotfiles_linked
+
+- name: Set proper ~/.ssh permissions
+  file:
+    path: "{{ ansible_env.HOME }}/.ssh"
+    mode: 0700
