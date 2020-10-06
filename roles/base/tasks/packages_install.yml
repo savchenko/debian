@@ -4,12 +4,13 @@
     name: "{{ pkg }}"
   vars:
     pkg:
-      - apt-transport-https
       - apt-listbugs
-      - debian-goodies
+      - apt-listchanges
+      - apt-transport-https
       - bash-completion
       - ca-certificates
       - curl
+      - debian-goodies
       - dfc
       - dnsutils
       - fzf
@@ -36,6 +37,7 @@
       - python-pip
       - python3
       - python3-pip
+      - ripgrep
       - rsync
       - ruby
       - silversearcher-ag
@@ -47,7 +49,6 @@
       - tree
       - unattended-upgrades
       - wget
-      - ripgrep
 
 - name: Install Intel CPU firmware if necessary
   apt:
@@ -140,3 +141,8 @@
   file:
     path: /tmp/st_deb
     state: absent
+
+- name: Configure unattended-upgrades
+  copy:
+    src: unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
