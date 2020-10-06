@@ -1,5 +1,5 @@
 #
-# Mon 11 Mar 17:45:03 ACDT 2019
+# 06 Oct 2020
 # Debian-specific SSHD
 #
 
@@ -12,21 +12,33 @@ Compression delayed
 HostKey /etc/ssh/ssh_host_ed25519_key
 HostKey /etc/ssh/ssh_host_rsa_key
 
+
+# HostkeyAlgorithms: the public key algorithms accepted for an SSH server to authenticate itself to an SSH client
+HostKeyAlgorithms ssh-ed25519,rsa-sha2-512,rsa-sha2-256
+
+# KexAlgorithms: the key exchange methods that are used to generate per-connection keys
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+
+# Ciphers: the ciphers to encrypt the connection
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+
+# MACs: the message authentication codes used to detect traffic modification 
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
 
 LogLevel ERROR
-
 StrictModes yes
-LoginGraceTime 20
+
+LoginGraceTime 10
 MaxAuthTries 3
 MaxSessions 20
-MaxStartups 20:100:100
+MaxStartups 100:50:200
+
+# Poke client every 10 seconds, drop connection if there is no response for a minute
 ClientAliveInterval 10
 ClientAliveCountMax 6
 
 PubkeyAuthentication yes
+PermitRootLogin prohibit-password
 HostbasedAuthentication no
 PasswordAuthentication no
 PermitEmptyPasswords no
@@ -48,9 +60,7 @@ Banner /dev/null
 Subsystem sftp internal-sftp
 
 Match Group agents
-    PasswordAuthentication no
     ChrootDirectory %h
     AllowTcpForwarding no
     AllowAgentForwarding no
     PermitTunnel no
-    X11Forwarding no

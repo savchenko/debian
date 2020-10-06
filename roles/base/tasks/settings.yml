@@ -99,13 +99,11 @@
 - name: Ensure systemd-logind.service.d exists
   file:
     path: /etc/systemd/system/systemd-logind.service.d
-    recurse: yes
     state: directory
 
 - name: Ensure /etc/systemd/coredump.conf.d exists
   file:
     path: /etc/systemd/coredump.conf.d
-    recurse: yes
     state: directory
 
 - name: Instruct systemd to not store coredumps
