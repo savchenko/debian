@@ -4,6 +4,16 @@
     dotfiles_list: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
   when: not change_prefix
 
+- name: Add local .gitconfig to the list of dotfiles
+  set_fact:
+    dotfiles_list: "{{ dotfiles_list | union(dotfiles_gitconfig_local) }}"
+  when: not remote_gitconfig
+
+- name: Add remote .gitconfig to the list of dotfiles
+  set_fact:
+    dotfiles_list: "{{ dotfiles_list | union(dotfiles_gitconfig_remote) }}"
+  when: remote_gitconfig
+
   #
   # `copy_dotfiles`
   #

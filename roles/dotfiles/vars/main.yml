@@ -1,14 +1,16 @@
 ---
 kernel_version: "{{ ansible_facts['kernel'] }}"
+
 WSL1: "{{ kernel_version is regex('.*Microsoft$') }}"
+
 dotfiles_list_tmux:
   - { src: 'tmux.conf', dest: '.tmux.conf' }
+
 dotfiles_list:
   - { src: 'aliases', dest: '.aliases' }
   - { src: 'bash_profile', dest: '.bash_profile' }
   - { src: 'bashrc', dest: '.bashrc' }
   - { src: 'curlrc', dest: '.curlrc' }
-  - { src: 'gitconfig', dest: '.gitconfig' }
   - { src: 'gitignore', dest: '.gitignore' }
   - { src: 'gpg.conf', dest: '.gnupg/gpg.conf' }
   - { src: 'i3', dest: '.i3' }
@@ -19,6 +21,13 @@ dotfiles_list:
   - { src: 'vimrc', dest: '.vimrc' }
   - { src: 'Xresources', dest: '.Xresources' }
   - { src: 'ssh_config', dest: '.ssh/config' }
+
+dotfiles_gitconfig_local:
+  - { src: 'gitconfig', dest: '.gitconfig' }
+
+dotfiles_gitconfig_remote:
+  - { src: 'gitconfig-remote', dest: '.gitconfig' }
+
 tmux_remove_lines:
   - "unbind C-b"
   - "set -g prefix C-Space"
