@@ -1,95 +1,47 @@
 ---
-- name: Add tmux.conf to the list of dotfiles to be linked
+- name: Add tmux.conf to the list of dotfiles, no prefix change
   set_fact:
-    dotfiles_list_with_tmux: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
+    dotfiles_list: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
+  when: not change_prefix
 
-- name: Find existing dotfiles
-  become: yes
-  become_user: "{{ ansible_env.USER }}"
-  find:
-    path: "{{ ansible_env.HOME }}"
-    file_type: file
-    hidden: yes
-  register: homedir_files
+  #
+  # `copy_dotfiles`
+  #
+- block:
 
-- name: Sanitize found files
-  set_fact:
-    homedir_files_fpaths: "{{ homedir_files.files | map(attribute='path') | list | flatten }}"
-    homedir_files_fnames: []
-    fname: ""
-  when: homedir_files|length > 0
-
-- name: Extract file-names from the full path
-  set_fact:
-    fname: "{{ item | basename }}"
-    homedir_files_fnames: "{{ homedir_files_fnames + [fname] }}"
-  with_items:
-    - "{{ homedir_files_fpaths }}"
-  when: homedir_files_fpaths|length > 0
-
-- name: Extract file-names of the new dotfiles we intend to copy
-  set_fact:
-    homedir_files_dotfiles: "{{ dotfiles_list_with_tmux | map(attribute='dest') | list | flatten }}"
-  when: homedir_files_fnames|length > 0
-
-- name: Intersect found files with the list of dotfiles we are about to copy
-  set_fact:
-    homedir_files_cross: "{{ homedir_files_dotfiles | intersect(homedir_files_fnames) }}"
-  when: homedir_files_dotfiles|length > 0
-
-- name: Create a folder for existing dotfiles
-  become: yes
-  become_user: "{{ ansible_env.USER }}"
-  file:
-      path: "{{ ansible_env.HOME }}/.dotfiles_backup"
+  - name: Create dotfiles folder
+    file:
+      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles"
       state: directory
-  when: homedir_files_cross|length > 0
-  register: dotfiles_backup_folder
 
-- name: Backup existing dotfiles
-  become: yes
-  become_user: "{{ ansible_env.USER }}"
-  copy:
-    src: "{{ ansible_env.HOME }}/{{ item }}"
-    dest: "{{ ansible_env.HOME }}/.dotfiles_backup/{{ item }}_{{ ansible_date_time.epoch }}"
-    remote_src: yes
-  with_items: "{{ homedir_files_cross }}"
-  when: dotfiles_backup_folder.changed
-  register: dotfiles_backup_result
+  - name: Copy primary dotfiles to the remote machine
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
+    with_items: "{{ dotfiles_list }}"
 
-- name: Remove pre-existing dotfiles
-  become: yes
-  become_user: "{{ ansible_env.USER }}"
-  file:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
-    state: absent
-  with_items: "{{ homedir_files_cross }}"
-  when: dotfiles_backup_result.msg == "All items completed"
-  register: dotfiles_backup_removed
+  - name: Link dotfiles from ~/.local/etc/dotfiles to $HOME
+    become: yes
+    become_user: "{{ ansible_env.USER }}"
+    file:
+      src: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
+      dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
+      state: link
+      force: yes
+    with_items: "{{ dotfiles_list }}"
+    register: dotfiles_linked
 
-- name: Link dotfiles from ~/.local/etc/dotfiles to $HOME
-  become: yes
-  become_user: "{{ ansible_env.USER }}"
-  file:
-    src: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
-    dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
-    state: link
-    force: yes
-  with_items: "{{ dotfiles_list }}"
-  register: dotfiles_linked
-  when: copy_dotfiles == true
+  when: copy_dotfiles
 
+  #
+  # Link from this role
+  #
 - name: Link dotfiles from this role to $HOME
   file:
     src: "{{role_path}}/files/{{ item.src }}"
     dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
     state: link
     force: yes
-  with_items: "{{ dotfiles_list_with_tmux }}"
-  when: ansible_connection == "local" and not WSL1 and not copy_dotfiles and not change_prefix
+  with_items: "{{ dotfiles_list }}"
+  when: link_to_localhost and not WSL1 and not copy_dotfiles
   register: dotfiles_linked
-
-- name: Set proper ~/.ssh permissions
-  file:
-    path: "{{ ansible_env.HOME }}/.ssh"
-    mode: 0700
