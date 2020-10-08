@@ -17,6 +17,16 @@
 - name: Set hostname to the value in inventory
   hostname:
     name: "{{ inventory_hostname }}"
+  when: not WSL2
+
+- name: (WSL2) Add hostname to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: '^127\.0\.0\.1[ \t]+localhost'
+    line: '127.0.0.1 localhost {{ inventory_hostname }}'
+    create: yes
+    state: present
+  when: WSL2
 
 - name: Add hostname to /etc/hosts
   lineinfile:
@@ -24,3 +34,4 @@
     regexp: '^127\.0\.0\.1[ \t]+localhost'
     line: '127.0.0.1 localhost {{ inventory_hostname }}'
     state: present
+  when: not WSL2

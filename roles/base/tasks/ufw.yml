@@ -4,21 +4,6 @@
     name: ufw
     state: present
 
-- name: Stop UFW to prevent casualties
-  service:
-    name: ufw
-    state: stopped
-
-- name: Remove all rules
-  shell: ufw --force reset
-
-- name: Limit SSH connections
-  ufw:
-    rule: limit
-    port: ssh
-    proto: tcp
-    comment: Limit SSH
-
 - name: Disable ipv6
   lineinfile:
     path: /etc/ufw/ufw.conf
@@ -32,6 +17,13 @@
     regexp: '^#(net\/ipv6\/conf\/\w*\/autoconf\=0)'
     replace: '\1'
 
+- name: Limit SSH connections
+  ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+    comment: Limit SSH
+
 - name: Enable UFW
   ufw:
     state: enabled
@@ -42,4 +34,5 @@
 - name: Ensure UFW is up and running
   service:
     name: ufw
-    state: started
+    state: restarted
+  changed_when: False

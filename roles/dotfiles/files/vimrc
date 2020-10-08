@@ -129,30 +129,30 @@ if &term =~# '^screen'
 endif
 
 " Colorscheme theme
-colorscheme github
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 1
+colorscheme hybrid_reverse
 syntax on
 
 " fzf, TODO: Check if these are present in the theme file
-let g:fzf_colors =
-\ { 'fg':      ['fg', '#032F62'],
-  \ 'bg':      ['bg', '#CCCCCC'],
-  \ 'hl':      ['fg', '#6A737D'],
-  \ 'fg+':     ['fg', '#005CC5', '#EAEFF4', '#005CC5'],
-  \ 'bg+':     ['bg', '#005CC5', '#EAEFF4'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" let g:fzf_colors =
+" \ { 'fg':      ['fg', '#032F62'],
+"   \ 'bg':      ['bg', '#CCCCCC'],
+"   \ 'hl':      ['fg', '#6A737D'],
+"   \ 'fg+':     ['fg', '#005CC5', '#EAEFF4', '#005CC5'],
+"   \ 'bg+':     ['bg', '#005CC5', '#EAEFF4'],
+"   \ 'hl+':     ['fg', 'Statement'],
+"   \ 'info':    ['fg', 'PreProc'],
+"   \ 'border':  ['fg', 'Ignore'],
+"   \ 'prompt':  ['fg', 'Conditional'],
+"   \ 'pointer': ['fg', 'Exception'],
+"   \ 'marker':  ['fg', 'Keyword'],
+"   \ 'spinner': ['fg', 'Label'],
+"   \ 'header':  ['fg', 'Comment'] }
 
 " Nice highlight of the current line, turned off by  default
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
-set nocul
+set cul
 
 " Don't show typed command, causes glitches in SR-bottom corner, show mode
 set noshowcmd

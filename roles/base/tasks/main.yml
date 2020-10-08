@@ -1,4 +1,24 @@
 ---
+- name: Parse cpuinfo
+  shell:
+    cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
+  register: cpu_model
+  changed_when: False 
+
+- set_fact:
+    cpu_vendor: "{{ cpu_model.stdout_lines[0] | string }}"
+    cpu_iommu: ""
+
+- name: Register IOMMU GRUB setting for Intel
+  set_fact:
+    cpu_iommu: "intel_iommu=on"
+  when: '"Intel" in cpu_vendor'
+
+- name: Register IOMMU GRUB setting for AMD
+  set_fact:
+    cpu_iommu: "amd_iommu=on"
+  when: '"AMD" in cpu_vendor'
+
 - name: Boostrap vital settings
   import_tasks: bootstrap.yml
   become: yes
@@ -64,3 +84,16 @@
   become: yes
   tags:
     - base_knot
+
+- name: Check if reboot is required
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required
+
+- name: Reboot if system can't pick-up updated kernel and/or userland without it
+  debug:
+    msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"
+  notify:
+    - reboot host
+  when: reboot_required.results | json_query( '[*].stat.exists' ) | string == "[True]"
+

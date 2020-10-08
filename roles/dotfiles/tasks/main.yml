@@ -1,18 +1,26 @@
 ---
-- name: Copy source dotfiles to the target host
-  import_tasks: dotfiles_propagate.yml
+- name: Hush login, setup terminfo and ~/.ssh
+  import_tasks: dotfiles_init.yml
   tags:
-    - dotfiles_propagate
+    - dotfiles_init
+
+- name: Backup existing dotfiles
+  import_tasks: dotfiles_backup.yml
+  tags:
+    - dotfiles_backup
+
+- name: Link dotfiles to $HOME
+  import_tasks: dotfiles_link.yml
+  tags:
+    - dotfiles_link
+
+- name: Adapt dotfiles for a remote host
+  import_tasks: dotfiles_remote.yml
+  tags:
+    - dotfiles_remote
 
 - name: Setup NeoVim
   import_tasks: dotfiles_neovim.yml
   when: neovim == true
   tags:
     - dotfiles_neovim
-
-- name: Link dotfiles to $HOME
-  import_tasks: dotfiles_link.yml
-  delegate_to: localhost
-  when: link_to_localhost == true
-  tags:
-    - dotfiles_link

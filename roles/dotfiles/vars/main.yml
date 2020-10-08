@@ -1,3 +1,38 @@
 ---
 kernel_version: "{{ ansible_facts['kernel'] }}"
-WSL: "{{ kernel_version is regex('.*Microsoft$') }}"
+
+WSL1: "{{ kernel_version is regex('.*Microsoft$') }}"
+
+dotfiles_list_tmux:
+  - { src: 'tmux.conf', dest: '.tmux.conf' }
+
+dotfiles_list:
+  - { src: 'aliases', dest: '.aliases' }
+  - { src: 'bash_profile', dest: '.bash_profile' }
+  - { src: 'bashrc', dest: '.bashrc' }
+  - { src: 'curlrc', dest: '.curlrc' }
+  - { src: 'gitignore', dest: '.gitignore' }
+  - { src: 'gpg.conf', dest: '.gnupg/gpg.conf' }
+  - { src: 'i3', dest: '.i3' }
+  - { src: 'inputrc', dest: '.inputrc' }
+  - { src: 'muttrc', dest: '.muttrc' }
+  - { src: 'profile', dest: '.profile' }
+  - { src: 'weechat.conf', dest: 'weechat.conf' }
+  - { src: 'vimrc', dest: '.vimrc' }
+  - { src: 'Xresources', dest: '.Xresources' }
+  - { src: 'ssh_config', dest: '.ssh/config' }
+
+dotfiles_gitconfig_local:
+  - { src: 'gitconfig', dest: '.gitconfig' }
+
+dotfiles_gitconfig_remote:
+  - { src: 'gitconfig-remote', dest: '.gitconfig' }
+
+tmux_remove_lines:
+  - "unbind C-b"
+  - "set -g prefix C-Space"
+  - "bind C-Space send-prefix"
+  - "bind -n C-left prev"
+  - "bind -n C-right next"
+  - "bind > swap-pane -D"
+  - "bind < swap-pane -U"

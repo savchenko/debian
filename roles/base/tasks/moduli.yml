@@ -1,10 +1,10 @@
 ---
-- name: Register hash of /etc/ssh/moduli
+- name: Stat /etc/ssh/moduli
   stat:
     path: "/etc/ssh/moduli"
   register: st_moduli
 
-- name: Set fact about our findings
+- name: Check hash of the current moduli
   set_fact:
     moduli_are_default: True
   when: (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad" or st_moduli.stat['checksum'] == "77e7851b030f0dfdcddd792890bf7c1f39e63333")
@@ -18,7 +18,7 @@
 
 - name: Generate primes pool
   shell: ssh-keygen -G "{{ ansible_env.HOME }}/moduli.in" -b 4096
-  when: moduli_are_default == True and generate_moduli == True
+  when: moduli_are_default == True and generate_moduli == True and not WSL2
   register: primes_pool_is_ready
 
 - name: Select primes

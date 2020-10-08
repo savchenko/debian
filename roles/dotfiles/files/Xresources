@@ -1,0 +1,4 @@
+XTerm*locale: true
+xterm*termName: xterm-256color
+xterm*font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+URxvt.font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*

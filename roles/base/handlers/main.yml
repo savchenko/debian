@@ -15,21 +15,25 @@
   service: name=systemd-timesyncd state=restarted
   listen: "restart timesyncd"
 
-- name: reboot
-  shell: sleep 2 && shutdown -r now 'Ansible maintenance reboot'
-  async: 1
-  poll: 0
-  ignore_errors: true
-  listen: "reboot computer"
-
 - name: reconfigure keyboard settings
-  shell: sudo dpkg-reconfigure -f noninteractive keyboard-configuration
+  shell: dpkg-reconfigure -f noninteractive keyboard-configuration
+  become: yes
   listen: "dpkg_keyboard"
-
-- name: Update GRUB
-  command: grub-mkconfig -o /boot/grub/grub.cfg && update-grub
-  listen: "grub_update"
 
 - name: restart sshguard
   service: name=sshguard state=restarted
   listen: "restart sshguard"
+
+- name: Update GRUB
+  command: grub-mkconfig -o /boot/grub/grub.cfg && update-grub
+  listen: "grub_update"
+  notify: reboot host
+
+- name: Reboot target host
+  reboot:
+    msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"
+    connect_timeout: 5
+    reboot_timeout: 600
+    post_reboot_delay: 10
+  when: ansible_connection != "local"
+  listen: "reboot host"

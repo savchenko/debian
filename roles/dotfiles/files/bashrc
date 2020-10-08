@@ -6,8 +6,9 @@
 # ~/.bashrc has anything you'd want at an interactive command line: command prompt, EDITOR variable, bash aliases
 #
 
-# Check if we are interactive enough...
+# Check if we are interactive and quack like a penguin
 if [ -t 1 ]; then
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # z `dirname` - telephatic cd with fzf support ----------------------------------
   if [ -x /usr/local/bin/z.lua ] && [ -x /usr/bin/fzf ]; then
@@ -17,10 +18,14 @@ if [ -t 1 ]; then
   # Check if we are root by any chance --------------------------------------------
   if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
 
+  # Check if there is a reasonable chance that systemd is present
+  if ! grep -iq microsoft /proc/version; then keychain_systemd_flag="--systemd"; fi
+
   # Automatically initialize keychain in tmux -------------------------------------
   if [ $root -eq 0 ]; then
     if [ "$TERM" = "tmux-256color" ] && [ -n "$TMUX" ]; then
-      eval "$(keychain --eval --agents ssh,gpg --timeout 360 --quiet 0xDEED803629B6FA56 ~/.ssh/id_rsa)"
+      eval "$(keychain --quiet $keychain_systemd_flag --eval --agents ssh,gpg --timeout 360 \
+              ~/.ssh/id_rsa 0xDEED803629B6FA56)"
     fi
   fi
 
@@ -40,6 +45,7 @@ if [ -t 1 ]; then
   grey="\[\e[38;5;245m\]"
   light_grey="\[\e[38;5;249m\]"
   dark_grey="\[\e[38;5;242m\]"
+  clr_reset="\[$(tput sgr0)\]\[\e[0m\]"
 
   if [ $root -eq 1 ]; then user_color="${red}"; else user_color="${green}"; fi
 
@@ -47,29 +53,29 @@ if [ -t 1 ]; then
   PS1+=" ${blue}\h"                               # hostname
   PS1+="${grey} \w"                               # work dir
   PS1+="${light_grey}\$(__git_ps1)"               # git branch
-  PS1+="\n${dark_grey} \[$(tput sgr0)\]"          # input symbol
+  PS1+="\n${dark_grey} ${clr_reset}"              # input symbol
 
   export PS1
-  export PS2='> '
+  export PS2="> ${clr_reset}"
 
   #
   # Tweaks ------------------------------------------------------------------------
   #
-  set -o vi
+  set -o vi                                       # Always
   bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
-  bind '"ii": "\e\e"'                             # the same escape as in vim
+  bind '"ii": "\e\e"'                             # The same escape as in vim
 
   for N in {0..9};                                # Don't use esoteric argument features of the Readline
     do 
   bind -m vi $N:
    done
 
-  complete -d cd                                  # cd only into directory
+  complete -d cd                                  # Cd only into directory
 
   shopt -s nocaseglob                             # Case-insensitive globbing (used in pathname expansion)
   shopt -s histappend                             # Append to the Bash history file, rather than overwriting
   shopt -s cdspell                                # Autocorrect typos in path names when using `cd`
-  shopt -s checkwinsize                           # should help with overlapping lines
+  shopt -s checkwinsize                           # Should help with overlapping lines
   shopt -s no_empty_cmd_completion                # No empty command completion.
   shopt -s histverify histreedit                  # Check expansions before submitting command
 
@@ -93,20 +99,21 @@ if [ -t 1 ]; then
                                                   # -h human-readable sizes
                                                   # -p append / indicator to directories
 
-  alias lt="ls -lt"                               # newest first
-  alias lth="ls -lt | head"                       # newest first
+  alias lt="ls -lt"                               # Newest first
+  alias lth="ls -lt | head"                       # Newest first
 
-  alias cp="cp -iv"                               # prompt before overwrite, be verbose
+  alias cp="cp -iv"                               # Prompt before overwrite, be verbose
 
   alias mkdir="mkdir -pv"                         # -p create intermediate directories as required
 
   alias mv="mv -iv"                               # -i ask before overwriting a file
 
-  alias grep="grep --color=auto"                  # colorize grep by default
+  alias grep="grep --color=auto"                  # Colorize grep by default
   alias egrep="egrep --color=auto"
   alias igrep="grep -i"
 
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
 
+fi
 fi

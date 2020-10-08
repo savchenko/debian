@@ -1,3 +1,9 @@
 ---
 copy_dotfiles: False
 change_prefix: True
+neovim_plugins:
+  - fzf
+  - fzf.vim
+  - ansible-vim
+  - vim-matchquote
+  - vim-gitgutter

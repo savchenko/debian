@@ -1,19 +1,57 @@
 ---
-- name: Link dotfiles to the home folder
-  file: src={{role_path}}/files/{{ item.src }}  dest={{ ansible_env.HOME }}/{{ item.dest }} state=link
-  with_items:
-    - { src: 'bash_profile', dest: '.bash_profile' }
-    - { src: 'bashrc', dest: '.bashrc' }
-    - { src: 'curlrc', dest: '.curlrc' }
-    - { src: 'gitconfig', dest: '.gitconfig' }
-    - { src: 'gitignore', dest: '.gitignore' }
-    - { src: 'gpg.conf', dest: '.gnupg/gpg.conf' }
-    - { src: 'i3', dest: '.i3' }
-    - { src: 'inputrc', dest: '.inputrc' }
-    - { src: 'muttrc', dest: '.muttrc' }
-    - { src: 'profile', dest: '.profile' }
-    - { src: 'tmux.conf', dest: '.tmux.conf' }
-    - { src: 'weechat.conf', dest: 'weechat.conf' }
-    - { src: 'Xresources', dest: '.Xresources' }
-    - { src: 'ssh_config', dest: '.ssh/config' }
-  when: ansible_connection == "local" and not WSL
+- name: Add tmux.conf to the list of dotfiles, no prefix change
+  set_fact:
+    dotfiles_list: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
+  when: not change_prefix
+
+- name: Add local .gitconfig to the list of dotfiles
+  set_fact:
+    dotfiles_list: "{{ dotfiles_list | union(dotfiles_gitconfig_local) }}"
+  when: not remote_gitconfig
+
+- name: Add remote .gitconfig to the list of dotfiles
+  set_fact:
+    dotfiles_list: "{{ dotfiles_list | union(dotfiles_gitconfig_remote) }}"
+  when: remote_gitconfig
+
+  #
+  # `copy_dotfiles`
+  #
+- block:
+
+  - name: Create dotfiles folder
+    file:
+      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles"
+      state: directory
+
+  - name: Copy primary dotfiles to the remote machine
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
+    with_items: "{{ dotfiles_list }}"
+
+  - name: Link dotfiles from ~/.local/etc/dotfiles to $HOME
+    become: yes
+    become_user: "{{ ansible_env.USER }}"
+    file:
+      src: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
+      dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
+      state: link
+      force: yes
+    with_items: "{{ dotfiles_list }}"
+    register: dotfiles_linked
+
+  when: copy_dotfiles
+
+  #
+  # Link from this role
+  #
+- name: Link dotfiles from this role to $HOME
+  file:
+    src: "{{role_path}}/files/{{ item.src }}"
+    dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
+    state: link
+    force: yes
+  with_items: "{{ dotfiles_list }}"
+  when: link_to_localhost and not WSL1 and not copy_dotfiles
+  register: dotfiles_linked
