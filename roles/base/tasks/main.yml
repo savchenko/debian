@@ -12,12 +12,12 @@
 
 - name: Register IOMMU GRUB setting for Intel
   set_fact:
-    cpu_iommu: "intel_iommu=on"
+    cpu_iommu: " intel_iommu=on"
   when: '"Intel" in cpu_vendor'
 
 - name: Register IOMMU GRUB setting for AMD
   set_fact:
-    cpu_iommu: "amd_iommu=on"
+    cpu_iommu: " amd_iommu=on"
   when: '"AMD" in cpu_vendor'
 
 - name: Boostrap vital settings
