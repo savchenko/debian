@@ -14,13 +14,13 @@ Role Variables
 `sshguard_path` path to sshguard config. Default is `/etc/sshguard/sshguard.conf`  
 `sshd_less_secure` enables aes256-cbc cipher and hmac-sha-256 MAC. Might be useful for outdated clients.  
 `generate_moduli` generate new set of 4096 moduli on the target host or copy pre-calculated ones. Either is better than the default set.
-`resolver_listen_on_ip` address on which Knot will listen. In most cases, you want this to be `127.0.0.1`.
-`resolver_tls` boolean, forward queries via TCP/TLS or UDP
-`resolver_blocklist` optional path to the blocklist _in RPZ format_.
-`resolver_primary_ip` self-explanatory
-`resolver_secondary_ip` --
-`resolver_primary_hostname` --
-`resolver_secondary_hostname` --
+`resolver_listen_on_ip` address on which Knot will listen. In most cases, you want this to be `127.0.0.1`.  
+`resolver_tls` boolean, forward queries via TCP/TLS or UDP  
+`resolver_blocklist` optional path to the blocklist _in RPZ format_.  
+`resolver_primary_ip` self-explanatory  
+`resolver_secondary_ip` --  
+`resolver_primary_hostname` --  
+`resolver_secondary_hostname` --  
 
 Dependencies
 ------------
