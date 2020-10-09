@@ -22,14 +22,14 @@
     rule: limit
     port: ssh
     proto: tcp
-    comment: Limit SSH
+    comment: Limit SSH via Ansible
 
 - name: Enable UFW
   ufw:
     state: enabled
     policy: deny
     direction: incoming
-    logging: no
+    logging: 'off'
 
 - name: Ensure UFW is up and running
   service:
