@@ -24,6 +24,12 @@
   service: name=sshguard state=restarted
   listen: "restart sshguard"
 
+- name: Restart Knot
+  service:
+    name: kresd@1
+    state: restarted
+  listen: "restart kresd"
+
 - name: Update GRUB
   command: grub-mkconfig -o /boot/grub/grub.cfg && update-grub
   listen: "grub_update"

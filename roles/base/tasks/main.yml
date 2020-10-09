@@ -5,7 +5,8 @@
   register: cpu_model
   changed_when: False 
 
-- set_fact:
+- name: Set facts about CPU
+  set_fact:
     cpu_vendor: "{{ cpu_model.stdout_lines[0] | string }}"
     cpu_iommu: ""
 

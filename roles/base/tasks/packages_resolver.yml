@@ -15,10 +15,12 @@
     dest: /etc/resolvconf.conf
     content: "resolvconf=NO"
 
-- name: Process and copy KresD template to the target host
-- template:
+- name: Process and copy Knot-Resolver template to the target host
+  template:
     src: kresd.j2
     dest: /etc/knot-resolver/kresd.conf
+  notify:
+    - restart kresd
 
 - name: Switch to the local resolver
   copy:
