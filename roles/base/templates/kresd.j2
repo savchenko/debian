@@ -1,0 +1,36 @@
+-- Listen locally
+net = { '{{ listen_on_ip }}' }
+
+-- Enable optional modules
+modules = {
+  'policy',              -- NXDOMAIN "bad" queries
+  'hints',               -- read /etc/hosts and whatever is defined below
+  'stats',               -- internal statistics
+  'serve_stale < cache', -- serve stale record if parent NS is unreachable
+  'rebinding < iterate', -- prevent rebinding attack
+  'predict'
+}
+
+{% if resolver_blocklist %}
+-- Add blocked hosts, reload on file change
+-- MUST be in a special .RPZ format
+-- https://knot-resolver.readthedocs.io/en/stable/modules-policy.html#policy.rpz
+policy.add(policy.rpz(policy.DENY('{{ resolver_blocklist }}'), true))
+{% endif %}
+
+{% if resolver_tls %}
+-- DNS-over-TLS
+policy.add(policy.all(policy.TLS_FORWARD({
+  {'{{ resolver_primary_ip }}', hostname='{{ resolver_primary_hostname }}'},
+  {'{{ resolver_secondary_ip }}', hostname='{{ resolver_secondary_hostname }}'}
+})))
+{% else %}
+-- DNS-over-UDP
+policy.add(policy.all(policy.FORWARD({'{{ resolver_primary_ip }}', '{{ resolver_secondary_ip }}'})))
+{% endif %}
+
+-- Cache size
+cache.size = 32 * MB
+
+-- Prefetch learning (15-minute blocks over 24 hours)
+predict.config(15, 24)
