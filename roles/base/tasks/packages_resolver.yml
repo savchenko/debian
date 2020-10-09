@@ -15,12 +15,10 @@
     dest: /etc/resolvconf.conf
     content: "resolvconf=NO"
 
-- name: Copy Knot settings
-  copy:
-    src: kresd.conf
+- name: Process and copy KresD template to the target host
+- template:
+    src: kresd.j2
     dest: /etc/knot-resolver/kresd.conf
-    owner: root
-    mode: 0644
 
 - name: Switch to the local resolver
   copy:
@@ -32,16 +30,7 @@
     path: /etc/resolv.conf
     attr: ie
 
-- name: Create /etc/hosts_blocked
-  file:
-    path: /etc/hosts_blocked
-    state: touch
-    modification_time: preserve
-    access_time: preserve
-    mode: 0644
-
 - name: Enable Knot resolver
   service:
     name: kresd@1
     enabled: yes
-
