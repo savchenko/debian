@@ -1,6 +1,6 @@
 ---
 - name: Assert that we are running against the supported distribution
-- assert:
+  assert:
     that:
       - ansible_distribution == "Debian"
       - ansible_distribution_file_variety == "Debian"
