@@ -16,16 +16,15 @@
     authorized_key:
       user: "{{ agent_name }}"
       state: present
-      key: "{{ item }}"
-    with_file:
-      - "~/.ssh/id_rsa.pub"
-    when: pubkey_from_current_user
+      key: "{{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+    # TODO: https://github.com/stoptracking/playbook/issues/18
+    when: pubkey_from_current_user and ansible_connection == "local"
 
   - name: Add other pubkeys
     authorized_key:
       user: "{{ agent_name }}"
       state: present
-      # Lookup is necessary as `authorized_key` expects content, not file.
+      # Lookup is necessary as `authorized_key` expects content, not a file.
       key: "{{ lookup('file',item) }}"
     with_fileglob:
       - "*.pub"
@@ -60,19 +59,17 @@
 
   - name: Copy sh to chroot /bin
     copy:
-      src: "/bin/{{ item.src }}"
-      dest: "/home/{{ agent_name }}/bin/{{ item.dest }}"
+      src: "/bin/sh"
+      dest: "/home/{{ agent_name }}/bin/sh"
       mode: 0755
-    with_items:
-      - { src: "sh", dest: "sh" }
+      remote_src: yes
 
   - name: Copy rsync to chroot /usr/bin
     copy:
-      src: "/usr/bin/{{ item.src }}"
-      dest: "/home/{{ agent_name }}/usr/bin/{{ item.dest }}"
+      src: "/usr/bin/rsync"
+      dest: "/home/{{ agent_name }}/usr/bin/rsync"
       mode: 0755
-    with_items:
-      - { src: "rsync", dest: "rsync" }
+      remote_src: yes
     when: rsync
 
   - name: Copy necessary libraries
@@ -80,6 +77,7 @@
       src: "/lib/x86_64-linux-gnu/{{ item.src }}"
       dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item.dest }}"
       mode: 0755
+      remote_src: yes
     with_items:
       - { src: "libattr.so.1", dest: "libattr.so.1" }
       - { src: "libacl.so.1", dest: "libacl.so.1" }
@@ -92,6 +90,7 @@
       src: "/usr/lib/x86_64-linux-gnu/{{ item.src }}"
       dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item.dest }}"
       mode: 0755
+      remote_src: yes
     with_items:
       - { src: "libattr.so.1", dest: "libattr.so.1" }
       - { src: "libacl.so.1", dest: "libacl.so.1" }
@@ -102,14 +101,14 @@
     copy:
       src: "/lib/x86_64-linux-gnu/libc.so.6"
       dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/libc.so.6"
+      remote_src: yes
     when: WSL1 or WSL2
 
   - name: Copy ld-linux-x86-64.so
     copy:
-      src: "/lib64/{{ item.src }}"
-      dest: "/home/{{ agent_name }}/lib64/{{ item.dest }}"
+      src: "/lib64/ld-linux-x86-64.so.2"
+      dest: "/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2"
       mode: 0755
-    with_items:
-      - { src: "ld-linux-x86-64.so.2", dest: "ld-linux-x86-64.so.2" }
+      remote_src: yes
 
   become: yes
