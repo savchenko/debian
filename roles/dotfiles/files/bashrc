@@ -24,7 +24,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Automatically initialize keychain in tmux -------------------------------------
   if [ $root -eq 0 ]; then
     if [ "$TERM" = "tmux-256color" ] && [ -n "$TMUX" ]; then
-      eval "$(keychain --quiet $keychain_systemd_flag --eval --agents ssh,gpg --timeout 360 \
+      eval "$(keychain --quiet $keychain_systemd_flag --eval --agents ssh,gpg --timeout 3600 \
               ~/.ssh/id_rsa 0xDEED803629B6FA56)"
     fi
   fi
