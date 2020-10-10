@@ -25,7 +25,7 @@
 - name: Switch to the local resolver
   copy:
     dest: /etc/resolv.conf
-    content: '127.0.0.1'
+    content: 'nameserver 127.0.0.1'
 
 - name: Make /etc/resolv.conf immutable
   file:
