@@ -35,8 +35,10 @@
       - neovim-runtime
       - python
       - python-pip
+      - python-psutil
       - python3
       - python3-pip
+      - python3-psutil
       - ripgrep
       - rsync
       - ruby
