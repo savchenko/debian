@@ -1,7 +1,9 @@
 ---
 kernel_version: "{{ ansible_facts['kernel'] }}"
 
-WSL1: "{{ kernel_version is regex('.*Microsoft$') }}"
+WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
+
+WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
 
 dotfiles_list_tmux:
   - { src: 'tmux.conf', dest: '.tmux.conf' }

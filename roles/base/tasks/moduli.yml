@@ -4,10 +4,10 @@
     path: "/etc/ssh/moduli"
   register: st_moduli
 
-- name: Check hash of the current moduli
+- name: Check if hash of the current moduli matches the default ones
   set_fact:
     moduli_are_default: True
-  when: (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad" or st_moduli.stat['checksum'] == "77e7851b030f0dfdcddd792890bf7c1f39e63333")
+  when: st_moduli.stat['exists'] == false or (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad" or st_moduli.stat['checksum'] == "77e7851b030f0dfdcddd792890bf7c1f39e63333")
 
 - name: Install non-default moduli
   unarchive:

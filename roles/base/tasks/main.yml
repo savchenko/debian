@@ -76,6 +76,7 @@
   become: yes
   tags:
     - base_ufw
+  when: not WSL1 and not WSL2
 
 - name: Install packages
   import_tasks: packages_install.yml
@@ -94,6 +95,7 @@
   become: yes
   tags:
     - base_knot
+  when: not WSL1 and not WSL2
 
 - name: Check if reboot is required
   stat:
