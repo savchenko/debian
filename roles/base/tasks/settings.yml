@@ -71,6 +71,7 @@
     state: present
   notify:
     - dpkg_keyboard
+  when: not WSL2 and not WSL1
 
 - name: GRUB settings
   # Refs: https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
@@ -81,6 +82,7 @@
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }}"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
+  when: not WSL1 and not WSL2
 
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
@@ -88,6 +90,7 @@
     line: "proc /proc proc nosuid,nodev,noexec,hidepid=2 0 0"
     insertafter: EOF
     state: present
+  when: not WSL1 and not WSL2
 
 - name: Make systemd-journal volatile
   lineinfile:
