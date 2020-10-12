@@ -1,0 +1,39 @@
+---
+- hosts: remote_vm
+  tasks:
+
+  - name: Execute `base` role
+    import_role:
+      name: base
+    vars:
+      timezone: Australia/Adelaide
+      locale: en_US.UTF8
+      generate_moduli: false
+      resolver_listen_on_ip: 127.0.0.1
+      resolver_tls: true
+      resolver_blocklist:
+      resolver_primary_ip: 9.9.9.9
+      resolver_secondary_ip: 149.112.112.112
+      resolver_primary_hostname: dns.quad9.net
+      resolver_secondary_hostname: dns.quad9.net
+
+  - name: Execute `dotfiles` role
+    include_role:
+      name: dotfiles
+    vars:
+      neovim: true
+      link_to_localhost: false
+      remote_bash_emacs: false
+      remote_gitconfig: true
+      copy_dotfiles: true
+      change_prefix: true
+      sshd_less_secure: false
+
+  - name: Execute `transfer-agent` role
+    include_role:
+      name: transfer-agent
+    vars:
+      agent_group: agents
+      agent_name: xfer_agent
+      pubkey_from_current_user: true
+      rsync: true

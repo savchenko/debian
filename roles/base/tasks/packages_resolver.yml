@@ -10,10 +10,16 @@
     dest: /etc/NetworkManager/conf.d/no-dns.conf
     content: "[main]\ndns=none\n"
 
-- name: Ensure `resolvconf` package won't override resolv.conf
+- name: Ensure `resolvconf` won't override resolv.conf
   copy:
     dest: /etc/resolvconf.conf
     content: "resolvconf=NO"
+
+- name: Ensure `dhclient` won't override resolv.conf
+  copy:
+    dest: /etc/dhcp/dhclient-enter-hooks.d/leave_my_resolv_conf_alone
+    content: "make_resolv_conf() { :; }"
+    mode: 0755
 
 - name: Process and copy Knot-Resolver template to the target host
   template:
@@ -25,7 +31,7 @@
 - name: Switch to the local resolver
   copy:
     dest: /etc/resolv.conf
-    content: 'nameserver 127.0.0.1'
+    content: "nameserver 127.0.0.1"
 
 - name: Make /etc/resolv.conf immutable
   file:
