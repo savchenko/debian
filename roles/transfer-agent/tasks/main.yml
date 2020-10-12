@@ -12,13 +12,54 @@
       shell: /bin/sh
       groups: agents
 
+  - block:
+
+    - name: Obtain username of the sudo user
+      shell:
+        cmd: "printenv | grep -i SUDO_USER | cut -d= -f2"
+      register: sudo_username
+      changed_when: False
+
+    - name: Get sudo user's ssh
+      shell:
+        cmd: "echo $( getent passwd {{ sudo_username.stdout }} | cut -d: -f6 )/.ssh/"
+      become: yes
+      become_user: "{{ sudo_username.stdout }}"
+      when: sudo_username.rc | int == 0
+      register: sudo_ssh_path
+      changed_when: False
+
+    - set_fact:
+        sudo_ssh_path: "{{ sudo_ssh_path.stdout | string }}"
+      when: sudo_ssh_path.rc | int == 0
+
+    - name: Check if current user has a pubkey file
+      stat:
+        path: "{{ sudo_ssh_path }}/id_rsa.pub"
+      register: pubkey_current_user_stat
+      become_user: "{{ ansible_env.USER }}"
+      when: pubkey_from_current_user
+
+    - name: Validate file content
+      shell:
+        cmd: "ssh-keygen -lf {{ sudo_ssh_path }}/id_rsa.pub"
+      register: pubkey_current_user_validate
+      when: pubkey_current_user_stat.stat['exists'] == true
+      changed_when: False
+
+    - name: Save pubkey from the current user to a variable
+      set_fact:
+        pubkey_current_content: "{{ lookup('file','{{ sudo_ssh_path }}/id_rsa.pub') }}"
+      when: pubkey_current_user_validate.rc | int == 0
+
+    delegate_to: localhost
+
   - name: Add pubkeys from current user
     authorized_key:
       user: "{{ agent_name }}"
       state: present
-      key: "{{ ansible_env.HOME }}/.ssh/id_rsa.pub"
-    # TODO: https://github.com/stoptracking/playbook/issues/18
-    when: pubkey_from_current_user and ansible_connection == "local"
+      key: "{{ pubkey_current_content }}"
+    when: pubkey_current_content is regex("^ssh-rsa")
 
   - name: Add other pubkeys
     authorized_key:
