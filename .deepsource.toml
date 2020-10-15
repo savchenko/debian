@@ -1,9 +1,6 @@
 version = 1
 
-test_patterns = [
-    "*.py",
-    "*.sh"
-]
+exclude_patterns = [".mitogen/**"]
 
 [[analyzers]]
 name = "python"
