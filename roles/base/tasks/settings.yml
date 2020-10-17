@@ -57,7 +57,7 @@
 - name: Modify /etc/issue
   copy:
     dest: "{{ item }}"
-    content: 'Access to this computer is prohibited.\n'
+    content: 'Access to this computer is prohibited.\n\n'
   with_items:
     - /etc/issue
     - /etc/issue.net
