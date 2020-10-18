@@ -225,10 +225,9 @@ set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 " Hotkeys
 " ----------------------------------------------------------------------------
 
-" F1 does _absolutely_ nothing
-nnoremap <F1> <nop>
-inoremap <F1> <nop>
-map <F1> <nop>
+" F1 switches paste mode
+map <silent> <F1> :set nopaste! paste?<cr>
+set pastetoggle=<F1>
 
 " F3 yanks all
 map <F3> :%y+<cr>
@@ -351,12 +350,27 @@ inoremap <C-Z> <Esc>ui
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 
+
+" ----------------------------------------------------------------------------
+" Plugins
+" ----------------------------------------------------------------------------
+
+" ansible-vim
+let g:ansible_unindent_after_newline = 1
+let g:ansible_attribute_highlight = 'ab'
+let g:ansible_name_highlight = 'b'
+let g:ansible_extra_keywords_highlight = 1
+let g:ansible_normal_keywords_highlight = 'Operator'
+let g:ansible_with_keywords_highlight = 'Operator'
+
+
+
 " ----------------------------------------------------------------------------
 " Macros
 " ----------------------------------------------------------------------------
 
 " Mostly use 2 spaces as <Tab>
-autocmd FileType text,markdown,vim,ini,gitconfig,*.yml setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType text,markdown,vim,ini,gitconfig,*.yml,shell,bash setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
 " Keep Web documents to 2 spaces as <Tab>
 autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth=2 softtabstop=2
@@ -365,7 +379,7 @@ autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
 " Fix YAML intendation
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab autoindent
 
 " format JSON code
 com! FormatJSON %!python -m json.tool
@@ -426,4 +440,13 @@ function! DD()
   let line = "\n====================="
   let out = date . line
   put =out
+endfunc
+
+" Show highlight groups
+nmap <leader>sp :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
