@@ -467,3 +467,23 @@ let &background = s:style
 " THE SOFTWARE.
 
 " }}}
+
+" https://github.com/sysvii/vim-hybrid/blob/71a92fe977008dd561da6ad8da76d8220856d77a/colors/hybrid.vim
+if has("nvim") && exists("&termguicolors") && &termguicolors
+    let g:terminal_color_0  = s:gui_line
+    let g:terminal_color_8  = s:gui_selection
+    let g:terminal_color_1  = "#A54242"
+    let g:terminal_color_9  = s:fg_red
+    let g:terminal_color_2  = "#B5BD68"
+    let g:terminal_color_10 = s:fg_green
+    let g:terminal_color_3  = s:fg_orange
+    let g:terminal_color_11 = "#709d6c"
+    let g:terminal_color_4  = "#5F819D"
+    let g:terminal_color_12 = s:fg_blue
+    let g:terminal_color_5  = "#85678F"
+    let g:terminal_color_13 = s:fg_purple
+    let g:terminal_color_6  = "#5E8D87"
+    let g:terminal_color_14 = s:fg_aqua
+    let g:terminal_color_7  = s:gui_selection
+    let g:terminal_color_15 = s:fg_foreground
+endif
