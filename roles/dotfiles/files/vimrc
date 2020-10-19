@@ -382,7 +382,7 @@ autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
 " Fix YAML intendation
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab autoindent
+autocmd FileType yaml,toml setlocal ts=2 sts=2 sw=2 expandtab autoindent
 
 " format JSON code
 com! FormatJSON %!python -m json.tool
