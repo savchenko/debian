@@ -20,6 +20,9 @@ function rmx() { if [ $# -eq 1 ]; then rar a -m5 -ma5 -s -md64m "${1%/}.rar" "${
 # Whois abuse contact
 function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 
+# Lazy git
+function lzg() { git add . && git commit -a -m "$@" && git push; }
+
 #
 # Aliases -------------------------------------------------------------------------------
 #
