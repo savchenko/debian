@@ -6,7 +6,7 @@
         "defaults":
         {
             "theme": "dark",
-            "colorScheme" : "Hybrid",
+            "colorScheme" : "BetterHybrid",
             "cursorShape": "filledBox",
             "fontFace": "Consolas",
             "fontSize": 12,
@@ -28,7 +28,7 @@
                 "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
                 "hidden": false,
                 "name": "Debian",
-                "cursorColor": "#CCC",
+                //"cursorColor": "#CCC",
                 //"background": "#1C1C1C",
                 "selectionBackground": "#000000",
                 "padding": "0, 0, 0, 0",
@@ -54,25 +54,25 @@
     "schemes": [
    
     {
-      "name": "Hybrid",
-      "black": "#2a2e33",
-      "red": "#b84d51",
-      "green": "#b3bf5a",
-      "yellow": "#e4b55e",
-      "blue": "#6e90b0",
-      "purple": "#a17eac",
-      "cyan": "#7fbfb4",
-      "white": "#b5b9b6",
-      "brightBlack": "#1d1f22",
-      "brightRed": "#8d2e32",
-      "brightGreen": "#798431",
-      "brightYellow": "#e58a50",
-      "brightBlue": "#4b6b88",
-      "brightPurple": "#6e5079",
-      "brightCyan": "#4d7b74",
-      "brightWhite": "#5a626a",
-      "background": "#161719",
-      "foreground": "#b7bcba"
+      "name": "BetterHybrid",
+      "black":"#000000",
+      "red":"#cc6666",
+      "green":"#b5bd68",
+      "yellow":"#de935f",
+      "blue":"#6e90b0",
+      "purple":"#b294bb",
+      "cyan":"#668c88",
+      "white":"#c5c8c6",
+      "brightBlack":"#1d1f22",
+      "brightRed":"#cc6666",
+      "brightGreen":"#d7ffaf",
+      "brightYellow":"#f0c674",
+      "brightBlue":"#81a2be",
+      "brightPurple":"#d7d7ff",
+      "brightCyan":"#8abeb7",
+      "brightWhite":"#f2f2f2",
+      "background":"#1d1f21",
+      "foreground":"#c5c8c6"
     }
    
     ],
