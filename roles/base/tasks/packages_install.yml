@@ -4,6 +4,7 @@
     name: "{{ pkg }}"
   vars:
     pkg:
+      - ack
       - apt-listbugs
       - apt-listchanges
       - apt-transport-https
@@ -108,6 +109,7 @@
     - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
     - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
     - { src: 'fzf', dest: '/usr/bin/fzf', mode: '0755'}
+    - { src: 'h.sh', dest: '/usr/local/bin/h.sh', mode: '0755'}
 
 - name: Check if .DEBs are installed
   command: "dpkg-query -W {{ item }}"

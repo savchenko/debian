@@ -15,6 +15,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       eval "$(lua '/usr/local/bin/z.lua' --init bash enhanced once fzf)";
   fi
 
+  #  h - multihighlighter based on ack --------------------------------------------
+  if [ -x /usr/local/bin/h.sh ]; then
+      source "/usr/local/bin/h.sh";
+  fi
+
   # Check if we are root by any chance --------------------------------------------
   if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
 
