@@ -1,7 +1,17 @@
 CHANGELOG
 =========
 
-0.22.1
+0.23.1
+------
+- Added `--preview-window` options for disabling flags
+    - `nocycle`
+    - `nohidden`
+    - `nowrap`
+    - `default`
+- Built with Go 1.14.9 due to performance regression
+    - https://github.com/golang/go/issues/40727
+
+0.23.0
 ------
 - Support preview scroll offset relative to window height
   ```sh
@@ -11,13 +21,19 @@ CHANGELOG
         --preview-window +{2}-/2
   ```
 - Added `--preview-window` option for sharp edges (`--preview-window sharp`)
+- Added `--preview-window` option for cyclic scrolling (`--preview-window cycle`)
 - Reduced vertical padding around the preview window when `--preview-window
   noborder` is used
+- Added actions for preview window
+    - `preview-half-page-up`
+    - `preview-half-page-down`
 - Vim
     - Popup width and height can be given in absolute integer values
     - Added `fzf#exec()` function for getting the path of fzf executable
         - It also downloads the latest binary if it's not available by running
           `./install --bin`
+- Built with Go 1.15.2
+    - We no longer provide 32-bit binaries
 
 0.22.0
 ------

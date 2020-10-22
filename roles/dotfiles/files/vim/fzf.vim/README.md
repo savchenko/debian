@@ -1,5 +1,5 @@
-fzf :heart: vim
-===============
+This is fork. You probably want an original plugin.
+--------
 
 Things you can do with [fzf][fzf] and Vim.
 

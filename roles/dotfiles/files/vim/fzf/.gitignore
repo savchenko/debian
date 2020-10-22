@@ -1,0 +1,13 @@
+target
+pkg
+Gemfile.lock
+.DS_Store
+doc/tags
+vendor
+gopath
+*.zwc
+fzf
+.github
+Dockerfile
+.rubocop.yml
+.travis.yml

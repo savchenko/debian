@@ -132,37 +132,13 @@ function! s:default_layout()
         \ : { 'down': '~40%' }
 endfunction
 
-function! fzf#install()
-  if s:is_win && !has('win32unix')
-    let script = s:base_dir.'/install.ps1'
-    if !filereadable(script)
-      throw script.' not found'
-    endif
-    let script = 'powershell -ExecutionPolicy Bypass -file ' . script
-  else
-    let script = s:base_dir.'/install'
-    if !executable(script)
-      throw script.' not found'
-    endif
-    let script .= ' --bin'
-  endif
-
-  call s:warn('Running fzf installer ...')
-  call system(script)
-  if v:shell_error
-    throw 'Failed to download fzf: '.script
-  endif
-endfunction
-
 function! fzf#exec()
   if !exists('s:exec')
     if executable(s:fzf_go)
       let s:exec = s:fzf_go
     elseif executable('fzf')
       let s:exec = 'fzf'
-    elseif input('fzf executable not found. Download binary? (y/n) ') =~? '^y'
       redraw
-      call fzf#install()
       return fzf#exec()
     else
       redraw
