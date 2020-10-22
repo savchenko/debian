@@ -2,8 +2,27 @@
 copy_dotfiles: False
 change_prefix: True
 neovim_plugins:
+  - clever-f.vim
   - fzf
   - fzf.vim
-  - ansible-vim
-  - vim-matchquote
+  - fzy.vim
+  - indentLine
+  - nerdcommenter
+  - nerdtree
+  - pear-tree
+  - supertab
+  - vim-airline
+  - vim-airline-themes
+  - vim-autoread
   - vim-gitgutter
+  - vim-lastplace
+  - vim-mark
+  - vim-matchquote
+  - vim-polyglot
+  - vim-sneak
+  - vim-startify
+  - vim-surround
+  - vim-table-mode
+  - vim-tmux-clipboard
+  - vim-visual-multi
+  - vim-zoom
