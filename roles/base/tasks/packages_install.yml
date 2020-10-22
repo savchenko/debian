@@ -15,6 +15,7 @@
       - dfc
       - dnsutils
       - fzf
+      - fzy
       - git
       - gnupg2
       - grc
