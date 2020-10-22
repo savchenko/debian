@@ -134,7 +134,8 @@ let g:github_colors_block_diffmark = 1
 let g:enable_bold_font = 1
 let g:enable_italic_font = 1
 let g:hybrid_transparent_background = 1
-colorscheme hybrid_reverse
+let g:hybrid_hy2 = 1
+colorscheme better_hybrid
 syntax on
 
 " fzf, TODO: Check if these are present in the theme file
@@ -157,9 +158,9 @@ syntax on
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set cul
 
-" Don't show typed command, causes glitches in SR-bottom corner, show mode
+" Don't show typed command, causes glitches in SR-bottom corner, do not show mode
 set noshowcmd
-set showmode
+set noshowmode
 
 " Line numbers by default
 set number
@@ -232,14 +233,20 @@ set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 map <silent> <F1> :set nopaste! paste?<cr>
 set pastetoggle=<F1>
 
+" Tree
+nnoremap <F2> :NERDTreeToggle<cr>
+
 " F3 yanks all
 map <F3> :%y+<cr>
 
 " Line numbers
 map <silent> <F4> :set nonumber!<cr>
 
+" Toggle indentation
+map <F5> :IndentLinesToggle<cr>
+
 " Toggle invisible chars
-map <silent> <F5> :set list!<cr>
+map <silent> <F6> :set list!<cr>
 
 " Toggle spell-check
 map <silent> <F7> :set spell!<cr>
@@ -250,8 +257,8 @@ inoremap ii <esc>
 " Remap leader from `\` to `Space`
 let mapleader = "\<Space>"
 
-" <leader>+m toggles "scroll mode"
-map <leader>m :call ToggleScrollMode()<cr>
+" <leader>+sm toggles "scroll mode"
+map <leader>sm :call ToggleScrollMode()<cr>
 
 " Insert date header
 map <F12> :call DD()<cr>
@@ -266,11 +273,15 @@ imap <C-s> <Esc>:w!<CR>a
 " Close window/split as usual
 map <C-w> :close<CR>
 
+" Select all as usual (skips to the last symbol)
+map <C-a> <esc>gg0vG$<CR>
+
 " Don't copy result of 'dd', 's' and 'c' into buffer
 nnoremap d "_d
 vnoremap d "_d
-nnoremap s "_s
-vnoremap s "_s
+" `s` is currently used by the vim-sneak
+" nnoremap s "_s
+" vnoremap s "_s
 nnoremap c "_c
 vnoremap c "_c
 nnoremap C "_C
@@ -318,7 +329,7 @@ nmap <leader>. :bn<CR>
 nmap <leader>, :bp<CR>
 nmap <leader>q :bp <BAR> bd #<CR>
 
-" Leave text selected after changing intendation with <>
+" Keep text selected after changing intendation with <>
 vnoremap < <gv
 vnoremap > >gv
 
@@ -353,6 +364,20 @@ inoremap <C-Z> <Esc>ui
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 
+" make n always search forward and N backward
+nnoremap <expr> n 'Nn'[v:searchforward]
+nnoremap <expr> N 'nN'[v:searchforward]
+
+" make ; always `find` forward and , backward
+nnoremap <expr> ; getcharsearch().forward ? ';' : ','
+nnoremap <expr> , getcharsearch().forward ? ',' : ';'
+
+" Zoom
+nmap <Leader>z <Plug>(zoom-toggle)
+
+" <leader>+s is ysW
+map <leader>s ysW
+
 
 " ----------------------------------------------------------------------------
 " Plugins
@@ -366,6 +391,87 @@ let g:ansible_extra_keywords_highlight = 1
 let g:ansible_normal_keywords_highlight = 'Operator'
 let g:ansible_with_keywords_highlight = 'Operator'
 
+" vim-startify
+let g:startify_custom_header = [
+            \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
+            \ ' │ ├─┤││││├┴┐ ',
+            \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
+            \ ]
+
+let g:startify_lists = [
+            \ { 'type': 'files', 'header': ['MRU'] },
+            \ ]
+
+" vim-airline
+let g:airline_minimalist_showmod = 0
+let g:airline_theme='minimalist'
+let g:airline_powerline_fonts=0
+let g:airline_skip_empty_sections = 1
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline_symbols = {}
+let g:airline_symbols.linenr = ''
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = '⎇ '
+
+
+function! AirlineInit()
+    let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()} %3l%#__restore__#/%L :%3v')
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+
+let g:airline_mode_map = {
+            \ '__' : '-',
+            \ 'n'  : 'N',
+            \ 'i'  : 'I',
+            \ 'R'  : 'R',
+            \ 'c'  : 'C',
+            \ 'v'  : 'V',
+            \ 'V'  : 'V',
+            \ '' : 'V',
+            \ 's'  : 'S',
+            \ 'S'  : 'S',
+            \ '' : 'S',
+            \ }
+
+" Show tabline only if >1 file is open
+let g:airline#extensions#tabline#show_buffers=1
+let g:airline#extensions#tabline#buffer_min_count=2
+let g:airline#extensions#tabline#tab_min_count=2
+
+" Disable buffer type SR
+let g:airline#extensions#tabline#show_tab_type=0
+let g:airline#extensions#tabline#fnamemod=':t'
+
+" Open fzy or rgrep finders
+nnoremap <C-f> :FuzzyOpen<CR>
+nnoremap <C-g> :FuzzyGrep<CR>
+
+" Git
+nnoremap <Leader>hn :GitGutterNextHunk<CR>
+nnoremap <Leader>hp :GitGutterPrevHunk<CR>
+
+" Prettier GiGutter glyphs
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '•'
+let g:gitgutter_sign_removed = '-'
+let g:gitgutter_sign_removed_first_line = '-'
+let g:gitgutter_sign_modified_removed = '~'
+
+" Disable indent line by default
+let g:indentLine_enabled = 0
+let g:indentLine_setColors = 1
+let g:indentLine_char = '│'
+let g:indentLine_leadingSpaceEnabled = 0
+let g:indentLine_leadingSpaceChar = '·'
+
+" clever-f
+let g:clever_f_smart_case = 1
+let g:clever_f_fix_key_direction = 1
+
+" vim-sneak
+let g:sneak#label = 1
 
 
 " ----------------------------------------------------------------------------
@@ -373,7 +479,7 @@ let g:ansible_with_keywords_highlight = 'Operator'
 " ----------------------------------------------------------------------------
 
 " Mostly use 2 spaces as <Tab>
-autocmd FileType text,markdown,vim,ini,gitconfig,*.yml,shell,bash setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType text,markdown,vim,ini,gitconfig,*.yml,shell,bash,sh setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
 " Keep Web documents to 2 spaces as <Tab>
 autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth=2 softtabstop=2
@@ -383,9 +489,6 @@ autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
 " Fix YAML intendation
 autocmd FileType yaml,toml setlocal ts=2 sts=2 sw=2 expandtab autoindent
-
-" format JSON code
-com! FormatJSON %!python -m json.tool
 
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
@@ -414,6 +517,23 @@ function! ToggleScrollMode()
         echom "scroll mode ON"
     endif
 endfunction
+
+" Prevent opening files in NERDTree
+autocmd FileType nerdtree let t:nerdtree_winnr = bufwinnr('%')
+autocmd BufWinEnter * call PreventBuffersInNERDTree()
+function! PreventBuffersInNERDTree()
+  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
+    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
+    \ && &buftype == '' && !exists('g:launching_fzf')
+    let bufnum = bufnr('%')
+    close
+    exe 'b ' . bufnum
+  endif
+  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
+endfunction
+
+" Close NERDTree if it's the only window left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Toggle between number and relativenumber
 function! ToggleNumber()
@@ -453,3 +573,4 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
