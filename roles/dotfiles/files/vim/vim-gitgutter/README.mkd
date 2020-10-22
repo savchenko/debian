@@ -1,3 +1,6 @@
+This is fork. You probably want an original plugin.
+-----
+
 ## vim-gitgutter
 
 A Vim plugin which shows a git diff in the sign column.  It shows which lines have been added, modified, or removed.  You can also preview, stage, and undo individual hunks; and stage partial hunks.  The plugin also provides a hunk text object.
@@ -38,18 +41,6 @@ Constraints:
 Compatibility:
 
 Compatible back to Vim 7.4, and probably 7.3.
-
-
-### Screenshot
-
-![screenshot](./screenshot.png?raw=true)
-
-In the screenshot above you can see:
-
-* Lines 183-184 are new.
-* Lines 186-187 have been modified.
-* The preview for the modified lines highlights changed regions within the line.
-
 
 ### Installation
 
