@@ -43,6 +43,16 @@
     src: "vim/{{ item }}"
     dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
   with_items: "{{ neovim_plugins }}"
+  when: copy_dotfiles and not link_to_localhost
+
+- name: Link plugins
+  file:
+    src: "{{ playbook_dir }}/roles/dotfiles/files/vim/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start/{{ item }}"
+    state: link
+    force: yes
+  with_items: "{{ neovim_plugins }}"
+  when: link_to_localhost and not WSL1 and not copy_dotfiles
 
 - name: Make `preview.sh` executable
   file:
