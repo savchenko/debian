@@ -61,6 +61,7 @@ alias gc="git commit"
 alias gca='git commit -a'
 alias gco='git checkout'
 alias gd='git diff'
+alias gdc='git diff --cached'
 alias gt='git status'
 alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset)%C(reset)%C(bold cyan)%d%C(reset)' --all"
 alias gfig="git config --local -e"
