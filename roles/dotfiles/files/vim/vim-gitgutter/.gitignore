@@ -1,7 +1,0 @@
-/doc/tags
-/misc
-/test/*.actual
-*.log
-screenshot.png
-/test
-.github/
