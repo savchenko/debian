@@ -1,4 +1,41 @@
 " ----------------------------------------------------------------------------
+" Plugins
+" ----------------------------------------------------------------------------
+ 
+" Polyglot, must be here unfortunately
+let g:polyglot_disabled = ['sensible', 'html']
+ 
+call plug#begin('~/.vim/plugged')
+ 
+Plug 'https://github.com/stoptracking-vim/clever-f.vim'
+Plug 'https://github.com/stoptracking-vim/fzf'
+Plug 'https://github.com/stoptracking-vim/fzf.vim'
+Plug 'https://github.com/stoptracking-vim/fzy.vim'
+Plug 'https://github.com/stoptracking-vim/indentLine'
+Plug 'https://github.com/stoptracking-vim/nerdcommenter'
+Plug 'https://github.com/stoptracking-vim/nerdtree'
+Plug 'https://github.com/stoptracking-vim/vim-airline'
+Plug 'https://github.com/stoptracking-vim/vim-airline-themes'
+Plug 'https://github.com/stoptracking-vim/vim-autoread'
+Plug 'https://github.com/stoptracking-vim/vim-easymotion'
+Plug 'https://github.com/stoptracking-vim/vim-gitgutter'
+Plug 'https://github.com/stoptracking-vim/vim-lastplace'
+Plug 'https://github.com/stoptracking-vim/vim-matchquote'
+Plug 'https://github.com/stoptracking-vim/vim-plug'
+Plug 'https://github.com/stoptracking-vim/vim-polyglot'
+Plug 'https://github.com/stoptracking-vim/vim-startify'
+Plug 'https://github.com/stoptracking-vim/vim-surround'
+Plug 'https://github.com/stoptracking-vim/vim-table-mode'
+Plug 'https://github.com/stoptracking-vim/vim-visual-multi'
+Plug 'https://github.com/stoptracking-vim/vim-zoom'
+Plug 'https://github.com/stoptracking-vim/supertab'
+Plug 'https://github.com/stoptracking-vim/pear-tree'
+
+call plug#end()
+
+
+
+" ----------------------------------------------------------------------------
 " System
 " ----------------------------------------------------------------------------
 

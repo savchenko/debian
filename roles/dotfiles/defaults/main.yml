@@ -1,6 +1,7 @@
 ---
 copy_dotfiles: False
 change_prefix: True
+use_vim_plug: True
 neovim_plugins:
   - clever-f.vim
   - fzf
