@@ -14,13 +14,13 @@
       - debian-goodies
       - dfc
       - dnsutils
+      - fd-find
       - fzf
       - fzy
       - git
       - gnupg2
       - grc
       - htop
-      - ioping
       - keychain
       - knot-resolver
       - libpam-tmpdir
