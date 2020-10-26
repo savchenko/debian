@@ -533,6 +533,10 @@ let g:pear_tree_smart_backspace = 1
 let g:VM_silent_exit = 1
 let g:VM_exit_on_1_cursor_left = 1 
 
+" SuperTAB
+let g:SuperTabDefaultCompletionType = "<c-n>"
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
 " fzf, TODO: Check if these are present in the theme file
 " let g:fzf_colors =
 " \ { 'fg':      ['fg', '#032F62'],
