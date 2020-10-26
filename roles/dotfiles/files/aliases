@@ -23,6 +23,20 @@ function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 # Lazy git
 function lzg() { git add . && git commit -a -m "$@" && git push; }
 
+# fe - search and open a file with the default editor
+fe() {
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+# fcd - cd into the directory of the selected file
+fcd() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+
 #
 # Aliases -------------------------------------------------------------------------------
 #

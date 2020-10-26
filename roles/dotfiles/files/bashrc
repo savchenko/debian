@@ -88,7 +88,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   export HISTFILESIZE=10000                           # Increase history file size (default is 500)
   export HISTSIZE=${HISTFILESIZE}                     # Increase history size (default is 500)
   export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}" 
-  export HSTR_CONFIG=hicolor
 
   #
   # Coreutils tweaks --------------------------------------------------------------

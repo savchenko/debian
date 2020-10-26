@@ -6,9 +6,9 @@
 #     ~/.bashrc has anything you'd want at an interactive command line. Command prompt, EDITOR variable, bash aliases
 #
 export PATH=$PATH:$HOME/.local/bin
-export EDITOR="nvim -u $HOME/.config/nvim/init.vim"
+export EDITOR="nvim"
 export FILEMANAGER="pcmanfm"
-export MP_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
+export MP_EDITOR="nvim"
 export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
 export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
 export GNC_DATA_HOME="$HOME/.local/share/gnucash"
