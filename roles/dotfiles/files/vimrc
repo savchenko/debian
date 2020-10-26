@@ -139,8 +139,13 @@ set expandtab
 " reveal already opened files instead of opening new buffers
 set switchbuf=useopen,usetab,newtab
 
-" Add space before comments
+" Nerd commenter
 let NERDSpaceDelims=1
+let g:NERDCompactSexyComs = 1
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 0
+let g:NERDToggleCheckAllLines = 1
+
 
 " ----------------------------------------------------------------------------
 " Visuals
@@ -331,8 +336,8 @@ nnoremap <Up> gk
 nnoremap <Down> gj
 
 " Move to beginning/end of line
-nnoremap B ^
-nnoremap E $
+" nnoremap B ^
+" nnoremap E $
 
 " Add new lines and spaces without changing the mode
 nmap <Leader>j mvo<Esc>`v
@@ -409,12 +414,24 @@ nnoremap <expr> N 'nN'[v:searchforward]
 nnoremap <expr> ; getcharsearch().forward ? ';' : ','
 nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
+" --- Plugins ----------------------------------------------------------------
+
 " Zoom
 nmap <Leader>z <Plug>(zoom-toggle)
 
 " <leader>+s is ysW
 map <leader>s ysW
 
+" Skip empty lines with multiple cursors
+map <leader>se :call SkipEmptyLines()<cr>
+
+" --- Functions --------------------------------------------------------------
+
+" Show highlight groups
+nmap <leader>sp :call <SID>SynStack()<CR>
+
+" Clear things
+nmap <silent><esc><esc> :call <SID>ClearThings()<CR>
 
 " ----------------------------------------------------------------------------
 " Plugins
@@ -452,7 +469,6 @@ let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.branch = '⎇ '
 
-
 function! AirlineInit()
     let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()} %3l%#__restore__#/%L :%3v')
 endfunction
@@ -485,7 +501,7 @@ let g:airline#extensions#tabline#fnamemod=':t'
 nnoremap <C-f> :FuzzyOpen<CR>
 nnoremap <C-g> :FuzzyGrep<CR>
 
-" Git
+" GitGutter
 nnoremap <Leader>hn :GitGutterNextHunk<CR>
 nnoremap <Leader>hp :GitGutterPrevHunk<CR>
 
@@ -506,10 +522,32 @@ let g:indentLine_leadingSpaceChar = '·'
 " clever-f
 let g:clever_f_smart_case = 1
 let g:clever_f_fix_key_direction = 1
+let g:clever_f_mark_char_color = 'DiffAdd'
 
-" vim-sneak
-let g:sneak#label = 1
+" Smart pairs are enabled by default:
+let g:pear_tree_smart_openers = 1
+let g:pear_tree_smart_closers = 1
+let g:pear_tree_smart_backspace = 1
 
+" multi-cursors
+let g:VM_silent_exit = 1
+let g:VM_exit_on_1_cursor_left = 1 
+
+" fzf, TODO: Check if these are present in the theme file
+" let g:fzf_colors =
+" \ { 'fg':      ['fg', '#032F62'],
+"   \ 'bg':      ['bg', '#CCCCCC'],
+"   \ 'hl':      ['fg', '#6A737D'],
+"   \ 'fg+':     ['fg', '#005CC5', '#EAEFF4', '#005CC5'],
+"   \ 'bg+':     ['bg', '#005CC5', '#EAEFF4'],
+"   \ 'hl+':     ['fg', 'Statement'],
+"   \ 'info':    ['fg', 'PreProc'],
+"   \ 'border':  ['fg', 'Ignore'],
+"   \ 'prompt':  ['fg', 'Conditional'],
+"   \ 'pointer': ['fg', 'Exception'],
+"   \ 'marker':  ['fg', 'Keyword'],
+"   \ 'spinner': ['fg', 'Label'],
+"   \ 'header':  ['fg', 'Comment'] }
 
 " ----------------------------------------------------------------------------
 " Macros
@@ -568,10 +606,10 @@ function! PreventBuffersInNERDTree()
   endif
   if exists('g:launching_fzf') | unlet g:launching_fzf | endif
 endfunction
-
+ 
 " Close NERDTree if it's the only window left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
+ 
 " Toggle between number and relativenumber
 function! ToggleNumber()
     if(&relativenumber == 1)
@@ -581,6 +619,22 @@ function! ToggleNumber()
         set relativenumber
         set nocul
     endif
+endfunc
+ 
+" Skip empty lines with multiple cursors
+function! SkipEmptyLines()
+  if exists("g:VM_skip_empty_lines")
+    if(g:VM_skip_empty_lines == 1)
+      let g:VM_skip_empty_lines = 0
+      echo "VM: Not skipping empty lines"
+    else
+      let g:VM_skip_empty_lines = 1
+      echo "VM: Skipping empty lines"
+    endif
+  else
+    let g:VM_skip_empty_lines = 1
+    echo "VM: Skipping empty lines"
+  endif
 endfunc
 
 " Strips trailing whitespace at the end of files.
@@ -603,7 +657,6 @@ function! DD()
 endfunc
 
 " Show highlight groups
-nmap <leader>sp :call <SID>SynStack()<CR>
 function! <SID>SynStack()
   if !exists("*synstack")
     return
@@ -611,3 +664,9 @@ function! <SID>SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
+" Clear things
+function! <SID>ClearThings()
+  set nohlsearch
+  call clever_f#reset()
+  call vm#hard_reset()
+endfunc
