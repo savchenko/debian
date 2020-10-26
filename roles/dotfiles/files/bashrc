@@ -121,5 +121,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
 
+  # Try to load fzf-completion ----------------------------------------------------
+  if [ -f /etc/bash_completion.d/fzf.sh ]; then . /etc/bash_completion.d/fzf.sh; fi
+
 fi
 fi

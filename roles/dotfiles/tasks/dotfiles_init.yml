@@ -11,6 +11,13 @@
     path: "{{ ansible_env.HOME }}/.ssh"
     mode: 0700
 
+- name: Copy fzf bash completion
+  copy:
+    src: completion.bash
+    dest: /etc/bash_completion.d/fzf.sh
+    mode: a+x
+  become: yes
+
 - name: Check if tmux terminfo already installed
   shell: infocmp -x tmux
   register: terminfo_test
