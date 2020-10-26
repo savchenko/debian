@@ -54,11 +54,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   if [ $root -eq 1 ]; then user_color="${red}"; else user_color="${green}"; fi
 
-  PS1="${dark_grey}╭${user_color}\u"              # user
-  PS1+=" ${blue}\h"                               # hostname
-  PS1+="${grey} \w"                               # work dir
-  PS1+="${light_grey}\$(__git_ps1)"               # git branch
-  PS1+="\n${dark_grey} ${clr_reset}"              # input symbol
+  PS1="${dark_grey}╭${user_color}\u"                  # user
+  PS1+=" ${blue}\h"                                   # hostname
+  PS1+="${grey} \w"                                   # work dir
+  PS1+="${light_grey}\$(__git_ps1)"                   # git branch
+  PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
 
   export PS1
   export PS2="> ${clr_reset}"
@@ -66,28 +66,29 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   #
   # Tweaks ------------------------------------------------------------------------
   #
-  set -o vi                                       # Always
-  bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
-  bind '"ii": "\e\e"'                             # The same escape as in vim
+  set -o vi                                           # Always
+  bind '"\C-r": "\e^ihh \n"'                          # ...in HSTR by CTRL+R
+  bind '"ii": "\e\e"'                                 # The same escape as in vim
 
-  for N in {0..9};                                # Don't use esoteric argument features of the Readline
+  for N in {0..9};                                    # Don't use esoteric argument features of the Readline
     do 
   bind -m vi $N:
    done
 
-  complete -d cd                                  # Cd only into directory
+  complete -d cd                                      # Cd only into directory
 
-  shopt -s nocaseglob                             # Case-insensitive globbing (used in pathname expansion)
-  shopt -s histappend                             # Append to the Bash history file, rather than overwriting
-  shopt -s cdspell                                # Autocorrect typos in path names when using `cd`
-  shopt -s checkwinsize                           # Should help with overlapping lines
-  shopt -s no_empty_cmd_completion                # No empty command completion.
-  shopt -s histverify histreedit                  # Check expansions before submitting command
+  shopt -s nocaseglob                                 # Case-insensitive globbing (used in pathname expansion)
+  shopt -s histappend                                 # Append to the Bash history file, rather than overwriting
+  shopt -s cdspell                                    # Autocorrect typos in path names when using `cd`
+  shopt -s checkwinsize                               # Should help with overlapping lines
+  shopt -s no_empty_cmd_completion                    # No empty command completion.
+  shopt -s histverify histreedit                      # Check expansions before submitting command
 
-  export HISTCONTROL=ignoreboth:erasedups         # Don't store duplicated entries in history
-  export HISTFILESIZE=5000                        # Increase history file size (default is 500)
-  export HISTSIZE=${HISTFILESIZE}                 # Increase history size (default is 500)
-  export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
+  export HISTCONTROL=ignoreboth:erasedups:ignorespace # Don't store duplicated entries in history, hide leading space
+  export HISTFILESIZE=10000                           # Increase history file size (default is 500)
+  export HISTSIZE=${HISTFILESIZE}                     # Increase history size (default is 500)
+  export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}" 
+  export HSTR_CONFIG=hicolor
 
   #
   # Coreutils tweaks --------------------------------------------------------------
