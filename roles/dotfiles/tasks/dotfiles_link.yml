@@ -41,6 +41,11 @@
     with_items: "{{ dotfiles_list }}"
     register: dotfiles_linked
 
+  - name: Copy ~/.local/bin
+    copy:
+      src: bin
+      dest: ~/.local/bin
+
   when: copy_dotfiles
 
   #
@@ -55,3 +60,9 @@
   with_items: "{{ dotfiles_list }}"
   when: link_to_localhost and not WSL1 and not copy_dotfiles
   register: dotfiles_linked
+
+- name: Link ~/.local/bin from this role to $HOME
+  file:
+    src: "{{role_path}}/files/bin" 
+    dest: "{{ ansible_env.HOME }}/.local/bin"
+  when: link_to_localhost and not WSL1 and not copy_dotfiles
