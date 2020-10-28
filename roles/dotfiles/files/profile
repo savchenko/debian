@@ -20,3 +20,4 @@ export NVIM_GTK_PREFER_DARK_THEME=1
 export NVIM_GTK_NO_HEADERBAR=1
 export HSTR_CONFIG=hicolor
 export GREP_COLOR="1;32"
+export BAT_THEME="Midnight.hybrid"
