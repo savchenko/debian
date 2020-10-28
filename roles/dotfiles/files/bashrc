@@ -92,35 +92,35 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   #
   # Coreutils tweaks --------------------------------------------------------------
   #
-  alias less="less -FXc"                          # -F automatically exit if file fits in one screen
-                                                  # -X disables sending the termcap init/deinit strings to the term
-                                                  # -c full screen repaints to be painted from the top line down
+  alias less="less -FXc"                              # -F automatically exit if file fits in one screen
+                                                      # -X disables sending the termcap init/deinit strings to the term
+                                                      # -c full screen repaints to be painted from the top line down
 
-  alias ls="ls -G --color=auto"                   # -G don't print group names
+  alias ls="ls -G --color=auto"                       # -G don't print group names
 
-  alias ll="ls -FlAhp --group-directories-first"  # -F append indicator to entries
-                                                  # -l long listing format
-                                                  # -A don't show ./ and ../
-                                                  # -h human-readable sizes
-                                                  # -p append / indicator to directories
+  alias ll="ls -FlAhp --group-directories-first"      # -F append indicator to entries
+                                                      # -l long listing format
+                                                      # -A don't show ./ and ../
+                                                      # -h human-readable sizes
+                                                      # -p append / indicator to directories
 
-  alias lt="ls -lt"                               # Newest first
-  alias lth="ls -lt | head"                       # Newest first
+  alias lt="ls -lt"                                   # Newest first
+  alias lth="ls -lt | head"                           # Newest first
 
-  alias cp="cp -iv"                               # Prompt before overwrite, be verbose
+  alias cp="cp -iv"                                   # Prompt before overwrite, be verbose
 
-  alias mkdir="mkdir -pv"                         # -p create intermediate directories as required
+  alias mkdir="mkdir -pv"                             # -p create intermediate directories as required
 
-  alias mv="mv -iv"                               # -i ask before overwriting a file
+  alias mv="mv -iv"                                   # -i ask before overwriting a file
 
-  alias grep="grep --color=auto"                  # Colorize grep by default
+  alias grep="grep --color=auto"                      # Colorize grep by default
   alias egrep="egrep --color=auto"
   alias igrep="grep -i"
 
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
 
-  # Try to load fzf-completion ----------------------------------------------------
+  # Try to load fzf-completion, has to be at the end ------------------------------
   if [ -f /etc/bash_completion.d/fzf.sh ]; then . /etc/bash_completion.d/fzf.sh; fi
 
 fi
