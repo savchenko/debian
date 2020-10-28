@@ -26,7 +26,7 @@
 
 - name: Copy /etc/systemd/timesyncd.conf
   copy:
-    src: timesyncd.conf
+    src: conf/timesyncd.conf
     dest: /etc/systemd/timesyncd.conf
     mode: preserve
   when: not WSL1 and not WSL2

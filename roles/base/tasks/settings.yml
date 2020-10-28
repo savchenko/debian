@@ -1,7 +1,7 @@
 ---
 - name: Copy /etc/ssh/sshd_config
   copy:
-    src: sshd_config
+    src: conf/sshd_config
     dest: /etc/ssh/sshd_config
     owner: root
     mode: 0644
@@ -24,7 +24,7 @@
 
 - name: Copy /etc/sysctl.conf
   copy:
-    src: sysctl.conf
+    src: conf/sysctl.conf
     dest: /etc/sysctl.conf
     owner: root
     mode: 0644
@@ -33,7 +33,7 @@
 
 - name: Copy system.conf
   copy:
-    src: system.conf
+    src: conf/system.conf
     dest: /etc/systemd/system.conf
     owner: root
     mode: 0644
@@ -134,7 +134,7 @@
 
 - name: Block unnecessary network protocols
   copy:
-    src: uncommon-network-protocols.conf
+    src: conf/uncommon-network-protocols.conf
     dest: /etc/modprobe.d/uncommon-network-protocols.conf
 
 - name: Enable APT sandboxing
