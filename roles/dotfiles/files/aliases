@@ -3,29 +3,30 @@
 #
 
 # Grep for a process without showing `grep` command itself
-function psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
+psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
 
 # Make directory and cd into it
-function mcd() { mkdir "$1" && cd "$1" || exit; }
+mcd() { mkdir "$1" && cd "$1" || exit; }
 
 # Find files not owned by current user in pwd
-function notusr() { find . \! -user "$@" -print; }
+notusr() { find . \! -user "$@" -print; }
 
 # Create tmux-split and close it after $editor is terminated
 if { [ -n "$TMUX" ]; }; then peek() { tmux split-window -p 40 "$EDITOR" "$@" || exit; }; fi
 
 # Compress file or directory
-function rmx() { if [ $# -eq 1 ]; then rar a -m5 -ma5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
+rmx() { if [ $# -eq 1 ]; then rar a -m5 -ma5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
 
 # Whois abuse contact
-function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
+wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 
 # Lazy git
-function lzg() { git add . && git commit -a -m "$@" && git push; }
+lzg() { git add . && git commit -a -m "$@" && git push; }
 
 # fe - search and open a file with the default editor
 fe() {
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  local IFS=$'\n'
+	local files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
@@ -36,6 +37,42 @@ fcd() {
    file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
 }
 
+# fcp - cf into parent directory
+fcp() {
+  local dirs=()
+  local parent_dir
+  get_parent_dirs() {
+    if [[ -d "$1" ]]; then dirs+=("$1"); else return; fi
+    if [[ "$1" == '/' ]]; then
+      for _dir in "${dirs[@]}"; do echo "$_dir"; done
+    else
+      get_parent_dirs "$(dirname "$1")"
+    fi
+  }
+  parent_dir="$(
+    get_parent_dirs "$(realpath "${1:-$PWD}")" \
+      | fzf +m \
+          --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
+          --preview-window='right:hidden:wrap' \
+          --bind=ctrl-v:toggle-preview \
+          --bind=ctrl-x:toggle-sort \
+          --header='(view:ctrl-v) (sort:ctrl-x)' \
+  )" || return
+  cd "$parent_dir" || return
+}
+
+# fkill - kill process
+fkill() {
+  local pid
+  pid="$(
+    ps -ef \
+      | sed 1d \
+      | fzf -m \
+      | awk '{print $2}'
+  )" || return
+
+  kill -"${1:-9}" "$pid"
+}
 
 #
 # Aliases -------------------------------------------------------------------------------
@@ -60,7 +97,7 @@ alias ap="ansible-playbook"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
 alias bfg="java -jar $HOME/.local/bin/bfg.jar"
 alias remount_nfs="sudo mount -a -t cifs"
-alias find="find -xdev"
+alias fd="fdfind"
 
 # NeoVim
 alias v="nvim"
