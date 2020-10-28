@@ -5,6 +5,7 @@
   vars:
     pkg:
       - ack
+      - moreutils
       - apt-listbugs
       - apt-listchanges
       - apt-transport-https
@@ -17,6 +18,7 @@
       - fd-find
       - fzf
       - fzy
+      - gawk
       - git
       - gnupg2
       - grc
@@ -35,6 +37,7 @@
       - needrestart
       - neovim
       - neovim-runtime
+      - pandoc
       - python
       - python-pip
       - python-psutil
@@ -50,9 +53,11 @@
       - strace
       - sudo
       - sysstat
+      - taskwarrior
       - tmux
       - tree
       - unattended-upgrades
+      - vit
       - wget
 
 - name: Install Intel CPU firmware if necessary
