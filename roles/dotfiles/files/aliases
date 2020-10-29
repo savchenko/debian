@@ -24,20 +24,39 @@ wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 lzg() { git add . && git commit -a -m "$@" && git push; }
 
 # fe - search and open a file with the default editor
+# TODO:
+#		1. Add preview
+#		2. Accept stdin as an argument in addition to $PWD
 fe() {
   local IFS=$'\n'
 	local files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-# fcd - cd into the directory of the selected file
-fcd() {
+# fcf - cd into the directory of a selected file
+# TODO:
+#		1. Add file preview
+#		2. Accept stdin as an argument in addition to $PWD
+fcf() {
    local file
    local dir
    file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
 }
 
-# fcp - cf into parent directory
+# fcd - cd into a directory
+# TODO:
+#		1. Add directory preview
+#		2. Accept stdin as an argument in addition to $PWD
+fcd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fcp - cd into parent directory
+# TODO:
+#		Nothing, just a cool implementation! 
+#		See if we can re-use it for other fuzzy-functions
 fcp() {
   local dirs=()
   local parent_dir
@@ -70,7 +89,6 @@ fkill() {
       | fzf -m \
       | awk '{print $2}'
   )" || return
-
   kill -"${1:-9}" "$pid"
 }
 
