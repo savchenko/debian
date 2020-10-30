@@ -1,12 +1,12 @@
 " ----------------------------------------------------------------------------
 " Plugins
 " ----------------------------------------------------------------------------
- 
+
 " Polyglot, must be here unfortunately
 let g:polyglot_disabled = ['sensible', 'html']
- 
+
 call plug#begin('~/.vim/plugged')
- 
+
 Plug 'https://github.com/stoptracking-vim/clever-f.vim'
 Plug 'https://github.com/stoptracking-vim/fzf'
 Plug 'https://github.com/stoptracking-vim/fzf.vim'
@@ -52,6 +52,10 @@ set encoding=utf8
 set fileformat=unix
 set clipboard=unnamedplus
 filetype plugin on
+
+" Shift+up/down select lines instead of moving screen
+" TODO: Finish this one, unmap visual-select on right/left arrow.
+set keymodel=startsel
 
 " Write swap every 0.5s if nothing is typed and report CursorHold
 set updatetime=25
@@ -158,18 +162,18 @@ set synmaxcol=512
 
 " Attempt to show 24-bit palette with 256 colours fallback
 if has("termguicolors")
-    set termguicolors
+  set termguicolors
 else
-    set t_Co=256
+  set t_Co=256
 endif
 
 " BG and italics colour fix for tmux
 if &term =~# '^screen'
-    set t_ut=
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-    set t_ZH=^[[3m
-    set t_ZR=^[[23m
+  set t_ut=
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set t_ZH=^[[3m
+  set t_ZR=^[[23m
 endif
 
 " Colorscheme
@@ -179,6 +183,7 @@ let g:enable_bold_font = 1
 let g:enable_italic_font = 1
 let g:hybrid_transparent_background = 1
 let g:hybrid_hy2 = 1
+let python_highlight_all = 1
 colorscheme better_hybrid
 syntax on
 
@@ -366,8 +371,8 @@ set whichwrap+=<,>
 
 " Resize splits with +-
 if bufwinnr(1)
-    map + <C-W>+
-    map - <C-W>-
+  map + <C-W>+
+  map - <C-W>-
 endif
 
 " Move a line of text using Shift+[jk]
@@ -385,6 +390,10 @@ inoremap <C-Z> <Esc>ui
 " Enable <S-TAB> to reduce intendation
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
+
+" Don't jump on * search
+nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <bar> set hls <cr>'
+nnoremap <silent> g* :let @/=expand('<cword>') <bar> set hls <cr>
 
 " make n always search forward and N backward
 nnoremap <expr> n 'Nn'[v:searchforward]
@@ -418,9 +427,9 @@ let g:gitgutter_map_keys = 0
 nmap g] :GitGutterNextHunk<CR>
 nmap g[ :GitGutterPrevHunk<CR>
 nmap <leader>f :GitGutterFold<CR>
-nmap <Leader>p <Plug>(GitGutterPreviewHunk)
-nmap <Leader>= <Plug>(GitGutterStageHunk)
-nmap <Leader>- <Plug>(GitGutterUndoHunk)
+nmap <leader>p <Plug>(GitGutterPreviewHunk)
+nmap <leader>s <Plug>(GitGutterStageHunk)
+nmap <leader>u <Plug>(GitGutterUndoHunk)
 
 " Easymotion
 nmap s <Plug>(easymotion-s2)
@@ -431,7 +440,12 @@ nmap s <Plug>(easymotion-s2)
 nmap <leader>sp :call <SID>SynStack()<CR>
 
 " Clear things
-nmap <silent><esc><esc> :noh<cr> :call <SID>ClearThings()<CR>
+nmap <silent><esc><esc> :call <SID>ClearThings() <bar> noh<CR>
+
+" Strip whitespace and retab -------------------------------------------------
+nmap gcl :call <SID>CleanUp()<CR>
+vmap gcl :call <SID>CleanUp()<CR>gv
+
 
 " ----------------------------------------------------------------------------
 " Plugins
@@ -447,14 +461,14 @@ let g:ansible_with_keywords_highlight = 'Operator'
 
 " vim-startify
 let g:startify_custom_header = [
-            \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
-            \ ' │ ├─┤││││├┴┐ ',
-            \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
-            \ ]
+      \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
+      \ ' │ ├─┤││││├┴┐ ',
+      \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
+      \ ]
 
 let g:startify_lists = [
-            \ { 'type': 'files', 'header': ['MRU'] },
-            \ ]
+      \ { 'type': 'files', 'header': ['MRU'] },
+      \ ]
 
 " vim-airline
 let g:airline_minimalist_showmod = 0
@@ -463,30 +477,30 @@ let g:airline_powerline_fonts=0
 let g:airline_skip_empty_sections = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#whitespace#enabled = 1
 let g:airline_symbols = {}
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.branch = '🔗'
 
 function! AirlineInit()
-    let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()} %3l%#__restore__#/%L :%3v')
+  let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()} %3l%#__restore__#/%L :%3v')
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
 let g:airline_mode_map = {
-            \ '__' : '-',
-            \ 'n'  : 'N',
-            \ 'i'  : 'I',
-            \ 'R'  : 'R',
-            \ 'c'  : 'C',
-            \ 'v'  : 'V',
-            \ 'V'  : 'V',
-            \ '' : 'V',
-            \ 's'  : 'S',
-            \ 'S'  : 'S',
-            \ '' : 'S',
-            \ }
+      \ '__' : '-',
+      \ 'n'  : 'N',
+      \ 'i'  : 'I',
+      \ 'R'  : 'R',
+      \ 'c'  : 'C',
+      \ 'v'  : 'V',
+      \ 'V'  : 'V',
+      \ '' : 'V',
+      \ 's'  : 'S',
+      \ 'S'  : 'S',
+      \ '' : 'S',
+      \ }
 
 " Show tabline only if >1 file is open
 let g:airline#extensions#tabline#show_buffers=1
@@ -531,6 +545,9 @@ let g:SuperTabContextDefaultCompletionType = "<c-n>"
 " vim-lion (gl/gL alignment)
 let g:lion_squeeze_spaces = 1
 
+" Open in tabs
+let NERDTreeMapOpenInTab='\r'
+
 "
 " FZF
 "
@@ -574,7 +591,7 @@ autocmd VimResized * wincmd =
 " Return to last edit position when opening files
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-  \ |   exe "normal! g`\""
+  \ | exe "normal! g`\""
   \ | endif
 
 " Temporarily hide ruler when in FZF mode
@@ -582,21 +599,21 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <bu
 
 " Scroll mode, keeps cursor centered and horizontally unchanged
 function! ToggleScrollMode()
-    if exists("s:scroll_mode")
-        unmap k
-        unmap j
-        set startofline
-        set virtualedit=""
-        unlet s:scroll_mode
-        echom "scroll mode OFF"
-    else
-        nnoremap j <C-e>j
-        nnoremap k <C-y>k
-        set virtualedit=all
-        set nostartofline
-        let s:scroll_mode = 1
-        echom "scroll mode ON"
-    endif
+  if exists("s:scroll_mode")
+    unmap k
+    unmap j
+    set startofline
+    set virtualedit=""
+    unlet s:scroll_mode
+    echom "scroll mode OFF"
+  else
+    nnoremap j <C-e>j
+    nnoremap k <C-y>k
+    set virtualedit=all
+    set nostartofline
+    let s:scroll_mode = 1
+    echom "scroll mode ON"
+  endif
 endfunction
 
 " Prevent opening files in NERDTree
@@ -612,21 +629,21 @@ function! PreventBuffersInNERDTree()
   endif
   if exists('g:launching_fzf') | unlet g:launching_fzf | endif
 endfunction
- 
+
 " Close NERDTree if it's the only window left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
- 
+
 " Toggle between number and relativenumber
 function! ToggleNumber()
-    if(&relativenumber == 1)
-        set norelativenumber
-        set number
-    else
-        set relativenumber
-        set nocul
-    endif
+  if(&relativenumber == 1)
+    set norelativenumber
+    set number
+  else
+    set relativenumber
+    set nocul
+  endif
 endfunc
- 
+
 " Skip empty lines with multiple cursors
 function! SkipEmptyLines()
   if exists("g:VM_skip_empty_lines")
@@ -643,16 +660,23 @@ function! SkipEmptyLines()
   endif
 endfunc
 
-" Strips trailing whitespace at the end of files.
-function! WhitespaceStrip()
-    " save last search & cursor position
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    let @/=_s
-    call cursor(l, c)
-endfunction
+" Strips trailing whitespace and retab
+function! <SID>CleanUp() range
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  let l:win_view = winsaveview()
+  if a:firstline == a:lastline
+    keeppatterns %s/\s\+$//e
+    %retab!
+  else
+    keeppatterns '<,'>s/\s\+$//e
+    '<,'>retab!
+  endif
+  call winrestview(l:win_view)
+  call cursor(l, c)
+  let @/=_s
+endfunc
 
 " Insert date header
 function! DD()
@@ -670,7 +694,21 @@ function! <SID>SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
-" Clear things
+" :ChangeTabStops 4 2
+" Use with care! Can break things.
+command! -nargs=* ChangeTabStops call s:ChangeTabStops(<f-args>)
+function! s:ChangeTabStops(current, new)
+        let &l:tabstop = a:current
+        let &l:softtabstop = a:current
+        set noexpandtab
+        retab!
+        let &l:tabstop = a:new
+        let &l:softtabstop = a:new
+        set expandtab
+        retab
+endfunction
+
+" Clear GUI/TUI indicators
 function! <SID>ClearThings()
   call clever_f#reset()
   call vm#hard_reset()
