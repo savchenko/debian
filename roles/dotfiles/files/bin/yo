@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+  then
+    echo "No argument supplied"
+    exit
+fi
+
+otp=$(/usr/bin/yubioath show -s1 6 $1 | sed -r 's!.*\s!!')
+echo $otp | xclip -selection clipboard
