@@ -23,6 +23,7 @@ dotfiles_list:
   - { src: 'vimrc', dest: '.vimrc' }
   - { src: 'Xresources', dest: '.Xresources' }
   - { src: 'ssh_config', dest: '.ssh/config' }
+  - { src: 'ripgreprc', dest: '.ripgreprc' }
 
 dotfiles_gitconfig_local:
   - { src: 'gitconfig', dest: '.gitconfig' }

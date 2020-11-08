@@ -65,4 +65,6 @@
   file:
     src: "{{role_path}}/files/bin" 
     dest: "{{ ansible_env.HOME }}/.local/bin"
+    state: link
+    force: yes
   when: link_to_localhost and not WSL1 and not copy_dotfiles

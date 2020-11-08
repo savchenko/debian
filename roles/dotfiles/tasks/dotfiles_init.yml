@@ -20,13 +20,13 @@
 
 - name: Create bat config folder
   file:
-    path: "{{ ansible_env.HOME }}"/.config/bat
+    path: "{{ ansible_env.HOME }}/.config/bat"
     state: directory
 
-- name: Copy bat themes
+- name: Copy bat folder
   copy:
-    src: themes
-    dest: "{{ ansible_env.HOME }}"/.config/bat/
+    src: config/bat
+    dest: "{{ ansible_env.HOME }}/.config/bat"
 
 - name: Check if tmux terminfo already installed
   shell: infocmp -x tmux
