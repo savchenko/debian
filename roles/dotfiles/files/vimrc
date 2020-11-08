@@ -387,7 +387,7 @@ vmap <S-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <S-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 " CTRL+V in insert mode
-inoremap <C-V> <C-r>+
+inoremap <silent><C-V> <C-r>+
 
 " CTRL+Z in insert mode
 inoremap <C-Z> <Esc>ui
@@ -588,8 +588,6 @@ let fzf_opt_rg = '--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:
 let fzf_opt_rg = fzf_opt_rg.'gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,'
 let fzf_opt_rg = fzf_opt_rg.'header:#707880 --exact --margin=1,2 --delimiter : --nth 2..'
 command! -bang -nargs=* Rg call fzf#vim#grep(fzf_cmd_rg .shellescape(<q-args>), 1, fzf#vim#with_preview({'options': fzf_opt_rg}), <bang>0)
-
-" TODO: Continue with colours, scrutinize that Rg does the right thing, try to hide unnecessary elements.
 
 " :Ag
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
