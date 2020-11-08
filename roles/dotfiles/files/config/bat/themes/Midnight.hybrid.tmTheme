@@ -18,13 +18,13 @@
 					<key>caret</key>
 					<string>#c5c8c6</string>
 					<key>background</key>
-					<string>#090b0d</string>
+					<string>#1D1F21</string>
 					<key>foreground</key>
 					<string>#c5c8c6</string>
 					<key>invisibles</key>
 					<string>#00ff69</string>
 					<key>lineHighlight</key>
-					<string>#171717</string>
+					<string>#1D1F21</string>
 					<key>selection</key>
 					<string>#1b1d20</string>
 					<key>selectionForeground</key>
@@ -50,7 +50,7 @@
 				<key>settings</key>
 				<dict>
 					<key>foreground</key>
-					<string>#ffffff</string>
+					<string>#c5c8c6</string>
 				</dict>
 			</dict>
 
