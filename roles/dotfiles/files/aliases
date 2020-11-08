@@ -25,74 +25,84 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 
 # FZF ----------------------------------------------------------------------------------
 
-# export FZF_COMPLETION_OPTS=''
+FCLR="--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 
-# Use fd (https://github.com/sharkdp/fd) instead of the default find
-# command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
+  fd --hidden --follow . "$1"
 }
 
 # Use fd to generate the list for directory completion
 _fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
+  fd --type d . "$1"
 }
 
-# (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.
 # - You should make sure to pass the rest of the arguments to fzf.
 _fzf_comprun() {
   local command=$1
   shift
-
   case "$command" in
-    cd)           fzf "$@" --preview 'tree -C {} | head -200' ;;
+    cd)           fzf "$@" --exact --margin=0,1,0,0 --preview 'tree -C {} | head -200' ;;
     export|unset) fzf "$@" --preview "eval 'echo \$'{}" ;;
-    ssh)          fzf "$@" --preview 'dig {}' ;;
+    ssh)          fzf "$@" --preview 'dig +short {}' ;;
     *)            fzf "$@" ;;
   esac
 }
 
-# fe - search and open a file with the default editor
-# TODO:
-#   1. Add preview
-#   2. Accept stdin as an argument in addition to $PWD
+# fe - edit file, optional cd into $1
 fe() {
   local IFS=$'\n'
-  local files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+  local cur_pwd=$PWD
+  local query=""
+  local FZF_DEFAULT_COMMAND="fd --hidden --follow -t f -t l"
+  if [[ -d $1 ]]; then cd $1; else query="$@"; fi
+  local f_files=($(fzf-tmux --query=$query +m --reverse \
+                --preview-window='right:hidden' \
+                --preview 'bat --color=always --style=plain {}' \
+                --inline-info --bind=ctrl-v:toggle-preview \
+                --bind=ctrl-x:toggle-sort --exact $FCLR --))
+  [[ -n "$f_files" ]] && ${EDITOR:-vim} "${f_files[@]}"
+  cd $cur_pwd
 }
 
-#
-# TODO: https://github.com/junegunn/fzf/wiki/examples
-#
-
-# fcf - cd into the directory of a selected file
-# TODO:
-#   1. Add file preview
-#   2. Accept stdin as an argument in addition to $PWD
+# fcf - cd into directory containing a file
 fcf() {
-   local file
-   local dir
-   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+  local f_file
+  local f_dir
+  local cur_pwd=$PWD
+  local query=""
+  local FZF_DEFAULT_COMMAND="fd --hidden --follow -t f -t l"
+  if [[ -d $1 ]]; then cd $1; else query="$@"; fi
+  f_file=$(fzf +m -q "$1" --delimiter / --nth -1 \
+              --preview-window='right:hidden' \
+              --preview 'bat --color=always --style=plain {}' \
+              --inline-info --bind=ctrl-v:toggle-preview \
+              --bind=ctrl-x:toggle-sort --exact $FCLR) \
+  && f_dir=$(dirname "$f_file") && cd "$f_dir"
 }
 
 # fcd - cd into a directory
-# TODO:
-#   1. Add directory preview
-#   2. Accept stdin as an argument in addition to $PWD
 fcd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
+  local f_dir
+  local cur_pwd=$PWD
+  local dst_pwd="."
+  local query=""
+  if [[ -d $1 ]]
+    then dst_pwd=$1
+      if [[ "$#" -gt 1 ]]; then query="${@:2}"; fi
+  else query="$@";
+  fi
+  f_dir=$(fd -t d --full-path $dst_pwd | fzf +m -q "$query" \
+        --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
+        --preview-window='right:hidden:wrap' --inline-info --exact \
+        --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort $FCLR) \
+  && cd "$f_dir";
+  if [ $? -ne 0 ]; then cd $cur_pwd; fi
 }
 
 # fcp - cd into parent directory
-# TODO:
-#   Nothing, just a cool implementation!
-#   See if we can re-use it for other fuzzy-functions
 fcp() {
   local dirs=()
   local parent_dir
@@ -111,7 +121,6 @@ fcp() {
           --preview-window='right:hidden:wrap' \
           --bind=ctrl-v:toggle-preview \
           --bind=ctrl-x:toggle-sort \
-          --header='(view:ctrl-v) (sort:ctrl-x)' \
   )" || return
   cd "$parent_dir" || return
 }
@@ -154,7 +163,7 @@ alias ap="ansible-playbook"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
 alias bfg="java -jar $HOME/.local/bin/bfg.jar"
 alias remount_nfs="sudo mount -a -t cifs"
-alias fd="fdfind -H -I -L"
+alias fd="fdfind --hidden --no-ignore --follow"
 alias watch="watch -c"
 
 # NeoVim
