@@ -5,19 +5,22 @@
 #     ~/.profile has the stuff NOT specifically related to bash, such as environment variables (PATH and friends)
 #     ~/.bashrc has anything you'd want at an interactive command line. Command prompt, EDITOR variable, bash aliases
 #
-export PATH=$PATH:$HOME/.local/bin
+export BAT_THEME="Midnight.hybrid"
+export CCACHE_DIR="$HOME/.cache/ccache"
+export CLICOLOR=1
 export EDITOR="nvim"
 export FILEMANAGER="pcmanfm"
-export MP_EDITOR="nvim"
 export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
-export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
-export GNC_DATA_HOME="$HOME/.local/share/gnucash"
 export GNC_CONFIG_HOME="$HOME/.config/gnucash"
-export CCACHE_DIR="$HOME/.cache/ccache"
-export QT_QPA_PLATFORMTHEME="qt5ct"
+export GNC_DATA_HOME="$HOME/.local/share/gnucash"
+export GREP_COLOR="1;32"
+export HSTR_CONFIG=hicolor
+export LESSCHARSET=utf-8
+export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
+export MP_EDITOR="nvim"
+export NVIM_GTK_NO_HEADERBAR=1
 export NVIM_GTK_NO_WINDOW_DECORATION=1
 export NVIM_GTK_PREFER_DARK_THEME=1
-export NVIM_GTK_NO_HEADERBAR=1
-export HSTR_CONFIG=hicolor
-export GREP_COLOR="1;32"
-export BAT_THEME="Midnight.hybrid"
+export PATH=$PATH:$HOME/.local/bin
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
