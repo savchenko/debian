@@ -10,6 +10,8 @@ export CCACHE_DIR="$HOME/.cache/ccache"
 export CLICOLOR=1
 export EDITOR="nvim"
 export FILEMANAGER="pcmanfm"
+export FZF_DEFAULT_COMMAND='fd --hidden --follow'
+export FZF_DEFAULT_OPTS="--height=99% --reverse --color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
 export GNC_CONFIG_HOME="$HOME/.config/gnucash"
 export GNC_DATA_HOME="$HOME/.local/share/gnucash"
@@ -24,5 +26,7 @@ export NVIM_GTK_PREFER_DARK_THEME=1
 export PATH=$PATH:$HOME/.local/bin
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-export FZF_DEFAULT_COMMAND='fd --hidden --follow'
-export FZF_DEFAULT_OPTS="--height=99% --reverse --color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_RUNTIME_DIR="$HOME/.local/runtime"
