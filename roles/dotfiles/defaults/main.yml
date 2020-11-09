@@ -2,23 +2,3 @@
 copy_dotfiles: False
 change_prefix: True
 use_vim_plug: True
-neovim_plugins:
-  - clever-f.vim
-  - fzf
-  - fzf.vim
-  - fzy.vim
-  - indentLine
-  - nerdcommenter
-  - nerdtree
-  - vim-airline
-  - vim-airline-themes
-  - vim-autoread
-  - vim-gitgutter
-  - vim-lastplace
-  - vim-matchquote
-  - vim-polyglot
-  - vim-startify
-  - vim-surround
-  - vim-table-mode
-  - vim-visual-multi
-  - vim-zoom
