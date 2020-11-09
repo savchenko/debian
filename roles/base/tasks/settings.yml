@@ -38,21 +38,18 @@
     owner: root
     mode: 0644
 
-- name: Blacklist SPECK module
-  lineinfile:
-    line: "blacklist CONFIG_CRYPTO_SPECK"
-    path: /etc/modprobe.d/blacklist.conf
-    create: true
-
-- name: Disable netfilter kernel module
-  lineinfile:
-    path: /etc/modprobe.d/blacklist.conf
-    line: "options nf_conntrack nf_conntrack_helper=0"
+- name: Copy blacklist.conf
+  copy:
+    src: conf/blacklist.conf
+    dest: /etc/modprobe.d/blacklist.conf
+    owner: root
+    mode: 0644
 
 - name: Disable pc-speaker (don't beep)
   lineinfile:
     path: /etc/modprobe.d/blacklist.conf
     line: "blacklist pcspkr"
+  when: disable_speaker
 
 - name: Modify /etc/issue
   copy:
@@ -79,7 +76,7 @@
   lineinfile:
     path: /etc/default/grub
     # Buster, v4.19+
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }}"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr  apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto,nosmt audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }}"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
   when: not WSL1 and not WSL2
