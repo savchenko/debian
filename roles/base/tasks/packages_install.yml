@@ -5,7 +5,6 @@
   vars:
     pkg:
       - ack
-      - moreutils
       - apt-listbugs
       - apt-listchanges
       - apt-transport-https
@@ -17,7 +16,6 @@
       - dnsutils
       - fd-find
       - fzf
-      - fzy
       - gawk
       - git
       - gnupg2
