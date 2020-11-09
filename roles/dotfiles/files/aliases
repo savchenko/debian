@@ -145,6 +145,7 @@ fkill() {
 alias ...="cd ../.."
 alias ..="cd .."
 alias c="clear"
+alias c,="cd - > /dev/null"
 alias rt="reset"
 alias sv="sudoedit"
 alias psudo="sudo --preserve-env"
