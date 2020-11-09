@@ -4,21 +4,23 @@
     name: "{{ pkg }}"
   vars:
     pkg:
+      - ack
       - apt-listbugs
       - apt-listchanges
       - apt-transport-https
       - bash-completion
       - ca-certificates
+      - checksec
       - curl
       - debian-goodies
       - dfc
       - dnsutils
-      - fzf
+      - fd-find
+      - gawk
       - git
       - gnupg2
       - grc
       - htop
-      - ioping
       - keychain
       - knot-resolver
       - libpam-tmpdir
@@ -33,12 +35,14 @@
       - needrestart
       - neovim
       - neovim-runtime
+      - pandoc
       - python
       - python-pip
       - python-psutil
       - python3
       - python3-pip
       - python3-psutil
+      - ranger
       - ripgrep
       - rsync
       - ruby
@@ -47,9 +51,11 @@
       - strace
       - sudo
       - sysstat
+      - taskwarrior
       - tmux
       - tree
       - unattended-upgrades
+      - vit
       - wget
 
 - name: Install Intel CPU firmware if necessary
@@ -88,10 +94,10 @@
   become: yes
   when: lua_stat.results | json_query( '[*].stat.exists' ) | unique | string != "[True]"
 
-- name: Unarchive z.lua into `/usr/local/bin` and make it executable
-  unarchive:
-    src: z.lua.tgz
-    dest: /usr/local/bin
+- name: Copy z.lua into `/usr/local/bin` and make it executable
+  copy:
+    src: bin/z.lua
+    dest: /usr/local/bin/z.lua
     mode: a+x
 
 - name: Create Perl modules folder
@@ -101,7 +107,7 @@
 
 - name: Copy diff-so-fancy, its dependencies and fzf
   copy:
-    src: "{{ item.src }}"
+    src: "bin/{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: "{{ item.mode }}"
   with_items:
@@ -126,7 +132,7 @@
 
 - name: Copy .deb packages to the remote host
   copy:
-    src: "{{ item }}"
+    src: "deb/{{ item }}"
     dest: "/tmp/st_deb/{{ item }}"
   loop: "{{ debs }}"
   register: debs_copy_status
@@ -146,5 +152,5 @@
 
 - name: Configure unattended-upgrades
   copy:
-    src: unattended-upgrades
+    src: conf/unattended-upgrades
     dest: /etc/apt/apt.conf.d/50unattended-upgrades

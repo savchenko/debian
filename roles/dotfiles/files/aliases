@@ -3,22 +3,139 @@
 #
 
 # Grep for a process without showing `grep` command itself
-function psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
+psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
 
 # Make directory and cd into it
-function mcd() { mkdir "$1" && cd "$1" || exit; }
+mcd() { mkdir "$1" && cd "$1" || exit; }
 
 # Find files not owned by current user in pwd
-function notusr() { find . \! -user "$@" -print; }
+notusr() { find . \! -user "$@" -print; }
 
 # Create tmux-split and close it after $editor is terminated
 if { [ -n "$TMUX" ]; }; then peek() { tmux split-window -p 40 "$EDITOR" "$@" || exit; }; fi
 
 # Compress file or directory
-function rmx() { if [ $# -eq 1 ]; then rar a -m5 -ma5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
+rmx() { if [ $# -eq 1 ]; then rar a -m5 -ma5 -s -md64m "${1%/}.rar" "${1%/}"; fi }
 
 # Whois abuse contact
-function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
+wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
+
+# Lazy git
+lzg() { git add . && git commit -a -m "$@" && git push; }
+
+# FZF ----------------------------------------------------------------------------------
+
+FCLR="--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
+
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d . "$1"
+}
+
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+  case "$command" in
+    cd)           fzf "$@" --exact --margin=0,1,0,0 --preview 'tree -C {} | head -200' ;;
+    export|unset) fzf "$@" --preview "eval 'echo \$'{}" ;;
+    ssh)          fzf "$@" --preview 'dig +short {}' ;;
+    *)            fzf "$@" ;;
+  esac
+}
+
+# fe - edit file, optional cd into $1
+fe() {
+  local IFS=$'\n'
+  local cur_pwd=$PWD
+  local query=""
+  local FZF_DEFAULT_COMMAND="fd --hidden --follow -t f -t l"
+  if [[ -d $1 ]]; then cd $1; else query="$@"; fi
+  local f_files=($(fzf-tmux --query=$query +m --reverse \
+                --preview-window='right:hidden' \
+                --preview 'bat --color=always --style=plain {}' \
+                --inline-info --bind=ctrl-v:toggle-preview \
+                --bind=ctrl-x:toggle-sort --exact $FCLR --))
+  [[ -n "$f_files" ]] && ${EDITOR:-vim} "${f_files[@]}"
+  cd $cur_pwd
+}
+
+# fcf - cd into directory containing a file
+fcf() {
+  local f_file
+  local f_dir
+  local cur_pwd=$PWD
+  local query=""
+  local FZF_DEFAULT_COMMAND="fd --hidden --follow -t f -t l"
+  if [[ -d $1 ]]; then cd $1; else query="$@"; fi
+  f_file=$(fzf +m -q "$1" --delimiter / --nth -1 \
+              --preview-window='right:hidden' \
+              --preview 'bat --color=always --style=plain {}' \
+              --inline-info --bind=ctrl-v:toggle-preview \
+              --bind=ctrl-x:toggle-sort --exact $FCLR) \
+  && f_dir=$(dirname "$f_file") && cd "$f_dir"
+}
+
+# fcd - cd into a directory
+fcd() {
+  local f_dir
+  local cur_pwd=$PWD
+  local dst_pwd="."
+  local query=""
+  if [[ -d $1 ]]
+    then dst_pwd=$1
+      if [[ "$#" -gt 1 ]]; then query="${@:2}"; fi
+  else query="$@";
+  fi
+  f_dir=$(fd -t d --full-path $dst_pwd | fzf +m -q "$query" \
+        --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
+        --preview-window='right:hidden:wrap' --inline-info --exact \
+        --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort $FCLR) \
+  && cd "$f_dir";
+  if [ $? -ne 0 ]; then cd $cur_pwd; fi
+}
+
+# fcp - cd into parent directory
+fcp() {
+  local dirs=()
+  local parent_dir
+  get_parent_dirs() {
+    if [[ -d "$1" ]]; then dirs+=("$1"); else return; fi
+    if [[ "$1" == '/' ]]; then
+      for _dir in "${dirs[@]}"; do echo "$_dir"; done
+    else
+      get_parent_dirs "$(dirname "$1")"
+    fi
+  }
+  parent_dir="$(
+    get_parent_dirs "$(realpath "${1:-$PWD}")" \
+      | fzf +m \
+          --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
+          --preview-window='right:hidden:wrap' \
+          --bind=ctrl-v:toggle-preview \
+          --bind=ctrl-x:toggle-sort \
+  )" || return
+  cd "$parent_dir" || return
+}
+
+# fkill - kill process
+fkill() {
+  local pid
+  pid="$(
+    ps -ef \
+      | sed 1d \
+      | fzf -m \
+      | awk '{print $2}'
+  )" || return
+  kill -"${1:-9}" "$pid"
+}
 
 #
 # Aliases -------------------------------------------------------------------------------
@@ -28,13 +145,17 @@ function wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 alias ...="cd ../.."
 alias ..="cd .."
 alias c="clear"
+alias c,="cd - > /dev/null"
 alias rt="reset"
 alias sv="sudoedit"
 alias psudo="sudo --preserve-env"
-alias ca="bat --style plain --theme 1337"
+alias ca="bat --style plain"
 alias dd="dd bs=4M status=progress oflag=sync"
 alias dmesg="dmesg -Hwx"
-alias symlinks="ls -ltra | grep '\->'"
+alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
+                ack --color-match='bold yellow' --passthru '\w+\Z' --color |
+                ack --color-match='yellow' --passthru '^[a-zA-Z0-9\_\.\-]+' --color |
+                ack --color-match='dark yellow' --passthru '\->\s'"
 alias xc="xclip -selection clipboard"
 alias sup='su --preserve-environment'
 alias openports='lsof -Pni4'
@@ -43,7 +164,8 @@ alias ap="ansible-playbook"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
 alias bfg="java -jar $HOME/.local/bin/bfg.jar"
 alias remount_nfs="sudo mount -a -t cifs"
-alias find="find -xdev"
+alias fd="fdfind --hidden --no-ignore --follow"
+alias watch="watch -c"
 
 # NeoVim
 alias v="nvim"
@@ -58,6 +180,7 @@ alias gc="git commit"
 alias gca='git commit -a'
 alias gco='git checkout'
 alias gd='git diff'
+alias gdc='git diff --cached'
 alias gt='git status'
 alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset)%C(reset)%C(bold cyan)%d%C(reset)' --all"
 alias gfig="git config --local -e"

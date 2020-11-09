@@ -6,27 +6,28 @@
     import_role:
       name: base
     vars:
-      timezone: Australia/Adelaide
-      locale: en_US.UTF8
+      allow_reboot: true
       generate_moduli: false
-      resolver_listen_on_ip: 127.0.0.1
-      resolver_tls: true
+      locale: en_US.UTF8
       resolver_blocklist:
-      resolver_primary_ip: 9.9.9.9
-      resolver_secondary_ip: 149.112.112.112
+      resolver_listen_on_ip: 127.0.0.1
       resolver_primary_hostname: dns.quad9.net
+      resolver_primary_ip: 9.9.9.9
       resolver_secondary_hostname: dns.quad9.net
+      resolver_secondary_ip: 149.112.112.112
+      resolver_tls: true
+      timezone: Australia/Adelaide
 
   - name: Execute `dotfiles` role
     include_role:
       name: dotfiles
     vars:
-      neovim: true
+      change_prefix: false
+      copy_dotfiles: false
       link_to_localhost: true
+      neovim: true
       remote_bash_emacs: false
       remote_gitconfig: false
-      copy_dotfiles: false
-      change_prefix: false
       sshd_less_secure: false
 
   - name: Execute `transfer-agent` role

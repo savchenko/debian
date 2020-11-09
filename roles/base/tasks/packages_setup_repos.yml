@@ -1,7 +1,7 @@
 ---
 - name: Copy /etc/apt/sources.list
   copy:
-    src: sources.list
+    src: conf/sources.list
     dest: /etc/apt/sources.list
     owner: root
     mode: 0644
