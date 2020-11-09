@@ -10,6 +10,7 @@
       - apt-transport-https
       - bash-completion
       - ca-certificates
+      - checksec
       - curl
       - debian-goodies
       - dfc
