@@ -22,6 +22,7 @@
       name: dotfiles
     vars:
       neovim: true
+      use_vim_plug: true
       link_to_localhost: false
       remote_bash_emacs: false
       remote_gitconfig: true
