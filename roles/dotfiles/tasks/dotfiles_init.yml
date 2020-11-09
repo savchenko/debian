@@ -11,13 +11,6 @@
     path: "{{ ansible_env.HOME }}/.ssh"
     mode: 0700
 
-- name: Copy fzf bash completion
-  copy:
-    src: completion.bash
-    dest: /etc/bash_completion.d/fzf.sh
-    mode: a+x
-  become: yes
-
 - name: Copy bat folder
   copy:
     src: config/bat
