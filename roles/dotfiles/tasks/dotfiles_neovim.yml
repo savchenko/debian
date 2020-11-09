@@ -65,6 +65,7 @@
     shell: nvim +PlugUpdate +sleep1000m +exit +sleep1000m +exit
     async: 45
     poll: 5
+    changed_when: false
 
   - name: Make `preview.sh` executable
     file:
