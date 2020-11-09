@@ -99,11 +99,6 @@
     insertafter: "[Journal]"
     state: present
 
-- name: Ensure systemd-logind.service.d exists
-  file:
-    path: /etc/systemd/system/systemd-logind.service.d
-    state: directory
-
 - name: Ensure /etc/systemd/coredump.conf.d exists
   file:
     path: /etc/systemd/coredump.conf.d
