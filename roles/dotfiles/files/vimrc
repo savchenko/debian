@@ -593,7 +593,7 @@ command! -bang -nargs=* Rg call fzf#vim#grep(fzf_cmd_rg .shellescape(<q-args>), 
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
 
 " Temp
-nmap <leader>b :w <bar> :so % <bar> :noh<cr>
+" nmap <leader>b :w <bar> :so % <bar> :noh<cr>
 
 let g:fzf_colors =
   \ { 'fg':      ['fg', 'Comment'],
@@ -676,8 +676,8 @@ endfunction
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Auto-open Startify if no buffers left
-" autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 | Startify | endif
-autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
+autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 | Startify | endif
+" autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
 
 " Toggle between number and relativenumber
 function! ToggleNumber()
