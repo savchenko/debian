@@ -30,12 +30,12 @@ FCLR="--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  fd --hidden --follow . "$1"
+  fdfind --hidden --follow . "$1"
 }
 
-# Use fd to generate the list for directory completion
+# Use fdfind to generate the list for directory completion
 _fzf_compgen_dir() {
-  fd --type d . "$1"
+  fdfind --type d . "$1"
 }
 
 # - The first argument to the function is the name of the command.
@@ -56,7 +56,7 @@ fe() {
   local IFS=$'\n'
   local cur_pwd=$PWD
   local query=""
-  local FZF_DEFAULT_COMMAND="fd --hidden --follow -t f -t l"
+  local FZF_DEFAULT_COMMAND="fdfind --hidden --follow -t f -t l"
   if [[ -d $1 ]]; then cd $1; else query="$@"; fi
   local f_files=($(fzf-tmux --query=$query +m --reverse \
                 --preview-window='right:hidden' \
@@ -73,7 +73,7 @@ fcf() {
   local f_dir
   local cur_pwd=$PWD
   local query=""
-  local FZF_DEFAULT_COMMAND="fd --hidden --follow -t f -t l"
+  local FZF_DEFAULT_COMMAND="fdfind --hidden --follow -t f -t l"
   if [[ -d $1 ]]; then cd $1; else query="$@"; fi
   f_file=$(fzf +m -q "$1" --delimiter / --nth -1 \
               --preview-window='right:hidden' \
@@ -94,7 +94,7 @@ fcd() {
       if [[ "$#" -gt 1 ]]; then query="${@:2}"; fi
   else query="$@";
   fi
-  f_dir=$(fd -t d --full-path $dst_pwd | fzf +m -q "$query" \
+  f_dir=$(fdfind -t d --full-path $dst_pwd | fzf +m -q "$query" \
         --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
         --preview-window='right:hidden:wrap' --inline-info --exact \
         --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort $FCLR) \
@@ -155,7 +155,7 @@ alias dmesg="dmesg -Hwx"
 alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
                 ack --color-match='bold yellow' --passthru '\w+\Z' --color |
                 ack --color-match='yellow' --passthru '^[a-zA-Z0-9\_\.\-]+' --color |
-                ack --color-match='dark yellow' --passthru '\->\s'"
+                ack --color-match='dark yellow' --passthru '\->\s'" # '"bad parser fix
 alias xc="xclip -selection clipboard"
 alias sup='su --preserve-environment'
 alias openports='lsof -Pni4'
