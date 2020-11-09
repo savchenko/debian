@@ -3,7 +3,7 @@
   assert:
     that:
       - copy_dotfiles != link_to_localhost
-    error_msg: "Copying to remote host from controller and simultaneously trying to link from this role dosn't make sense.\nChoose one"
+    fail_msg: "Copying to remote host from controller and simultaneously trying to link from this role dosn't make sense.\nChoose one"
 
 - name: Hush login, setup terminfo and ~/.ssh
   import_tasks: dotfiles_init.yml

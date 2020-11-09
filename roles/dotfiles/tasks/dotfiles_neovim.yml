@@ -26,25 +26,51 @@
   copy:
     src: vim/colors
     dest: "{{ ansible_env.HOME }}/.vim"
+  when: copy_dotfiles and not link_to_localhost
 
-- name: Create site-packages root
+- name: Link colour-schemes
   file:
-    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack"
-    state: directory
+    src: "{{ playbook_dir }}/roles/dotfiles/files/vim/colors"
+    dest: "{{ ansible_env.HOME }}/.vim/colors"
+    state: link
+    force: yes
+  when: link_to_localhost and not WSL1 and not copy_dotfiles
 
-- name: Create package folders
-  file:
-    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
-    state: directory
-  with_items: "{{ neovim_plugins }}"
+#
+# Use vim-plug
+#
+- block:
 
-- name: Copy plugins
-  copy:
-    src: "vim/{{ item }}"
-    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/{{ item }}/start"
-  with_items: "{{ neovim_plugins }}"
+  - name: Create autoload directory
+    file:
+      path: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload"
+      state: directory
+      mode: 0755
 
-- name: Make `preview.sh` executable
-  file:
-    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/fzf.vim/start/fzf.vim/bin/preview.sh"
-    mode: a+x
+  - name: Copy vim-plug
+    copy:
+      src: vim/vim-plug/plug.vim
+      dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
+    when: copy_dotfiles and not link_to_localhost
+
+  - name: Link vim-plug
+    file:
+      src: "{{ playbook_dir }}/roles/dotfiles/files/vim/vim-plug/plug.vim"
+      dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
+      state: link
+      force: yes
+    when: link_to_localhost and not WSL1 and not copy_dotfiles
+
+  - name: Install nVIM plugins and exit
+    shell: nvim +PlugUpdate +sleep1000m +exit +sleep1000m +exit
+    async: 45
+    poll: 5
+    changed_when: false
+
+  - name: Make `preview.sh` executable
+    file:
+      path: "{{ ansible_env.HOME }}/.vim/plugged/fzf.vim/bin/preview.sh"
+      mode: a+x
+
+
+  when: use_vim_plug

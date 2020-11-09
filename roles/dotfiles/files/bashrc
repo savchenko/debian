@@ -15,6 +15,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       eval "$(lua '/usr/local/bin/z.lua' --init bash enhanced once fzf)";
   fi
 
+  #  h - multihighlighter based on ack --------------------------------------------
+  if [ -x /usr/local/bin/h.sh ]; then
+      source "/usr/local/bin/h.sh";
+  fi
+
   # Check if we are root by any chance --------------------------------------------
   if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
 
@@ -49,11 +54,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   if [ $root -eq 1 ]; then user_color="${red}"; else user_color="${green}"; fi
 
-  PS1="${dark_grey}╭${user_color}\u"              # user
-  PS1+=" ${blue}\h"                               # hostname
-  PS1+="${grey} \w"                               # work dir
-  PS1+="${light_grey}\$(__git_ps1)"               # git branch
-  PS1+="\n${dark_grey} ${clr_reset}"              # input symbol
+  PS1="${dark_grey}╭${user_color}\u"                  # user
+  PS1+=" ${blue}\h"                                   # hostname
+  PS1+="${grey} \w"                                   # work dir
+  PS1+="${light_grey}\$(__git_ps1)"                   # git branch
+  PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
 
   export PS1
   export PS2="> ${clr_reset}"
@@ -61,59 +66,62 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   #
   # Tweaks ------------------------------------------------------------------------
   #
-  set -o vi                                       # Always
-  bind '"\C-r": "\e^ihh \n"'                      # ...in HSTR by CTRL+R
-  bind '"ii": "\e\e"'                             # The same escape as in vim
+  set -o vi                                           # Always
+  bind '"\C-r": "\e^ihh \n"'                          # ...in HSTR by CTRL+R
+  bind '"ii": "\e\e"'                                 # The same escape as in vim
 
-  for N in {0..9};                                # Don't use esoteric argument features of the Readline
+  for N in {0..9};                                    # Don't use esoteric argument features of the Readline
     do 
   bind -m vi $N:
    done
 
-  complete -d cd                                  # Cd only into directory
+  complete -d cd                                      # Cd only into directory
 
-  shopt -s nocaseglob                             # Case-insensitive globbing (used in pathname expansion)
-  shopt -s histappend                             # Append to the Bash history file, rather than overwriting
-  shopt -s cdspell                                # Autocorrect typos in path names when using `cd`
-  shopt -s checkwinsize                           # Should help with overlapping lines
-  shopt -s no_empty_cmd_completion                # No empty command completion.
-  shopt -s histverify histreedit                  # Check expansions before submitting command
+  shopt -s nocaseglob                                 # Case-insensitive globbing (used in pathname expansion)
+  shopt -s histappend                                 # Append to the Bash history file, rather than overwriting
+  shopt -s cdspell                                    # Autocorrect typos in path names when using `cd`
+  shopt -s checkwinsize                               # Should help with overlapping lines
+  shopt -s no_empty_cmd_completion                    # No empty command completion.
+  shopt -s histverify histreedit                      # Check expansions before submitting command
 
-  export HISTCONTROL=ignoreboth:erasedups         # Don't store duplicated entries in history
-  export HISTFILESIZE=5000                        # Increase history file size (default is 500)
-  export HISTSIZE=${HISTFILESIZE}                 # Increase history size (default is 500)
-  export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
+  export HISTCONTROL=ignoreboth:erasedups:ignorespace # Don't store duplicated entries in history, hide leading space
+  export HISTFILESIZE=10000                           # Increase history file size (default is 500)
+  export HISTSIZE=${HISTFILESIZE}                     # Increase history size (default is 500)
+  export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}" 
 
   #
   # Coreutils tweaks --------------------------------------------------------------
   #
-  alias less="less -FXc"                          # -F automatically exit if file fits in one screen
-                                                  # -X disables sending the termcap init/deinit strings to the term
-                                                  # -c full screen repaints to be painted from the top line down
+  alias less="less -FXc"                              # -F automatically exit if file fits in one screen
+                                                      # -X disables sending the termcap init/deinit strings to the term
+                                                      # -c full screen repaints to be painted from the top line down
 
-  alias ls="ls -G --color=auto"                   # -G don't print group names
+  alias ls="ls -G --color=auto"                       # -G don't print group names
 
-  alias ll="ls -FlAhp --group-directories-first"  # -F append indicator to entries
-                                                  # -l long listing format
-                                                  # -A don't show ./ and ../
-                                                  # -h human-readable sizes
-                                                  # -p append / indicator to directories
+  alias ll="ls -FlAhp --group-directories-first"      # -F append indicator to entries
+                                                      # -l long listing format
+                                                      # -A don't show ./ and ../
+                                                      # -h human-readable sizes
+                                                      # -p append / indicator to directories
 
-  alias lt="ls -lt"                               # Newest first
-  alias lth="ls -lt | head"                       # Newest first
+  alias lt="ls -lt"                                   # Newest first
+  alias lth="ls -lt | head"                           # Newest first
 
-  alias cp="cp -iv"                               # Prompt before overwrite, be verbose
+  alias cp="cp -iv"                                   # Prompt before overwrite, be verbose
 
-  alias mkdir="mkdir -pv"                         # -p create intermediate directories as required
+  alias mkdir="mkdir -pv"                             # -p create intermediate directories as required
 
-  alias mv="mv -iv"                               # -i ask before overwriting a file
+  alias mv="mv -iv"                                   # -i ask before overwriting a file
 
-  alias grep="grep --color=auto"                  # Colorize grep by default
+  alias grep="grep --color=auto"                      # Colorize grep by default
   alias egrep="egrep --color=auto"
   alias igrep="grep -i"
 
   # Source aliases here -----------------------------------------------------------
   if [ -f "$HOME/.aliases" ]; then . "$HOME/.aliases"; fi
+
+  # Try to load fzf-completion, has to be at the end ------------------------------
+  if [ -f /etc/bash_completion.d/fzf.sh ]; then . /etc/bash_completion.d/fzf.sh; fi
 
 fi
 fi

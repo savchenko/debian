@@ -1,0 +1,89 @@
+{
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "profiles":
+    {
+        "defaults":
+        {
+            "theme": "dark",
+            "colorScheme" : "BetterHybrid",
+            "cursorShape": "filledBox",
+            "fontFace": "Consolas",
+            "fontSize": 12,
+            "antialiasingMode": "cleartype",
+            "scrollbarState": "hidden",
+            "tabWidthMode": "titleLength",
+            "multiLinePasteWarning": false,
+            "snapToGridOnResize": true,
+            "copyOnSelect": true,
+            "copyFormatting": false,
+            "alwaysShowTabs": false,
+            "showTabsInTitlebar": false,
+            "altGrAliasing": false,
+            "useAcrylic": false
+        },
+        "list":
+        [
+            {
+                "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
+                "hidden": false,
+                "name": "Debian",
+                //"cursorColor": "#CCC",
+                //"background": "#1C1C1C",
+                "selectionBackground": "#000000",
+                "padding": "0, 0, 0, 0",
+                "startingDirectory": "/home/$USER",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "PowerShell",
+                "commandline": "powershell.exe -NoLogo -NoExit"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": true,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+        ]
+    },
+
+    // To learn more about color schemes, visit https://aka.ms/terminal-color-schemes
+    "schemes": [
+   
+    {
+      "name": "BetterHybrid",
+      "black":"#000000",
+      "red":"#cc6666",
+      "green":"#b5bd68",
+      "yellow":"#de935f",
+      "blue":"#6e90b0",
+      "purple":"#b294bb",
+      "cyan":"#668c88",
+      "white":"#c5c8c6",
+      "brightBlack":"#1d1f22",
+      "brightRed":"#cc6666",
+      "brightGreen":"#d7ffaf",
+      "brightYellow":"#f0c674",
+      "brightBlue":"#81a2be",
+      "brightPurple":"#d7d7ff",
+      "brightCyan":"#8abeb7",
+      "brightWhite":"#f2f2f2",
+      "background":"#1d1f21",
+      "foreground":"#c5c8c6"
+    }
+   
+    ],
+
+    // To learn more about keybindings, visit https://aka.ms/terminal-keybindings
+    "keybindings":
+    [
+        { "command": "toggleFocusMode", "keys": "shift+f11" },
+        { "command": "toggleAlwaysOnTop", "keys": "alt+shift+f11"},
+
+        { "command": { "action": "splitPane", "split": "auto", "splitMode": "duplicate" }, "keys": "alt+enter" },
+        { "command": "toggleFocusMode", "keys": "shift+f11" }
+    ]
+}
