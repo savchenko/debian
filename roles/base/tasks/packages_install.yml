@@ -16,7 +16,6 @@
       - dfc
       - dnsutils
       - fd-find
-      - fzf
       - gawk
       - git
       - gnupg2
