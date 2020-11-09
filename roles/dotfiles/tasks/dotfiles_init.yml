@@ -26,6 +26,12 @@
   register: terminfo_test
   changed_when: False
 
+- name: Create $XDG_RUNTIME_DIR
+  file:
+    path: "{{ ansible_env.HOME }}/.local/runtime"
+    state: directory
+    mode: 0700
+
   #
   # terminfo
   #
