@@ -7,6 +7,7 @@
       name: base
     vars:
       allow_reboot: true
+      disable_speaker: false
       generate_moduli: false
       locale: en_US.UTF8
       resolver_blocklist:
