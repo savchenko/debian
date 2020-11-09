@@ -38,21 +38,18 @@
     owner: root
     mode: 0644
 
-- name: Blacklist SPECK module
-  lineinfile:
-    line: "blacklist CONFIG_CRYPTO_SPECK"
-    path: /etc/modprobe.d/blacklist.conf
-    create: true
-
-- name: Disable netfilter kernel module
-  lineinfile:
-    path: /etc/modprobe.d/blacklist.conf
-    line: "options nf_conntrack nf_conntrack_helper=0"
+- name: Copy blacklist.conf
+  copy:
+    src: conf/blacklist.conf
+    dest: /etc/modprobe.d/blacklist.conf
+    owner: root
+    mode: 0644
 
 - name: Disable pc-speaker (don't beep)
   lineinfile:
     path: /etc/modprobe.d/blacklist.conf
     line: "blacklist pcspkr"
+  when: disable_speaker
 
 - name: Modify /etc/issue
   copy:
