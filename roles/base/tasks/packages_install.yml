@@ -5,6 +5,11 @@
   vars:
     pkg:
       - ack
+      - apparmor
+      - apparmor-easyprof
+      - apparmor-profiles
+      - apparmor-profiles-extra
+      - apparmor-utils
       - apt-listbugs
       - apt-listchanges
       - apt-transport-https
