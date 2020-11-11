@@ -20,6 +20,7 @@
       - debian-goodies
       - dfc
       - dnsutils
+      - dosfstools
       - fd-find
       - gawk
       - git
