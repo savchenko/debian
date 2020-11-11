@@ -89,6 +89,14 @@
     state: present
   when: not WSL1 and not WSL2
 
+- name: Check root FS on every boot
+  file:
+    path: /forcefsck
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+  become: yes
+
 - name: Make systemd-journal volatile
   lineinfile:
     path: /etc/systemd/journald.conf
