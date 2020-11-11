@@ -45,7 +45,7 @@ call plug#end()
 " Basics
 set ttyfast
 set nocompatible
-set lazyredraw
+set nolazyredraw
 set shell=/bin/bash
 set modelines=0
 set termencoding=utf-8
@@ -407,6 +407,10 @@ nnoremap <expr> N 'nN'[v:searchforward]
 nnoremap <expr> ; getcharsearch().forward ? ';' : ','
 nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
+" Logical scrolling
+nnoremap <C-j> <C-y>
+nnoremap <C-k> <C-e>
+
 " Keep search results centered and L-to-R
 nnoremap <silent> n :set hlsearch<cr>nzz
 nnoremap <silent> N :set hlsearch<cr>Nzz
@@ -423,12 +427,13 @@ noremap ? :set hlsearch<cr>?
 " FZF
 nmap <silent><C-f> :F<cr>
 nmap <silent><C-g> :Rg<cr>
-" nmap <silent><Leader>b :Buffers<CR>
+nmap <silent><Leader>b :Buffers<CR>
 nmap <silent><Leader>i :History<CR>
-nmap <Leader>l :Lines<CR>
-nmap <Leader>` :Marks<CR>
-nmap <Leader>: :History:<CR>
-nmap <leader>c :Commits<cr>
+nmap <silent><Leader>/ :History/<CR>
+nmap <silent><Leader>l :Lines<CR>
+nmap <silent><Leader>` :Marks<CR>
+nmap <silent><Leader>: :History:<CR>
+nmap <silent><leader>c :Commits<cr>
 
 " Zoom
 nmap <Leader>z <Plug>(zoom-toggle)
@@ -675,8 +680,8 @@ endfunction
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Auto-open Startify if no buffers left
-autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 | Startify | endif
-" autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
+" autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 | Startify | endif
+autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
 
 " Toggle between number and relativenumber
 function! ToggleNumber()
