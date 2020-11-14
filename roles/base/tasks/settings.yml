@@ -77,6 +77,15 @@
   notify: grub_update
   when: not WSL1 and not WSL2
 
+- name: Tighten Grub config permissions (V-38583)
+  file:
+    path: "{{ item }}"
+    mode: 0600
+  with_items:
+    - "/boot/grub/grub.cfg"
+    - "/boot/grub/grubenv"
+    - "/boot/grub/unicode.pf2"
+
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
     path: /etc/fstab
