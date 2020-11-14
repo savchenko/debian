@@ -28,12 +28,15 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 FCLR="--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 FZF_CTRL_F_OPTS="--preview-window='right:hidden' --margin=0,1,0,0 --preview 'bat --color=always --style=plain {}' --inline-info --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort --exact"
 
-# CTRL+F --find all
+
+# CTRL+F or `fa` --find all
 fzf-file-widget() {
   local selected="$(__fzf_select__)"
   READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT}$selected${READLINE_LINE:$READLINE_POINT}"
   READLINE_POINT=$(( READLINE_POINT + ${#selected} ))
 }
+
+fa() { fzf-file-widget; }
 
 __fzf_select__() {
   local cmd="${FZF_CTRL_F_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
