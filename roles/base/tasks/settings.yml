@@ -156,3 +156,21 @@
   copy:
     dest: /etc/apt/apt.conf.d/02sandboxing
     content: 'APT::Sandbox::Seccomp "true";'
+
+- name: Configure APT
+  lineinfile:
+    dest: /etc/apt/apt.conf.d/03settings
+    mode: 0644
+    state: present
+    create: 'yes'
+    line: "{{ item }}"
+  with_items:
+    - 'APT::Get::AllowUnauthenticated "false";'
+    - 'APT::Periodic::AutocleanInterval "2";'
+    - 'Acquire::AllowTLS "true";'
+    - 'Acquire::ForceIPv4 "true";'
+    - 'Acquire::http::AllowRedirect "false";'
+    - 'Acquire::http::Timeout "10";'
+    - 'Acquire::https::AllowRedirect "false";'
+    - 'Acquire::https::Timeout "10";'
+    - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
