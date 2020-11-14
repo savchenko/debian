@@ -96,7 +96,7 @@
       ProtectSystem=full
       PrivateDevices=on
       NoNewPrivileges=on
-    insertafter: "[Service]"
+    insertafter: "^ExecStart.*"
   when: not WSL1 and not WSL2
 
 - name: Check root FS on every boot
