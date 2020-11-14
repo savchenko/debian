@@ -51,6 +51,7 @@
       - ranger
       - ripgrep
       - rsync
+      - rng-tools
       - ruby
       - silversearcher-ag
       - sshguard
