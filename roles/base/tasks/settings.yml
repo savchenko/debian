@@ -86,6 +86,31 @@
     - "/boot/grub/grubenv"
     - "/boot/grub/unicode.pf2"
 
+- name: Adjust sudo defaults
+  lineinfile:
+    path: /etc/sudoers
+    line: "{{ item }}"
+    insertafter: "^Defaults.*"
+  with_items:
+    - "Defaults  requiretty"
+    - "Defaults  use_pty"
+    - 'Defaults  lecture="never"'
+    - "Defaults  insults"
+- name: Set default non-root $HOME permissions to 750
+  lineinfile:
+    path: /etc/adduser.conf
+    line: "DIR_MODE=0750"
+- name: Find existing users under /home/
+  find:
+    paths: /home/
+    file_type: directory
+    recurse: no
+  register: home_dirs
+- name: Set existing user home-dirs to 0750
+  file:
+    path: "{{ item.path }}"
+    mode: 0750
+  with_items: "{{ home_dirs.files }}"
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
     path: /etc/fstab
