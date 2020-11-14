@@ -89,6 +89,16 @@
     state: present
   when: not WSL1 and not WSL2
 
+- name: Harden rsync systemd module
+  blockinfile:
+    path: /usr/lib/systemd/system/rsync.service
+    block: |
+      ProtectSystem=full
+      PrivateDevices=on
+      NoNewPrivileges=on
+    insertafter: "[Service]"
+  when: not WSL1 and not WSL2
+
 - name: Check root FS on every boot
   file:
     path: /forcefsck
