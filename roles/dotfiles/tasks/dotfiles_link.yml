@@ -43,7 +43,7 @@
 
   - name: Copy ~/.local/bin
     copy:
-      src: bin
+      src: bin/
       dest: ~/.local/bin
 
   when: copy_dotfiles
