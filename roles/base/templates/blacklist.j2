@@ -1,0 +1,30 @@
+# Nonsense crypto
+blacklist CONFIG_CRYPTO_SPECK
+
+# Bluetooth
+blacklist bluetooth
+blacklist bnep
+blacklist btusb
+blacklist net-pf-31
+
+# DMA exposure
+blacklist firewire-core
+blacklist thunderbolt
+
+# Esoteric network protocols
+blacklist ax25
+blacklist netrom
+blacklist x25
+blacklist rose
+blacklist decnet
+blacklist econet
+blacklist rds
+blacklist af_802154
+blacklist sctp
+blacklist dccp
+blacklist tipc
+
+# Speaker
+{% if disable_speaker %}
+blacklist pcspkr
+{% endif %}
