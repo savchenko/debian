@@ -6,7 +6,7 @@
 
 - name: Install few packages we will need later on
   apt:
-    name: ['curl', 'apt-transport-https']
+    name: ['curl', 'apt-transport-https', 'sudo', 'rsync']
     state: present
 
 - name: Ensure en_US.UTF-8 locale is present
