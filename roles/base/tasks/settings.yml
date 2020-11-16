@@ -50,7 +50,7 @@
 - name: Modify /etc/issue
   copy:
     dest: "{{ item }}"
-    content: 'Access to this computer is prohibited.\n\n'
+    content: ' '
   with_items:
     - /etc/issue
     - /etc/issue.net
@@ -72,7 +72,7 @@
   lineinfile:
     path: /etc/default/grub
     # Buster, v4.19+
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr  apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto,nosmt audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }}"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto,nosmt audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
   when: not WSL1 and not WSL2
@@ -129,13 +129,6 @@
     insertafter: "^ExecStart.*"
   when: not WSL1 and not WSL2
 
-- name: Check root FS on every boot
-  file:
-    path: /forcefsck
-    state: touch
-    modification_time: preserve
-    access_time: preserve
-  become: yes
 
 - name: Make systemd-journal volatile
   lineinfile:
