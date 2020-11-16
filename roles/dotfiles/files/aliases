@@ -238,6 +238,8 @@ alias mp3guess="mp3guessenc -v -r -f -i -s"
 alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (\$n=\$_) while <IN>;print \$n'"
 alias t='task'
 alias cal='ncal -M -b'
+alias backports_check="sudo apt full-upgrade -t buster-backports --assume-no"
+alias backports_check_oneline='apt -t buster-backports -s upgrade 2> /dev/null | egrep ^Inst | cut -d " " -f 2-3'
 
 # Wireless
 alias wifimon='wavemon -g'
