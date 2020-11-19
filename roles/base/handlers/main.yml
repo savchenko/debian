@@ -35,6 +35,10 @@
   listen: "grub_update"
   notify: reboot host
 
+- name: Rotate logs
+  command: logrotate -f /etc/logrotate.conf
+  listen: "rotate logs"
+
 - name: Reboot target host
   reboot:
     msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"
