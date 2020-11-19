@@ -1,0 +1,20 @@
+---
+- name: Propagate logrotate configs
+  copy:
+    src: "conf/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    directory_mode: 0700
+    owner: root
+  with_items:
+    - { src: 'logrotate.conf', dest: '/etc/logrotate.conf', mode: '0644'}
+    - { src: 'logrotate.d/alternatives', dest: '/etc/logrotate.d/alternatives', mode: '0644'}
+    - { src: 'logrotate.d/apt', dest: '/etc/logrotate.d/apt', mode: '0644'}
+    - { src: 'logrotate.d/btmp', dest: '/etc/logrotate.d/btmp', mode: '0644'}
+    - { src: 'logrotate.d/dpkg', dest: '/etc/logrotate.d/dpkg', mode: '0644'}
+    - { src: 'logrotate.d/rsyslog', dest: '/etc/logrotate.d/rsyslog', mode: '0644'}
+    - { src: 'logrotate.d/ufw', dest: '/etc/logrotate.d/ufw', mode: '0644'}
+    - { src: 'logrotate.d/unattended-upgrades', dest: '/etc/logrotate.d/unattended-upgrades', mode: '0644'}
+    - { src: 'logrotate.d/wtmp', dest: '/etc/logrotate.d/wtmp', mode: '0644'}
+  notify:
+    - rotate logs

@@ -1,0 +1,13 @@
+/var/log/apt/term.log {
+  rotate 1
+  daily
+  missingok
+  notifempty
+}
+
+/var/log/apt/history.log {
+  rotate 1
+  daily
+  missingok
+  notifempty
+}

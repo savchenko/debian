@@ -1,0 +1,11 @@
+/var/log/ufw.log
+{
+        rotate 1
+        daily
+        missingok
+        notifempty
+        sharedscripts
+        postrotate
+                invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+        endscript
+}
