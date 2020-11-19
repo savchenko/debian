@@ -8,26 +8,17 @@
       - ( ansible_distribution_major_version | int ) == 10
     fail_msg: "This playbook is tested exclusively on Debian Buster.\nPlease double-check you are executing the right thing."
 
-- name: Parse cpuinfo
-  shell:
-    cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
-  register: cpu_model
-  changed_when: False 
+- name: Register CPU details
+  import_tasks: cpu.yml
+  become: yes
+  tags:
+    - base_cpu
 
-- name: Set facts about CPU
-  set_fact:
-    cpu_vendor: "{{ cpu_model.stdout_lines[0] | string }}"
-    cpu_iommu: ""
-
-- name: Register IOMMU GRUB setting for Intel
-  set_fact:
-    cpu_iommu: " intel_iommu=on"
-  when: '"Intel" in cpu_vendor'
-
-- name: Register IOMMU GRUB setting for AMD
-  set_fact:
-    cpu_iommu: " amd_iommu=on"
-  when: '"AMD" in cpu_vendor'
+- name: Set dpkg overrides
+  import_tasks: dpkg.yml
+  become: yes
+  tags:
+    - base_dpkg
 
 - name: Boostrap vital settings
   import_tasks: bootstrap.yml
@@ -89,6 +80,12 @@
   become: yes
   tags:
     - base_sshguard
+
+- name: Configure logrotate
+  import_tasks: logrotate.yml
+  become: yes
+  tags:
+    - base_logrotate
 
 - name: Configure Knot-resolver
   import_tasks: packages_resolver.yml
