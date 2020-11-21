@@ -1,16 +1,16 @@
 ---
-timezone: "UTC"
-locale: "en_US.UTF-8"
-
-resolver_listen_on_ip: 127.0.0.1
-resolver_tls: true
-resolver_blocklist:
-resolver_primary_ip: 9.9.9.9
-resolver_secondary_ip: 149.112.112.112
-resolver_primary_hostname: dns.quad9.net
-resolver_secondary_hostname: dns.quad9.net
 allow_reboot: true
 disable_speaker: true
+fstab_noexec: true
+locale: "en_US.UTF-8"
+resolver_blocklist:
+resolver_listen_on_ip: 127.0.0.1
+resolver_primary_hostname: dns.quad9.net
+resolver_primary_ip: 9.9.9.9
+resolver_secondary_hostname: dns.quad9.net
+resolver_secondary_ip: 149.112.112.112
+resolver_tls: true
+timezone: "UTC"
 
 WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
 WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"

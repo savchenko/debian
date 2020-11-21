@@ -26,6 +26,7 @@ export NVIM_GTK_PREFER_DARK_THEME=1
 export PATH=$PATH:$HOME/.local/bin
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export TMPDIR="$HOME/.cache/TMPDIR"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
