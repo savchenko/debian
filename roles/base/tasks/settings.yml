@@ -96,21 +96,25 @@
     - "Defaults  use_pty"
     - 'Defaults  lecture="never"'
     - "Defaults  insults"
+
 - name: Set default non-root $HOME permissions to 750
   lineinfile:
     path: /etc/adduser.conf
     line: "DIR_MODE=0750"
+
 - name: Find existing users under /home/
   find:
     paths: /home/
     file_type: directory
     recurse: no
   register: home_dirs
+
 - name: Set existing user home-dirs to 0750
   file:
     path: "{{ item.path }}"
     mode: 0750
   with_items: "{{ home_dirs.files }}"
+
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
     path: /etc/fstab
@@ -118,6 +122,34 @@
     insertafter: EOF
     state: present
   when: not WSL1 and not WSL2
+
+- block:
+
+  - name: Mount /tmp with nodev, nosuid, and noexec
+    lineinfile:
+      path: /etc/fstab
+      line: "tmpfs /tmp tmpfs rw,nosuid,nodev,noexec 0 2"
+      insertafter: EOF
+      state: present
+    when: not WSL1 and not WSL2
+
+  - name: Mount /var/tmp with nodev, nosuid, and noexec
+    lineinfile:
+      path: /etc/fstab
+      line: "/tmp /var/tmp none rw,noexec,nosuid,nodev,bind 0 0"
+      insertafter: EOF
+      state: present
+    when: not WSL1 and not WSL2
+
+  - name: Mount /dev/shm with nodev, nosuid, and noexec
+    lineinfile:
+      path: /etc/fstab
+      line: "tmpfs /dev/shm tmpfs defaults,nosuid,nodev,noexec 0 0"
+      insertafter: EOF
+      state: present
+    when: not WSL1 and not WSL2
+
+  when: fstab_noexec
 
 - name: Harden rsync systemd module
   blockinfile:
@@ -128,7 +160,6 @@
       NoNewPrivileges=on
     insertafter: "^ExecStart.*"
   when: not WSL1 and not WSL2
-
 
 - name: Make systemd-journal volatile
   lineinfile:
@@ -183,6 +214,7 @@
     create: 'yes'
     line: "{{ item }}"
   with_items:
+    - 'APT::ExtractTemplates::TempDir "~/.cache/apt";'
     - 'APT::Get::AllowUnauthenticated "false";'
     - 'APT::Periodic::AutocleanInterval "2";'
     - 'Acquire::AllowTLS "true";'
