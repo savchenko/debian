@@ -9,6 +9,8 @@ blacklist net-pf-31
 
 # DMA exposure
 blacklist firewire-core
+blacklist firewire-ohci
+blacklist firewire-sbp2
 blacklist thunderbolt
 
 # Esoteric network protocols
@@ -23,6 +25,14 @@ blacklist af_802154
 blacklist sctp
 blacklist dccp
 blacklist tipc
+
+# Rarely needed filesystems
+cramfs
+freevxfs
+hfs
+hfsplus
+jffs2
+udf
 
 # Speaker
 {% if disable_speaker %}
