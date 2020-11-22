@@ -39,6 +39,14 @@
   command: logrotate -f /etc/logrotate.conf
   listen: "rotate logs"
 
+- name: Reload systemd
+  systemd:
+    daemon_reexec: yes
+    daemon_reload: yes
+    state: restarted
+    name: local-fs.target
+  listen: "reload systemd"
+
 - name: Reboot target host
   reboot:
     msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"

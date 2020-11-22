@@ -150,6 +150,7 @@
     when: not WSL1 and not WSL2
 
   when: fstab_noexec
+  notify: "reload systemd"
 
 - name: Harden rsync systemd module
   blockinfile:
