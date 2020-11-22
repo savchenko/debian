@@ -119,9 +119,11 @@
   lineinfile:
     path: /etc/fstab
     line: "proc /proc proc nosuid,nodev,noexec,hidepid=2 0 0"
+    regexp: '^proc /proc .*'
     insertafter: EOF
     state: present
   when: not WSL1 and not WSL2
+  notify: "reload systemd"
 
 - block:
 
@@ -129,6 +131,7 @@
     lineinfile:
       path: /etc/fstab
       line: "tmpfs /tmp tmpfs rw,nosuid,nodev,noexec 0 0"
+      regexp: '^tmpfs\s\/tmp\s.*'
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
@@ -138,6 +141,7 @@
     lineinfile:
       path: /etc/fstab
       line: "/tmp /var/tmp none rw,noexec,nosuid,nodev,bind 0 0"
+      regexp: '^\/tmp.*'
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
@@ -147,6 +151,7 @@
     lineinfile:
       path: /etc/fstab
       line: "tmpfs /dev/shm tmpfs defaults,nosuid,nodev,noexec 0 0"
+      regexp: '^tmpfs\s\/dev\/shm.*'
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
