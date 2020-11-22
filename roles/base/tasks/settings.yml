@@ -132,6 +132,7 @@
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
+    notify: "reload systemd"
 
   - name: Mount /var/tmp with nodev, nosuid, and noexec
     lineinfile:
@@ -140,6 +141,7 @@
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
+    notify: "reload systemd"
 
   - name: Mount /dev/shm with nodev, nosuid, and noexec
     lineinfile:
@@ -148,9 +150,9 @@
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
+    notify: "reload systemd"
 
   when: fstab_noexec
-  notify: "reload systemd"
 
 - name: Harden rsync systemd module
   blockinfile:
