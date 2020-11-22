@@ -72,7 +72,7 @@
   lineinfile:
     path: /etc/default/grub
     # Buster, v4.19+
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto,nosmt audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 kernel.kexec_load_disabled=1 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto,nosmt audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen {{ grub_optional }}"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
   when: not WSL1 and not WSL2
@@ -128,7 +128,7 @@
   - name: Mount /tmp with nodev, nosuid, and noexec
     lineinfile:
       path: /etc/fstab
-      line: "tmpfs /tmp tmpfs rw,nosuid,nodev,noexec 0 2"
+      line: "tmpfs /tmp tmpfs rw,nosuid,nodev,noexec 0 0"
       insertafter: EOF
       state: present
     when: not WSL1 and not WSL2
@@ -173,7 +173,7 @@
     path: /etc/systemd/coredump.conf.d
     state: directory
 
-- name: Instruct systemd to not store coredumps
+- name: Instruct systemd to avoid preserving coredumps
   copy:
     dest: /etc/systemd/coredump.conf.d/custom.conf
     content: "[Coredump]\nStorage=none\n"

@@ -2,6 +2,7 @@
 allow_reboot: true
 disable_speaker: true
 fstab_noexec: true
+grub_optional: ""
 locale: "en_US.UTF-8"
 resolver_blocklist:
 resolver_listen_on_ip: 127.0.0.1
