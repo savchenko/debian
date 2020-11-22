@@ -17,7 +17,7 @@
 - name: Set hostname to the value in inventory
   hostname:
     name: "{{ inventory_hostname }}"
-  when: not WSL2
+  when: not WSL2 and ansible_connection != "local"
 
 - name: (WSL2) Add hostname to /etc/hosts
   lineinfile:
