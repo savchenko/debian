@@ -22,6 +22,7 @@
 
 - name: Disable iGFX for Intel CPU
   set_fact:
-    cput_iommu: " intel_iommu=igfx_off"
-  when: '"Intel" in cpu_vendor and disable_igfx'
-
+    cpu_iommu: " intel_iommu=igfx_off"
+  when:
+    - '"Intel" in cpu_vendor'
+    - disable_igfx|bool == true

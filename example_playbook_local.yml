@@ -18,6 +18,8 @@
       resolver_secondary_ip: 149.112.112.112
       resolver_tls: true
       timezone: Australia/Adelaide
+      grub_optional: ""
+      disable_igfx: true
 
   - name: Execute `dotfiles` role
     include_role:
