@@ -27,12 +27,12 @@ blacklist dccp
 blacklist tipc
 
 # Rarely needed filesystems
-cramfs
-freevxfs
-hfs
-hfsplus
-jffs2
-udf
+blacklist cramfs
+blacklist freevxfs
+blacklist hfs
+blacklist hfsplus
+blacklist jffs2
+blacklist udf
 
 # Speaker
 {% if disable_speaker %}
