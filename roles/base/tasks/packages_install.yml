@@ -32,9 +32,8 @@
       - libpam-tmpdir
       - lshw
       - lsof
-      - lua5.3
+      - lua5.4
       - man-db
-      - mc
       - ncdu
       - ncurses-base
       - ncurses-term
@@ -42,19 +41,14 @@
       - neovim
       - neovim-runtime
       - pandoc
-      - python
-      - python-pip
-      - python-psutil
       - python3
       - python3-pip
       - python3-psutil
       - ranger
       - ripgrep
       - rsync
-      - rng-tools
-      - ruby
+      - rng-tools5
       - silversearcher-ag
-      - sshguard
       - strace
       - sudo
       - sysstat
