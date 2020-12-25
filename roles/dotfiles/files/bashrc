@@ -26,13 +26,15 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Check if there is a reasonable chance that systemd is present
   if ! grep -iq microsoft /proc/version; then keychain_systemd_flag="--systemd"; fi
 
-  # Automatically initialize keychain in tmux -------------------------------------
+  # Automatically initialize keychain ---------------------------------------------
   if [ $root -eq 0 ]; then
-    if [ "$TERM" = "tmux-256color" ] && [ -n "$TMUX" ]; then
-      eval "$(keychain --quiet $keychain_systemd_flag --eval --agents ssh,gpg --timeout 3600 \
+    if [ "$TERM" = "tmux-256color" ]; then
+      eval "$(keychain $keychain_systemd_flag --eval --agents ssh,gpg --timeout 3600 \
               ~/.ssh/id_rsa 0xDEED803629B6FA56)"
     fi
   fi
+  # Use bash-completion, if available
+  [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
   # Try to load git-completion ----------------------------------------------------
   if [ -f /etc/bash_completion.d/git-prompt ]; then . /etc/bash_completion.d/git-prompt; fi
@@ -67,11 +69,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Tweaks ------------------------------------------------------------------------
   #
   set -o vi                                           # Always
-  bind '"\C-r": "\e^ihh \n"'                          # ...in HSTR by CTRL+R
+  bind '"\C-r": "\e^ihstr \n"'                        # ...in HSTR by CTRL+R
   bind '"ii": "\e\e"'                                 # The same escape as in vim
 
   for N in {0..9};                                    # Don't use esoteric argument features of the Readline
-    do 
+    do
   bind -m vi $N:
    done
 
@@ -87,7 +89,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   export HISTCONTROL=ignoreboth:erasedups:ignorespace # Don't store duplicated entries in history, hide leading space
   export HISTFILESIZE=10000                           # Increase history file size (default is 500)
   export HISTSIZE=${HISTFILESIZE}                     # Increase history size (default is 500)
-  export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}" 
+  export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 
   #
   # Coreutils tweaks --------------------------------------------------------------
@@ -122,6 +124,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # Try to load fzf-completion, has to be at the end ------------------------------
   if [ -f /etc/bash_completion.d/fzf.sh ]; then . /etc/bash_completion.d/fzf.sh; fi
+
+  # Go sway!
+  if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    exec sway
+  fi
 
 fi
 fi
