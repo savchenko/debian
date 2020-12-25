@@ -4,9 +4,9 @@
     that:
       - ansible_distribution == "Debian"
       - ansible_distribution_file_variety == "Debian"
-      - ansible_distribution_release == "buster"
+      - ansible_distribution_release == "bullseye"
       - ( ansible_distribution_major_version | int ) == 10
-    fail_msg: "This playbook is tested exclusively on Debian Buster.\nPlease double-check you are executing the right thing."
+    fail_msg: "This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing."
 
 - name: Register CPU details
   import_tasks: cpu.yml
