@@ -79,12 +79,15 @@
 [cola]
 	spellcheck = false
 	boldheaders = true
-	fontdiff = Terminus,9,-1,5,50,0,0,0,0,0
+	fontdiff = Consolas NF,8,-1,5,50,0,0,0,0,0
 	tabwidth = 4
 	expandtab = true
 	safemode = true
 	blameviewer = git gui blame
 	icontheme = dark
+	theme = flat-dark-grey
+	hidpi = 1.5
+	savewindowsettings = false
 
 [gpg]
 	program = gpg2
