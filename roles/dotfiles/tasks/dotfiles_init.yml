@@ -18,7 +18,7 @@
   register: copy_bat_folder
 
 - name: Rebuild bat cache
-  shell: bat cache --build
+  shell: bat cache --clear && bat cache --build
   when: copy_bat_folder.changed
 
 - name: Check if tmux terminfo already installed
@@ -33,7 +33,7 @@
     mode: 0700
 
   #
-  # terminfo
+  # terminfo, might be unnecessary with Bullseye packaging
   #
 - block:
 
