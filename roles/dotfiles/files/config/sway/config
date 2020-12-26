@@ -1,0 +1,284 @@
+#
+# Look ------------------------------------------------
+#
+default_border pixel 2
+default_floating_border pixel 2
+default_orientation auto
+font pango:Terminus 16px
+hide_edge_borders smart
+title_align center
+titlebar_border_thickness 0
+
+smart_gaps on
+gaps inner 10
+
+## Window decoration
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #2b2e30 #888888 #3a3a3a   #3a3a3a
+client.focused_inactive #1d1f21 #2b2e30 #888888 #1d1f21   #1d1f21
+client.unfocused        #1d1f21 #222222 #555555 #1d1f21   1d1f21
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+
+# Always
+assign [app_id="firefox"] " 2 "
+assign [app_id="keepassxc"] " 5 "
+for_window [app_id="foot"] titlebar_padding 0 2
+for_window [app_id="veracrypt"] floating enable
+
+# Default wallpaper
+output * bg #000000 solid_color
+# output * bg /home/lbr/Downloads/10-14-Night.jpg fill
+
+# Behavior
+focus_follows_mouse yes
+
+#
+# Controls --------------------------------------------
+#
+input "1:1:AT_Translated_Set_2_keyboard" {
+    xkb_layout us
+    xkb_options ctrl:nocaps
+    repeat_delay 500
+    repeat_rate 20
+}
+
+input "2:14:ETPS/2_Elantech_TrackPoint" {
+    accel_profile flat
+    pointer_accel 0.75
+    scroll_factor 0.25
+}
+
+input type:touchpad {
+    dwt disabled
+    events disabled
+    middle_emulation disabled
+    natural_scroll disabled
+    tap disabled
+}
+
+# Change "Mod" key to "Windows" (otherwise useless)
+set $mod Mod4
+
+# start a terminal
+set $term foot
+bindsym $mod+Return exec $term
+
+# Wofi
+set $menu wofi --gtk-dark
+bindsym $mod+d exec $menu
+
+# Screenshotting
+bindsym Print exec ~/.config/sway/sway-interactive-screenshot
+bindsym $mod+Print exec ~/.config/sway/picker.sh
+
+# Scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+Ctrl+minus scratchpad show
+
+# HJKL
+set $up k
+set $down j
+set $left h
+set $right l
+
+# Mouse+Meta to drag floating windows
+floating_modifier $mod normal
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# WOB indicator
+exec_always rm $HOME/.local/runtime/wob-ipc.sock
+exec_always pkill --signal 9 wob
+exec_always mkfifo $HOME/.local/runtime/wob-ipc.sock
+exec_always tail -f $HOME/.local/runtime/wob-ipc.sock | wob -H 35 -b 2 -M 40 -a top
+
+# Brightness
+bindsym XF86MonBrightnessDown exec echo $(light -U 1 | light -G | cut -d'.' -f1) "#20000000 #50cccccc #90007be0" > $HOME/.local/runtime/wob-ipc.sock
+bindsym XF86MonBrightnessUp exec echo $(light -A 1 | light -G | cut -d'.' -f1) "#20000000 #50cccccc #90007be0" > $HOME/.local/runtime/wob-ipc.sock
+
+# Pure ALSA
+bindsym XF86AudioRaiseVolume exec amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock
+bindsym XF86AudioLowerVolume exec amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock
+bindsym XF86AudioMute exec (amixer get Speaker | grep off > /dev/null && amixer -q set Speaker unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock) || (amixer -q set Speaker mute && echo 0 > $HOME/.local/runtime/wob-ipc.sock)
+
+# Windows list
+bindsym Alt+Tab exec ~/.config/sway/windows.sh
+bindsym $mod+Tab exec ~/.config/sway/windows.sh
+
+# Mako
+bindsym $mod+Escape exec makoctl dismiss
+bindsym $mod+Alt+Escape exec makoctl dismiss --all
+
+#
+# Workspace wrangling ---------------------------------
+#
+
+# Rename workspaces
+set $ws1 " 1 "
+set $ws2 " 2 "
+set $ws3 " 3 "
+set $ws4 " 4 "
+set $ws5 " 5 "
+set $ws6 " 6 "
+set $ws7 " 7 "
+set $ws8 " 8 "
+set $ws8 " 9 "
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+
+#
+# Windows wrangling ----------------------------------
+#
+
+# Resize, also works with mouse
+bindsym $mod+r mode "resize"
+mode "resize" {
+        bindsym $right          resize shrink width  5 px or 5 ppt
+        bindsym $down           resize grow   height 5 px or 5 ppt
+        bindsym $up             resize shrink height 5 px or 5 ppt
+        bindsym $left           resize grow   width  5 px or 5 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Right           resize shrink width  5 px or 5 ppt
+        bindsym Down            resize grow   height 5 px or 5 ppt
+        bindsym Up              resize shrink height 5 px or 5 ppt
+        bindsym Left            resize grow   width  5 px or 5 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# Focus on parent/child
+bindsym $mod+F1 focus parent
+bindsym $mod+F2 focus child
+
+# change focus
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move window within workspace
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Move window to another screen (monitor)
+bindsym $mod+Control+m move window to output right
+
+# Move focus (cursor) to another monitor
+bindsym $mod+Control+Left focus output left
+bindsym $mod+Control+Right focus output right
+
+# This flips between two screens
+bindsym $mod+m focus output left
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# splits
+bindsym $mod+minus split vertical ; exec $term
+bindsym $mod+backslash split horizontal ; exec $term
+
+# toggle tiling / floating
+bindsym $mod+Shift+f floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Toggles sticky window
+bindsym $mod+Shift+s sticky toggle
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# exit Sway
+# bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit Sway?' -b 'Yes, exit sway' 'swaymsg exit'
+set $mode_system System: (l) lock, (e) logout, (s) suspend, (r) reboot, (S) shutdown, (R) UEFI
+mode "$mode_system" {
+    bindsym l exec $lock, mode "default"
+    bindsym e exit
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+    bindsym Shift+r exec --no-startup-id systemctl reboot --firmware-setup, mode "default"
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Shift+e mode "$mode_system"
+
+# Keep these window roles floating (pop-ups)
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="TfrmFileOp"] floating enable
+for_window [window_role="notification_banner"] floating enable
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+     # status_command waybar
+     swaybar_command waybar
+     # status_command exec ~/.local/bin/nettraf.sh
+     # position bottom
+     # status_command while ~/.config/sway/status.sh; do sleep 4; done
+     # colors {
+     #                    background         #222222
+     #                    statusline         #adbece
+     #                    separator          #666666
+     #                    focused_workspace  #4c7899 #335c85 #adbece
+     #                    active_workspace   #333333 #5f676a #bdcbd8
+     #                    inactive_workspace #333333 #222222 #888888
+     #                    urgent_workspace   #2f343a #900000 #ffffff
+     #            }
+     # strip_workspace_numbers no
+}
+
+# Notifier
+exec mako
+
+# Dim down the LEDs
+exec_always sudo light -s sysfs/leds/tpacpi::power -S 0.00
+exec_always sudo light -s sysfs/leds/platform::mute -S 0.00
+exec_always sudo light -s sysfs/leds/platform::micmute -S 0.00
+
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 500 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && exec sudo light -s sysfs/leds/tpacpi::power -S 0.00' \
+         before-sleep 'swaylock -f -c 000000'
+

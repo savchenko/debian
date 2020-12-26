@@ -15,7 +15,6 @@ dotfiles_list:
   - { src: 'curlrc', dest: '.curlrc' }
   - { src: 'gitignore', dest: '.gitignore' }
   - { src: 'gpg.conf', dest: '.gnupg/gpg.conf' }
-  - { src: 'i3', dest: '.i3' }
   - { src: 'inputrc', dest: '.inputrc' }
   - { src: 'muttrc', dest: '.muttrc' }
   - { src: 'profile', dest: '.profile' }
@@ -24,6 +23,8 @@ dotfiles_list:
   - { src: 'Xresources', dest: '.Xresources' }
   - { src: 'ssh_config', dest: '.ssh/config' }
   - { src: 'ripgreprc', dest: '.ripgreprc' }
+  - { src: 'config/foot', dest: '.config/foot'}
+  - { src: 'config/sway', dest: '.config/sway'}
 
 dotfiles_gitconfig_local:
   - { src: 'gitconfig', dest: '.gitconfig' }
