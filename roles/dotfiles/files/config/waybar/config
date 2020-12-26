@@ -1,0 +1,141 @@
+{
+    // "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 20, // Waybar height (to be removed for auto height)
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["custom/clock", "sway/window"],
+    "modules-right": ["custom/outside", "custom/uv", "network", "cpu", "memory", "temperature", "battery", "clock", "tray"],
+    // Modules configuration
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{icon}{name}",
+        "format-icons": {
+            " 1 ": ">_",
+            " 2 ": "www",
+            " 3 ": "",
+            " 4 ": "",
+            " 5 ": "⚷",
+            "urgent": "❗",
+            "focused": "",
+            "default": ""
+        }
+    },
+    "custom/outside": {
+        "format": "{} ",
+        "interval": 120,
+        "exec": "~/.config/waybar/modules/temp.sh",
+        "exec-if": "ping wttr.in -c1",
+        "tooltip": false
+    },
+    "custom/clock": {
+        "exec": "date +'%H:%M'",
+        "interval": 5
+    },
+    "custom/uv": {
+        "format": "☼ {}",
+        "interval": 120,
+        "exec": "~/.config/waybar/modules/arpansa.sh",
+        "exec-if": "ping 9.9.9.9 -c1",
+        "tooltip": false
+    },
+    "sway/window": {
+        "format": " — {}",
+        "rotate": 0,
+        "tooltip": false
+    },
+    "sway/mode": {
+        "format": "{}"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    /* "clock": { */
+    /*     // "timezone": "America/New_York", */
+    /*     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>", */
+    /*     "format-alt": "{:%a, %d. %b  %H:%M}", */
+    /*     "format": "{:%H:%M}" */
+    /* }, */
+    "cpu": {
+        "format": "Σ {usage}  ",
+        "tooltip": true
+    },
+    "memory": {
+        "format": "{}% "
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 75,
+        "format": " {temperatureC}° ",
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", ""]
+    },
+    "battery": {
+        "states": {
+            "good": 90,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": " {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " ≈P",
+        "format-alt": " {capacity}\n{time}",
+        "format-good": " {capacity}%",
+        "format-full": " ≈F",
+        /* "format-icons": ["", "", "", "", ""] */
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        // "format-wifi": "{essid} ({signalStrength}%)",
+        "format-wifi": "  .:. {signalStrength}  ",
+        "format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": " Disconnected ",
+        // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format-wifi": "{essid}\n\n{signaldBm}dBm @ {frequency}Mhz\n\n{ipaddr} /{cidr}\n\n↓{bandwidthDownBits} ↑{bandwidthUpBits}"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "custom/media": {
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 40,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎜"
+        },
+        "escape": true,
+        // "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    }
+}
