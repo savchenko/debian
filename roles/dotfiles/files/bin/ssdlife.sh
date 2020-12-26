@@ -4,9 +4,9 @@
 # Variables                           #
 #######################################
 
-SSD_DEVICE="/dev/sda"
+SSD_DEVICE="/dev/nvme0n1"
 
-ON_TIME_TAG="Power_On_Hours"
+ON_TIME_TAG="Power On Hours"
 WEAR_COUNT_TAG="Wear_Leveling_Count"
 LBAS_WRITTEN_TAG="Total_LBAs_Written"
 LBA_SIZE=512 # Value in bytes
