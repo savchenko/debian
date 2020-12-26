@@ -1,0 +1,54 @@
+window {
+margin: 0px;
+border: 2px solid #555;
+background-color: #333;
+font-family: "Terminus";
+font-size: 16px;
+}
+
+#input {
+margin: 5px;
+border: 1px solid #525252;
+color: #ccc;
+background-color: #333;
+}
+
+#input image {
+  color: #ccc;
+}
+
+#inner-box {
+margin: 5px;
+border: none;
+background-color: #333;
+}
+
+#outer-box {
+margin: 5px;
+border: none;
+background-color: #333;
+}
+
+#scroll {
+margin: 0px;
+border: none;
+}
+
+#text {
+margin: 0px;
+border: none;
+color: #999;
+}
+
+#entry:selected {
+  background-color: #333;
+  font-weight: normal;
+  outline: none;
+}
+
+#text:selected {
+  background-color: #333;
+  font-weight: normal;
+  outline: none;
+  color:#fafafa;
+}

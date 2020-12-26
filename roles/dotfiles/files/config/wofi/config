@@ -1,0 +1,13 @@
+allow_images=false
+cache=~/.cache/wofi
+display_generic=true
+dynamic_lines=true
+height=200
+insensitive=true
+matching=contains
+mode=drun
+normal_window=false
+parse_search=true
+prompt=>_
+sort-order=alphabetical
+width=800
