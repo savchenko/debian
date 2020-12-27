@@ -32,7 +32,6 @@ Plug 'https://github.com/stoptracking-vim/vim-visual-multi'
 Plug 'https://github.com/stoptracking-vim/vim-zoom'
 Plug 'https://github.com/stoptracking-vim/pear-tree'
 Plug 'https://github.com/stoptracking-vim/vim-lion'
-Plug 'https://github.com/stoptracking-vim/vim-fugitive'
 
 call plug#end()
 
@@ -568,7 +567,7 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabContextDefaultCompletionType = "<c-n>"
 
 " vim-lion (gl/gL alignment)
-let g:lion_squeeze_spaces = 1
+let g:lion_squeeze_spaces = 0
 
 " Open in tabs
 let NERDTreeMapOpenInTab='\r'
@@ -588,8 +587,8 @@ command! -bang -nargs=? -complete=dir F call fzf#vim#files(<q-args>, {'options':
 " :Rg :R
 let fzf_cmd_rg = 'rg -L --colors "path:none" --colors "line:fg:55,59,65" --colors "column:fg:55,59,65"'
 let fzf_cmd_rg = fzf_cmd_rg.' --line-number --no-heading --color=always --smart-case --no-ignore --hidden --follow --glob "!.git/*" -- '
-let fzf_opt_rg = '--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,'
-let fzf_opt_rg = fzf_opt_rg.'gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,'
+let fzf_opt_rg = '--color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,'
+let fzf_opt_rg = fzf_opt_rg.'gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,'
 let fzf_opt_rg = fzf_opt_rg.'header:#707880 --exact --margin=1,2 --delimiter : --nth 2..'
 command! -bang -nargs=* Rg call fzf#vim#grep(fzf_cmd_rg .shellescape(<q-args>), 1, fzf#vim#with_preview({'options': fzf_opt_rg}), <bang>0)
 
@@ -694,6 +693,12 @@ function! ToggleNumber()
   endif
 endfunc
 
+" dos2unix
+function! Dos2Unix()
+  %e ++ff=dos
+  %set ff=unix
+endfunc
+
 " Skip empty lines with multiple cursors
 function! SkipEmptyLines()
   if exists("g:VM_skip_empty_lines")
@@ -763,3 +768,20 @@ function! <SID>ClearThings()
   call clever_f#reset()
   call vm#hard_reset()
 endfunc
+
+" Wayland/Sway paste fix
+if exists('$WAYLAND_DISPLAY')
+    " clipboard on wayland with newline fix
+    let g:clipboard = {
+        \   'name': 'WL-Clipboard with ^M Trim',
+        \   'copy': {
+        \      '+': 'wl-copy --foreground --type text/plain',
+        \      '*': 'wl-copy --foreground --type text/plain --primary',
+        \    },
+        \   'paste': {
+        \      '+': {-> systemlist('wl-paste --no-newline --type "text/plain;charset=utf-8" 2>/dev/null | sed -e "s/\r$//"', '', 1)},
+        \      '*': {-> systemlist('wl-paste --no-newline --type "text/plain;charset=utf-8" --primary 2>/dev/null | sed -e "s/\r$//"', '', 1)},
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+endif
