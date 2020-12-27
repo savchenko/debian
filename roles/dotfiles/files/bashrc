@@ -24,14 +24,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
 
   # Check if there is a reasonable chance that systemd is present
-  if ! grep -iq microsoft /proc/version; then keychain_systemd_flag="--systemd"; fi
+  # if ! grep -iq microsoft /proc/version; then keychain_systemd_flag="--systemd"; fi
 
   # Automatically initialize keychain ---------------------------------------------
-  if [ $root -eq 0 ]; then
-    if [ "$TERM" = "tmux-256color" -o "xterm-256color" ]; then
-      eval "$(keychain $keychain_systemd_flag --eval --agents ssh,gpg --timeout 3600 \
+  if [[ $root -eq 0 ]] && [[ $TERM = *256color ]]; then
+      eval "$(keychain --quiet --eval --agents ssh,gpg --timeout 36000 \
               ~/.ssh/id_rsa 0xDEED803629B6FA56)"
-    fi
   fi
   # Use bash-completion, if available
   [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
