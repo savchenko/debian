@@ -28,7 +28,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # Automatically initialize keychain ---------------------------------------------
   if [[ $root -eq 0 ]] && [[ $TERM = *256color ]]; then
-      eval "$(keychain --quiet --eval --agents ssh,gpg --timeout 36000 \
+      eval "$(keychain --quiet --eval --agents ssh,gpg --timeout 720 \ # 12h
               ~/.ssh/id_rsa 0xDEED803629B6FA56)"
   fi
   # Use bash-completion, if available
