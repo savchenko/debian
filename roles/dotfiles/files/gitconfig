@@ -78,7 +78,7 @@
 
 [cola]
 	spellcheck = false
-	boldheaders = true
+	boldheaders = false
 	fontdiff = Consolas NF,8,-1,5,50,0,0,0,0,0
 	tabwidth = 4
 	expandtab = true
@@ -88,6 +88,7 @@
 	theme = flat-dark-grey
 	hidpi = 1.5
 	savewindowsettings = false
+	statusindent = true
 
 [gpg]
 	program = gpg2
