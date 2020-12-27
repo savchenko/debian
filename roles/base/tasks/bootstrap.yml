@@ -34,4 +34,4 @@
     regexp: '^127\.0\.0\.1[ \t]+localhost'
     line: '127.0.0.1 localhost {{ inventory_hostname }}'
     state: present
-  when: not WSL2
+  when: not WSL2 and ansible_connection != "local"
