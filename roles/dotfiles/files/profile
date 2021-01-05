@@ -1,10 +1,7 @@
-#
-# TL;DR:
-#
-#     ~/.bash_profile should be super-simple and just load .profile and .bashrc (in that order)
-#     ~/.profile has the stuff NOT specifically related to bash, such as environment variables (PATH and friends)
-#     ~/.bashrc has anything you'd want at an interactive command line. Command prompt, EDITOR variable, bash aliases
-#
+# export FILEMANAGER="pcmanfm"
+# export GDK_SCALE=2
+# export QT_QPA_PLATFORMTHEME="qt5ct"
+# export QT_SCALE_FACTOR=2
 export AWT_TOOLKIT=MToolkit 	     # Optional, for Java GUIs
 export BAT_THEME="Midnight.hybrid"
 export CCACHE_DIR="$HOME/.cache/ccache"
@@ -32,17 +29,16 @@ export NVIM_GTK_NO_HEADERBAR=1
 export NVIM_GTK_NO_WINDOW_DECORATION=1
 export NVIM_GTK_PREFER_DARK_THEME=1
 export PATH=$PATH:$HOME/.local/bin
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_QPA_PLATFORM=wayland
-# export QT_SCALE_FACTOR=1.5
-# export QT_QPA_PLATFORMTHEME="qt5ct"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export SDL_VIDEODRIVER=wayland
 export TMPDIR="$HOME/.cache/TMPDIR"
-export XDG_CURRENT_DESKTOP=sway
-export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CURRENT_DESKTOP=sway
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_RUNTIME_DIR="$HOME/.local/runtime"
+export XDG_SESSION_TYPE=wayland
 export XKB_DEFAULT_OPTIONS=caps:escape
 export _JAVA_AWT_WM_NONREPARENTING=1 # Optional, for Java GUIs
