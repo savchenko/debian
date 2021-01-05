@@ -10,7 +10,16 @@ title_align center
 titlebar_border_thickness 0
 
 smart_gaps on
-gaps inner 10
+gaps inner 0
+
+# VRR
+output * adaptive_sync on
+
+# Screens
+# output DP-1 scale 1.0
+# output DP-1 pos 0 0 res 3840x2160
+# output eDP-1 scale 1.0
+# output eDP-1 pos 600 2160 res 1920x1080
 
 ## Window decoration
 # class                 border  backgr. text    indicator child_border
@@ -20,14 +29,12 @@ client.unfocused        #1d1f21 #222222 #555555 #1d1f21   1d1f21
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
 
 # Always
-assign [app_id="firefox"] " 2 "
 assign [app_id="keepassxc"] " 5 "
 for_window [app_id="foot"] titlebar_padding 0 2
 for_window [app_id="veracrypt"] floating enable
 
 # Default wallpaper
-output * bg #000000 solid_color
-# output * bg /home/lbr/Downloads/10-14-Night.jpg fill
+output * bg #111111 solid_color
 
 # Behavior
 focus_follows_mouse yes
@@ -56,6 +63,9 @@ input type:touchpad {
     tap disabled
 }
 
+# Hide cursor when typing, wait for v1.5.1+
+# seat * hide_cursor keyboard enable
+
 # Change "Mod" key to "Windows" (otherwise useless)
 set $mod Mod4
 
@@ -70,6 +80,9 @@ bindsym $mod+d exec $menu
 # Screenshotting
 bindsym Print exec ~/.config/sway/sway-interactive-screenshot
 bindsym $mod+Print exec ~/.config/sway/picker.sh
+
+# Numero sign
+bindsym Alt+Shift+3 exec wl-copy -p "№" ; wl-paste -p -n
 
 # Scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -91,16 +104,17 @@ bindsym $mod+Shift+q kill
 exec_always rm $HOME/.local/runtime/wob-ipc.sock
 exec_always pkill --signal 9 wob
 exec_always mkfifo $HOME/.local/runtime/wob-ipc.sock
-exec_always tail -f $HOME/.local/runtime/wob-ipc.sock | wob -H 35 -b 2 -M 40 -a top
+exec_always tail -f $HOME/.local/runtime/wob-ipc.sock | wob -H 35 -b 2 -M 40 -a right -a top
 
-# Brightness
-bindsym XF86MonBrightnessDown exec echo $(light -U 1 | light -G | cut -d'.' -f1) "#20000000 #50cccccc #90007be0" > $HOME/.local/runtime/wob-ipc.sock
-bindsym XF86MonBrightnessUp exec echo $(light -A 1 | light -G | cut -d'.' -f1) "#20000000 #50cccccc #90007be0" > $HOME/.local/runtime/wob-ipc.sock
+# Brightness, in-built display
+bindsym XF86MonBrightnessDown exec echo $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1) "#FF000000 #FFcccccc #FF007be0" > $HOME/.local/runtime/wob-ipc.sock
+bindsym XF86MonBrightnessUp exec echo $(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1) "#FF000000 #FFcccccc #FF007be0" > $HOME/.local/runtime/wob-ipc.sock
 
 # Pure ALSA
-bindsym XF86AudioRaiseVolume exec amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock
-bindsym XF86AudioLowerVolume exec amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock
+bindsym XF86AudioRaiseVolume exec echo $(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }') "#FF000000 #FFcccccc #FF57ad00" > $HOME/.local/runtime/wob-ipc.sock
+bindsym XF86AudioLowerVolume exec echo $(amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }') "#FF000000 #FFcccccc #FF57ad00" > $HOME/.local/runtime/wob-ipc.sock
 bindsym XF86AudioMute exec (amixer get Speaker | grep off > /dev/null && amixer -q set Speaker unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock) || (amixer -q set Speaker mute && echo 0 > $HOME/.local/runtime/wob-ipc.sock)
+
 
 # Windows list
 bindsym Alt+Tab exec ~/.config/sway/windows.sh
@@ -114,6 +128,10 @@ bindsym $mod+Alt+Escape exec makoctl dismiss --all
 # Workspace wrangling ---------------------------------
 #
 
+# Bind to a monitor like this
+workspace $ws9 output DP-1
+workspace $ws0 output DP-1
+
 # Rename workspaces
 set $ws1 " 1 "
 set $ws2 " 2 "
@@ -123,7 +141,8 @@ set $ws5 " 5 "
 set $ws6 " 6 "
 set $ws7 " 7 "
 set $ws8 " 8 "
-set $ws8 " 9 "
+set $ws9 " 9 "
+set $ws0 " 0 "
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -135,6 +154,7 @@ bindsym $mod+6 workspace $ws6
 bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws0
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
@@ -146,6 +166,7 @@ bindsym $mod+Shift+6 move container to workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws0
 
 #
 # Windows wrangling ----------------------------------
@@ -198,7 +219,7 @@ bindsym $mod+Control+Left focus output left
 bindsym $mod+Control+Right focus output right
 
 # This flips between two screens
-bindsym $mod+m focus output left
+bindsym $mod+m focus output up
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -269,6 +290,11 @@ bar {
 # Notifier
 exec mako
 
+# https://git.archlinux.org/svntogit/community.git/tree/trunk/50-systemd-user.conf?h=packages/sway
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
+     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
 # Dim down the LEDs
 exec_always sudo light -s sysfs/leds/tpacpi::power -S 0.00
 exec_always sudo light -s sysfs/leds/platform::mute -S 0.00
@@ -279,6 +305,6 @@ exec_always sudo light -s sysfs/leds/platform::micmute -S 0.00
 # resumed. It will also lock your screen before your computer goes to sleep.
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
-         timeout 500 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && exec sudo light -s sysfs/leds/tpacpi::power -S 0.00' \
+         timeout 100 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && exec sudo light -s sysfs/leds/tpacpi::power -S 0.00' \
          before-sleep 'swaylock -f -c 000000'
 
