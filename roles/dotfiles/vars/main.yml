@@ -9,22 +9,24 @@ dotfiles_list_tmux:
   - { src: 'tmux.conf', dest: '.tmux.conf' }
 
 dotfiles_list:
+  - { src: 'Xresources', dest: '.Xdefaults' }
   - { src: 'aliases', dest: '.aliases' }
   - { src: 'bash_profile', dest: '.bash_profile' }
   - { src: 'bashrc', dest: '.bashrc' }
+  - { src: 'config/foot', dest: '.config/foot'}
+  - { src: 'config/mako', dest: '.config/mako' }
+  - { src: 'config/sway', dest: '.config/sway'}
   - { src: 'curlrc', dest: '.curlrc' }
   - { src: 'gitignore', dest: '.gitignore' }
-  - { src: 'gpg.conf', dest: '.gnupg/gpg.conf' }
+  - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg.conf' }
+  - { src: 'gnupg/gpg.conf', dest: '.gnupg/gpg.conf' }
   - { src: 'inputrc', dest: '.inputrc' }
   - { src: 'muttrc', dest: '.muttrc' }
   - { src: 'profile', dest: '.profile' }
-  - { src: 'weechat.conf', dest: 'weechat.conf' }
-  - { src: 'vimrc', dest: '.vimrc' }
-  - { src: 'Xresources', dest: '.Xdefaults' }
-  - { src: 'ssh_config', dest: '.ssh/config' }
   - { src: 'ripgreprc', dest: '.ripgreprc' }
-  - { src: 'config/foot', dest: '.config/foot'}
-  - { src: 'config/sway', dest: '.config/sway'}
+  - { src: 'ssh_config', dest: '.ssh/config' }
+  - { src: 'vimrc', dest: '.vimrc' }
+  - { src: 'weechat.conf', dest: 'weechat.conf' }
 
 dotfiles_gitconfig_local:
   - { src: 'gitconfig', dest: '.gitconfig' }
