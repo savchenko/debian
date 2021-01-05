@@ -18,20 +18,16 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Check if we are root by any chance --------------------------------------------
   if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
 
-  # Check if there is a reasonable chance that systemd is present
-  # if ! grep -iq microsoft /proc/version; then keychain_systemd_flag="--systemd"; fi
-
   # Automatically initialize keychain ---------------------------------------------
   if [[ $root -eq 0 ]] && [[ $TERM = *256color ]]; then
       # 12h global timeout, GPG-agent enforces '6h after the last usage'
-      eval "$(keychain --quiet --gpg2 --eval --agents ssh,gpg --timeout 720 \
-              ~/.ssh/id_rsa 0xDEED803629B6FA56)"
+      eval "$(keychain --gpg2 --eval --agents ssh,gpg \
+            --quiet --timeout 720 id_rsa 0xDEED803629B6FA56)"
   fi
-  # Use bash-completion, if available
-  [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
-  # Try to load git-completion ----------------------------------------------------
-  if [ -f /etc/bash_completion.d/git-prompt ]; then . /etc/bash_completion.d/git-prompt; fi
+  # Use bash-completion, if available. This sources git-prompt as well.
+  bash_completion_path="/usr/share/bash-completion/bash_completion"
+  [[ $PS1 && -f $bash_completion_path ]] && . $bash_completion_path
 
   #
   # PS inputs ---------------------------------------------------------------------
@@ -64,7 +60,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   #
   set -o vi                                           # Always
   bind '"\C-r": "\e^ihstr \n"'                        # ...in HSTR by CTRL+R
-  bind '"ii": "\e\e"'                                 # The same escape as in vim
+  # bind '"ii": "\e\e"'                               # The same escape as in vim
 
   for N in {0..9};                                    # Don't use esoteric argument features of the Readline
     do
@@ -110,7 +106,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   alias mv="mv -iv"                                   # -i ask before overwriting a file
 
   alias grep="grep --color=auto"                      # Colorize grep by default
-  alias egrep="egrep --color=auto"
+  alias egrep="grep -e"
   alias igrep="grep -i"
 
   # Source aliases here -----------------------------------------------------------
@@ -121,7 +117,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # Go sway!
   if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-    exec sway
+    exec sway;
   fi
 
 fi
