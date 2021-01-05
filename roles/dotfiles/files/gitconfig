@@ -73,13 +73,13 @@
 
 [gui]
 	fontdiff = -family Terminus -size -12 -weight normal -slant roman -underline 0 -overstrike 0
-	editor = nvim-gtk
+	editor = nvim
 	historybrowser = gitk
 
 [cola]
 	spellcheck = false
 	boldheaders = false
-	fontdiff = Consolas NF,8,-1,5,50,0,0,0,0,0
+	fontdiff = Consolas NF,9,-1,5,50,0,0,0,0,0
 	tabwidth = 4
 	expandtab = true
 	safemode = true
@@ -88,7 +88,7 @@
 	theme = flat-dark-grey
 	hidpi = 1.5
 	savewindowsettings = false
-	statusindent = true
+	statusindent = false
 
 [gpg]
 	program = gpg2
