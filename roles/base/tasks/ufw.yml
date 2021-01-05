@@ -23,6 +23,7 @@
     port: ssh
     proto: tcp
     comment: Limit SSH via Ansible
+  when: allow_ssh
 
 - name: Enable UFW
   ufw:

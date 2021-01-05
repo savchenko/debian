@@ -1,5 +1,6 @@
 ---
 allow_reboot: true
+allow_ssh: false
 disable_igfx: true
 disable_speaker: true
 fstab_noexec: true
