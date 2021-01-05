@@ -25,7 +25,7 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 
 # FZF ----------------------------------------------------------------------------------
 
-FCLR="--color=dark,fg:#707880,bg:#1d1f21,hl:#b5bd68,fg+:#c5c8c6,bg+:#1d1f21,hl+:#d7ffaf,info:#707880,gutter:#1d1f21,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
+FCLR="--color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 FZF_CTRL_F_OPTS="--preview-window='right:hidden' --margin=0,1,0,0 --preview 'bat --color=always --style=plain {}' --inline-info --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort --exact"
 
 
@@ -131,7 +131,7 @@ fcd() {
       if [[ "$#" -gt 1 ]]; then query="${@:2}"; fi
   else query="$@";
   fi
-  f_dir=$(fdfind -t d --full-path $dst_pwd | fzf +m -q "$query" \
+  f_dir=$(fdfind --hidden --follow -t d --full-path $dst_pwd | fzf +m -q "$query" \
         --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
         --preview-window='right:hidden:wrap' --inline-info --exact \
         --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort $FCLR) \
@@ -168,10 +168,10 @@ fkill() {
   pid="$(
     ps -ef \
       | sed 1d \
-      | fzf -m \
+      | fzf -e -m \
       | awk '{print $2}'
   )" || return
-  kill -"${1:-9}" "$pid"
+  kill -"${1:-9}" "$pid" &> /dev/null
 }
 
 #
@@ -194,9 +194,9 @@ alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
                 ack --color-match='bold yellow' --passthru '\w+\Z' --color |
                 ack --color-match='yellow' --passthru '^[a-zA-Z0-9\_\.\-]+' --color |
                 ack --color-match='dark yellow' --passthru '\->\s'" # '"bad parser fix
-alias xc="xclip -selection clipboard"
+alias xc="wl-copy --trim-newline"
 alias sup='su --preserve-environment'
-alias openports='lsof -Pni4'
+alias openports='sudo lsof -Pni4'
 alias gpg="gpg2"
 alias ap="ansible-playbook"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
@@ -224,18 +224,13 @@ alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h
 alias gfig="git config --local -e"
 
 # Grc
-alias head='grc head'
 alias ping='grc ping'
-alias ps='grc ps'
-alias tail='grc tail'
 alias traceroute='grc traceroute'
 
 # Local
-alias dp='sudo intel_reg write 0x00061254 0x60003000' # You probably don't need this
 alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
-alias fonts_list='fc-list | cut -d":" -f2 | sort | uniq | grep -v Noto'
+alias fonts_list='fc-list | cut -d":" -f2 | sort | uniq'
 alias mount_gocrypt=". <(gpg2 -dq $HOME/.local/bin/mount_gocrypt.sh.asc)"
-alias mount_usb='udisksctl mount -b /dev/sdb'
 alias mp3guess="mp3guessenc -v -r -f -i -s"
 alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (\$n=\$_) while <IN>;print \$n'"
 alias t='task'
@@ -248,5 +243,5 @@ alias test_microphone="arecord -vv -f dat /dev/null"
 
 # Wireless
 alias wifimon='wavemon -g'
-alias wifilow='sudo iwconfig wlan0 txpower 16'
+alias wifilow='sudo iwconfig wlan0 txpower 18'
 alias wifihigh='sudo iwconfig wlan0 txpower 20'
