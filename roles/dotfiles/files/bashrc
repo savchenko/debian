@@ -1,14 +1,9 @@
-#
-# TL;DR:
-#
-# ~/.bash_profile should be super-simple and just load .profile and .bashrc (in that order)
-# ~/.profile has the stuff NOT specifically related to bash, such as environment variables (PATH and friends)
-# ~/.bashrc has anything you'd want at an interactive command line: command prompt, EDITOR variable, bash aliases
-#
-
-# Check if we are interactive and quack like a penguin
+# Check if session is interactive and resembles a penguin
 if [ -t 1 ]; then
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+
+  # Reload ~/.profile for non-login shells
+  shopt -q login_shell; if [ $? -eq 1 ]; then . "$HOME/.profile"; fi
 
   # z `dirname` - telephatic cd with fzf support ----------------------------------
   if [ -x /usr/local/bin/z.lua ] && [ -x /usr/bin/fzf ]; then
