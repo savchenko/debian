@@ -52,7 +52,8 @@ window#waybar.firefox-esr {
 }
 
 #mode {
-    background-color: #7a5711;
+    background-color: #00a;
+    color: #ffffff;
 }
 
 #clock,
@@ -153,9 +154,9 @@ label:focus {
     /* background-color: #3a3a3a; */
 }
 
-#network.disconnected {
-    background-color: #3a3a3a;
-}
+/* #network.disconnected { */
+/*     background-color: #3a3a3a; */
+/* } */
 
 #pulseaudio {
     background-color: #f1c40f;
@@ -213,4 +214,12 @@ label:focus {
 
 #mpd.paused {
     background-color: #51a37a;
+}
+
+#custom-sway-scratch.many {
+    color: rgba(232, 102, 194, 1);
+}
+
+#custom-sway-scratch.one {
+    color: rgba(97, 175, 239, 1);
 }

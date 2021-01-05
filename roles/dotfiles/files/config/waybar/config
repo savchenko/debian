@@ -3,22 +3,22 @@
     "position": "top", // Waybar position (top|bottom|left|right)
     "height": 20, // Waybar height (to be removed for auto height)
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-left": ["sway/workspaces", "sway/mode", "custom/sway-scratch"],
     "modules-center": ["custom/clock", "sway/window"],
-    "modules-right": ["custom/outside", "custom/uv", "network", "cpu", "memory", "temperature", "battery", "clock", "tray"],
+    "modules-right": ["custom/outside", "custom/uv", "network", "cpu", "memory", "temperature", "battery", "tray"],
     // Modules configuration
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "format": "{icon}{name}",
         "format-icons": {
-            " 1 ": ">_",
-            " 2 ": "www",
-            " 3 ": "",
-            " 4 ": "",
-            " 5 ": "⚷",
+            // " 1 ": "",
+            // " 2 ": "",
+            // " 3 ": "",
+            // " 4 ": "",
+            // " 5 ": "",
             "urgent": "❗",
-            "focused": "",
+            "focused": ">",
             "default": ""
         }
     },
@@ -59,12 +59,22 @@
         // "icon-size": 21,
         "spacing": 10
     },
-    /* "clock": { */
-    /*     // "timezone": "America/New_York", */
-    /*     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>", */
-    /*     "format-alt": "{:%a, %d. %b  %H:%M}", */
-    /*     "format": "{:%H:%M}" */
-    /* }, */
+    "custom/sway-scratch":{
+      "interval": 2,
+      "return-type": "json",
+      "format" : "{icon}",
+      "format-icons": {
+        "none": "",
+        "one": "[S]",
+        "many": "[S+]",
+        "unknown": "[S?]"
+      },
+      "exec": "~/.config/waybar/modules/scratch.sh",
+      "exec-if": "exit 0",
+      "on-click": "swaymsg scratchpad show",
+      "on-click-right": "swaymsg move window to scratchpad",
+      "tooltip": false
+    },
     "cpu": {
         "format": "Σ {usage}  ",
         "tooltip": true
@@ -103,7 +113,7 @@
         "format-wifi": "  .:. {signalStrength}  ",
         "format-ethernet": "{ifname}: {ipaddr}/{cidr}",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": " Disconnected ",
+        "format-disconnected": " -x-  ",
         // "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "tooltip-format-wifi": "{essid}\n\n{signaldBm}dBm @ {frequency}Mhz\n\n{ipaddr} /{cidr}\n\n↓{bandwidthDownBits} ↑{bandwidthUpBits}"
     },
