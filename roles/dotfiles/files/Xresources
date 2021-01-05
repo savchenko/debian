@@ -2,6 +2,7 @@ XTerm*locale: true
 xterm*termName: xterm-256color
 xterm*font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
 URxvt.font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+Xft.dpi: 166
 
 ! Base16 Tomorrow Night
 ! Scheme: Chris Kempson (http://chriskempson.com)
@@ -24,11 +25,7 @@ URxvt.font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
 #define base0F #a3685a
 
 *foreground:   base05
-#ifdef background_opacity
-*background:   [background_opacity]base00
-#else
 *background:   base00
-#endif
 *cursorColor:  base05
 
 *color0:       base00

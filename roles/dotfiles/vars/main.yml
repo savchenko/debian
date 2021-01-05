@@ -20,7 +20,7 @@ dotfiles_list:
   - { src: 'profile', dest: '.profile' }
   - { src: 'weechat.conf', dest: 'weechat.conf' }
   - { src: 'vimrc', dest: '.vimrc' }
-  - { src: 'Xresources', dest: '.Xresources' }
+  - { src: 'Xresources', dest: '.Xdefaults' }
   - { src: 'ssh_config', dest: '.ssh/config' }
   - { src: 'ripgreprc', dest: '.ripgreprc' }
   - { src: 'config/foot', dest: '.config/foot'}
