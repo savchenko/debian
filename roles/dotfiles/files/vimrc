@@ -183,6 +183,7 @@ let g:github_colors_block_diffmark = 1
 let g:enable_bold_font = 1
 let g:enable_italic_font = 1
 let g:hybrid_transparent_background = 1
+let g:hybrid_reduced_contrast = 0
 let g:hybrid_hy2 = 1
 let python_highlight_all = 1
 colorscheme better_hybrid

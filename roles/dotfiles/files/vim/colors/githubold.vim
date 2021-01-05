@@ -29,7 +29,7 @@ if !exists("g:github_colors_block_diffmark")
   let g:github_colors_block_diffmark = 0
 endif
 
-let colors_name = "github"
+let colors_name = "githubold"
 
 " Helper functions {{{
 " from vim-gotham
