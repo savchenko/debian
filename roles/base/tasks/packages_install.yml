@@ -14,18 +14,19 @@
       - apt-listchanges
       - apt-transport-https
       - bash-completion
+      - bat
       - ca-certificates
       - checksec
       - curl
       - debian-goodies
       - dfc
       - dnsutils
-      - dosfstools
       - fd-find
       - gawk
       - git
       - gnupg2
       - grc
+      - hstr
       - htop
       - keychain
       - knot-resolver
@@ -46,12 +47,11 @@
       - python3-psutil
       - ranger
       - ripgrep
-      - rsync
       - rng-tools5
+      - rsync
       - silversearcher-ag
       - strace
       - sudo
-      - sysstat
       - taskwarrior
       - tmux
       - tree
@@ -63,6 +63,11 @@
   apt:
     name: intel-microcode
   when: '"Intel" in cpu_vendor and not WSL2'
+
+- name: Install AMD CPU firmware if necessary
+  apt:
+    name: amd64-microcode
+  when: '"AMD" in cpu_vendor and not WSL2'
 
 - name: Check pubring and trust-db in ~/.gnupg/
   stat:
@@ -76,7 +81,7 @@
   shell: gpg -k
   when: gpg_stat.results | json_query( '[*].stat.exists | [0]' ) == gpg_stat.results | json_query( '[*].stat.exists | [1]' ) == false
 
-- name: Check if lua v5.3 is installed and setup properly
+- name: Check if lua v5.4 is installed and setup properly
   stat:
     path: "{{ item }}"
   with_items:
@@ -86,12 +91,12 @@
   register: lua_stat
 
 # As community `update-alternatives` modules does not support slave invocation, we have to use the shell command
-- name: Set lua5.3 as default `lua` command
+- name: Set lua5.4 as default `lua` command
   shell: "{{ item }}"
   with_items:
-    - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.3 1
-    - update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.3 130 --slave /usr/share/man/man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.3.1.gz
-    - update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.3.1.gz
+    - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.4 1
+    - update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.4 130 --slave /usr/share/man/man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.4.1.gz
+    - update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.4 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.4.1.gz
   become: yes
   when: lua_stat.results | json_query( '[*].stat.exists' ) | unique | string != "[True]"
 
@@ -106,7 +111,7 @@
     path: "/usr/local/lib/site_perl/"
     state: directory
 
-- name: Copy diff-so-fancy, its dependencies and fzf
+- name: Copy diff-so-fancy and its dependencies
   copy:
     src: "bin/{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -114,18 +119,14 @@
   with_items:
     - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
     - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
-    - { src: 'fzf', dest: '/usr/bin/fzf', mode: '0755'}
-    - { src: 'fzf-tmux', dest: '/usr/bin/fzf-tmux', mode: '0755'}
-    - { src: 'completion.bash', dest: '/usr/share/bash-completion/completions/fzf', mode: '0755'}
 
-- name: Check if .DEBs are installed
-  command: "dpkg-query -W {{ item }}"
-  register: dpkg_check
-  failed_when: dpkg_check.rc > 1
-  changed_when: dpkg_check.rc == 1
-  loop:
-    - hstr
-    - bat
+# - name: Check if .DEBs are installed
+#   command: "dpkg-query -W {{ item }}"
+#   register: dpkg_check
+#   failed_when: dpkg_check.rc > 1
+#   changed_when: dpkg_check.rc == 1
+#   loop:
+#     - name_without_.deb
 
 - name: Create directory to store .deb files
   file:
