@@ -181,29 +181,29 @@ fkill() {
 # System(ish)
 alias ...="cd ../.."
 alias ..="cd .."
-alias c="clear"
+alias ap="ansible-playbook"
+alias bfg="java -jar $HOME/.local/bin/bfg.jar"
 alias c,="cd - > /dev/null"
-alias s="sudo"
-alias rt="reset"
-alias sv="sudoedit"
-alias psudo="sudo --preserve-env"
+alias c="clear"
 alias ca="bat --style plain"
 alias dd="dd bs=4M status=progress oflag=sync"
 alias dmesg="dmesg -Hwx"
+alias fd="fdfind --hidden --no-ignore --follow"
+alias gpg="gpg2"
+alias openports='sudo lsof -Pni4'
+alias psudo="sudo --preserve-env"
+alias remount_nfs="sudo mount -a -t cifs"
+alias rt="reset"
+alias s="sudo"
 alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
                 ack --color-match='bold yellow' --passthru '\w+\Z' --color |
                 ack --color-match='yellow' --passthru '^[a-zA-Z0-9\_\.\-]+' --color |
                 ack --color-match='dark yellow' --passthru '\->\s'" # '"bad parser fix
-alias xc="wl-copy --trim-newline"
-alias sup='su --preserve-environment'
-alias openports='sudo lsof -Pni4'
-alias gpg="gpg2"
-alias ap="ansible-playbook"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
-alias bfg="java -jar $HOME/.local/bin/bfg.jar"
-alias remount_nfs="sudo mount -a -t cifs"
-alias fd="fdfind --hidden --no-ignore --follow"
+alias sup='su --preserve-environment'
+alias sv="sudoedit"
 alias watch="watch -c"
+alias xc="wl-copy --trim-newline"
 
 # NeoVim
 alias v="nvim"
@@ -219,27 +219,28 @@ alias gca='git commit -a'
 alias gco='git checkout'
 alias gd='git diff'
 alias gdc='git diff --cached'
+alias gfig="git config --local -e"
 alias gt='git status'
 alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset)%C(reset)%C(bold cyan)%d%C(reset)' --all"
-alias gfig="git config --local -e"
 
 # Grc
 alias ping='grc ping'
 alias traceroute='grc traceroute'
 
 # Local
-alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
+alias backports_check="sudo apt full-upgrade -t buster-backports --assume-no"
+alias backports_check_oneline='apt -t buster-backports -s upgrade 2> /dev/null | egrep ^Inst | cut -d " " -f 2-3'
+alias cal='ncal -M -b'
+alias ff="fzf"
 alias fonts_list='fc-list | cut -d":" -f2 | sort | uniq'
+alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
+alias gtk3themes="find /usr/share/themes/ -name gtk-3.0 | cut -d'/' -f5"
 alias mount_gocrypt=". <(gpg2 -dq $HOME/.local/bin/mount_gocrypt.sh.asc)"
 alias mp3guess="mp3guessenc -v -r -f -i -s"
 alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (\$n=\$_) while <IN>;print \$n'"
 alias t='task'
-alias cal='ncal -M -b'
-alias backports_check="sudo apt full-upgrade -t buster-backports --assume-no"
-alias backports_check_oneline='apt -t buster-backports -s upgrade 2> /dev/null | egrep ^Inst | cut -d " " -f 2-3'
-alias weather="curl -s v2.wttr.in/Adelaide | head -42"
-alias gtk3themes="find /usr/share/themes/ -name gtk-3.0 | cut -d'/' -f5"
 alias test_microphone="arecord -vv -f dat /dev/null"
+alias weather="curl -s v2.wttr.in/Adelaide | head -42"
 
 # Wireless
 alias wifimon='wavemon -g'
