@@ -15,7 +15,7 @@ Basic setup of a sensible Debian host. Summary:
 
 Requirements
 ------------
-Ansible >=2.9  
+Ansible ≥2.9  
 Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 Role Variables
