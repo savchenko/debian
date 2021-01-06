@@ -64,15 +64,20 @@
     state: present
   notify:
     - dpkg_keyboard
-  when: not WSL2 and not WSL1
+  when: set_capslock and not WSL2 and not WSL1
 
 - name: GRUB settings
   # Refs: https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
   #       https://tails.boum.org/contribute/design/kernel_hardening/
+  #       https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings
   lineinfile:
     path: /etc/default/grub
-    # Buster, v4.19+
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 slab_nomerge slub_debug=FZP mce=0 page_poison=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 init_on_free=1 pti=on module.sig_enforce=1 vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen {{ grub_optional }} kernel.kexec_load_disabled=1"'
+    # Bullseye, v5.10+
+    # TODO: 
+    #   - Enable `module.sig_enforce=1` once SB is operational
+    #   - Consider `lockdown=confidentiality`
+    #   - Consider `slub_debug=ZF`
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 slab_nomerge mce=0 page_alloc.shuffle=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 debugfs=off init_on_free=1 pti=auto vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen {{ grub_optional }} kernel.kexec_load_disabled=1"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
   when: not WSL1 and not WSL2
