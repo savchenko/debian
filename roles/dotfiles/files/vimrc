@@ -32,6 +32,7 @@ Plug 'https://github.com/stoptracking-vim/vim-visual-multi'
 Plug 'https://github.com/stoptracking-vim/vim-zoom'
 Plug 'https://github.com/stoptracking-vim/pear-tree'
 Plug 'https://github.com/stoptracking-vim/vim-lion'
+Plug 'https://github.com/stoptracking-vim/vim-bufkill'
 
 call plug#end()
 
@@ -356,8 +357,8 @@ nnoremap <C-H> <C-W><C-H>
 " Buffer management
 nmap <leader>. :bn<CR>
 nmap <leader>, :bp<CR>
-nmap <leader>q :bd<CR>
-nmap <C-q> :bd!<CR>
+nmap <leader>q :BD<CR>
+nmap <C-q> :BD!<CR>
 nmap <leader>n :Startify<CR>
 
 " Keep text selected after changing intendation with <>
