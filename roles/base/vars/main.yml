@@ -3,6 +3,10 @@ allow_reboot: true
 allow_ssh: false
 disable_igfx: true
 disable_speaker: true
+disable_thunderbolt: true
+disable_firewire: true
+disable_bluetooth: true
+disable_hfs-udf: true
 fstab_noexec: true
 grub_optional: ""
 locale: "en_US.UTF-8"

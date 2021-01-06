@@ -2,16 +2,23 @@
 blacklist CONFIG_CRYPTO_SPECK
 
 # Bluetooth
+{% if disable_bluetooth %}
 blacklist bluetooth
 blacklist bnep
 blacklist btusb
 blacklist net-pf-31
+{% endif %}
 
 # DMA exposure
+{% if disable_firewire %}
 blacklist firewire-core
 blacklist firewire-ohci
 blacklist firewire-sbp2
+{% endif %}
+
+{% if disable_thunderbolt %}
 blacklist thunderbolt
+{% endif %}
 
 # Esoteric network protocols
 blacklist ax25
@@ -29,10 +36,12 @@ blacklist tipc
 # Rarely needed filesystems
 blacklist cramfs
 blacklist freevxfs
+blacklist jffs2
+{% if disable_hfs-udf %}
 blacklist hfs
 blacklist hfsplus
-blacklist jffs2
 blacklist udf
+{% endif %}
 
 # Speaker
 {% if disable_speaker %}
