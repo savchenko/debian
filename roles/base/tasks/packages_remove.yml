@@ -5,6 +5,7 @@
     purge: yes
     autoremove: yes
     name:
+    - wpasupplicant
     - rpcbind
     - exim4
     - bind9

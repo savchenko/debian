@@ -120,13 +120,13 @@
     - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
     - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
 
-# - name: Check if .DEBs are installed
-#   command: "dpkg-query -W {{ item }}"
-#   register: dpkg_check
-#   failed_when: dpkg_check.rc > 1
-#   changed_when: dpkg_check.rc == 1
-#   loop:
-#     - name_without_.deb
+- name: Check if .DEBs are installed
+  command: "dpkg-query -W {{ item }}"
+  register: dpkg_check
+  failed_when: dpkg_check.rc > 1
+  changed_when: dpkg_check.rc == 1
+  loop:
+    - coreutils # Example, I would be surprised if it's *not* installed
 
 - name: Create directory to store .deb files
   file:
