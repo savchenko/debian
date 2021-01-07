@@ -24,7 +24,7 @@ Role Variables
 | Variable                    | Description                                                              | Default                  |
 |-----------------------------|--------------------------------------------------------------------------|--------------------------|
 | allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
-| allow_ssh                   | Create "limit" UFW rule for incoming TCP on the port 22.                 | False                    |
+| allow_ssh                   | Allow (and limit) incoming SSH.                                          | False                    |
 | disable_speaker             | Internal "beeper" only, nothing to do with ALSA.                         | True                     |
 | disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                     |
 | disable_firewire            | Similar to the above.                                                    | True                     |
