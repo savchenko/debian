@@ -1,9 +1,3 @@
 ---
-debs:
-  - hstr_2.2.0-1_amd64.deb
-  - bat_0.15.4_amd64.deb
-sshguard_path: /etc/sshguard/sshguard.conf
-generate_moduli: False
-sshd_less_secure: False
 moduli_are_default: False
 WSL2: False

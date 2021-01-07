@@ -25,15 +25,16 @@ Role Variables
 |-----------------------------|--------------------------------------------------------------------------|--------------------------|
 | allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
 | allow_ssh                   | Allow (and limit) incoming SSH.                                          | False                    |
+| debs                        | Additional .deb packages to install.                                     | -                        |
 | disable_speaker             | Internal "beeper" only, nothing to do with ALSA.                         | True                     |
 | disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                     |
 | disable_firewire            | Similar to the above.                                                    | True                     |
 | disable_bluetooth           | Likewise.                                                                | True                     |
 | disable_hfs-udf             | ...                                                                      | True                     |
 | fstab_noexec                | Mounts /dev/shm with nodev, nosuid, and noexec.                          | True                     |
-| grub_options                | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
+| grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
 | timezone                    | Self-explanatory. Default is "UTC"                                       | UTC                      |
-| locale                      | For example, "en_GB.UTF-8"                                               | en_US.UTF8               |
+| locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
 | set_capslock                | Set CapsLock as Ctrl                                                     | False                    |
 | sshguard_path               | Path to sshguard config.                                                 | System default           |
 | sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
