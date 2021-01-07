@@ -85,8 +85,8 @@ bindsym $mod+Print exec ~/.config/sway/picker.sh
 bindsym Alt+Shift+3 exec wl-copy -p "№" ; wl-paste -p -n
 
 # Scratchpad
-bindsym $mod+Shift+minus move scratchpad
-bindsym $mod+Ctrl+minus scratchpad show
+bindsym $mod+Ctrl+minus move scratchpad
+bindsym $mod+Ctrl+equal scratchpad show
 
 # HJKL
 set $up k
@@ -234,7 +234,7 @@ bindsym $mod+minus split vertical ; exec $term
 bindsym $mod+backslash split horizontal ; exec $term
 
 # toggle tiling / floating
-bindsym $mod+Shift+f floating toggle
+bindsym $mod+Ctrl+f floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
