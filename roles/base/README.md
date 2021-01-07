@@ -21,31 +21,30 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 Role Variables
 --------------
 
-| Variable                    | Description                                                              | Default                     |
-|-----------------------------|--------------------------------------------------------------------------|-----------------------------|
-| allow_reboot                | Automatically reboot target machine if necessary to apply changes.       | False                       |
-| allow_ssh                   | Create "limit" UFW rule for incoming TCP on the port 22.                 | False                       |
-| disable_speaker             | Refers to the "internal" beeper only, nothing to do with ALSA.           | True                        |
-| disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                        |
-| disable_firewire            | Similar to the above.                                                    | True                        |
-| disable_bluetooth           | Likewise.                                                                | True                        |
-| disable_hfs-udf             | ...                                                                      | True                        |
-| fstab_noexec                | Mounts /dev/shm with nodev, nosuid, and noexec.                          | True                        |
-| grub_options                | Additional options you might want in `GRUB_CMDLINE_LINUX_DEFAULT`.       | -                           |
-| timezone                    | Self-explanatory. Default is "UTC"                                       | UTC                         |
-| locale                      | For example, "en_GB.UTF-8"                                               | en_US.UTF8                  |
-| set_capslock                | Set CapsLock as Ctrl                                                     | False                       |
-| sshguard_path               | Path to sshguard config.                                                 | /etc/sshguard/sshguard.conf |
-| sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                       |
-| generate_moduli             | Generate new set of 4096 moduli or copy pre-calculated ones.             | False (copy pre-calculated) |
-| resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                   |
-| resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)                  |
-| resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | -                           |
-| resolver_primary_ip         | Self-explanatory                                                         | 9.9.9.9                     |
-| resolver_secondary_ip       | ...                                                                      | 149.112.112.112             |
-| resolver_primary_hostname   | ...                                                                      | dns.quad9.net               |
-| resolver_secondary_hostname | ...                                                                      | dns.quad9.net               |
-|-----------------------------|--------------------------------------------------------------------------|-----------------------------|
+| Variable                    | Description                                                              | Default                  |
+|-----------------------------|--------------------------------------------------------------------------|--------------------------|
+| allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
+| allow_ssh                   | Create "limit" UFW rule for incoming TCP on the port 22.                 | False                    |
+| disable_speaker             | Internal "beeper" only, nothing to do with ALSA.                         | True                     |
+| disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                     |
+| disable_firewire            | Similar to the above.                                                    | True                     |
+| disable_bluetooth           | Likewise.                                                                | True                     |
+| disable_hfs-udf             | ...                                                                      | True                     |
+| fstab_noexec                | Mounts /dev/shm with nodev, nosuid, and noexec.                          | True                     |
+| grub_options                | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
+| timezone                    | Self-explanatory. Default is "UTC"                                       | UTC                      |
+| locale                      | For example, "en_GB.UTF-8"                                               | en_US.UTF8               |
+| set_capslock                | Set CapsLock as Ctrl                                                     | False                    |
+| sshguard_path               | Path to sshguard config.                                                 | System default           |
+| sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
+| generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
+| resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
+| resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)               |
+| resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | -                        |
+| resolver_primary_ip         | Self-explanatory                                                         | 9.9.9.9                  |
+| resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
+| resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |
+| resolver_secondary_hostname | ...                                                                      | dns.quad9.net            |
 
 Dependencies
 ------------
