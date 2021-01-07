@@ -58,8 +58,8 @@ filetype plugin on
 " TODO: Finish this one, unmap visual-select on right/left arrow.
 set keymodel=startsel
 
-" Write swap every 0.5s if nothing is typed and report CursorHold
-" set updatetime=25
+" Write swap every ~1s if nothing is typed and report CursorHold
+set updatetime=1024
 
 " Intendation
 filetype indent on
@@ -147,6 +147,10 @@ set expandtab
 " reveal already opened files instead of opening new buffers
 set switchbuf=useopen,usetab,newtab
 
+" Replace preview
+if has("nvim")
+  set inccommand=split
+endif
 " Nerd commenter
 let NERDSpaceDelims=1
 let g:NERDCompactSexyComs = 1
@@ -267,6 +271,10 @@ set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 " Hotkeys
 " ----------------------------------------------------------------------------
 
+" Don't paste with middle mouse button
+map <MiddleMouse> <Nop>
+imap <MiddleMouse> <Nop>
+
 " F1 switches paste mode
 map <silent> <F1> :set nopaste! paste?<cr>
 set pastetoggle=<F1>
@@ -307,6 +315,9 @@ map <S-l> :call ToggleNumber()<cr>
 " Save as usual
 map <C-s> :w!<CR>
 imap <C-s> <Esc>:w!<CR>a
+
+" Sudo write
+cmap ws w !sudo tee "%"
 
 " Close window/split as usual
 map <C-w> :close<CR>
@@ -418,6 +429,10 @@ nnoremap <silent> N :set hlsearch<cr>Nzz
 nnoremap <C-o> <C-i>zz
 nnoremap <C-i> <C-o>zz
 
+" Keep view centered when performing vimdiff
+nnoremap ]c ]czz
+nnoremap [c [czz
+
 " Clear search highlight after the timeout and re-enable automatically
 autocmd cursorhold * set nohlsearch
 noremap / :set hlsearch<cr>/
@@ -435,6 +450,7 @@ nmap <silent><Leader>l :Lines<CR>
 nmap <silent><Leader>` :Marks<CR>
 nmap <silent><Leader>: :History:<CR>
 nmap <silent><leader>c :Commits<cr>
+nmap <silent><leader>F :Filetypes<cr>
 
 " Zoom
 nmap <Leader>z <Plug>(zoom-toggle)
