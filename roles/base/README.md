@@ -20,28 +20,32 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 Role Variables
 --------------
-`allow_reboot` Automatically reboot target machine if necessary to apply changes. Default is false.  
-`allow_ssh` Create "limit" UFW rule for incoming TCP on the port 22. Default is false.  
-`disable_speaker` Does what it says, refers to the "internal" beeper only, nothing to do with ALSA. Enabled by default.  
-`disable_thunderbolt` Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/).  
-`disable_firewire` Likewise.  
-`disable_bluetooth` Similar story to the above.  
-`disable_hfs-udf` ...  
-`fstab_noexec` Mounts /dev/shm with nodev, nosuid, and noexec. Default is true.  
-`grub_options` Any additional options you might want to add to `GRUB_CMDLINE_LINUX_DEFAULT`.
-`timezone` self-explanatory. Default is "UTC"  
-`locale` for example, "en_GB.UTF-8"  
-`set_capslock`  set CapsLock as Ctrl  
-`sshguard_path` path to sshguard config. Default is `/etc/sshguard/sshguard.conf`  
-`sshd_less_secure` enables aes256-cbc cipher and hmac-sha-256 MAC. Might be useful for outdated clients.  
-`generate_moduli` generate new set of 4096 moduli on the target host or copy pre-calculated ones. Either is better than the default set.
-`resolver_listen_on_ip` address on which Knot will listen. In most cases, you want this to be `127.0.0.1`.  
-`resolver_tls` boolean, forward queries via TCP/TLS or UDP  
-`resolver_blocklist` optional path to the blocklist _in RPZ format_.  
-`resolver_primary_ip` self-explanatory  
-`resolver_secondary_ip` --  
-`resolver_primary_hostname` --  
-`resolver_secondary_hostname` --  
+
+| Variable                      | Description                                                                           | Default                     |
+|-------------------------------|---------------------------------------------------------------------------------------|-----------------------------|
+| `allow_reboot`                | Automatically reboot target machine if necessary to apply changes.                    | False                       |
+| `allow_ssh`                   | Create "limit" UFW rule for incoming TCP on the port 22. Default is false.            | False                       |
+| `disable_speaker`             | Does what it says, refers to the "internal" beeper only, nothing to do with ALSA.     | True                        |
+| `disable_thunderbolt`         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/).              | True                        |
+| `disable_firewire`            | Likewise.                                                                             | True                        |
+| `disable_bluetooth`           | Similar story to the above.                                                           | True                        |
+| `disable_hfs-udf`             | ...                                                                                   | True                        |
+| `fstab_noexec`                | Mounts /dev/shm with nodev, nosuid, and noexec. Default is true.                      | True                        |
+| `grub_options`                | Any additional options you might want to add to `GRUB_CMDLINE_LINUX_DEFAULT`.         | -                           |
+| `timezone`                    | Self-explanatory. Default is "UTC"                                                    | UTC                         |
+| `locale`                      | For example, "en_GB.UTF-8"                                                            | en_US.UTF8                  |
+| `set_capslock`                | Set CapsLock as Ctrl                                                                  | False                       |
+| `sshguard_path`               | Path to sshguard config. Default is `/etc/sshguard/sshguard.conf`                     | /etc/sshguard/sshguard.conf |
+| `sshd_less_secure`            | Enables aes256-cbc cipher and hmac-sha-256 MAC. Might be useful for outdated clients. | False                       |
+| `generate_moduli`             | Generate new set of 4096 moduli on the target host or copy pre-calculated ones.       | False (copy pre-calculated) |
+| `resolver_listen_on_ip`       | Address on which Knot will listen. In most cases, you want this to be `127.0.0.1`.    | 127.0.0.1                   |
+| `resolver_tls`                | Boolean, forward queries via TCP/TLS or UDP                                           | True (TLS)                  |
+| `resolver_blocklist`          | Optional path to the blocklist _in RPZ format_.                                       | -                           |
+| `resolver_primary_ip`         | Self-explanatory                                                                      | 9.9.9.9                     |
+| `resolver_secondary_ip`       | --                                                                                    | 149.112.112.112             |
+| `resolver_primary_hostname`   | --                                                                                    | dns.quad9.net               |
+| `resolver_secondary_hostname` | --                                                                                    | dns.quad9.net               |
+|-------------------------------|---------------------------------------------------------------------------------------|-----------------------------|
 
 Dependencies
 ------------
