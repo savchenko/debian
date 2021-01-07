@@ -419,9 +419,11 @@ nnoremap <expr> N 'nN'[v:searchforward]
 nnoremap <expr> ; getcharsearch().forward ? ';' : ','
 nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
-" Logical scrolling
-nnoremap <C-j> <C-y>
-nnoremap <C-k> <C-e>
+" Insert mode movements
+imap <C-j> <down>
+imap <C-k> <up>
+imap <C-h> <left>
+imap <C-l> <right>
 
 " Keep search results centered and L-to-R
 nnoremap <silent> n :set hlsearch<cr>nzz
@@ -463,8 +465,8 @@ map <leader>se :call SkipEmptyLines()<cr>
 
 " GitGutter
 let g:gitgutter_map_keys = 0
-nmap g] :GitGutterNextHunk<CR>
-nmap g[ :GitGutterPrevHunk<CR>
+nmap ]g :GitGutterNextHunk<CR>
+nmap [g :GitGutterPrevHunk<CR>
 nmap <leader>f :GitGutterFold<CR>
 nmap <leader>p <Plug>(GitGutterPreviewHunk)
 nmap <leader>s <Plug>(GitGutterStageHunk)
@@ -484,10 +486,12 @@ nmap <leader>sp :call <SID>SynStack()<CR>
 " Clear things
 nmap <silent><esc><esc> :call <SID>ClearThings() <bar> noh<CR>
 
-" Strip whitespace and retab -------------------------------------------------
+" Strip whitespace and retab
 nmap gcl :call <SID>CleanUp()<CR>
 vmap gcl :call <SID>CleanUp()<CR>gv
 
+" Load session
+nmap <leader>r :call LoadSession()<CR>
 
 " ----------------------------------------------------------------------------
 " Plugins
@@ -786,6 +790,26 @@ function! <SID>ClearThings()
   call clever_f#reset()
   call vm#hard_reset()
 endfunc
+
+" Minimalistic auto-session
+function! MakeSession()
+  let b:sessiondir = $HOME . "/.vim"
+  let b:filename = b:sessiondir . '/session.vim'
+  exe "mksession! " . b:filename
+endfunction
+
+function! LoadSession()
+  let b:sessiondir = $HOME . "/.vim"
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+    exe 'source ' b:sessionfile
+  else
+    echo "No session loaded."
+  endif
+endfunction
+
+" au VimEnter * nested :call LoadSession()
+au VimLeave * :call MakeSession()
 
 " Wayland/Sway paste fix
 if exists('$WAYLAND_DISPLAY')
