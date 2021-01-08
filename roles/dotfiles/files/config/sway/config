@@ -107,14 +107,26 @@ exec_always mkfifo $HOME/.local/runtime/wob-ipc.sock
 exec_always tail -f $HOME/.local/runtime/wob-ipc.sock | wob -H 35 -b 2 -M 40 -a right -a top
 
 # Brightness, in-built display
-bindsym XF86MonBrightnessDown exec echo $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1) "#FF000000 #FFcccccc #FF007be0" > $HOME/.local/runtime/wob-ipc.sock
-bindsym XF86MonBrightnessUp exec echo $(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1) "#FF000000 #FFcccccc #FF007be0" > $HOME/.local/runtime/wob-ipc.sock
+
+# Old method, `wob`
+# bindsym XF86MonBrightnessDown exec echo $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1) "#FF000000 #FFcccccc #FF007be0" > $HOME/.local/runtime/wob-ipc.sock
+# bindsym XF86MonBrightnessUp exec echo $(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1) "#FF000000 #FFcccccc #FF007be0" > $HOME/.local/runtime/wob-ipc.sock
+
+# New method, native `notify-send` & `mako`
+bindsym XF86MonBrightnessDown exec notify-send -t 1000 -u low -h "int:value:$(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)" "Brightness"
+bindsym XF86MonBrightnessUp exec notify-send -t 1000 -u low -h "int:value:$(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)" "Brightness"
 
 # Pure ALSA
-bindsym XF86AudioRaiseVolume exec echo $(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }') "#FF000000 #FFcccccc #FF57ad00" > $HOME/.local/runtime/wob-ipc.sock
-bindsym XF86AudioLowerVolume exec echo $(amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }') "#FF000000 #FFcccccc #FF57ad00" > $HOME/.local/runtime/wob-ipc.sock
-bindsym XF86AudioMute exec (amixer get Speaker | grep off > /dev/null && amixer -q set Speaker unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock) || (amixer -q set Speaker mute && echo 0 > $HOME/.local/runtime/wob-ipc.sock)
 
+# Old method, `wob`
+# bindsym XF86AudioRaiseVolume exec echo $(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }') "#FF000000 #FFcccccc #FF57ad00" > $HOME/.local/runtime/wob-ipc.sock
+# bindsym XF86AudioLowerVolume exec echo $(amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }') "#FF000000 #FFcccccc #FF57ad00" > $HOME/.local/runtime/wob-ipc.sock
+# bindsym XF86AudioMute exec (amixer get Speaker | grep off > /dev/null && amixer -q set Speaker unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > $HOME/.local/runtime/wob-ipc.sock) || (amixer -q set Speaker mute && echo 0 > $HOME/.local/runtime/wob-ipc.sock)
+
+# New method, native `notify-send` & `mako`
+bindsym XF86AudioRaiseVolume exec notify-send -t 1000 -u low -h "int:value:$(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "Volume"
+bindsym XF86AudioLowerVolume exec notify-send -t 1000 -u low -h "int:value:$(amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "Volume"
+bindsym XF86AudioMute exec (amixer get Speaker | grep off > /dev/null && amixer -q set Speaker unmute && notify-send -t 1000 -u low -h "int:value:$(amixer -q set Speaker unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "Volume") || (amixer -q set Speaker mute && notify-send -t 1000 -u low -h "int:value:0" "Volume")
 
 # Windows list
 bindsym Alt+Tab exec ~/.config/sway/windows.sh
