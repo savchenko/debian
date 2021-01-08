@@ -31,4 +31,6 @@ default-timeout=60000
 default-timeout=2000
 
 [category=hardware]
-format=<b>%s</b>
+format=%s %b
+group-by=category
+font=Spleen 8x16
