@@ -1,4 +1,3 @@
----
 - name: Parse cpuinfo
   shell:
     cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
@@ -8,14 +7,10 @@
 - name: Set facts about CPU
   set_fact:
     cpu_vendor: "{{ cpu_model.stdout_lines[0] | string }}"
-    cpu_iommu: ""
 
-- name: Register IOMMU GRUB setting for Intel
+- name: Disable iGFX for Intel CPU
   set_fact:
-    cpu_iommu: " intel_iommu=on"
-  when: '"Intel" in cpu_vendor'
-
-- name: Register IOMMU GRUB setting for AMD
-  set_fact:
-    cpu_iommu: " amd_iommu=on"
-  when: '"AMD" in cpu_vendor'
+    cpu_iommu: " intel_iommu=igfx_off"
+  when:
+    - '"Intel" in cpu_vendor'
+    - disable_igfx|bool == true

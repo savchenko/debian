@@ -13,3 +13,9 @@
   become: yes
   tags:
     - laptop_packages
+
+- name: Intel-specific settings
+  import_tasks: intel.yml
+  become: yes
+  tags:
+    - laptop_intel
