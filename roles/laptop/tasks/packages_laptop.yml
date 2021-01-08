@@ -1,0 +1,65 @@
+---
+- name: Install list of packages
+  apt:
+    name: "{{ pkg }}"
+  vars:
+    pkg:
+      - alsa-firmware-loaders
+      - bpython
+      - cargo
+      - exfatprogs
+      - filezilla
+      - firefox-esr
+      - firmware-amd-graphics
+      - firmware-iwlwifi
+      - firmware-misc-nonfree
+      - firmware-realtek
+      - fonts-liberation
+      - fonts-powerline
+      - fonts-spleen
+      - fonts-terminus
+      - fonts-terminus-otb
+      - fzf
+      - git
+      - imv
+      - iwd
+      - kanshi # Pending configuration
+      - keepassxc
+      - laptop-mode-tools
+      - light
+      - mako-notifier
+      - mpv
+      - nmap
+      - pandoc
+      - python3-pip
+      - python3-psutil
+      - python3-virtualenv
+      - rlwrap # cht.sh dependency
+      - rustc
+      - strace
+      - sway
+      - swaybg
+      - swayidle
+      - swaylock
+      - syncthing
+      - taskwarrior
+      - timeshift
+      - virt-manager
+      - vit
+      - wavemon
+      - waybar
+      - wdisplays
+      - weechat
+      - wf-recorder
+      - whois
+      - wob
+      - wofi
+      - youtube-dl
+      - yubioath-desktop
+
+- name: Install GitCola without recommended dependencies
+  apt:
+    name: git-cola
+    state: present
+    install_recommends: no
+

@@ -1,2 +1,15 @@
 ---
-# tasks file for laptop
+- name: Assert that we are running against the supported distribution
+  assert:
+    that:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_file_variety == "Debian"
+      - ansible_distribution_release == "bullseye"
+      - ( ansible_distribution_major_version | int ) == 10
+    fail_msg: "This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing."
+
+- name: Install laptop packages
+  import_tasks: packages_laptop.yml
+  become: yes
+  tags:
+    - laptop_packages
