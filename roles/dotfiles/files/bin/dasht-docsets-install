@@ -1,0 +1,97 @@
+#!/bin/sh -e
+#
+# # DASHT-DOCSETS-INSTALL 1       2020-05-16                            2.4.0
+#
+# ## NAME
+#
+# dasht-docsets-install - installs new [Dash] docsets
+#
+# ## SYNOPSIS
+#
+# `dasht-docsets-install` [*OPTION*...] [*NAME*...]
+#
+# ### Examples
+#
+# `dasht-docsets-install`
+#   Installs all new [Dash] docsets currently available.
+#
+# `dasht-docsets-install` sh
+#   Installs new [Dash] docsets whose names contain "sh".
+#
+# `dasht-docsets-install` sh 'c$'
+#   Installs new [Dash] docsets whose names contain "sh" or end in "c".
+#
+# ## DESCRIPTION
+#
+# Installs new [Dash] docsets whose names match the *NAME* regex(7) patterns.
+# If no *NAME*s are given, all new docsets available for install are matched.
+# Unless forced, this operation prompts you to confirm it for every match.
+#
+# ## OPTIONS
+#
+# `-f`, `--force`
+#   Forces the operation by overriding the interactive confirmation prompt.
+#
+# ## ENVIRONMENT
+#
+# `DASHT_DOCSETS_DIR`
+#   Defines the filesystem location where your [Dash] docsets are installed.
+#   If undefined, its value is assumed to be `$XDG_DATA_HOME/dasht/docsets/`
+#   or, if `XDG_DATA_HOME` is undefined, `$HOME/.local/share/dasht/docsets/`.
+#
+# `DASHT_CACHE_DIR`
+#   Defines the filesystem location where download links are cached.
+#   If undefined, its value is assumed to be `$XDG_CACHE_HOME/dasht/`
+#   or, if `XDG_CACHE_HOME` is also undefined, `$HOME/.cache/dasht/`.
+#
+# ## SEE ALSO
+#
+# dasht-docsets-extract(1), dasht-docsets-update(1), dasht-docsets-remove(1),
+# dasht-docsets(1), [Dash]
+#
+# [Dash]: https://kapeli.com/dash
+#
+# ## AUTHOR
+#
+# Written in 2016 by Suraj N. Kurapati <https://github.com/sunaku/dasht>
+# Distributed under the terms of the ISC license (see the LICENSE file).
+
+: ${DASHT_DOCSETS_DIR:=${XDG_DATA_HOME:-$HOME/.local/share}/dasht/docsets}
+: ${DASHT_CACHE_DIR:=${XDG_CACHE_HOME:-$HOME/.cache}/dasht}
+
+test "$1" = '-f' -o "$1" = '--force' && force=1 && shift || unset force
+
+# cache the docset download links list to avoid unnecessary network traffic
+cache() {
+  url=$1
+  file="$DASHT_CACHE_DIR/${url##*/}"
+  wget -T 2 -t 1 -P "${file%/*}" -N "$url" || test -s "$file"
+  echo "$file"
+}
+master_url=https://api.github.com/repos/Kapeli/feeds/git/refs/heads/master
+master_cache=$(cache "$master_url")
+master_sha=$(sed -n 's/"sha"://p' "$master_cache" | tr -d '":, ')
+tree_url="https://api.github.com/repos/Kapeli/feeds/git/trees/$master_sha"
+tree_cache=$(cache "$tree_url")
+
+# extract and filter installable docset names from the download links list
+set -- $(
+  sed -n 's/"path"://p' "$tree_cache" | tr -d '":, ' | sed -n 's/.xml$//p' |
+  sort -u |
+  grep -E -i "$(IFS='|'; echo "$*")" |
+  sed "$(dasht-docsets | awk '{ print "/^" $0 "$/d" }')" # exclude installed
+)
+printf "Installable docsets ($#):\n\n\t%s\n\n" "$(echo "$*" | sed 's/ /,&/g')"
+
+trap exit INT # let Control-C abort `xargs -p` when running under bash(1)
+for docset; do
+  test -n "$force" || # don't ask for confirmation when it's being forced
+  echo "Install $docset docset [y/N]" | xargs -p | grep -q . || continue
+
+  basename="$docset".tgz
+  tgz="$DASHT_DOCSETS_DIR/$basename"
+  url="https://kapeli.com/feeds/$basename"
+
+  wget -P "$DASHT_DOCSETS_DIR" -N -c "$url"
+  gzip -t "$tgz" && dasht-docsets-extract "$tgz"
+done

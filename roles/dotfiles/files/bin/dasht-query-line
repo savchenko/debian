@@ -1,0 +1,270 @@
+#!/bin/sh -e
+#
+# # DASHT-QUERY-LINE 1            2020-05-16                            2.4.0
+#
+# ## NAME
+#
+# dasht-query-line - searches [Dash] docsets and emits groups of lines
+#
+# ## SYNOPSIS
+#
+# `dasht-query-line` [*PATTERN*] [*DOCSET*]...
+#
+# ### Examples
+#
+# `dasht-query-line`
+#   Topics (A-Z) from each installed docset.
+#
+# `dasht-query-line` 'c - x'
+#   Search for "c - x" in all installed docsets.
+#
+# `dasht-query-line` 'c - x' bash
+#   Search for "c - x" only in the "bash" docset.
+#
+# `dasht-query-line` 'c - x' bash css
+#   Search for "c - x" only in the "bash" and "css" docsets.
+#
+# ## DESCRIPTION
+#
+# Searches for *PATTERN* in all installed [Dash] docsets, optionally searching
+# only in those whose names match *DOCSET*s, by calling dasht-query-exec(1)
+# and emits the results in groups of lines, as described in "Results" below.
+# However, if no results were found, this program exits with a nonzero status.
+#
+# ### Searching
+#
+# Whitespace characters in *PATTERN* are treated as wildcards, whereas the
+# SQL LIKE wildcard characters `%` and `_` are not: they are taken literally.
+#
+# Before searching, *PATTERN* is surrounded by whitespace wildcards so that it
+# can match anywhere: beginning, middle, or end.  As a result, if *PATTERN* is
+# undefined, it becomes a whitespace wildcard and thereby matches everything.
+#
+# ### Results
+#
+# Each search result is printed to stdout as a group of four lines of text:
+#
+# `name` `=` *VALUE*
+#   Name of the token that matched the *PATTERN*.
+#
+# `type` `=` *VALUE*
+#   Type of the token, as defined in the docset.
+#
+# `from` `=` *VALUE*
+#   Name of the docset this result was found in.
+#
+# `url` `=` *VALUE*
+#   URL of the API documentation for this result.
+#
+# For example, here is a search result for "c - x" from the "bash" docset:
+#
+#     name = undo (C-_ or C-x C-u)
+#     type = Function
+#     from = Bash
+#     url = file:///home/sunny/.local/share/dasht/docsets/Bash.docset/Contents/Resources/Documents/bash/Miscellaneous-Commands.html#//apple_ref/Function/undo%20%28C%2D%5F%20or%20C%2Dx%20C%2Du%29
+#
+# ## ENVIRONMENT
+#
+# `DASHT_DOCSETS_DIR`
+#   Defines the filesystem location where your [Dash] docsets are installed.
+#   If undefined, its value is assumed to be `$XDG_DATA_HOME/dasht/docsets/`
+#   or, if `XDG_DATA_HOME` is undefined, `$HOME/.local/share/dasht/docsets/`.
+#
+# ## EXIT STATUS
+#
+# 44
+#   No results were found.
+#
+# ## SEE ALSO
+#
+# dasht-query-exec(1), dasht-query-html(1), dasht-docsets(1), dasht(1), [Dash]
+#
+# [Dash]: https://kapeli.com/dash
+#
+# ## AUTHOR
+#
+# Written in 2016 by Suraj N. Kurapati <https://github.com/sunaku/dasht>
+# Distributed under the terms of the ISC license (see the LICENSE file).
+
+: ${DASHT_DOCSETS_DIR:=${XDG_DATA_HOME:-$HOME/.local/share}/dasht/docsets}
+
+pattern=$(echo " $1 " | sed -e 's/[%_]/\\&/g' -e 's/[[:space:]]\{1,\}/%/g')
+test $# -gt 0 && shift # shift off PATTERN so argv contains solely DOCSETs
+
+status=44 # (default) exit with a nonzero status when no results are found
+trap 'status=0' USR1 # override default exit status when results are found
+
+dasht-docsets "$@" | while read -r docset; do
+  database="$DASHT_DOCSETS_DIR/$docset".docset/Contents/Resources/docSet.dsidx
+  file_url="file://$(dirname "$database")/Documents/"
+
+  dasht-query-exec "$pattern" "$database" -line |
+  awk -v docset="$docset" -v file_url="$file_url" '
+    BEGIN {
+      # default URI fragments that move user
+      # past navigation links at top of page
+      fragment_by_docset["AWS_JavaScript"]          = "#content"
+      fragment_by_docset["ActionScript"]            = "#content"
+      fragment_by_docset["Akka"]                    = "#signature"
+      fragment_by_docset["Android"]                 = "#doc-col"
+      # fragment_by_docset["Angular.dart"]          = "#"                        # works fine without it
+      # fragment_by_docset["AngularJS"]             = "#"                        # FIXME: none available
+      fragment_by_docset["Ansible"]                 = "#page-content"
+      fragment_by_docset["Apache_HTTP_Server"]      = "#page-content"
+      # fragment_by_docset["Appcelerator_Titanium"] = "#"                        # works fine without it
+      fragment_by_docset["Arduino"]                 = "#wikitext"
+      # fragment_by_docset["Bash"]                  = "#"                        # works fine without it
+      # fragment_by_docset["Boost"]                 = "#"                        # FIXME: none available
+      fragment_by_docset["Bootstrap_2"]             = "#overview"
+      fragment_by_docset["C"]                       = "#toc"
+      fragment_by_docset["C++"]                     = "#toc"
+      # fragment_by_docset["CMake"]                 = "#"                        # FIXME: none available
+      fragment_by_docset["CSS"]                     = "#content"
+      fragment_by_docset["CakePHP"]                 = "#right"
+      fragment_by_docset["Cappuccino"]              = "#MSearchResults"
+      fragment_by_docset["Chai"]                    = "#content"                 # FIXME: needs improvement
+      fragment_by_docset["Chef"]                    = "#dropdown-select-version" # FIXME: needs improvement
+      fragment_by_docset["Clojure"]                 = "#content-tag"
+      fragment_by_docset["Cocos2D"]                 = "#content"
+      fragment_by_docset["Cocos2D-X"]               = "#contents"                # FIXME: none available
+      fragment_by_docset["Cocos3D"]                 = "#header"
+      fragment_by_docset["CodeIgniter"]             = "#closeMe"                 # FIXME: needs improvement
+      fragment_by_docset["CoffeeScript"]            = "#title"
+      fragment_by_docset["ColdFusion"]              = "#main"
+      fragment_by_docset["Compass"]                 = "#fusion_ad"               # FIXME: needs improvement
+      fragment_by_docset["Cordova"]                 = "#page-toc-source"
+      fragment_by_docset["Corona"]                  = "#breadcrumb"              # FIXME: needs improvement
+      # fragment_by_docset["CouchDB"]               = "#"                        # works fine without it
+      fragment_by_docset["Craft"]                   = "#content"
+      fragment_by_docset["D3JS"]                    = "#wiki-body"
+      # fragment_by_docset["Dart"]                  = "#"                        # works fine without it
+      fragment_by_docset["Docker"]                  = "#toc"                     # w3m cannot find "#content"
+      # fragment_by_docset["Dojo"]                  = "#"                        # works fine without it
+      fragment_by_docset["Drupal_7"]                = "#content"
+      fragment_by_docset["Drupal_8"]                = "#content"
+      fragment_by_docset["ElasticSearch"]           = "#pageheader"              # FIXME: needs improvement
+      fragment_by_docset["Elixir"]                  = "#content"
+      fragment_by_docset["EmberJS"]                 = "#content"                 # FIXME: needs improvement
+      fragment_by_docset["Erlang"]                  = "#content"
+      fragment_by_docset["Express"]                 = "#overlay"
+      fragment_by_docset["ExpressionEngine"]        = "#content"
+      # fragment_by_docset["ExtJS"]                 = "#"                        # works fine without it
+      # fragment_by_docset["Font_Awesome"]          = "#"                        # FIXME: none available
+      fragment_by_docset["Foundation"]              = "#docs"
+      # fragment_by_docset["GLib"]                  = "#"                        # works fine without it
+      fragment_by_docset["Go"]                      = "#page"
+      # fragment_by_docset["Grails"]                = "#"                        # FIXME: none available
+      # fragment_by_docset["Groovy"]                = "#"                        # FIXME: none available
+      # fragment_by_docset["Groovy_JDK"]            = "#"                        # FIXME: none available
+      # fragment_by_docset["Grunt"]                 = "#"                        # FIXME: none available
+      # fragment_by_docset["Gulp"]                  = "#"                        # works fine without it
+      fragment_by_docset["HTML"]                    = "#content"
+      fragment_by_docset["Handlebars"]              = "#reference"
+      fragment_by_docset["Haskell"]                 = "#content"
+      fragment_by_docset["Ionic"]                   = "#usage"                   # FIXME: needs improvement
+      fragment_by_docset["Jasmine"]                 = "#section-1"
+      fragment_by_docset["JavaFX"]                  = "#skip.navbar.top"
+      fragment_by_docset["JavaScript"]              = "#wiki-content"
+      fragment_by_docset["Java_EE6"]                = "#skip-navbar_top"
+      fragment_by_docset["Java_EE7"]                = "#skip-navbar_top"
+      fragment_by_docset["Java_SE6"]                = "#skip-navbar_top"
+      fragment_by_docset["Java_SE7"]                = "#skip-navbar_top"
+      fragment_by_docset["Java_SE8"]                = "#skip.navbar.top"
+      # fragment_by_docset["Jekyll"]                = "#"                        # FIXME: none available
+      fragment_by_docset["Joomla"]                  = "#title"
+      # fragment_by_docset["KnockoutJS"]            = "#"                        # FIXME: none available
+      fragment_by_docset["Kobold2D"]                = "#contents"
+      fragment_by_docset["Laravel"]                 = "#page-content"
+      fragment_by_docset["Less"]                    = "#content"
+      # fragment_by_docset["MarionetteJS"]          = "#"                        # FIXME: none available
+      fragment_by_docset["Meteor"]                  = "#content"
+      fragment_by_docset["MongoDB"]                 = "#on-this-page"
+      fragment_by_docset["Mongoose"]                = "#content"
+      # fragment_by_docset["Mono"]                  = "#"                        # FIXME: none available
+      fragment_by_docset["Nginx"]                   = "#summary"
+      fragment_by_docset["OpenCV_C"]                = "#searchbox"               # FIXME: needs improvement
+      fragment_by_docset["OpenCV_C++"]              = "#searchbox"               # FIXME: needs improvement
+      fragment_by_docset["OpenCV_Java"]             = "#skip.navbar.top"
+      fragment_by_docset["OpenCV_Python"]           = "#searchbox"               # FIXME: needs improvement
+      fragment_by_docset["PHP"]                     = "#layout"
+      # fragment_by_docset["PHPUnit"]               = "#"                        # FIXME: none available
+      fragment_by_docset["Perl"]                    = "#from_search"
+      # fragment_by_docset["Phalcon"]               = "#"                        # FIXME: none available
+      # fragment_by_docset["PhoneGap"]              = "#"                        # FIXME: none available
+      fragment_by_docset["Play_Java"]               = "#skip.navbar.top"
+      fragment_by_docset["Play_Scala"]              = "#template"
+      # fragment_by_docset["Polymer.dart"]          = "#"                        # FIXME: none available
+      fragment_by_docset["Processing"]              = "#mainnav"                 # FIXME: needs improvement
+      fragment_by_docset["PrototypeJS"]             = "#main"                    # FIXME: needs improvement
+      fragment_by_docset["Puppet"]                  = "#rendered-markdown"
+      fragment_by_docset["Qt_4"]                    = "#toc"
+      fragment_by_docset["Qt_5"]                    = "#toc"
+      # fragment_by_docset["R"]                     = "#"                        # FIXME: none available
+      # fragment_by_docset["React"]                 = "#"                        # FIXME: none available
+      fragment_by_docset["Redis"]                   = "#topic"
+      fragment_by_docset["Ruby"]                    = "#documentation"
+      fragment_by_docset["Ruby_2"]                  = "#documentation"
+      fragment_by_docset["Ruby_on_Rails_3"]         = "#feature"
+      fragment_by_docset["Ruby_on_Rails_4"]         = "#feature"
+      fragment_by_docset["Ruby_on_Rails_5"]         = "#feature"
+      fragment_by_docset["Rust"]                    = "#main"
+      # fragment_by_docset["SQLite"]                = "#"                        # FIXME: none available
+      fragment_by_docset["SVG"]                     = "#wiki-content"
+      # fragment_by_docset["SailsJS"]               = "#"                        # FIXME: none available
+      fragment_by_docset["Scala"]                   = "#template"
+      # fragment_by_docset["Semantic_UI"]           = "#"                        # FIXME: none available
+      # fragment_by_docset["Sencha_Touch"]          = "#"                        # works fine without it
+      # fragment_by_docset["Smarty"]                = "#"                        # works fine without it
+      fragment_by_docset["Sparrow"]                 = "#contents"
+      fragment_by_docset["Spring_Framework"]        = "#skip.navbar.top"
+      fragment_by_docset["Statamic"]                = "#search"                  # FIXME: needs improvement
+      fragment_by_docset["Stylus"]                  = "#content"
+      # fragment_by_docset["Susy"]                  = "#"                        # FIXME: none available
+      fragment_by_docset["Swift"]                   = "#content"
+      fragment_by_docset["Symfony"]                 = "#page-content"
+      fragment_by_docset["TYPO3"]                   = "#details"
+      # fragment_by_docset["Tcl"]                   = "#"                        # works fine without it
+      fragment_by_docset["Twig"]                    = "#license"                 # FIXME: needs improvement
+      # fragment_by_docset["Twisted"]               = "#"                        # works fine without it
+      fragment_by_docset["Unity_3D"]                = "#content-wrap"
+      fragment_by_docset["VMware_vSphere"]          = "#top"
+      fragment_by_docset["VueJS"]                   = "#ad"
+      fragment_by_docset["WordPress"]               = "#content-area"
+      fragment_by_docset["XSLT"]                    = "#wiki-content"
+      fragment_by_docset["XUL"]                     = "#wiki-content"
+      # fragment_by_docset["Xamarin"]               = "#"                        # FIXME: none available
+      fragment_by_docset["Xojo"]                    = "#xojodescription"
+      fragment_by_docset["YUI"]                     = "#docs-main"
+      # fragment_by_docset["Yii"]                   = "#"                        # FIXME: none available
+      # fragment_by_docset["Zend_Framework_1"]      = "#"                        # FIXME: none available
+      # fragment_by_docset["Zend_Framework_2"]      = "#"                        # FIXME: none available
+      fragment_by_docset["jQuery"]                  = "#content"
+      fragment_by_docset["jQuery_Mobile"]           = "#content"
+      fragment_by_docset["jQuery_UI"]               = "#content"
+    }
+
+    { $1 = $1 } # strip whitespace from key
+
+    $1 == "url" { were_any_results_found=1
+      # indicate the source of this result
+      print "from = " docset
+
+      # strip embedded XML from result URL
+      gsub("<.*>", "", $3)
+
+      # use default URI fragment if absent
+      if ($3 !~ "#.+$") {
+        $3 = $3 fragment_by_docset[docset]
+      }
+
+      # resolve URL to filesystem location
+      $3 = file_url $3
+    }
+
+    /./ # reject any empty lines from input
+
+    END { exit !were_any_results_found }
+  ' && kill -s USR1 $$ || : # notify this script if any results were found
+done
+
+exit $status

@@ -1,0 +1,217 @@
+#!/bin/sh -e
+#
+# # DASHT-SERVER-HTTP 1           2020-05-16                            2.4.0
+#
+# ## NAME
+#
+# dasht-server-http - simple search engine that powers dasht-server(1)
+#
+# ## SYNOPSIS
+#
+# `dasht-server-http`
+#
+# ### Examples
+#
+# printf 'GET / HTTP/1.1\r\n' | `dasht-server-http`
+#   Shows topics (A-Z) from each installed [Dash] docset.
+#
+# printf 'GET /?docsets=*DOCSETS* HTTP/1.1\r\n' | `dasht-server-http`
+#   Shows topics (A-Z) from installed [Dash] docsets matching *DOCSETS*.
+#
+# printf 'GET /?query=*PATTERN* HTTP/1.1\r\n' | `dasht-server-http`
+#   Searches for *PATTERN* in all installed [Dash] docsets.
+#
+# printf 'GET /?query=*PATTERN*&docsets=*DOCSETS* HTTP/1.1\r\n' | `dasht-server-http`
+#   Searches for *PATTERN* in installed [Dash] docsets matching *DOCSETS*.
+#
+# ## DESCRIPTION
+#
+# Reads a single HTTP request from stdin and writes a HTTP response to stdout.
+# Any `query=`*PATTERN* and `docsets=`*DOCSETS* parameters in the request URL
+# are passed to dasht-query-html(1) as its *PATTERN* and *DOCSETS* arguments.
+#
+# ## ENVIRONMENT
+#
+# `DASHT_DOCSETS_DIR`
+#   Defines the filesystem location where your [Dash] docsets are installed.
+#   If undefined, its value is assumed to be `$XDG_DATA_HOME/dasht/docsets/`
+#   or, if `XDG_DATA_HOME` is undefined, `$HOME/.local/share/dasht/docsets/`.
+#
+# ## SEE ALSO
+#
+# dasht-query-html(1), dasht-server(1), dasht-docsets(1), dasht(1), [Dash]
+#
+# [Dash]: https://kapeli.com/dash
+#
+# ## AUTHOR
+#
+# Written in 2016 by Suraj N. Kurapati <https://github.com/sunaku/dasht>
+# Distributed under the terms of the ISC license (see the LICENSE file).
+
+# Escapes XML "predefined entities" in given arguments.
+# See http://www.w3.org/TR/REC-xml/#sec-predefined-ent
+entities() {
+  echo "$*" |
+  sed -e 's/&/\&amp;/g'  \
+      -e 's/"/\&quot;/g' \
+      -e "s/'/\&#39;/g"  \
+      -e 's/</\&lt;/g'   \
+      -e 's/>/\&gt;/g'
+}
+
+# Converts the given 2-xdigit string into a byte value.
+# See http://mywiki.wooledge.org/BashFAQ/071
+hex2byte() {
+  dec=$(( 0x$1 ))
+  oct=$(printf '%03o' "$dec")
+  printf "\\$oct"
+}
+
+# parse URL from request: only GET is supported
+url=$(awk '
+  /^GET [[:print:]]+ HTTP\/1.+\r$/ { print $2 }
+  /^\r$/ { exit } # reached end of HTTP request
+')
+
+# serve translated local file:// URLs over HTTP
+# (skip the / homepage and /? form submissions)
+if ! echo "$url" | grep -q '^/$\|^/?'; then
+  file=${url%#*} # strip URI fragment, if any
+
+  if test -f "$file"; then
+    printf 'HTTP/1.0 200 OK\r\n'
+    printf 'Content-Type: %s\r\n' "$(file -b --mime "$file" 2>&1)"
+    printf '\r\n'
+    cat "$file" 2>&1 || :
+  else
+    printf 'HTTP/1.0 400 Bad Request\r\n'
+    printf '\r\n'
+  fi
+
+  exit
+fi
+
+# parse URL query parameters as shell variables
+eval "$(
+  # split URL on query parameter delimiters (?&)
+  IFS='?&'
+  set -- $url
+  shift # protocol, hostname, port number, path
+
+  # convert segments into safely eval()able assignments
+  for segment; do
+    # split param=value
+    param=${segment%%=*}
+    value=${segment#*=}
+
+    # only accept known parameters to prevent injection
+    case "$param" in (query|docsets)
+      # decode URL-encoded characters in parameter value
+      value=$(echo "$value" | tr '+' ' ' | # + is space
+        sed 's/%\([[:xdigit:]]\{2\}\)/$(hex2byte \1)/g')
+      if test -n "$value"; then
+        echo "$param=\"\$$param\${$param:+ }$value\""
+        echo "${param}_html=\$(entities \"\$$param\")"
+      fi
+    ;;esac
+  done
+)"
+
+# emit response header
+printf 'HTTP/1.0 200 OK\r\n'
+printf 'Content-Type: text/html\r\n'
+printf '\r\n'
+
+# emit response body
+docsets_menu=$(
+  { dasht-docsets           # all installed docsets
+    dasht-docsets $docsets  # the current selection
+  } | sort | uniq -c | awk '{ $1 = $1 > 1; print }'
+)
+set -- $(echo "$docsets_menu" | awk '
+  BEGIN { matched = ignored = 0 }
+  $1    { matched++ }
+  !$1   { ignored++ }
+  END   { print matched, ignored, NR }
+')
+cat <<HEADER
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>dasht $query_html $docsets_html</title>
+    <style>
+      body, input, select {
+        font-family: monospace;
+      }
+      form {
+        display: flex;
+      }
+      tr:hover {
+        background-color: LightYellow;
+      }
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      b > i > u {
+        text-decoration: none;
+        font-style: normal;
+        font-weight: normal;
+        color: Black;
+        background-color: Yellow;
+        border: thin dotted Silver;
+      }
+      h1 > i {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="get" action="/">
+      <div>
+      <label>Search for
+        <input name="query" value="$query_html" type="search"
+               placeholder="space is wildcard" autofocus>
+      </label>
+      <br>
+      <label>in docsets
+        <select name="docsets">
+          <option value="" selected>matched $1 out of $3</option>
+          $(echo "$docsets_menu" | awk -v were_any_ignored=$2 '{
+            label = were_any_ignored && $1 ? "((( " $2 " )))" : $2
+            regex = $2; gsub("[[:punct:]]", "\\\\&", regex)
+            value = "^" regex "$"
+            print "<option value=\"" value "\">" label "</option>"
+          }')
+        </select>
+      </label>
+      <br>
+      <label>with names
+        <input name="docsets" value="$docsets_html" type="search"
+               placeholder="chosen from above">
+      </label>
+      <br>
+      </div>
+      <input type="submit">
+    </form>
+    <br>
+HEADER
+
+if test $1 -eq 0; then
+  # notify user when no docsets are installed so they can go install them
+  echo "<h1><i>${docsets_html}</i> docsets not installed so <i>$query_html</i> not searched</h1>"
+elif results_html=$(dasht-query-html "$query" $docsets); then
+  # translate local file:// URLs into HTTP ones so that we can serve them
+  echo "$results_html" | sed 's,file://,,'
+else
+  # notify user when no results are found so they can refine their search
+  echo "<h1><i>$query_html</i> not found in $1 docsets matching <i>${docsets_html:-.*}</i></h1>"
+fi
+
+cat <<FOOTER
+  </body>
+</html>
+FOOTER
