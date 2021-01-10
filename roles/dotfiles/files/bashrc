@@ -48,7 +48,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   PS1="${dark_grey}${user_color}"                     # user
   # PS1+=" ${blue}\h"                                 # hostname
-  PS1+="${grey}\w"                                    # work dir
+  PS1+="  ${grey}\w"                                    # work dir
   PS1+="${light_grey}\$(__git_ps1)"                   # git branch
   PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
 
