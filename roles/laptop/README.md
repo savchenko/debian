@@ -1,4 +1,4 @@
-Role Name
+Laptop
 =========
 Configures Debian installation to be used on a laptop. 
 
@@ -8,30 +8,23 @@ Should be installed on a computer that is already provisioned with the [base](ht
 
 Role Variables
 --------------
-| Variable     | Description                     | Default |
-|--------------|---------------------------------|---------|
-| disable_igfx | Disable iGFX on Intel platform. | False   |
+
+| Variable           | Description                     | Default |
+|--------------------|---------------------------------|---------|
+| disable_igfx       | Disable iGFX on Intel platform. | False   |
+| alsa_out_primary   | Primary ALSA output device      | 3       |
+| alsa_out_secondary | Secondary ALSA output device    | 1       |
+| alsa_in            | Default ALSA input              | -       |
 
 Dependencies
 ------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+None.
 
 License
 -------
-
-BSD
+MIT
 
 Author Information
 ------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Andrew Savchenko  
+https://savchenko.net
