@@ -1,0 +1,22 @@
+---
+- name: Ensure asound.conf is present
+  file:
+    path: /etc/asound.conf
+    state: present
+    modification_time: preserve
+    access_time: preserve
+
+- name: Set default alsa device
+  lineinfile:
+    path: /etc/asound.conf
+    line: "{{ item }}"
+    insertafter: EOF
+  with_items:
+    - "defaults.pcm.card {{ alsa_out_primary }}"
+    - "defaults.ctl.card {{ alsa_out_primary }}"
+    - "defaults.ctl.card {{ alsa_out_secondary }}"
+
+- name: Reload ALSA configs
+  command: alaucm reload
+  register: alsa_reloaded
+  changed_when: alsa_reloaded.rc != 0
