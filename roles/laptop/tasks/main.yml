@@ -19,3 +19,9 @@
   become: yes
   tags:
     - laptop_intel
+
+- name: Setup ALSA
+  import_tasks: alsa.yml
+  become: yes
+  tags:
+    - laptop_alsa

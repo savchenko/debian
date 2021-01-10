@@ -1,2 +1,5 @@
 ---
 disable_igfx: false
+alsa_out_primary: 1
+alsa_out_secondary: 1
+alsa_in: 1
