@@ -23,6 +23,7 @@ export HSTR_CONFIG=hicolor,hide-help
 export HSTR_PROMPT="> "
 export LESSCHARSET=utf-8
 export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
+export MANPATH="$HOME/.local/man:$MANPATH"
 export MOZ_ENABLE_WAYLAND=1
 export MP_EDITOR="nvim"
 export NVIM_GTK_NO_HEADERBAR=1
