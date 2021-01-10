@@ -183,6 +183,7 @@ if &term =~# '^screen'
 endif
 
 " Colorscheme
+set bg=dark
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 1
 let g:enable_bold_font = 1
@@ -567,9 +568,11 @@ let g:gitgutter_sign_modified_removed = '~'
 " Disable indent line by default
 let g:indentLine_enabled = 0
 let g:indentLine_setColors = 1
-let g:indentLine_char = '│'
+" | ¦ ┆ │ |
+let g:indentLine_char = '┊'
 let g:indentLine_leadingSpaceEnabled = 0
 let g:indentLine_leadingSpaceChar = '·'
+let g:indentLine_color_gui = '#303030'
 
 " clever-f
 let g:clever_f_smart_case = 1
