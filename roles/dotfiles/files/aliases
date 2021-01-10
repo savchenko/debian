@@ -241,6 +241,7 @@ alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (
 alias t='task'
 alias test_microphone="arecord -vv -f dat /dev/null"
 alias weather="curl -s v2.wttr.in/Adelaide | head -42"
+alias rr="ranger"
 
 # Wireless
 alias wifimon='wavemon -g'
