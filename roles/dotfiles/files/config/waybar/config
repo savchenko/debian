@@ -60,7 +60,7 @@
         "spacing": 10
     },
     "custom/sway-scratch":{
-      "interval": 2,
+      "interval": 5,
       "return-type": "json",
       "format" : "{icon}",
       "format-icons": {
@@ -110,7 +110,7 @@
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         // "format-wifi": "{essid} ({signalStrength}%)",
-        "format-wifi": "  .:. {signalStrength}  ",
+        "format-wifi": "  .:.  ",
         "format-ethernet": "{ifname}: {ipaddr}/{cidr}",
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": " -x-  ",
