@@ -5,6 +5,7 @@
   vars:
     pkg:
       - alsa-firmware-loaders
+      - alsa-ucm-conf
       - bpython
       - cargo
       - exfatprogs
@@ -14,6 +15,7 @@
       - firmware-iwlwifi
       - firmware-misc-nonfree
       - firmware-realtek
+      - firmware-sof-signed
       - fonts-liberation
       - fonts-powerline
       - fonts-spleen
@@ -21,6 +23,7 @@
       - fonts-terminus-otb
       - fzf
       - git
+      - gocryptfs
       - imv
       - iwd
       - kanshi # Pending configuration
@@ -36,6 +39,7 @@
       - python3-virtualenv
       - rlwrap # cht.sh dependency
       - rustc
+      - socat
       - strace
       - sway
       - swaybg
@@ -62,4 +66,3 @@
     name: git-cola
     state: present
     install_recommends: no
-
