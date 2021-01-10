@@ -14,7 +14,8 @@ dotfiles_list:
   - { src: 'bash_profile', dest: '.bash_profile' }
   - { src: 'bashrc', dest: '.bashrc' }
   - { src: 'config/foot', dest: '.config/foot'}
-  - { src: 'config/mako', dest: '.config/mako' }
+  - { src: 'config/luakit', dest: '.config/luakit'}
+  - { src: 'config/mako', dest: '.config/mako' } # TODO: Must be a hard-link, AppArmor
   - { src: 'config/sway', dest: '.config/sway'}
   - { src: 'curlrc', dest: '.curlrc' }
   - { src: 'gitignore', dest: '.gitignore' }
@@ -27,6 +28,7 @@ dotfiles_list:
   - { src: 'ssh_config', dest: '.ssh/config' }
   - { src: 'vimrc', dest: '.vimrc' }
   - { src: 'weechat.conf', dest: 'weechat.conf' }
+  - { src: 'man', dest: '.local/man' }
 
 dotfiles_gitconfig_local:
   - { src: 'gitconfig', dest: '.gitconfig' }
