@@ -44,16 +44,16 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   dark_grey="\[\e[38;5;242m\]"
   clr_reset="\[$(tput sgr0)\]\[\e[0m\]"
 
-  if [ $root -eq 1 ]; then user_color="${red}"; else user_color="${green}"; fi
+  if [ $root -eq 1 ]; then user_color="${red}[!] "; else user_color="${light_grey}"; fi
 
-  PS1="${dark_grey}╭${user_color}\u"                  # user
-  PS1+=" ${blue}\h"                                   # hostname
-  PS1+="${grey} \w"                                   # work dir
+  PS1="${dark_grey}${user_color}"                     # user
+  # PS1+=" ${blue}\h"                                 # hostname
+  PS1+="${grey}\w"                                    # work dir
   PS1+="${light_grey}\$(__git_ps1)"                   # git branch
   PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
 
   export PS1
-  export PS2="> ${clr_reset}"
+  export PS2=" ${clr_reset}"
 
   #
   # Tweaks ------------------------------------------------------------------------
