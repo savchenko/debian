@@ -182,12 +182,13 @@ fkill() {
 alias ...="cd ../.."
 alias ..="cd .."
 alias ap="ansible-playbook"
+alias apt="sudo apt"
 alias bfg="java -jar $HOME/.local/bin/bfg.jar"
 alias c,="cd - > /dev/null"
 alias c="clear"
 alias ca="bat --style plain"
 alias dd="dd bs=4M status=progress oflag=sync"
-alias dmesg="dmesg -Hwx"
+alias dmesg="sudo dmesg -Hwx"
 alias fd="fdfind --hidden --no-ignore --follow"
 alias gpg="gpg2"
 alias openports='sudo lsof -Pni4'
@@ -242,6 +243,7 @@ alias t='task'
 alias test_microphone="arecord -vv -f dat /dev/null"
 alias weather="curl -s v2.wttr.in/Adelaide | head -42"
 alias rr="ranger"
+alias issues_dmesg="sudo dmesg | grep -i -E 'erro|warn|fail'"
 
 # Wireless
 alias wifimon='wavemon -g'
