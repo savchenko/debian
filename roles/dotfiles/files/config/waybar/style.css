@@ -1,18 +1,14 @@
 * {
     border: none;
     border-radius: 0;
-    /* `otf-font-awesome` is required to be installed for icons */
     font-family: Terminus;
     font-size: 18px;
-    /* font-weight: bogrim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:-ld; */
-    min-height: 20px;
+    min-height: 24px;
     font-size: 16px;
 }
 
 window#waybar {
-    /* background-color: #262626; */
     background-color: #000000;
-    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
     color: #999999;
     transition-property: background-color;
     transition-duration: .5s;
@@ -40,7 +36,9 @@ window#waybar.firefox-esr {
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 #workspaces button:hover {
-    color: #415761;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
 }
 
 #workspaces button.focused {
@@ -52,11 +50,15 @@ window#waybar.firefox-esr {
 }
 
 #mode {
-    background-color: #00a;
+    background-color: #990000;
     color: #ffffff;
+    min-width: 480px;
 }
 
-#clock,
+#custom-clock {
+  color: #d1d1d1;
+}
+
 #battery,
 #cpu,
 #memory,
@@ -68,11 +70,8 @@ window#waybar.firefox-esr {
 #custom-outside,
 #custom-uv,
 #tray,
-#mode,
 #idle_inhibitor,
 #mpd {
-    /* padding: 0 0px; */
-    /* margin: 0 0px; */
     color: #999999;
 }
 
