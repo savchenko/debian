@@ -4,11 +4,15 @@
     name: "{{ pkg }}"
   vars:
     pkg:
+      # - at-spi2-core # Dependency for Gnome apps.
       - alsa-firmware-loaders
       - alsa-ucm-conf
+      - aria2
       - bpython
       - cargo
+      - dosfstools
       - exfatprogs
+      - ffmpeg
       - filezilla
       - firefox-esr
       - firmware-amd-graphics
@@ -29,14 +33,17 @@
       - kanshi # Pending configuration
       - keepassxc
       - laptop-mode-tools
+      - libasound2-plugin-smixer
       - light
       - mako-notifier
       - mpv
       - nmap
       - pandoc
+      - pmount
       - python3-pip
       - python3-psutil
       - python3-virtualenv
+      - radeontop
       - rlwrap # cht.sh dependency
       - rustc
       - socat
@@ -66,3 +73,10 @@
     name: git-cola
     state: present
     install_recommends: no
+
+- name: Launch KeepassXC via .desktop with 1.5x scale
+  lineinfile:
+    path: /usr/share/applications/org.keepassxc.KeePassXC.desktop
+    regexp: '^Exec=keepassx.*'
+    line: Exec=env QT_SCALE_FACTOR=1.5 keepassxc %f
+
