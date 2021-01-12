@@ -103,12 +103,6 @@ floating_modifier $mod normal
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# WOB indicator, deprecated
-# exec_always rm $HOME/.local/runtime/wob-ipc.sock
-# exec_always pkill --signal 9 wob
-# exec_always mkfifo $HOME/.local/runtime/wob-ipc.sock
-# exec_always tail -f $HOME/.local/runtime/wob-ipc.sock | wob -H 35 -b 2 -M 40 -a right -a top
-
 # Brightness, in-built display
 set $light_up $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 set $light_down $(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
@@ -253,22 +247,21 @@ bindsym $mod+Shift+s sticky toggle
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
-# exit Sway
-# bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit Sway?' -b 'Yes, exit sway' 'swaymsg exit'
-set $mode_system System: (l) lock, (e) logout, (s) suspend, (r) reboot, (S) shutdown, (R) UEFI
+# Exit menu
+set $mode_system (L)ock (E)xit (S)uspend (H)ibernate (R)eboot (P)ower-off
 mode "$mode_system" {
-    bindsym l exec $lock, mode "default"
-    bindsym e exit
-    bindsym s exec --no-startup-id systemctl suspend, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
-    bindsym Shift+r exec --no-startup-id systemctl reboot --firmware-setup, mode "default"
+    bindsym Shift+l exec --no-startup-id swaylock -f -c 000000, mode "default"
+    bindsym Shift+e exit
+    bindsym Shift+s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym Shift+h exec --no-startup-id systemctl hibernate, mode "default"
+    bindsym Shift+r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+p exec --no-startup-id systemctl poweroff -i, mode "default"
 
     # return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Shift+e mode "$mode_system"
+bindsym $mod+Alt+e mode "$mode_system"
 
 # Keep these window roles floating (pop-ups)
 for_window [window_role="pop-up"] floating enable
