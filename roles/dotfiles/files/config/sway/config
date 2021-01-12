@@ -273,6 +273,9 @@ bar {
      swaybar_command waybar
 }
 
+# Gsettings importer
+exec_always $XDG_CONFIG_HOME/sway/gsettings.sh
+
 # Notifier
 exec mako
 
