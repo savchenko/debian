@@ -1,48 +1,44 @@
+/*
+ *
+ * https://github.com/Alexays/Waybar/wiki/Styling
+ *
+ */
+
 * {
     border: none;
-    border-radius: 0;
     font-family: Terminus;
-    font-size: 18px;
-    min-height: 24px;
     font-size: 16px;
+    min-height: 26px;
 }
 
 window#waybar {
     background-color: #000000;
     color: #999999;
-    transition-property: background-color;
-    transition-duration: .5s;
 }
 
 window#waybar.hidden {
     opacity: 0.2;
 }
 
+/* Custom colour for a specific app */
 window#waybar.foot {
     background-color: #000000;
 }
 
-window#waybar.firefox-esr {
-    background-color: #000000;
-}
-
 #workspaces button {
-    padding: 0 0px 0 10px;
+    padding: 0 12px 0 12px;
+    min-width: 0; /* width fix */
     background-color: transparent;
-    color: #999999;
-    /* Use box-shadow instead of border so the text isn't offset */
-    /* box-shadow: inset 0 -3px transparent; */
+    color: #666666;
+    border-radius: 0px;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 #workspaces button:hover {
-    background: transparent;
-    border: none;
     color: #FFFFFF;
 }
 
 #workspaces button.focused {
-    color: #d1d1d1;
+    color: #c1c1c1;
 }
 
 #workspaces button.urgent {
@@ -52,46 +48,22 @@ window#waybar.firefox-esr {
 #mode {
     background-color: #990000;
     color: #ffffff;
-    min-width: 480px;
+    min-width: 450px;
+    padding: 0px 10px 0px 10px;
 }
+
+/* #tooltip { */
+/*   background-color: #cccccc; */
+/*   color: #990000; */
+/* } */
+/*  */
+/* #tooltip label { */
+/*   background-color: #af4f4b; */
+/*   color: #2fefaf; */
+/* } */
 
 #custom-clock {
   color: #d1d1d1;
-}
-
-#battery,
-#cpu,
-#memory,
-#temperature,
-#backlight,
-#network,
-#pulseaudio,
-#custom-media,
-#custom-outside,
-#custom-uv,
-#tray,
-#idle_inhibitor,
-#mpd {
-    color: #999999;
-}
-
-#window,
-#workspaces {
-    margin: 0 4px;
-}
-
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
-}
-
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
-}
-
-#clock {
-    background-color: #64727D;
 }
 
 #battery.warning {
@@ -112,14 +84,6 @@ window#waybar.firefox-esr {
 
 #battery.charging {
     background-color: #073d1e;
-    /* font-family: DejaVu; */
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: #000000;
-    }
 }
 
 #battery.critical:not(.charging) {
@@ -137,34 +101,17 @@ label:focus {
     color: #afa;
 }
 
-#cpu {
-    /* background-color: #3a3a3a; */
-}
-
-#memory {
-    /* background-color: #3a3a3a; */
-}
-
 #backlight {
     background-color: #90b1b1;
 }
 
-#network {
-    /* background-color: #3a3a3a; */
+#network.disconnected {
+    color: #333333;
 }
-
-/* #network.disconnected { */
-/*     background-color: #3a3a3a; */
-/* } */
 
 #pulseaudio {
     background-color: #f1c40f;
     color: #000000;
-}
-
-#pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #2a5c45;
 }
 
 #custom-media {
@@ -181,38 +128,20 @@ label:focus {
     background-color: #ffa000;
 }
 
-#temperature {
-    /* background-color: #3a3a3a; */
-}
-
 #temperature.critical {
     background-color: #eb4d4b;
 }
 
 #idle_inhibitor {
-    background-color: #2d3436;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #333333;
 }
 
 #idle_inhibitor.activated {
-    background-color: #ecf0f1;
-    color: #2d3436;
-}
-
-#mpd {
-    background-color: #66cc99;
-    color: #2a5c45;
-}
-
-#mpd.disconnected {
-    background-color: #f53c3c;
-}
-
-#mpd.stopped {
-    background-color: #90b1b1;
-}
-
-#mpd.paused {
-    background-color: #51a37a;
+    background-color: #990000;
+    color: #ffffff;
+    border-radius: 6px;
 }
 
 #custom-sway-scratch.many {

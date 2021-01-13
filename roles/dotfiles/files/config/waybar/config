@@ -1,24 +1,15 @@
 {
-    // "layer": "top", // Waybar at top layer
-    "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 20, // Waybar height (to be removed for auto height)
-    // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode", "custom/sway-scratch"],
-    "modules-center": ["custom/clock", "sway/window"],
-    "modules-right": ["custom/outside", "custom/uv", "network", "cpu", "memory", "temperature", "battery", "tray"],
-    // Modules configuration
+    "position": "top",
+    "modules-left": ["idle_inhibitor", "sway/workspaces", "sway/mode", "custom/sway-scratch"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["custom/outside", "custom/uv", "network", "cpu", "memory", "temperature", "battery", "custom/clock", "tray"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "format": "{icon}{name}",
         "format-icons": {
-            // " 1 ": "",
-            // " 2 ": "",
-            // " 3 ": "",
-            // " 4 ": "",
-            // " 5 ": "",
-            "urgent": "❗",
-            "focused": ">",
+            "urgent": "! ",
+            "focused": "",
             "default": ""
         }
     },
@@ -30,7 +21,7 @@
         "tooltip": false
     },
     "custom/clock": {
-        "exec": "date +'%H:%M'",
+        "exec": "echo ' '$(date +'%H:%M')'  '",
         "interval": 5
     },
     "custom/uv": {
@@ -41,7 +32,7 @@
         "tooltip": false
     },
     "sway/window": {
-        "format": " — {}",
+        "format": "{}",
         "rotate": 0,
         "tooltip": false
     },
@@ -51,8 +42,8 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": "",
+            "deactivated": ""
         }
     },
     "tray": {
@@ -88,11 +79,6 @@
         "critical-threshold": 75,
         "format": " {temperatureC}° ",
     },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", ""]
-    },
     "battery": {
         "states": {
             "good": 90,
@@ -105,47 +91,12 @@
         "format-alt": " {capacity}\n{time}",
         "format-good": " {capacity}%",
         "format-full": " ≈F",
-        /* "format-icons": ["", "", "", "", ""] */
     },
     "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        // "format-wifi": "{essid} ({signalStrength}%)",
         "format-wifi": "  .:.  ",
-        "format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+        "format-ethernet": "  <->  ",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": " -x-  ",
-        // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-disconnected": "  -x-  ",
         "tooltip-format-wifi": "{essid}\n\n{signaldBm}dBm @ {frequency}Mhz\n\n{ipaddr} /{cidr}\n\n↓{bandwidthDownBits} ↑{bandwidthUpBits}"
-    },
-    "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
-        "on-click": "pavucontrol"
-    },
-    "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
-        "escape": true,
-        // "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     }
 }
