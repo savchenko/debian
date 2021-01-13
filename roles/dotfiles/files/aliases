@@ -236,6 +236,10 @@ alias ff="fzf"
 alias fonts_list='fc-list | cut -d":" -f2 | sort | uniq'
 alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
 alias gtk3themes="find /usr/share/themes/ -name gtk-3.0 | cut -d'/' -f5"
+alias gtk3icons="
+find /usr/share/icons/ ~/.local/share/icons -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2> /dev/null
+"
+alias gtk3cursors="find /usr/share/icons ~/.local/share/icons ~/.icons -type d -name "cursors" 2> /dev/null"
 alias mount_gocrypt=". <(gpg2 -dq $HOME/.local/bin/mount_gocrypt.sh.asc)"
 alias mp3guess="mp3guessenc -v -r -f -i -s"
 alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (\$n=\$_) while <IN>;print \$n'"
