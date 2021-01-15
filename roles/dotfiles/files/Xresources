@@ -1,8 +1,9 @@
-XTerm*locale: true
-xterm*termName: xterm-256color
-xterm*font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
 URxvt.font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+XTerm*locale: true
+Xcursor.size: 32
 Xft.dpi: 166
+xterm*font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+xterm*termName: xterm-256color
 
 ! Base16 Tomorrow Night
 ! Scheme: Chris Kempson (http://chriskempson.com)
