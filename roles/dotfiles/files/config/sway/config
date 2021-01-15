@@ -8,6 +8,7 @@ font pango:Terminus 16px
 hide_edge_borders smart
 title_align center
 titlebar_border_thickness 0
+seat seat0 xcursor_theme Adwaita 32
 
 smart_gaps on
 gaps inner 0
@@ -35,6 +36,7 @@ client.urgent           #2f343a #900000 #ffffff #900000   #900000
 assign [app_id="keepassxc"] " 5 "
 for_window [app_id="foot"] titlebar_padding 0 2
 for_window [app_id="veracrypt"] floating enable
+for_window [app_id="gtk3-widget-factory"] floating enable
 
 # Default wallpaper
 output * bg #111111 solid_color
