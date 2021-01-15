@@ -58,8 +58,8 @@ filetype plugin on
 " TODO: Finish this one, unmap visual-select on right/left arrow.
 set keymodel=startsel
 
-" Write swap every ~1s if nothing is typed and report CursorHold
-set updatetime=1024
+" Write swap every ~0.5s if nothing is typed and report CursorHold
+set updatetime=512
 
 " Intendation
 filetype indent on
@@ -101,6 +101,9 @@ set nojoinspaces
 
 " Don't autoextend comments or join comment characters
 set formatoptions-=r formatoptions-=c formatoptions-=o formatoptions-=j
+
+" Don't show all the context when diff'ing
+set diffopt=filler,context:0
 
 " Autosaves
 if has("unix")
@@ -149,9 +152,10 @@ set switchbuf=useopen,usetab,newtab
 
 " Replace preview
 if has("nvim")
-  set inccommand=split
+  set inccommand=nosplit
 endif
-" Nerd commenter
+
+" Nerd commenter, TODO: Why is this here? Move to plugins.
 let NERDSpaceDelims=1
 let g:NERDCompactSexyComs = 1
 let g:NERDCommentEmptyLines = 1
@@ -318,7 +322,7 @@ map <C-s> :w!<CR>
 imap <C-s> <Esc>:w!<CR>a
 
 " Sudo write
-cmap ws w !sudo tee "%"
+map <C-A-s> :w !sudo tee "%"<cr><cr>
 
 " Close window/split as usual
 map <C-w> :close<CR>
@@ -326,7 +330,8 @@ map <C-w> :close<CR>
 " Select all as usual (skips to the last symbol)
 map <C-a> <esc>gg0vG$<CR>
 
-" Don't copy result of 'dd', 's' and 'c' into buffer
+" Don't copy result of 'dd', 's' and 'c' into buffer.
+" That incomprehensible 'p' is supposed to deal with paste
 nnoremap d "_d
 vnoremap d "_d
 nnoremap s "_s
@@ -335,6 +340,8 @@ nnoremap c "_c
 vnoremap c "_c
 nnoremap C "_C
 vnoremap C "_C
+vnoremap p :<C-U>let @p = @+<CR>gvp:let @+ = @p<CR>
+nnoremap p :<C-U>let @p = @+<CR>gvp:let @+ = @p<CR>
 
 " Move up/down using _visual_ lines (e.g. wrapped ones)
 nnoremap j gj
@@ -525,10 +532,10 @@ let g:airline_skip_empty_sections = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#whitespace#enabled = 1
-let g:airline_symbols = {}
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.branch = ''
+" let g:airline_symbols = {}
+" let g:airline_symbols.linenr = ''
+" let g:airline_symbols.maxlinenr = ''
+" let g:airline_symbols.branch = ''
 
 function! AirlineInit()
   let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()} %3l%#__restore__#/%L :%3v')
@@ -605,7 +612,7 @@ let g:fzf_preview_window = 'right:50%'
 let $FZF_DEFAULT_OPTS="--layout=reverse"
 
 " :Files :F
-let fzf_opt_files = ['--margin=1,2', '--preview', 'bat --color=always --style=plain,changes {}']
+let fzf_opt_files = ['--color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880', '--margin=1,2', '--preview', 'bat --color=always --style=plain,changes {}']
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': fzf_opt_files}, <bang>0)
 command! -bang -nargs=? -complete=dir F call fzf#vim#files(<q-args>, {'options': fzf_opt_files}, <bang>0)
 
@@ -830,3 +837,17 @@ if exists('$WAYLAND_DISPLAY')
         \   'cache_enabled': 1,
         \ }
 endif
+
+" nvim-qt
+function! NeovimQtLoader()
+  if exists('g:GuiLoaded')
+    GuiTabline 0
+    Guifont JetBrains Mono:h14
+    let g:GuiMousehide=1
+    map <A-c> y
+    map <A-v> p
+  endif
+endfunction
+
+" Yes, this 1ms delay is necessary.
+autocmd VimEnter * call timer_start(1, { tid -> execute(NeovimQtLoader())})
