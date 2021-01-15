@@ -78,17 +78,18 @@
 
 [cola]
 	spellcheck = false
-	boldheaders = false
-	fontdiff = Consolas NF,9,-1,5,50,0,0,0,0,0
+	boldheaders = true
+	fontdiff = IBM Plex Mono,11,-1,5,50,0,0,0,0,0
 	tabwidth = 4
 	expandtab = true
 	safemode = true
 	blameviewer = git gui blame
-	icontheme = dark
-	theme = flat-dark-grey
-	hidpi = 1.5
+	icontheme = default
+	theme = default
+	hidpi = 1
 	savewindowsettings = false
-	statusindent = false
+	statusindent = true
+	statusshowtotals = true
 
 [gpg]
 	program = gpg2
