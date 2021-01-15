@@ -73,7 +73,7 @@
 
 [gui]
 	fontdiff = -family Terminus -size -12 -weight normal -slant roman -underline 0 -overstrike 0
-	editor = nvim
+	editor = nvim-qt
 	historybrowser = gitk
 
 [cola]

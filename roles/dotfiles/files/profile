@@ -11,7 +11,7 @@ export EDITOR="nvim"
 export ELM_ACCEL=gl
 export ELM_DISPLAY=wl
 export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
-export FZF_DEFAULT_COMMAND='fd'
+export FZF_DEFAULT_COMMAND='fd --hidden'
 export FZF_DEFAULT_OPTS="--height=99% --reverse --color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
 export GNC_CONFIG_HOME="$HOME/.config/gnucash"
@@ -29,6 +29,7 @@ export NO_AT_BRIDGE=1
 export NVIM_GTK_NO_HEADERBAR=1
 export NVIM_GTK_NO_WINDOW_DECORATION=1
 export NVIM_GTK_PREFER_DARK_THEME=1
+export NVIM_QT_RUNTIME_PATH="/usr/share/nvim-qt/runtime"
 export PATH=$PATH:$HOME/.local/bin
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_QPA_PLATFORM=wayland
