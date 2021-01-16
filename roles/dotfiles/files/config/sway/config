@@ -20,10 +20,10 @@ xwayland disable
 output * adaptive_sync on
 
 # Screens
-# output DP-1 scale 1.0
-# output DP-1 pos 0 0 res 3840x2160
-# output eDP-1 scale 1.0
-# output eDP-1 pos 600 2160 res 1920x1080
+output DP-1 scale 2.0
+output DP-1 pos 972 1080 res 3840x2160
+output eDP-1 scale 1.0
+output eDP-1 pos 972 2160 res 1920x1080
 
 ## Window decoration
 # class                 border  backgr. text    indicator child_border
@@ -33,10 +33,11 @@ client.unfocused        #1d1f21 #222222 #555555 #1d1f21   1d1f21
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
 
 # Always
-assign [app_id="keepassxc"] " 5 "
+assign [app_id="keepassxc"] "5"
 for_window [app_id="foot"] titlebar_padding 0 2
 for_window [app_id="veracrypt"] floating enable
 for_window [app_id="gtk3-widget-factory"] floating enable
+for_window [app_id="wdisplays"] floating enable
 
 # Default wallpaper
 output * bg #111111 solid_color
@@ -112,6 +113,13 @@ set $light_level $(light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 bindsym XF86MonBrightnessDown exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_up" "$light_level"
 bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_down" "$light_level"
 
+# Brightness, external display via i2c
+set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 1; echo 1)
+set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 1; echo 1)
+set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
+bindsym $mod+p exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_level" "$ext_light_down"
+bindsym $mod+o exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_level" "$ext_light_up"
+
 # Pure ALSA
 set $volume_up $(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
 set $volume_down $(amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
@@ -131,10 +139,6 @@ bindsym $mod+Alt+Escape exec makoctl dismiss --all
 #
 # Workspace wrangling ---------------------------------
 #
-
-# Bind to a monitor like this
-workspace $ws9 output DP-1
-workspace $ws0 output DP-1
 
 # Rename workspaces
 set $ws1 "1"
@@ -171,6 +175,10 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws0
+
+# Bind to a monitor like this
+workspace $ws9 output DP-1
+workspace $ws0 output DP-1
 
 #
 # Windows wrangling ----------------------------------
@@ -216,7 +224,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # Move window to another screen (monitor)
-bindsym $mod+Control+m move window to output right
+bindsym $mod+Control+m move window to output up
 
 # Move focus (cursor) to another monitor
 bindsym $mod+Control+Left focus output left
