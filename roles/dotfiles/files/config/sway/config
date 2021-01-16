@@ -8,7 +8,7 @@ font pango:Terminus 16px
 hide_edge_borders smart
 title_align center
 titlebar_border_thickness 0
-seat seat0 xcursor_theme Adwaita 32
+seat seat0 xcursor_theme Adwaita 24
 
 smart_gaps on
 gaps inner 0
