@@ -250,7 +250,7 @@ set completeopt+=noinsert,noselect
 
 " Automatically show signcolumn and try to accommodate up to 6 sections
 if has('nvim-0.4.0')
-  set signcolumn=auto:6
+  set signcolumn=auto:1
 elseif has('nvim-0.3.4') || has('signs')
   set signcolumn=auto
 endif
@@ -341,7 +341,6 @@ vnoremap c "_c
 nnoremap C "_C
 vnoremap C "_C
 vnoremap p :<C-U>let @p = @+<CR>gvp:let @+ = @p<CR>
-nnoremap p :<C-U>let @p = @+<CR>gvp:let @+ = @p<CR>
 
 " Move up/down using _visual_ lines (e.g. wrapped ones)
 nnoremap j gj
