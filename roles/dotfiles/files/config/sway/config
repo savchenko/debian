@@ -117,8 +117,10 @@ bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 1000 -u low -h "in
 set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 1; echo 1)
 set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 1; echo 1)
 set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
-bindsym $mod+p exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_level" "$ext_light_down"
-bindsym $mod+o exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_level" "$ext_light_up"
+set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 5; echo $ext_light_level)
+set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 5; echo $ext_light_level)
+bindsym Alt+Ctrl+F5 exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_down" "$ext_light_level"
+bindsym Alt+Ctrl+F6 exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_up" "$ext_light_level"
 
 # Pure ALSA
 set $volume_up $(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
