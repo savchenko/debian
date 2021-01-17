@@ -25,7 +25,7 @@
         "interval": 5
     },
     "custom/uv": {
-        "format": "☼ {}",
+        "format": "☼ {}  ",
         "interval": 120,
         "exec": "~/.config/waybar/modules/arpansa.sh",
         "exec-if": "ping 9.9.9.9 -c1",

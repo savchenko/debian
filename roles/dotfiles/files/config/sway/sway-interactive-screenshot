@@ -1,5 +1,8 @@
 #!/bin/bash
-
+#
+# Based on https://github.com/moverest/sway-interactive-screenshot/blob/master/sway-interactive-screenshot
+# MIT
+#
 # `list_geometry` returns the geometry of the focused of visible windows. You can also get they title
 # by setting a second argument to `with_description`. The geometry and the title are seperated by `\t`.
 #

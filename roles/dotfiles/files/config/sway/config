@@ -114,8 +114,6 @@ bindsym XF86MonBrightnessDown exec notify-send -c "hardware" -t 1000 -u low -h "
 bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_down" "$light_level"
 
 # Brightness, external display via i2c
-set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 1; echo 1)
-set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 1; echo 1)
 set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
 set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 5; echo $ext_light_level)
 set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 5; echo $ext_light_level)

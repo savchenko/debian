@@ -1,10 +1,11 @@
 allow_images=false
 cache=~/.cache/wofi
 display_generic=true
-layer=overlay
 dynamic_lines=true
+gtk_dark=true
 height=200
 insensitive=true
+layer=overlay
 matching=contains
 mode=drun
 normal_window=false
