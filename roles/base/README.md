@@ -30,12 +30,13 @@ Role Variables
 | disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                     |
 | disable_firewire            | Similar to the above.                                                    | True                     |
 | disable_bluetooth           | Likewise.                                                                | True                     |
-| disable_hfs-udf             | ...                                                                      | True                     |
+| disable_hfs_udf             | ...                                                                      | True                     |
 | fstab_noexec                | Mounts /dev/shm with nodev, nosuid, and noexec.                          | True                     |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
 | timezone                    | Self-explanatory. Default is "UTC"                                       | UTC                      |
 | locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
 | set_capslock                | Set CapsLock as Ctrl                                                     | False                    |
+| set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
 | sshguard_path               | Path to sshguard config.                                                 | System default           |
 | sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
 | generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |

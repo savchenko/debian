@@ -5,14 +5,12 @@ debs:
   - no_such_package.deb
 disable_bluetooth: true
 disable_firewire: true
-disable_hfs-udf: true
+disable_hfs_udf: true
 disable_speaker: true
 disable_thunderbolt: true
 fstab_noexec: true
 grub_optional: ""
 locale: "en_US.UTF-8"
-sshguard_path: /etc/sshguard/sshguard.conf
-sshd_less_secure: False
 resolver_blocklist:
 resolver_listen_on_ip: 127.0.0.1
 resolver_primary_hostname: dns.quad9.net
@@ -21,6 +19,9 @@ resolver_secondary_hostname: dns.quad9.net
 resolver_secondary_ip: 149.112.112.112
 resolver_tls: true
 set_capslock: false
+set_hostname: false
+sshd_less_secure: False
+sshguard_path: /etc/sshguard/sshguard.conf
 timezone: "UTC"
 
 WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
