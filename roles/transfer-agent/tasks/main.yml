@@ -1,15 +1,52 @@
 ---
+
+- name: Check if requested user is already present
+  shell:
+    cmd: "grep {{ agent_name }} /etc/passwd"
+  register: user_grep
+  changed_when: False
+
+- name: Assert that user isn't already present on the system
+  assert:
+    that:
+      - "{{ user_grep.rc | int == 1 }}"
+    fail_msg: "User '{{ agent_name }}' is found and 'remove_existing_user' is set to False.\nAborting."
+    success_msg: "User '{{ agent_name }}' and all its files will be deleted."
+  when: not remove_existing_user
+
 - block:
 
-  - name: Create agents group
+  - name: Delete pre-existing user
+    user:
+      name: "{{ agent_name }}"
+      state: absent
+      remove: yes
+      force: true
+    when: user_grep.rc | int == 0 and remove_existing_user
+
+  - name: Ensure agents group is present
     group:
       name: "{{ agent_group }}"
       state: present
+
+  - name: Throw random seeds
+    set_fact:
+      rnd_a: "{{ 4096 | random }}"
+      rnd_b: "{{ 4096 | random }}"
+      rnd_c: "{{ 4096 | random }}"
+      rnd_d: "{{ 4096 | random }}"
+      rnd_e: "{{ 4096 | random }}"
+
+  - name: Create random password and salt
+    set_fact:
+      password_raw: "{{ lookup('password', '/dev/null') }}"
+      salt: "{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}"
 
   - name: Create xfer user
     user:
       name: "{{ agent_name }}"
       shell: /bin/sh
+      password: "{{ password_raw | password_hash('sha512', salt) }}"
       groups: agents
 
   - block:
@@ -20,7 +57,7 @@
       register: sudo_username
       changed_when: False
 
-    - name: Get sudo user's ssh
+    - name: Get sudo user's ssh path
       shell:
         cmd: "echo $( getent passwd {{ sudo_username.stdout }} | cut -d: -f6 )/.ssh/"
       become: yes
@@ -111,38 +148,38 @@
       dest: "/home/{{ agent_name }}/usr/bin/rsync"
       mode: 0755
       remote_src: yes
-    when: rsync
+    when: add_rsync
 
-  - name: Copy necessary libraries
+  - name: Copy necessary /lib libraries
     copy:
-      src: "/lib/x86_64-linux-gnu/{{ item.src }}"
-      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item.dest }}"
+      src: "/lib/x86_64-linux-gnu/{{ item }}"
+      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
       mode: 0755
       remote_src: yes
     with_items:
-      - { src: "libattr.so.1", dest: "libattr.so.1" }
-      - { src: "libacl.so.1", dest: "libacl.so.1" }
-      - { src: "libpopt.so.0", dest: "libpopt.so.0" }
-      - { src: "libc.so.6", dest: "libc.so.6" }
+      - "libacl.so.1"
+      - "libattr.so.1"
+      - "libc.so.6"
+      - "libcrypto.so.1.1"
+      - "libdl.so.2"
+      - "liblz4.so.1"
+      - "libpopt.so.0"
+      - "libpthread.so.0"
+      - "libxxhash.so.0"
+      - "libz.so.1"
+      - "libzstd.so.1"
     when: not WSL1 and not WSL2
 
-  - name: Copy necessary libraries
+  - name: Copy necessary /usr/lib libraries
     copy:
-      src: "/usr/lib/x86_64-linux-gnu/{{ item.src }}"
-      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item.dest }}"
+      src: "/usr/lib/x86_64-linux-gnu/{{ item }}"
+      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
       mode: 0755
       remote_src: yes
     with_items:
-      - { src: "libattr.so.1", dest: "libattr.so.1" }
-      - { src: "libacl.so.1", dest: "libacl.so.1" }
-      - { src: "libpopt.so.0", dest: "libpopt.so.0" }
-    when: WSL1 or WSL2
-
-  - name: Copy libc
-    copy:
-      src: "/lib/x86_64-linux-gnu/libc.so.6"
-      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/libc.so.6"
-      remote_src: yes
+      - "libattr.so.1"
+      - "libacl.so.1"
+      - "libpopt.so.0"
     when: WSL1 or WSL2
 
   - name: Copy ld-linux-x86-64.so
@@ -151,5 +188,16 @@
       dest: "/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2"
       mode: 0755
       remote_src: yes
+
+  - name: Remove unnecessary files
+    file:
+      path: "/home/{{ agent_name }}/{{ item }}"
+      state: absent
+    loop:
+      - ".bashrc"
+      - ".bash_profile"
+      - ".bash_logout"
+      - ".profile"
+      - ".logout"
 
   become: yes

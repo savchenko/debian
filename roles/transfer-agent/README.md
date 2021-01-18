@@ -1,6 +1,6 @@
 Transfer-agent
 =========
-Setup jailed user, useful for rsync/sftp. Chroot example:  
+Setup jailed user, useful for a secure rsync/sftp. Chroot example:  
 ```
 .
 |-- bin
@@ -11,7 +11,14 @@ Setup jailed user, useful for rsync/sftp. Chroot example:
 |       |-- libacl.so.1
 |       |-- libattr.so.1
 |       |-- libc.so.6
-|       `-- libpopt.so.0
+|       |-- libcrypto.so.1.1
+|       |-- libdl.so.2
+|       |-- liblz4.so.1
+|       |-- libpopt.so.0
+|       |-- libpthread.so.0
+|       |-- libxxhash.so.0
+|       |-- libz.so.1
+|       `-- libzstd.so.1
 |-- lib64
 |   `-- ld-linux-x86-64.so.2
 `-- usr
@@ -21,8 +28,8 @@ Setup jailed user, useful for rsync/sftp. Chroot example:
 
 Requirements
 ------------
-Ansible >=2.4  
-Debian 9 (might work on its derivatives, however this is not guaranteed)  
+Ansible ≥2.9  
+Debian 11 (might work on its derivatives, however this is not guaranteed)  
 Presence of the following block in your `/etc/ssh/sshd_config`:
 ```sh
 Match Group agents
@@ -37,32 +44,20 @@ If you decide to change name of the group (e.g. "minions" instead of "agents"), 
 
 Role Variables
 --------------
-`agent_name` Username to create  
-`agent_group` Users that belong to this group will be chroot'ed to their home directories.  
-`rsync` If set to false, rsync binaries won't be added.  
-`pubkey_from_current_user` If set to true, will add `~/.ssh/id_rsa.pub` to the `~/.ssh/authorized_keys`.  
-`pubkey_from_others` If set to true, will add all *.pub files from `../files/` to the `~/.ssh/authorized_keys`.
+
+| Variable                 | Description                                                                   | Default |
+|--------------------------|-------------------------------------------------------------------------------|---------|
+| agent_name               | Username to create                                                            | xfer    |
+| agent_group              | Users from this group will be chroot'ed to their home directories.            | agents  |
+| add_rsync                | Add `rsync` binaries                                                          | true    |
+| pubkey_from_current_user | Add local `~/.ssh/id_rsa.pub` to the target's `~/.ssh/authorized_keys`.       | true    |
+| pubkey_from_others       | Add all *.pub keys from `../files/` to the target's `~/.ssh/authorized_keys`. | true    |
+| remove_existing_user     | Wipe existing user if found, delete all their files.                          | false   |
 
 Dependencies
 ------------
 rsync.
 
-Example Playbook
-----------------
-```yaml
----
-- hosts: laptop, server
-  tasks:
-  - name: Execute `transfer-agent` role
-    include_role:
-      name: transfer-agent
-    vars:
-      agent_group: "agents"
-      agent_name: "xfer"
-      rsync: true
-      pubkey_from_current_user: true
-      pubkey_from_others: true
-```
 
 License
 -------
