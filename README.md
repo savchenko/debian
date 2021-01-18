@@ -12,7 +12,7 @@ Basic preparation of the target host: updating some of the system's settings, in
 Distributes dotfiles to the target host. Supports either copying files to the remote host or symlinking from the role's [./files/](https://github.com/savchenko/debian/tree/bullseye/roles/dotfiles/files) to the destination directories within `$HOME`. Has its own [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/dotfiles/README.md).
 
 ### Transfer-agent
-Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host.
+Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/tree/bullseye/roles/transfer-agent).
 
 ### Hosts  
 _**(Pending update to support Knot-Resolver)**_  
