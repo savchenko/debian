@@ -1,42 +1,55 @@
 ---
-- hosts: remote_vm
+- hosts: virtbsy
   tasks:
 
   - name: Execute `base` role
     import_role:
       name: base
     vars:
+      # See the README.md for the variables' descriptions and default values
       allow_reboot: false
+      allow_ssh: true
+      debs: []
+      disable_bluetooth: true
+      disable_firewire: true
+      disable_hfs_udf: true
       disable_speaker: true
+      disable_thunderbolt: true
+      fstab_noexec: true
       generate_moduli: false
+      grub_optional: ""
       locale: en_US.UTF8
-      resolver_blocklist:
+      resolver_blocklist: ""
       resolver_listen_on_ip: 127.0.0.1
       resolver_primary_hostname: dns.quad9.net
-      resolver_primary_ip: 192.168.2.4
+      resolver_primary_ip: 9.9.9.9
       resolver_secondary_hostname: dns.quad9.net
       resolver_secondary_ip: 149.112.112.112
-      resolver_tls: false
+      resolver_tls: true
+      set_capslock: false
+      set_hostname: true
+      sshd_less_secure: false
+      sshguard_path: /etc/sshguard/sshguard.conf
       timezone: Australia/Adelaide
 
-  - name: Execute `dotfiles` role
-    include_role:
-      name: dotfiles
-    vars:
-      change_prefix: true
-      copy_dotfiles: true
-      link_to_localhost: false
-      neovim: true
-      remote_bash_emacs: false
-      remote_gitconfig: true
-      sshd_less_secure: false
-      use_vim_plug: true
-
-  - name: Execute `transfer-agent` role
-    include_role:
-      name: transfer-agent
-    vars:
-      agent_group: agents
-      agent_name: xfer_agent
-      pubkey_from_current_user: true
-      rsync: true
+  # - name: Execute `dotfiles` role
+  #   include_role:
+  #     name: dotfiles
+  #   vars:
+  #     change_prefix: true
+  #     copy_dotfiles: true
+  #     link_to_localhost: false
+  #     neovim: true
+  #     remote_bash_emacs: false
+  #     remote_gitconfig: true
+  #     sshd_less_secure: false
+  #     use_vim_plug: true
+  # 
+  # - name: Execute `transfer-agent` role
+  #   include_role:
+  #     name: transfer-agent
+  #   vars:
+  #     agent_group: agents
+  #     agent_name: xfer_agent
+  #     pubkey_from_current_user: true
+  #     rsync: true

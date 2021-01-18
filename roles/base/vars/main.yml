@@ -1,8 +1,7 @@
 ---
 allow_reboot: true
 allow_ssh: false
-debs:
-  - no_such_package.deb
+debs: []
 disable_bluetooth: true
 disable_firewire: true
 disable_hfs_udf: true

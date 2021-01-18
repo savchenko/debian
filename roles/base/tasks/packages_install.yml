@@ -115,8 +115,8 @@
   register: dpkg_check
   failed_when: dpkg_check.rc > 1
   changed_when: dpkg_check.rc == 1
-  loop:
-    - coreutils # Example, I would be surprised if it's *not* installed
+  loop: "{{ debs }}"
+  when: debs | length > 0
 
 - name: Create directory to store .deb files
   file:
