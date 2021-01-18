@@ -6,8 +6,8 @@ Setup dotfiles from this repository. Summary:
 1. Setup `bat` theme and `tmux` terminfo.
 1. Backup existing dotfiles if found.
 1. Either:
-  1. Copy to remote host under `~/.local/etc/dotfiles` and link to respective locations.
-  2. Or link from this role directly. For example, if executing against localhost.
+    1. Copy to remote host under `~/.local/etc/dotfiles` and link to respective locations.
+    2. Or link from this role directly. For example, if executing against localhost.
 1. Adapt dotfiles for the remote host if requested.
 1. Setup nVim with plugins.
 
