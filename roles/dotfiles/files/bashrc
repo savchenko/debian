@@ -16,10 +16,20 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
 
   # Check if we are root by any chance --------------------------------------------
-  if id -nG | egrep -q -w "wheel|root"; then root=1; else root=0; fi
+  if id -nG | egrep -q -w "wheel|root"; then _root=1; else _root=0; fi
+
+  # Check if this is a remote session ---------------------------------------------
+  _remote=0
+  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    _remote=1
+  else
+    case $(ps -o comm= -p $PPID) in
+      sshd|*/sshd) _remote=1;;
+    esac
+  fi
 
   # Automatically initialize keychain ---------------------------------------------
-  if [[ $root -eq 0 ]] && [[ $TERM = *256color ]]; then
+  if [[ $_root -eq 0 ]] && [[ $TERM = *256color ]]; then
       # 12h global timeout, GPG-agent enforces '6h after the last usage'
       eval "$(keychain --gpg2 --eval --agents ssh,gpg \
             --quiet --timeout 720 id_rsa 0xDEED803629B6FA56)"
@@ -44,11 +54,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   dark_grey="\[\e[38;5;242m\]"
   clr_reset="\[$(tput sgr0)\]\[\e[0m\]"
 
-  if [ $root -eq 1 ]; then user_color="${red}[!] "; else user_color="${light_grey}"; fi
+  if [ $_root -eq 1 ]; then user_color="${red}[!]"; else user_color="${light_grey}"; fi
 
   PS1="${dark_grey}${user_color}"                     # user
-  # PS1+=" ${blue}\h"                                 # hostname
-  PS1+="  ${grey}\w"                                    # work dir
+  if [ $_remote -eq 1 ]; then PS1+=" ${blue}\h"; fi   # hostname, show only for remotes
+  PS1+=" ${grey}\w"                                   # work dir
   PS1+="${light_grey}\$(__git_ps1)"                   # git branch
   PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
 

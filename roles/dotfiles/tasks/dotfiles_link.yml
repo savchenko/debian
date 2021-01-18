@@ -19,9 +19,9 @@
   #
 - block:
 
-  - name: Create dotfiles folder
+  - name: Create remote dotfiles folders tree
     file:
-      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles"
+      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles/gnupg"
       state: directory
 
   - name: Copy primary dotfiles to the remote machine
@@ -63,7 +63,7 @@
 
 - name: Link ~/.local/bin from this role to $HOME
   file:
-    src: "{{role_path}}/files/bin" 
+    src: "{{role_path}}/files/bin"
     dest: "{{ ansible_env.HOME }}/.local/bin"
     state: link
     force: yes
