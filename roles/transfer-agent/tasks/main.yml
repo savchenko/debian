@@ -12,8 +12,12 @@
     that:
       - "{{ user_grep.rc | int == 1 }}"
     fail_msg: "User '{{ agent_name }}' is found and 'remove_existing_user' is set to False.\nAborting."
-    success_msg: "User '{{ agent_name }}' and all its files will be deleted."
   when: not remove_existing_user
+
+- name: Warning message
+  debug:
+    msg: 'User "{{ agent_name }}" and all its files will be deleted.'
+  when: user_grep.rc | int == 1 and remove_existing_user
 
 - block:
 
@@ -43,7 +47,7 @@
       password_raw: "{{ lookup('password', '/dev/null') }}"
       salt: "{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}"
 
-  - name: Create xfer user
+  - name: 'Create "{{ agent_name }}" user with random password'
     user:
       name: "{{ agent_name }}"
       shell: /bin/sh
@@ -92,7 +96,7 @@
 
     delegate_to: localhost
 
-  - name: Add pubkeys from current user
+  - name: Add pubkeys from the user executing this Playbook
     authorized_key:
       user: "{{ agent_name }}"
       state: present
@@ -199,6 +203,5 @@
       - ".bash_profile"
       - ".bash_logout"
       - ".profile"
-      - ".logout"
 
   become: yes

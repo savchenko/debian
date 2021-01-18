@@ -96,6 +96,9 @@
     path: /var/run/reboot-required
   register: reboot_required
 
+- name: Run all relevant handlers
+  meta: flush_handlers
+
 - name: Reboot if system can't pick-up updated kernel and/or userland without it
   debug:
     msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"
