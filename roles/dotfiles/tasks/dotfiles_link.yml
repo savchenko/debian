@@ -21,7 +21,7 @@
 
   - name: Create remote dotfiles folders tree
     file:
-      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles/gnupg"
+      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles"
       state: directory
 
   - name: Copy primary dotfiles to the remote machine

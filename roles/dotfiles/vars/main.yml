@@ -19,7 +19,7 @@ dotfiles_list:
   - { src: 'config/sway', dest: '.config/sway'}
   - { src: 'curlrc', dest: '.curlrc' }
   - { src: 'gitignore', dest: '.gitignore' }
-  - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg.conf' }
+  - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg-agent.conf' }
   - { src: 'gnupg/gpg.conf', dest: '.gnupg/gpg.conf' }
   - { src: 'inputrc', dest: '.inputrc' }
   - { src: 'muttrc', dest: '.muttrc' }
