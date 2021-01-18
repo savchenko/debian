@@ -1,12 +1,19 @@
 ---
-- hosts: virtbsy
+- hosts: my-valid-hostname
   tasks:
 
   - name: Execute `base` role
-    import_role:
+    include_role:
       name: base
+      apply:
+        tags:
+          # Limit play via `ansible-playbook --tags role_*`
+          - role_base
+    tags:
+      # `always` is a keyword here, not a tag.
+      - always
     vars:
-      # See the README.md for the variables' descriptions and default values
+      # Refer to the respective READMEs for variables' descriptions and default values
       allow_reboot: false
       allow_ssh: true
       debs: []
@@ -32,24 +39,33 @@
       sshguard_path: /etc/sshguard/sshguard.conf
       timezone: Australia/Adelaide
 
-  # - name: Execute `dotfiles` role
-  #   include_role:
-  #     name: dotfiles
-  #   vars:
-  #     change_prefix: true
-  #     copy_dotfiles: true
-  #     link_to_localhost: false
-  #     neovim: true
-  #     remote_bash_emacs: false
-  #     remote_gitconfig: true
-  #     sshd_less_secure: false
-  #     use_vim_plug: true
-  # 
-  # - name: Execute `transfer-agent` role
-  #   include_role:
-  #     name: transfer-agent
-  #   vars:
-  #     agent_group: agents
-  #     agent_name: xfer_agent
-  #     pubkey_from_current_user: true
-  #     rsync: true
+  - name: Execute `dotfiles` role
+    include_role:
+      name: dotfiles
+      apply:
+        tags:
+          - role_dotfiles
+    tags:
+      - always
+    vars:
+      change_tmux_prefix: true
+      copy_dotfiles: true
+      link_to_localhost: false
+      remote_bash_emacs: false
+      remote_gitconfig: true
+      setup_neovim: true
+
+  - name: Execute `transfer-agent` role
+    include_role:
+      name: transfer-agent
+      apply:
+        tags:
+          - role_transfer
+    tags:
+      - always
+    vars:
+      agent_group: agents
+      agent_name: xfer_agent
+      pubkey_from_current_user: true
+      remove_existing_user: false
+      add_rsync: true
