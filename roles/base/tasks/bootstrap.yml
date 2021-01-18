@@ -17,7 +17,6 @@
 - name: Set hostname to the value in inventory
   hostname:
     name: "{{ inventory_hostname }}"
-    use: debian
   when: not WSL2 and ansible_connection != "local" and set_hostname
 
 - name: (WSL2) Add hostname to /etc/hosts
