@@ -59,6 +59,15 @@
     name: amd64-microcode
   when: '"AMD" in cpu_vendor and not WSL2'
 
+- name: Link binaries to their commonly used names
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop:
+    - { src: "/usr/bin/batcat", dest: "/usr/bin/bat" }
+    - { src: "/usr/bin/fdfind", dest: "/usr/bin/fd" }
+
 - name: Check pubring and trust-db in ~/.gnupg/
   stat:
     path: "{{ ansible_env.HOME }}/.gnupg/{{ item }}"
