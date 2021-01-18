@@ -32,5 +32,8 @@ policy.add(policy.all(policy.FORWARD({'{{ resolver_primary_ip }}', '{{ resolver_
 -- Cache size
 cache.size = 32 * MB
 
--- Prefetch learning (15-minute blocks over 24 hours)
-predict.config(15, 24)
+--- Prefetch learning (15-minute blocks over 24 hours)
+predict.config({
+  window = 15,         -- 15 minutes sampling window
+  period = 24*(60/15)  -- track last 24 hours
+})
