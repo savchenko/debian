@@ -1,4 +1,6 @@
 ---
-copy_dotfiles: False
-change_prefix: True
-use_vim_plug: True
+copy_dotfiles: false
+link_to_localhost: true
+change_prefix: true
+use_vim_plug: true
+setup_neovim: false

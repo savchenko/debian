@@ -3,7 +3,7 @@
   assert:
     that:
       - copy_dotfiles != link_to_localhost
-    fail_msg: "Copying to remote host from controller and simultaneously trying to link from this role dosn't make sense.\nChoose one"
+    fail_msg: "Copying to remote host from controller and simultaneously trying to link from this role is impossible.\nChoose one."
 
 - name: Hush login, setup terminfo and ~/.ssh
   import_tasks: dotfiles_init.yml
@@ -27,6 +27,6 @@
 
 - name: Setup NeoVim
   import_tasks: dotfiles_neovim.yml
-  when: neovim == true
+  when: setup_neovim
   tags:
     - dotfiles_neovim
