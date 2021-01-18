@@ -61,16 +61,29 @@
       force: yes
     when: link_to_localhost and not WSL1 and not copy_dotfiles
 
+  - name: Ensure that resolver is restarted so we can pull the plugins
+    service:
+      name: kresd@1
+      state: restarted
+
+  - name: Check if DNS resolution works
+    shell: dig github.com
+    register: dig_github
+
   - name: Install nVIM plugins and exit
     shell: nvim +PlugUpdate +sleep1000m +exit +sleep1000m +exit
     async: 45
     poll: 5
+    retries: 3
+    delay: 6
+    register: nvim_plugins_installed
+    when: "dig_github.rc == 0 and 'NOERROR' in dig_github.stdout"
     changed_when: false
 
   - name: Make `preview.sh` executable
     file:
       path: "{{ ansible_env.HOME }}/.vim/plugged/fzf.vim/bin/preview.sh"
       mode: a+x
-
+    when: "'Done!' in nvim_plugins_installed.stdout and nvim_plugins_installed.rc == 0 and 'fatal' not in nvim_plugins_installed.stdout"
 
   when: use_vim_plug

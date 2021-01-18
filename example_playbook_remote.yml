@@ -14,7 +14,7 @@
       - always
     vars:
       # Refer to the respective READMEs for variables' descriptions and default values
-      allow_reboot: false
+      allow_reboot: true
       allow_ssh: true
       debs: []
       disable_bluetooth: true

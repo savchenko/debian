@@ -4,6 +4,7 @@
   shell:
     cmd: "grep {{ agent_name }} /etc/passwd"
   register: user_grep
+  failed_when: user_grep.stderr | length > 1
   changed_when: False
 
 - name: Assert that user isn't already present on the system
