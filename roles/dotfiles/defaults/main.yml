@@ -1,6 +1,7 @@
 ---
+change_tmux_prefix: true
 copy_dotfiles: false
 link_to_localhost: true
-change_prefix: true
-use_vim_plug: true
+remote_gitconfig: true
 setup_neovim: false
+use_vim_plug: true

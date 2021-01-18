@@ -74,4 +74,4 @@
 
     when: link_to_localhost == true
 
-  when: change_prefix == true
+  when: change_tmux_prefix == true

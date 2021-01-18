@@ -2,7 +2,7 @@
 - name: Add tmux.conf to the list of dotfiles, no prefix change
   set_fact:
     dotfiles_list: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
-  when: not change_prefix
+  when: not change_tmux_prefix
 
 - name: Add local .gitconfig to the list of dotfiles
   set_fact:

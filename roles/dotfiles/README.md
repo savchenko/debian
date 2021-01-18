@@ -19,14 +19,15 @@ Corresponding applications installed.
 Role Variables
 --------------
 
-| Variable          | Description                                                         | Default |
-|-------------------|---------------------------------------------------------------------|---------|
-| copy_dotfiles     | Copy dotfiles to the remote host instead of linking from this role. | false   |
-| link_to_localhost | Link to the target's $HOME from this role.                          | true    |
-| setup_neovim      | All-inclusive, 5-stars neovim setup.                                | false   |
-| remote_bash_emacs | Switch bash to "regular" Emacs-like mode                            | false   |
+| Variable           | Description                                                         | Default |
+|--------------------|---------------------------------------------------------------------|---------|
+| change_tmux_prefix | Changes `tmux` prefix from <kbd>C-Space</kbd> to <kbd>C-b</kbd>.    | true    |
+| copy_dotfiles      | Copy dotfiles to the remote host instead of linking from this role. | false   |
+| link_to_localhost  | Link to the target's $HOME from this role.                          | true    |
+| remote_bash_emacs  | Switch bash to "regular" Emacs-like mode.                           | false   |
+| remote_gitconfig   | Use `.gitconfig` without `gpgsign` and author's information.        | true    |
+| setup_neovim       | All-inclusive, 5-stars neovim setup.                                | false   |
  
-
 Dependencies
 ------------
 None.
