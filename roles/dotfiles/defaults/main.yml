@@ -1,6 +1,7 @@
 ---
 change_tmux_prefix: true
 copy_dotfiles: false
+gpg_files_found: []
 link_to_localhost: true
 remote_gitconfig: true
 setup_neovim: false

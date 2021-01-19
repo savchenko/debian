@@ -6,35 +6,37 @@ WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
 WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
 
 dotfiles_list_tmux:
-  - { src: 'tmux.conf', dest: '.tmux.conf' }
+  - { src: 'tmux.conf', dest: '.tmux.conf', state: 'link' }
+
+dotfiles_list_mako:
+  - { src: 'config/mako'         , dest: '.config/mako'         , state: 'hard' }
 
 dotfiles_list:
-  - { src: 'Xresources', dest: '.Xdefaults' }
-  - { src: 'aliases', dest: '.aliases' }
-  - { src: 'bash_profile', dest: '.bash_profile' }
-  - { src: 'bashrc', dest: '.bashrc' }
-  - { src: 'config/foot', dest: '.config/foot'}
-  - { src: 'config/luakit', dest: '.config/luakit'}
-  - { src: 'config/mako', dest: '.config/mako' } # TODO: Must be a hard-link, AppArmor
-  - { src: 'config/sway', dest: '.config/sway'}
-  - { src: 'curlrc', dest: '.curlrc' }
-  - { src: 'gitignore', dest: '.gitignore' }
-  - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg-agent.conf' }
-  - { src: 'gnupg/gpg.conf', dest: '.gnupg/gpg.conf' }
-  - { src: 'inputrc', dest: '.inputrc' }
-  - { src: 'muttrc', dest: '.muttrc' }
-  - { src: 'profile', dest: '.profile' }
-  - { src: 'ripgreprc', dest: '.ripgreprc' }
-  - { src: 'ssh_config', dest: '.ssh/config' }
-  - { src: 'vimrc', dest: '.vimrc' }
-  - { src: 'weechat.conf', dest: 'weechat.conf' }
-  - { src: 'man', dest: '.local/man' }
+  - { src: 'Xresources'          , dest: '.Xdefaults'           , state: 'link' }
+  - { src: 'aliases'             , dest: '.aliases'             , state: 'link' }
+  - { src: 'bash_profile'        , dest: '.bash_profile'        , state: 'link' }
+  - { src: 'bashrc'              , dest: '.bashrc'              , state: 'link' }
+  - { src: 'config/foot'         , dest: '.config/foot'         , state: 'link' }
+  - { src: 'config/luakit'       , dest: '.config/luakit'       , state: 'link' }
+  - { src: 'config/sway'         , dest: '.config/sway'         , state: 'link' }
+  - { src: 'curlrc'              , dest: '.curlrc'              , state: 'link' }
+  - { src: 'gitignore'           , dest: '.gitignore'           , state: 'link' }
+  - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg-agent.conf', state: 'link' }
+  - { src: 'gnupg/gpg.conf'      , dest: '.gnupg/gpg.conf'      , state: 'link' }
+  - { src: 'inputrc'             , dest: '.inputrc'             , state: 'link' }
+  - { src: 'muttrc'              , dest: '.muttrc'              , state: 'link' }
+  - { src: 'profile'             , dest: '.profile'             , state: 'link' }
+  - { src: 'ripgreprc'           , dest: '.ripgreprc'           , state: 'link' }
+  - { src: 'ssh_config'          , dest: '.ssh/config'          , state: 'link' }
+  - { src: 'vimrc'               , dest: '.vimrc'               , state: 'link' }
+  - { src: 'weechat.conf'        , dest: 'weechat.conf'         , state: 'link' }
+  - { src: 'man'                 , dest: '.local/man'           , state: 'link' }
 
 dotfiles_gitconfig_local:
-  - { src: 'gitconfig', dest: '.gitconfig' }
+  - { src: 'gitconfig', dest: '.gitconfig', state: 'link' }
 
 dotfiles_gitconfig_remote:
-  - { src: 'gitconfig-remote', dest: '.gitconfig' }
+  - { src: 'gitconfig-remote', dest: '.gitconfig', state: 'link' }
 
 tmux_remove_lines:
   - "unbind C-b"
