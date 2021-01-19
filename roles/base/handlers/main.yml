@@ -1,10 +1,14 @@
 ---
 - name: restart sshd
-  service: name=sshd state=restarted
+  service:
+    name: sshd
+    state: restarted
   listen: "restart sshd"
 
 - name: restart ufw
-  service: name=ufw state=restarted
+  service:
+    name: ufw
+    state: restarted
   listen: "restart ufw"
 
 - name: reload sysctl
@@ -12,7 +16,9 @@
   listen: "reload sysctl"
 
 - name: restart timesyncd
-  service: name=systemd-timesyncd state=restarted
+  service:
+    name: systemd-timesyncd
+    state: restarted
   listen: "restart timesyncd"
 
 - name: reconfigure keyboard settings
@@ -21,7 +27,9 @@
   listen: "dpkg_keyboard"
 
 - name: restart sshguard
-  service: name=sshguard state=restarted
+  service:
+    name: sshguard
+    state: restarted
   listen: "restart sshguard"
 
 - name: Restart Knot
