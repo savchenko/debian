@@ -1,2 +1,2 @@
 ---
-# defaults file for laptop
+virtio_network_ready: false

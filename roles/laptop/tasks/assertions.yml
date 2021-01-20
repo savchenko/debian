@@ -1,0 +1,18 @@
+---
+- name: Assert that we are running against the supported distribution
+  assert:
+    that:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_file_variety == "Debian"
+      - ansible_distribution_release == "bullseye"
+      - ( ansible_distribution_major_version | int ) == 0 # TODO: Replace with "11" once Bullseye is out
+    fail_msg: "This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing."
+    success_msg: "Running against Debian Bullseye at {{ ansible_host }}"
+
+- name: Assert that target looks like a laptop
+  assert:
+    that:
+      - ansible_facts.machine == "x86_64"
+      - ansible_facts.form_factor == "Notebook"
+      - ansible_fact.virtualization_role != "guest"
+    sucess_msg: "Seems like target is a valid laptop. Proceeding..."

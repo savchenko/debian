@@ -1,0 +1,41 @@
+---
+- name: Disable systemd units
+  systemd:
+    name: '{{ item }}'
+    state: stopped
+    enabled: no
+  with_items: '{{ systemd_units_disable }}'
+  when: systemd_units_disable | length > 0
+
+- name: Enable systemd units
+  systemd:
+    name: '{{ item }}'
+    state: stopped
+    enabled: no
+  with_items: '{{ systemd_units_enable }}'
+  when: systemd_units_enable | length > 0
+
+  # Default virtual switch, NAT'ted network
+- block:
+
+  - name: Check if virtio default network is configured
+    shell:
+      cmd: 'virsh net-info default | grep -E yes$ | grep -E "^Persistent|^Autostart" | wc -l'
+    register: virtio_network_check_out
+
+  - set_fact:
+      virtio_network_ready: true
+    when: virtio_network_check_out.stdout | int == 2
+
+    # Default network isn't ready and operator requested it to be configured
+  - block:
+
+    - name: Start virtio "default" network automatically, on boot
+      shell:  virsh --connect=qemu:///system net-autostart default
+
+    - name: Start "default" virtio network once, now
+      shell: virsh net-start default
+
+    when: virtio_network_autostart and not virtio_network_ready
+
+  when: virtio_use_default_network

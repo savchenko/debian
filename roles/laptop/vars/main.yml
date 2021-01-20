@@ -1,5 +1,9 @@
 ---
 disable_igfx: false
 alsa_out_primary: 1
-alsa_out_secondary: 1
+alsa_out_secondary: 2
 alsa_in: 1
+systemd_units_disable: []
+systemd_units_enable: []
+virtio_network_autostart: true
+virtio_use_default_network: true

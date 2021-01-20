@@ -10,11 +10,14 @@
       - aria2
       - bpython
       - cargo
+      - dictionaries-common
       - dosfstools
+      - entr
       - exfatprogs
       - ffmpeg
       - filezilla
       - firefox-esr
+      - firefox-esr-l10n-en-gb
       - firmware-amd-graphics
       - firmware-iwlwifi
       - firmware-misc-nonfree
@@ -22,27 +25,40 @@
       - firmware-sof-signed
       - fonts-liberation
       - fonts-powerline
+      - fonts-recommended
       - fonts-spleen
       - fonts-terminus
       - fonts-terminus-otb
       - fzf
+      - gcolor3
       - git
       - gocryptfs
+      - hunspell
+      - hunspell-en-au
       - imv
       - iwd
-      - kanshi # Pending configuration
       - keepassxc
       - laptop-mode-tools
       - libasound2-plugin-smixer
+      - libglib2.0-bin # gsettings
+      - libreoffice-l10n-en-gb
+      - libreoffice-style-sifr
+      - libvirt-bin
+      - libvirt-daemon-system
       - light
+      - lyx
       - mako-notifier
       - mpv
+      - myspell-en-au
+      - mythes-en-au
       - nmap
       - pandoc
       - pmount
       - python3-pip
       - python3-psutil
       - python3-virtualenv
+      - qasmixer
+      - qt5ct
       - radeontop
       - rlwrap # cht.sh dependency
       - rustc
@@ -55,7 +71,10 @@
       - syncthing
       - taskwarrior
       - timeshift
+      - tor
+      - torsocks
       - virt-manager
+      - virt-top
       - vit
       - wavemon
       - waybar
@@ -65,6 +84,8 @@
       - whois
       - wob
       - wofi
+      - wordnet
+      - wordnet-sense-index
       - youtube-dl
       - yubioath-desktop
 
