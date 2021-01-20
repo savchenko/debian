@@ -13,4 +13,4 @@
     cpu_iommu: " intel_iommu=igfx_off"
   when:
     - '"Intel" in cpu_vendor'
-    - disable_igfx|bool == true
+    - intel_disable_igfx|bool == true

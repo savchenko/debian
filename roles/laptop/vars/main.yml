@@ -1,8 +1,8 @@
 ---
-disable_igfx: false
+alsa_in: 1
 alsa_out_primary: 1
 alsa_out_secondary: 2
-alsa_in: 1
+intel_disable_igfx: false
 systemd_units_disable: []
 systemd_units_enable: []
 virtio_network_autostart: true
