@@ -42,6 +42,7 @@
       - ranger
       - ripgrep
       - rng-tools5
+      - rpl
       - rsync
       - silversearcher-ag
       - sudo
