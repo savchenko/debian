@@ -1,0 +1,7 @@
+---
+- name: Add user to i2c group
+  user:
+    append: yes
+    groups: i2c
+    name: "{{ ansible_env.USER }}"
+  when: user_add_i2c
