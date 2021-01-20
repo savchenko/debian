@@ -7,3 +7,4 @@ systemd_units_disable: []
 systemd_units_enable: []
 virtio_network_autostart: true
 virtio_use_default_network: true
+user_add_i2c: false

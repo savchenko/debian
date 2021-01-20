@@ -10,6 +10,7 @@
       - aria2
       - bpython
       - cargo
+      - ddcutil
       - dictionaries-common
       - dosfstools
       - entr

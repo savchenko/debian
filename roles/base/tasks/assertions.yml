@@ -15,3 +15,14 @@
     fail_msg: "Requested hostname is invalid.\nSee the RFC #1123"
     success_msg: "Will set target's hostname to '{{ inventory_hostname }}'"
   when: inventory_hostname | string | length > 0
+
+- name: Register user's home folder status
+  stat:
+    path: "{{ ansible_facts.user_dir }}"
+  register: user_homedir
+
+- name: Assert the facts about user's home folder
+  assert:
+    that:
+      - ansible_facts.user_dir == ansible_env.HOME
+      - user_homedir.stat.writeable and user_homedir.stat.readable

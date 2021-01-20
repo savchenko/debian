@@ -16,3 +16,14 @@
       - ansible_facts.form_factor == "Notebook"
       - ansible_fact.virtualization_role != "guest"
     sucess_msg: "Seems like target is a valid laptop. Proceeding..."
+
+- name: Register user's home folder status
+  stat:
+    path: "{{ ansible_facts.user_dir }}"
+  register: user_homedir
+
+- name: Assert the facts about user's home folder
+  assert:
+    that:
+      - ansible_facts.user_dir == ansible_env.HOME
+      - user_homedir.stat.writeable and user_homedir.stat.readable

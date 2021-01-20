@@ -11,6 +11,12 @@
   tags:
     - laptop_packages
 
+- name: Notebook-specific settings
+  import_tasks: notebook.yml
+  become: yes
+  tags:
+    - laptop_notebook
+
 - name: Intel-specific settings
   import_tasks: intel.yml
   become: yes

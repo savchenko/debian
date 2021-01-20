@@ -2,21 +2,33 @@
 - name: Ensure asound.conf is present
   file:
     path: /etc/asound.conf
-    state: present
+    state: file
     modification_time: preserve
     access_time: preserve
+  register: stat_asound
 
-- name: Set default alsa device
+- name: Backup existing asound.conf
+  copy:
+    remote_src: yes
+    src: /etc/asound.conf
+    dest: /etc/asound_conf_backup
+  when: stat_asound.size > 1
+
+- name: Set secondary (fallback) ALSA output system-wide
   lineinfile:
     path: /etc/asound.conf
     line: "{{ item }}"
     insertafter: EOF
   with_items:
-    - "defaults.pcm.card {{ alsa_out_primary }}"
-    - "defaults.ctl.card {{ alsa_out_primary }}"
+    - "defaults.pcm.card {{ alsa_out_secondary }}"
     - "defaults.ctl.card {{ alsa_out_secondary }}"
 
+- name: Set primary ALSA output in ~/.asoundrc
+  template:
+    src: alsa.j2
+    dest: "{{ ansible_env.HOME}}/.asoundrc"
+
 - name: Reload ALSA configs
-  command: alaucm reload
+  command: alsaucm reload
   register: alsa_reloaded
   changed_when: alsa_reloaded.rc != 0
