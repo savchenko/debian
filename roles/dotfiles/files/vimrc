@@ -673,6 +673,13 @@ autocmd BufReadPost *
 " Temporarily hide ruler when in FZF mode
 autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
+" Hide line numbers and enter insert mode when in terminal-mode
+function! TerminalOptions()
+  set nonumber
+  startinsert
+endfunction
+au TermOpen * call TerminalOptions()
+
 " Scroll mode, keeps cursor centered and horizontally unchanged
 function! ToggleScrollMode()
   if exists("s:scroll_mode")

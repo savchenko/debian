@@ -23,6 +23,9 @@ wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 # Lazy git
 lzg() { git add . && git commit -a -m "$@" && git push; }
 
+# Reset the term
+bind -x '"\C-l"':reset
+
 # Quick thesaurus
 function _dict_lookup {
   if [ -f $HOME/.local/share/wordlist ]; then

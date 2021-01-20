@@ -21,6 +21,7 @@ export GREP_COLOR="1;32"
 export HSTR_CONFIG=hicolor,hide-help
 export HSTR_PROMPT="> "
 export LESSCHARSET=utf-8
+export LIBVIRT_DEFAULT_URI="qemu:///system"
 export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
 export MANPATH="$HOME/.local/man:$MANPATH"
 export MOZ_ENABLE_WAYLAND=1

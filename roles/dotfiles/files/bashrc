@@ -63,7 +63,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
 
   export PS1
-  export PS2=" ${clr_reset}"
+  export PS2=" ${clr_reset} "
 
   #
   # Tweaks ------------------------------------------------------------------------
