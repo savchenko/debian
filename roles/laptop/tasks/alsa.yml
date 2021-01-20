@@ -13,6 +13,7 @@
     src: /etc/asound.conf
     dest: /etc/asound_conf_backup
   when: stat_asound.size > 1
+  become: yes
 
 - name: Set secondary (fallback) ALSA output system-wide
   lineinfile:
@@ -22,6 +23,7 @@
   with_items:
     - "defaults.pcm.card {{ alsa_out_secondary }}"
     - "defaults.ctl.card {{ alsa_out_secondary }}"
+  become: yes
 
 - name: Set primary ALSA output in ~/.asoundrc
   template:
@@ -32,3 +34,4 @@
   command: alsaucm reload
   register: alsa_reloaded
   changed_when: alsa_reloaded.rc != 0
+  become: yes
