@@ -14,8 +14,8 @@
     that:
       - ansible_facts.machine == "x86_64"
       - ansible_facts.form_factor == "Notebook"
-      - ansible_fact.virtualization_role != "guest"
-    sucess_msg: "Seems like target is a valid laptop. Proceeding..."
+      - ansible_facts.virtualization_role != "guest"
+    success_msg: "Seems like target is a valid laptop. Proceeding..."
 
 - name: Register user's home folder status
   stat:

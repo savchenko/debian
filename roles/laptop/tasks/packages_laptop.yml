@@ -44,7 +44,6 @@
       - libglib2.0-bin # gsettings
       - libreoffice-l10n-en-gb
       - libreoffice-style-sifr
-      - libvirt-bin
       - libvirt-daemon-system
       - light
       - lyx
@@ -75,7 +74,6 @@
       - tor
       - torsocks
       - virt-manager
-      - virt-top
       - vit
       - wavemon
       - waybar

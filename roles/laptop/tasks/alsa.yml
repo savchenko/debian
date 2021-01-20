@@ -1,5 +1,5 @@
 ---
-- name: Ensure asound.conf is present
+- name: Check if asound.conf is present
   file:
     path: /etc/asound.conf
     state: file
@@ -24,6 +24,21 @@
     - "defaults.pcm.card {{ alsa_out_secondary }}"
     - "defaults.ctl.card {{ alsa_out_secondary }}"
   become: yes
+
+- name: Check if ~/.asoundrc is present
+  file:
+    path: "{{ ansible_env.HOME}}/.asoundrc"
+    state: file
+    modification_time: preserve
+    access_time: preserve
+  register: stat_asoundrc
+
+- name: Backup existing ~/.asoundrc
+  copy:
+    remote_src: yes
+    src: "{{ ansible_env.HOME}}/.asoundrc"
+    dest: "{{ ansible_env.HOME}}/asoundrc_backup"
+  when: stat_asoundrc.size > 1
 
 - name: Set primary ALSA output in ~/.asoundrc
   template:
