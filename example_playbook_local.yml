@@ -3,41 +3,88 @@
   tasks:
 
   - name: Execute `base` role
-    import_role:
+    include_role:
       name: base
+      apply:
+        tags:
+          # Limit play via `ansible-playbook --tags role_*`
+          - role_base
+    tags:
+      # `always` is a keyword here, not a tag.
+      - always
     vars:
-      allow_reboot: true
+      # Refer to the respective READMEs for variables' descriptions and default values
+      allow_reboot: false
+      allow_ssh: false
+      debs: []
+      disable_bluetooth: true
+      disable_firewire: true
+      disable_hfs_udf: true
       disable_speaker: false
+      disable_thunderbolt: true
+      fstab_noexec: true
       generate_moduli: false
+      grub_optional: ""
       locale: en_US.UTF8
-      resolver_blocklist:
+      resolver_blocklist: ""
       resolver_listen_on_ip: 127.0.0.1
       resolver_primary_hostname: dns.quad9.net
       resolver_primary_ip: 9.9.9.9
       resolver_secondary_hostname: dns.quad9.net
       resolver_secondary_ip: 149.112.112.112
-      resolver_tls: true
+      resolver_tls: false
+      set_capslock: true
+      set_hostname: false
+      sshd_less_secure: false
+      sshguard_path: /etc/sshguard/sshguard.conf
       timezone: Australia/Adelaide
-      grub_optional: ""
-      disable_igfx: true
 
   - name: Execute `dotfiles` role
     include_role:
       name: dotfiles
+      apply:
+        tags:
+          - role_dotfiles
+    tags:
+      - always
     vars:
-      change_prefix: false
+      change_tmux_prefix: false
       copy_dotfiles: false
       link_to_localhost: true
-      neovim: true
       remote_bash_emacs: false
       remote_gitconfig: false
-      sshd_less_secure: false
+      setup_neovim: true
 
   - name: Execute `transfer-agent` role
     include_role:
       name: transfer-agent
+      apply:
+        tags:
+          - role_transfer
+    tags:
+      - always
     vars:
       agent_group: agents
       agent_name: xfer_agent
       pubkey_from_current_user: true
-      rsync: true
+      remove_existing_user: true
+      add_rsync: true
+    when: undefined # this block won't run
+
+  - name: Execute `laptop` role
+    include_role:
+      name: laptop
+      apply:
+        tags:
+          - role_laptop
+    tags:
+      - always
+    vars:
+      alsa_in: 2
+      alsa_out_primary: 3
+      alsa_out_secondary: 1
+      disable_igfx: false
+      systemd_units_disable: []
+      systemd_units_enable: []
+      virtio_network_autostart: true
+      virtio_use_default_network: true
