@@ -214,6 +214,8 @@ alias dd="dd bs=4M status=progress oflag=sync"
 alias dmesg="sudo dmesg -Hwx"
 alias fd="fdfind --hidden --no-ignore --follow"
 alias gpg="gpg2"
+alias ip="ip --color=auto"
+alias ipa="ip --color=auto -br addr"
 alias openports='sudo lsof -Pni4'
 alias psudo="sudo --preserve-env"
 alias remount_nfs="sudo mount -a -t cifs"
@@ -271,7 +273,8 @@ alias t='task'
 alias test_microphone="arecord -vv -f dat /dev/null"
 alias weather="curl -s v2.wttr.in/Adelaide | head -42"
 alias rr="ranger"
-alias issues_dmesg="sudo dmesg | grep -i -E 'erro|warn|fail'"
+alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault'"
+alias debug_keycodes="sudo libinput debug-events --show-keycodes"
 
 # Wireless
 alias wifimon='wavemon -g'

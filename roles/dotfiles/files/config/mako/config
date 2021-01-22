@@ -3,7 +3,7 @@ background-color=#2b2e30
 border-color=#888888
 border-size=2
 default-timeout=5000
-font=Consolas NF 12
+font=JetBrains Mono 14
 format=<b>%s</b>\n%b
 group-by=summary
 height=200
@@ -26,6 +26,10 @@ border-color=#888888
 [urgency=high]
 border-color=#bf616a
 default-timeout=60000
+
+[category=interfaces]
+width=600
+height=600
 
 [category=mpd]
 default-timeout=2000

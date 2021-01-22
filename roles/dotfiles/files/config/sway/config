@@ -106,12 +106,18 @@ floating_modifier $mod normal
 # kill focused window
 bindsym $mod+Shift+q kill
 
+# WLAN on/off
+bindsym XF86WLAN exec ~/.config/sway/wlan.sh
+
 # Brightness, in-built display
 set $light_up $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 set $light_down $(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 set $light_level $(light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 bindsym XF86MonBrightnessDown exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_up" "$light_level"
 bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_down" "$light_level"
+
+# All displays on/off switch (Fn+F7)
+bindsym XF86Display exec ~/.config/sway/backlight.sh
 
 # Brightness, external display via i2c
 set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
@@ -120,13 +126,33 @@ set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 5; echo $ext_l
 bindsym Alt+Ctrl+F5 exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_down" "$ext_light_level"
 bindsym Alt+Ctrl+F6 exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_up" "$ext_light_level"
 
-# Pure ALSA
-set $volume_up $(amixer -q set Speaker 1%+ unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
-set $volume_down $(amixer -q set Speaker 1%- unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
-set $volume_level $(amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
-bindsym XF86AudioRaiseVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_up" "$volume_level"
+#
+# ALSA
+#
+
+# out
+set $volume_up $(amixer -q set PCM 1%+ unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
+set $volume_down $(amixer -q set PCM 1%- unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
+set $volume_level $(amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
+set $pcm_led_mute $(light -s sysfs/leds/platform::mute -S 100)
+set $pcm_led_unmute $(light -s sysfs/leds/platform::mute -S 0)
+
+bindsym XF86AudioRaiseVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_up" "$volume_level" && $pcm_led_unmute
 bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_down" "$volume_level"
-bindsym XF86AudioMute exec (amixer get Speaker | grep off > /dev/null && amixer -q set Speaker unmute && notify-send -c "hardware" -t 1000 -u low -h "int:value:$(amixer -q set Speaker unmute && amixer sget Speaker | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "$volume_level") || (amixer -q set Speaker mute && notify-send -c "hardware" -t 1000 -u low -h "int:value:0" "Muted")
+bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 1000 -u low -h "int:value:$(amixer -q set PCM unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "$volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 1000 -u low -h "int:value:0" "Muted" && $pcm_led_mute)
+
+# in
+set $mic_mute $(amixer -q -c1 set Capture 0% && amixer -q -c1 set 'Mic Boost' 0% && amixer -q -c1 set 'Digital' 0% && amixer -q -c1 set 'Mic Boost' 0%)
+set $mic_unmute $(amixer -q -c1 set Capture 100% && amixer -q -c1 set 'Mic Boost' 100% && amixer -q -c1 set 'Digital' 100% && amixer -q -c1 set 'Mic Boost' 100%)
+set $mic_led_mute $(light -s sysfs/leds/platform::micmute -S 100)
+set $mic_led_unmute $(light -s sysfs/leds/platform::micmute -S 0)
+set $mic_toggle $(amixer -q -c1 set 'Capture' toggle)
+
+bindsym XF86AudioMicMute exec (amixer get -c1 Capture | grep -E "\[0%" > /dev/null && $mic_unmute && $mic_led_unmute && $mic_toggle) || ($mic_mute && $mic_led_mute && $mic_toggle)
+
+#
+# Windows
+#
 
 # Windows list
 bindsym Alt+Tab exec ~/.config/sway/windows.sh
