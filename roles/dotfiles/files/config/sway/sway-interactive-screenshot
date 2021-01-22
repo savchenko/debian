@@ -30,28 +30,28 @@ Focused
 4s Focused
 EOF`
 
-SAVEDIR=${SWAY_INTERACTIVE_SCREENSHOT_SAVEDIR:=~/Desktop/screenshots}
-FILENAME="$SAVEDIR/$(date +'%Y-%m-%d-%H%M%S_screenshot.png')"
-EXPENDED_FILENAME="${FILENAME/#\~/$HOME}"
+SAVEDIR="$HOME/Desktop/screenshots"
+DATE="date +'%d-%b_%H-%M-%S.png'"
+FILENAME="$SAVEDIR/$(eval $DATE)"
 
 case $CHOICE in
     Fullscreen)
-        grim "$EXPENDED_FILENAME"
+        grim "$FILENAME";
   ;;
     Region)
-        grim -g "$(slurp)" "$EXPENDED_FILENAME"
+        grim -g "$(slurp)" "$FILENAME";
   ;;
     Focused)
-        grim -g "$FOCUSED" "$EXPENDED_FILENAME"
+        grim -g "$FOCUSED" "$FILENAME";
   ;;
     "4s Fullscreen")
-        sleep 4s && grim "$EXPENDED_FILENAME"; wait
+        sleep 4s && grim "$FILENAME";
   ;;
     "4s Region")
-        sleep 4s && grim -g "$(slurp)" "$EXPENDED_FILENAME"; wait
+        sleep 4s && grim -g "$(slurp)" "$FILENAME";
   ;;
     "4s Focused")
-        sleep 4s && grim -g "$FOCUSED" "$EXPENDED_FILENAME"; wait
+        sleep 4s && grim -g "$FOCUSED" "$FILENAME";
   ;;
     '')
         # notify-send "Screenshot" "Cancelled"
@@ -59,8 +59,8 @@ case $CHOICE in
         ;;
     *)
       GEOMETRY="`echo \"$CHOICE\" | cut -d$'\t' -f1`"
-      grim -g "$GEOMETRY" "$EXPENDED_FILENAME"
+      grim -g "$GEOMETRY" "$FILENAME";
 esac
 
-wl-copy < "$EXPENDED_FILENAME"
-notify-send "Screenshot" "File saved as <i>'$FILENAME'</i> and copied to the clipboard." -i "$EXPENDED_FILENAME"
+wl-copy < "$FILENAME";
+notify-send "Screenshot" "File saved as <i>'$FILENAME'</i> and copied to the clipboard." -i "$FILENAME";
