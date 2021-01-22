@@ -139,11 +139,11 @@ set $pcm_led_unmute $(light -s sysfs/leds/platform::mute -S 0)
 
 bindsym XF86AudioRaiseVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_up" "$volume_level" && $pcm_led_unmute
 bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_down" "$volume_level"
-bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 1000 -u low -h "int:value:$(amixer -q set PCM unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "$volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 1000 -u low -h "int:value:0" "Muted" && $pcm_led_mute)
+bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$(amixer -q set PCM unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "$volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
 
 # in
-set $mic_mute $(amixer -q -c1 set Capture 0% && amixer -q -c1 set 'Mic Boost' 0% && amixer -q -c1 set 'Digital' 0% && amixer -q -c1 set 'Mic Boost' 0%)
-set $mic_unmute $(amixer -q -c1 set Capture 100% && amixer -q -c1 set 'Mic Boost' 100% && amixer -q -c1 set 'Digital' 100% && amixer -q -c1 set 'Mic Boost' 100%)
+set $mic_mute $(amixer -q -c1 set Capture 0% && amixer -q -c1 set 'Mic Boost' 0% && amixer -q -c1 set 'Digital' 0% && amixer -q -c1 set 'Mic Boost' 0% && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "Microphone muted")
+set $mic_unmute $(amixer -q -c1 set Capture 100% && amixer -q -c1 set 'Mic Boost' 100% && amixer -q -c1 set 'Digital' 100% && amixer -q -c1 set 'Mic Boost' 100% && notify-send -c "hardware" -t 2000 -u low -h "int:value:$(amixer -c1 sget Capture | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}')" "$(amixer -c1 sget Capture | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}')")
 set $mic_led_mute $(light -s sysfs/leds/platform::micmute -S 100)
 set $mic_led_unmute $(light -s sysfs/leds/platform::micmute -S 0)
 set $mic_toggle $(amixer -q -c1 set 'Capture' toggle)
