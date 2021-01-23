@@ -20,8 +20,8 @@ function list_geometry () {
   swaymsg -t get_tree | jq -r '.. | (.nodes? // empty)[] | select(.'$1' and .pid) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)'$append'"'
 }
 
-FOCUSED=`list_geometry focused`
-CHOICE=`wofi -L 6 -W 200 -b -d -p 'Screenshot' -O 'alphabetical' << EOF
+focused_pane=`list_geometry focused | xargs`
+choice=`wofi -L 6 -W 200 -b -d -p 'Screenshot' -O 'alphabetical' << EOF
 Fullscreen
 Region
 Focused
@@ -30,37 +30,46 @@ Focused
 4s Focused
 EOF`
 
-SAVEDIR="$HOME/Desktop/screenshots"
-DATE="date +'%d-%b_%H-%M-%S.png'"
-FILENAME="$SAVEDIR/$(eval $DATE)"
+fname_short=$(date +'%d-%b_%H-%M-%S.png')
+fname_full="$HOME/Desktop/screenshots/$fname_short"
 
-case $CHOICE in
+valid_geo="^[0-9]+\,[0-9]+\ [0-9]+x[0-9]+"
+if [[ $focused_pane =~ $valid_geo ]];
+then
+  :
+else
+  notify-send -u low "Screenshot failed" "\nUnable to obtain the requested geometry."
+  echo -e "Floating windows are not supported.\nUnable to obtain the requested geometry."
+  exit 126 # Command invoked cannot execute
+fi
+
+case $choice in
     Fullscreen)
-        grim "$FILENAME";
+        grim "$fname_full";
   ;;
     Region)
-        grim -g "$(slurp)" "$FILENAME";
+        grim -g "$(slurp)" "$fname_full";
   ;;
     Focused)
-        grim -g "$FOCUSED" "$FILENAME";
+        grim -g "$focused_pane" "$fname_full";
   ;;
     "4s Fullscreen")
-        sleep 4s && grim "$FILENAME";
+        sleep 4s && grim "$fname_full";
   ;;
     "4s Region")
-        sleep 4s && grim -g "$(slurp)" "$FILENAME";
+        sleep 4s && grim -g "$(slurp)" "$fname_full";
   ;;
     "4s Focused")
-        sleep 4s && grim -g "$FOCUSED" "$FILENAME";
+        sleep 4s && grim -g "$focused_pane" "$fname_full";
   ;;
     '')
-        # notify-send "Screenshot" "Cancelled"
+        notify-send "Screenshot" "Cancelled"
         exit 0
         ;;
     *)
-      GEOMETRY="`echo \"$CHOICE\" | cut -d$'\t' -f1`"
-      grim -g "$GEOMETRY" "$FILENAME";
+      GEOMETRY="`echo \"$choice\" | cut -d$'\t' -f1`"
+      grim -g "$GEOMETRY" "$fname_full";
 esac
 
-wl-copy < "$FILENAME";
-notify-send "Screenshot" "File saved as <i>'$FILENAME'</i> and copied to the clipboard." -i "$FILENAME";
+wl-copy < "$fname_full";
+notify-send "Screenshot" "$fname_short" -i "$fname_full";

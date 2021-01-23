@@ -84,7 +84,7 @@ set $menu wofi --gtk-dark
 bindsym $mod+d exec $menu
 
 # Screenshotting
-bindsym Print exec ~/.config/sway/sway-interactive-screenshot
+bindsym Print exec ~/.config/sway/screenshot.sh
 bindsym $mod+Print exec ~/.config/sway/picker.sh
 
 # Numero sign
