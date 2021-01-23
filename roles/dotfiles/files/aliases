@@ -219,6 +219,7 @@ alias ipa="ip --color=auto -br addr"
 alias openports='sudo lsof -Pni4'
 alias psudo="sudo --preserve-env"
 alias remount_nfs="sudo mount -a -t cifs"
+alias rm="rm -I"
 alias rt="reset"
 alias s="sudo"
 alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
@@ -275,6 +276,7 @@ alias weather="curl -s v2.wttr.in/Adelaide | head -42"
 alias rr="ranger"
 alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault'"
 alias debug_keycodes="sudo libinput debug-events --show-keycodes"
+alias debug_summary="inxi -Fxxxz -G --display"
 
 # Wireless
 alias wifimon='wavemon -g'
