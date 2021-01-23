@@ -21,6 +21,12 @@
     state: restarted
   listen: "restart timesyncd"
 
+- name: restart networking
+  service:
+    name: networking
+    state: restarted
+  listen: "restart networking"
+
 - name: reconfigure keyboard settings
   shell: dpkg-reconfigure -f noninteractive keyboard-configuration
   become: yes

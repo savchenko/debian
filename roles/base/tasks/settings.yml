@@ -55,6 +55,15 @@
     - /etc/issue
     - /etc/issue.net
 
+- name: Modify basic dhclient settings
+  copy:
+    dest: /etc/dhcp/dhclient.conf
+    src: conf/dhclient.conf
+    owner: root
+    mode: 0644
+  notify:
+    - restart networking
+
 - name: Change CapsLock to Ctrl
   lineinfile:
     path: /etc/default/keyboard
