@@ -140,7 +140,7 @@ set $pcm_led_unmute $(light -s sysfs/leds/platform::mute -S 0)
 bindsym XF86AudioRaiseVolume exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_up" "PCM: $volume_level" && $pcm_led_unmute
 bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_down" "PCM: $volume_level"
 
-bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$(amixer -q set PCM unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)" "PCM: $volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
+bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_level" "PCM: $volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
 
 # in
 set $mic_lvl_left $(amixer -c1 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f1)
