@@ -113,8 +113,8 @@ bindsym XF86WLAN exec ~/.config/sway/wlan.sh
 set $light_up $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 set $light_down $(light -s sysfs/backlight/amdgpu_bl0 -A 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
 set $light_level $(light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
-bindsym XF86MonBrightnessDown exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_up" "$light_level"
-bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$light_down" "$light_level"
+bindsym XF86MonBrightnessDown exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$light_up" "Laptop: $light_level"
+bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$light_down" "Laptop: $light_level"
 
 # All displays on/off switch (Fn+F7)
 bindsym XF86Display exec ~/.config/sway/backlight.sh
@@ -123,27 +123,31 @@ bindsym XF86Display exec ~/.config/sway/backlight.sh
 set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
 set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 5; echo $ext_light_level)
 set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 5; echo $ext_light_level)
-bindsym Alt+Ctrl+F5 exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_down" "$ext_light_level"
-bindsym Alt+Ctrl+F6 exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$ext_light_up" "$ext_light_level"
+bindsym Alt+Ctrl+F5 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_down" "Monitor: $ext_light_level"
+bindsym Alt+Ctrl+F6 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_up" "Monitor: $ext_light_level"
 
 #
 # ALSA
 #
 
 # out
-set $volume_up $(amixer -q set PCM 1%+ unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
-set $volume_down $(amixer -q set PCM 1%- unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
-set $volume_level $(amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')
+set $volume_up $(amixer -q set PCM 1%+ unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
+set $volume_down $(amixer -q set PCM 1%- unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
+set $volume_level $(amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
 set $pcm_led_mute $(light -s sysfs/leds/platform::mute -S 100)
 set $pcm_led_unmute $(light -s sysfs/leds/platform::mute -S 0)
 
-bindsym XF86AudioRaiseVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_up" "$volume_level" && $pcm_led_unmute
-bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 1000 -u low -h "int:value:$volume_down" "$volume_level"
-bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$(amixer -q set PCM unmute && amixer sget PCM | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }')" "$volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
+bindsym XF86AudioRaiseVolume exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_up" "PCM: $volume_level" && $pcm_led_unmute
+bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_down" "PCM: $volume_level"
+
+bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$(amixer -q set PCM unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)" "PCM: $volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
 
 # in
+set $mic_lvl_left $(amixer -c1 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f1)
+set $mic_lvl_right $(amixer -c1 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f2)
+set $mic_lvl_min $(( $mic_lvl_left < $mic_lvl_right ? $mic_lvl_left : $mic_lvl_right ))
 set $mic_mute $(amixer -q -c1 set Capture 0% && amixer -q -c1 set 'Mic Boost' 0% && amixer -q -c1 set 'Digital' 0% && amixer -q -c1 set 'Mic Boost' 0% && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "Microphone muted")
-set $mic_unmute $(amixer -q -c1 set Capture 100% && amixer -q -c1 set 'Mic Boost' 100% && amixer -q -c1 set 'Digital' 100% && amixer -q -c1 set 'Mic Boost' 100% && notify-send -c "hardware" -t 2000 -u low -h "int:value:$(amixer -c1 sget Capture | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}')" "$(amixer -c1 sget Capture | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}')")
+set $mic_unmute $(amixer -q -c1 set Capture 100% && amixer -q -c1 set 'Mic Boost' 100% && amixer -q -c1 set 'Digital' 100% && amixer -q -c1 set 'Mic Boost' 100% && notify-send -c "hardware" -t 2000 -u low -h "int:value:$mic_lvl_min" "Microphone: $mic_lvl_min")
 set $mic_led_mute $(light -s sysfs/leds/platform::micmute -S 100)
 set $mic_led_unmute $(light -s sysfs/leds/platform::micmute -S 0)
 set $mic_toggle $(amixer -q -c1 set 'Capture' toggle)
