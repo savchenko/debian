@@ -30,17 +30,18 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 ## Role Variables
 
-| Variable                   | Description                              | Default |
-|----------------------------|------------------------------------------|---------|
-| alsa_in                    | ALSA input                               | 1       |
-| alsa_out_primary           | Primary ALSA output device               | 1       |
-| alsa_out_secondary         | Secondary ALSA output device             | 2       |
-| intel_disable_igfx         | Disable iGFX on Intel platform.          | false   |
-| systemd_units_disable      | List of systemd units to disable         | -       |
-| systemd_units_enable       | List of systemd units to enable          | -       |
-| user_add_i2c               | Add login user to i2c group              | false   |
-| virtio_network_autostart   | Autostart default virtio network on boot | true    |
-| virtio_use_default_network | Use NAT-based, "default" virtio setup    | true    |
+| Variable                   | Description                                            | Default |
+|----------------------------|--------------------------------------------------------|---------|
+| alsa_out_card              | Default ALSA output card                               | 0       |
+| alsa_out_device            | Default ALSA output device                             | 0       |
+| alsa_setup                 | Setup ALSA?                                            | false   |
+| intel_disable_igfx         | Disable iGFX on Intel platform.                        | false   |
+| intel_hda_options          | String that is passed to `snd-hda-intel` via modprobe. | ""      |
+| systemd_units_disable      | List of systemd units to disable                       | []      |
+| systemd_units_enable       | List of systemd units to enable                        | []      |
+| user_add_i2c               | Add login user to i2c group                            | false   |
+| virtio_network_autostart   | Autostart default virtio network on boot               | true    |
+| virtio_use_default_network | Use NAT-based, "default" virtio setup                  | true    |
 
 
 ## Dependencies

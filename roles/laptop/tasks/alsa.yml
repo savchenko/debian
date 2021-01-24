@@ -1,49 +1,36 @@
 ---
 - name: Check if asound.conf is present
-  file:
+  stat:
     path: /etc/asound.conf
-    state: file
-    modification_time: preserve
-    access_time: preserve
   register: stat_asound
 
 - name: Backup existing asound.conf
   copy:
     remote_src: yes
     src: /etc/asound.conf
-    dest: /etc/asound_conf_backup
-  when: stat_asound.size > 1
+    dest: "/etc/backup_asound_conf_{{ ansible_date_time.epoch }}"
+  when: stat_asound | bool
   become: yes
 
-- name: Set secondary (fallback) ALSA output system-wide
-  lineinfile:
-    path: /etc/asound.conf
-    line: "{{ item }}"
-    insertafter: EOF
-  with_items:
-    - "defaults.pcm.card {{ alsa_out_secondary }}"
-    - "defaults.ctl.card {{ alsa_out_secondary }}"
-  become: yes
-
-- name: Check if ~/.asoundrc is present
+- name: Remove existing asound.conf
   file:
-    path: "{{ ansible_env.HOME}}/.asoundrc"
-    state: file
-    modification_time: preserve
-    access_time: preserve
-  register: stat_asoundrc
+    path: /etc/asound.conf
+    state: absent
+  become: yes
 
-- name: Backup existing ~/.asoundrc
-  copy:
-    remote_src: yes
-    src: "{{ ansible_env.HOME}}/.asoundrc"
-    dest: "{{ ansible_env.HOME}}/asoundrc_backup"
-  when: stat_asoundrc.size > 1
-
-- name: Set primary ALSA output in ~/.asoundrc
+- name: Set ALSA card and device in ~/.asoundrc
   template:
     src: alsa.j2
     dest: "{{ ansible_env.HOME}}/.asoundrc"
+    backup: yes
+
+- name: Add Intel HDA parameters
+  lineinfile:
+    path: /etc/modprobe.d/snd-hda-intel.conf
+    regexp: '^options\ snd-hda-intel\ '
+    line: "options snd-hda-intel {{ intel_hda_options }}"
+    state: present
+  when: intel_hda_options | length > 2
 
 - name: Reload ALSA configs
   command: alsaucm reload

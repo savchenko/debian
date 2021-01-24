@@ -1,9 +1,8 @@
-pcm.!default {
-    type asym
-    playback.pcm "plughw:{{ alsa_out_primary }},0"
-    capture.pcm  "plughw:{{ alsa_in }},0"
-}
-ctl.!default {
-        type hw
-        card {{ alsa_out_primary }}
-}
+#
+# Only these 4 lines, please. Sets an active card and device.
+# D-Mixing et al. are automatic since ALSA ~1.0.9rc2.
+#
+defaults.pcm.!card {{ alsa_out_card }}
+defaults.ctl.!card {{ alsa_out_card }}
+defaults.ctl.!device {{ alsa_out_device }}
+defaults.pcm.!device {{ alsa_out_device }}

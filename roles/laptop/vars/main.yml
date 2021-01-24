@@ -1,9 +1,9 @@
 ---
-alsa_in: 1
-alsa_out_primary: 1
-alsa_out_secondary: 2
+alsa_out_card: 0
+alsa_out_device: 0
+alsa_setup: false
 intel_disable_igfx: false
-setup_alsa: false
+intel_hda_options: ""
 systemd_units_disable: []
 systemd_units_enable: []
 user_add_i2c: false
