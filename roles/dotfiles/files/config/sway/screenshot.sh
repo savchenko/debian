@@ -20,26 +20,20 @@ function list_geometry () {
   swaymsg -t get_tree | jq -r '.. | (.nodes? // empty)[] | select(.'$1' and .pid) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)'$append'"'
 }
 
+options=$'Fullscreen\nRegion\nFocused\n4s Fullscreen\n4s Region\n4s Focused'
 focused_pane=`list_geometry focused | xargs`
-choice=`wofi -L 6 -W 200 -b -d -p 'Screenshot' -O 'alphabetical' << EOF
-Fullscreen
-Region
-Focused
-4s Fullscreen
-4s Region
-4s Focused
-EOF`
-
+choice=$(echo "$options" | wofi -L 6 -W 200 -b -d -p 'Screenshot' -O 'alphabetical')
 fname_short=$(date +'%d-%b_%H-%M-%S.png')
 fname_full="$HOME/Desktop/screenshots/$fname_short"
-
 valid_geo="^[0-9]+\,[0-9]+\ [0-9]+x[0-9]+"
-if [[ $focused_pane =~ $valid_geo ]];
+
+if [[ "$choice" =~ Focused$ ]] && ! [[ $focused_pane =~ $valid_geo ]];
 then
-  :
-else
-  notify-send -u low "Screenshot failed" "\nUnable to obtain the requested geometry."
-  echo -e "Floating windows are not supported.\nUnable to obtain the requested geometry."
+  if [[ -n "$TERM" && -n "$COLORTERM" ]]; then
+    echo -e "Floating windows are not supported.\nUnable to obtain the requested geometry."
+  else
+    notify-send -u low "Screenshot failed" "\nUnable to obtain the requested geometry."
+  fi
   exit 126 # Command invoked cannot execute
 fi
 
@@ -67,8 +61,8 @@ case $choice in
         exit 0
         ;;
     *)
-      GEOMETRY="`echo \"$choice\" | cut -d$'\t' -f1`"
-      grim -g "$GEOMETRY" "$fname_full";
+      geo="`echo \"$choice\" | cut -d$'\t' -f1`"
+      grim -g "$geo" "$fname_full";
 esac
 
 wl-copy < "$fname_full";
