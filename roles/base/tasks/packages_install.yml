@@ -18,6 +18,7 @@
       - ca-certificates
       - checksec
       - curl
+      - debconf-utils
       - debian-goodies
       - dfc
       - dnsutils

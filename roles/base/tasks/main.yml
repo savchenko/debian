@@ -12,10 +12,10 @@
     - base_cpu
 
 - name: Set dpkg overrides
-  import_tasks: dpkg.yml
+  import_tasks: dpkg_overrides.yml
   become: yes
   tags:
-    - base_dpkg
+    - base_dpkg_overrides
 
 - name: Boostrap vital settings
   import_tasks: bootstrap.yml
@@ -71,6 +71,12 @@
   become: yes
   tags:
     - base_pkg_install
+
+- name: Reconfigure dpkg
+  import_tasks: dpkg_reconfigure.yml
+  become: yes
+  tags:
+    - base_dpkg_reconfigure
 
 - name: Configure sshguard
   import_tasks: sshguard.yml

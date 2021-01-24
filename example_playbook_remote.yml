@@ -1,5 +1,5 @@
 ---
-- hosts: my-valid-hostname
+- hosts: virtbsy
   tasks:
 
   - name: Execute `base` role
@@ -22,6 +22,7 @@
       disable_hfs_udf: true
       disable_speaker: true
       disable_thunderbolt: true
+      fb_font_size: 10x18
       fstab_noexec: true
       generate_moduli: false
       grub_optional: ""
@@ -67,5 +68,6 @@
       agent_group: agents
       agent_name: xfer_agent
       pubkey_from_current_user: true
-      remove_existing_user: false
+      remove_existing_user: true
       add_rsync: true
+    when: false

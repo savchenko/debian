@@ -10,7 +10,7 @@ disable_thunderbolt: true
 fstab_noexec: true
 grub_optional: ""
 locale: "en_US.UTF-8"
-resolver_blocklist:
+resolver_blocklist: ""
 resolver_listen_on_ip: 127.0.0.1
 resolver_primary_hostname: dns.quad9.net
 resolver_primary_ip: 9.9.9.9

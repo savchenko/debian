@@ -1,0 +1,14 @@
+- name: Re-configure framebuffer / console
+  debconf:
+    name: console-setup
+    question: "{{ item.q }}"
+    value: "{{ item.a }}"
+    vtype: select
+  with_items:
+    - { q: 'console-setup/charmap47', a: 'UTF-8' }
+    - { q: 'console-setup/codeset47', a: '# Latin2 - central Europe and Romanian'}
+    - { q: 'console-setup/codesetcode', a: 'Lat2'}
+    - { q: 'console-setup/fontface47', a: 'TerminusBold'}
+    - { q: 'console-setup/fontsize', a: '{{ fb_font_size }}'}
+    - { q: 'console-setup/fontsize-fb47', a: '{{ fb_font_size }}'}
+    - { q: 'console-setup/fontsize-text47', a: '{{ fb_font_size }}'}

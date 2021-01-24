@@ -25,12 +25,13 @@ Role Variables
 |-----------------------------|--------------------------------------------------------------------------|--------------------------|
 | allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
 | allow_ssh                   | Allow (and limit) incoming SSH.                                          | False                    |
-| debs                        | Additional .deb packages to install.                                     | -                        |
+| debs                        | Additional .deb packages to install.                                     | []                       |
 | disable_speaker             | Internal "beeper" only, nothing to do with ALSA.                         | True                     |
 | disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                     |
 | disable_firewire            | Similar to the above.                                                    | True                     |
 | disable_bluetooth           | Likewise.                                                                | True                     |
 | disable_hfs_udf             | ...                                                                      | True                     |
+| fb_font_size                | Framebuffer font size                                                    | 10x18                    |
 | fstab_noexec                | Mount /dev/shm with nodev, nosuid, and noexec.                           | True                     |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
 | timezone                    | Self-explanatory.                                                        | UTC                      |
@@ -42,7 +43,7 @@ Role Variables
 | generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
 | resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
 | resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)               |
-| resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | -                        |
+| resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | ""                       |
 | resolver_primary_ip         | Self-explanatory                                                         | 9.9.9.9                  |
 | resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
 | resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |

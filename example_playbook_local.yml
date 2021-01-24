@@ -22,6 +22,7 @@
       disable_hfs_udf: true
       disable_speaker: false
       disable_thunderbolt: true
+      fb_font_size: 10x18
       fstab_noexec: true
       generate_moduli: false
       grub_optional: ""
