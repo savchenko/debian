@@ -123,8 +123,8 @@ bindsym XF86Display exec ~/.config/sway/backlight.sh
 set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
 set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 5; echo $ext_light_level)
 set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 5; echo $ext_light_level)
-bindsym Alt+Ctrl+F5 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_down" "Monitor: $ext_light_level"
-bindsym Alt+Ctrl+F6 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_up" "Monitor: $ext_light_level"
+bindsym $mod+Ctrl+F5 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_down" "Monitor: $ext_light_level"
+bindsym $mod+Ctrl+F6 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_up" "Monitor: $ext_light_level"
 
 #
 # ALSA
@@ -133,7 +133,7 @@ bindsym Alt+Ctrl+F6 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:
 # out
 set $volume_up $(amixer -q set PCM 1%+ unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
 set $volume_down $(amixer -q set PCM 1%- unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
-set $volume_level $(amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
+set $volume_level $(amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | tail -1 | xargs)
 set $pcm_led_mute $(light -s sysfs/leds/platform::mute -S 100)
 set $pcm_led_unmute $(light -s sysfs/leds/platform::mute -S 0)
 

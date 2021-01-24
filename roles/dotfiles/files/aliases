@@ -23,6 +23,9 @@ wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
 # Lazy git
 lzg() { git add . && git commit -a -m "$@" && git push; }
 
+# apt search | grep wrapper
+aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi }
+
 # Reset the term
 bind -x '"\C-l"':reset
 
@@ -277,6 +280,7 @@ alias rr="ranger"
 alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault'"
 alias debug_keycodes="sudo libinput debug-events --show-keycodes"
 alias debug_summary="inxi -Fxxxz -G --display"
+alias changelog="apt changelog"
 
 # Wireless
 alias wifimon='wavemon -g'
