@@ -1,5 +1,5 @@
 ---
-- name: Disable systemd units
+- name: Disable and stop systemd units
   systemd:
     name: '{{ item }}'
     state: stopped
@@ -10,8 +10,7 @@
 - name: Enable systemd units
   systemd:
     name: '{{ item }}'
-    state: stopped
-    enabled: no
+    enabled: yes
   with_items: '{{ systemd_units_enable }}'
   when: systemd_units_enable | length > 0
 

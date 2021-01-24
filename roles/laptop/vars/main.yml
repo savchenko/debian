@@ -3,8 +3,9 @@ alsa_in: 1
 alsa_out_primary: 1
 alsa_out_secondary: 2
 intel_disable_igfx: false
+setup_alsa: false
 systemd_units_disable: []
 systemd_units_enable: []
+user_add_i2c: false
 virtio_network_autostart: true
 virtio_use_default_network: true
-user_add_i2c: false

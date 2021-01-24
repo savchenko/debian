@@ -80,12 +80,13 @@
     tags:
       - always
     vars:
-      alsa_in: 2
-      alsa_out_primary: 3
+      alsa_setup: false
+      alsa_in: 1
+      alsa_out_primary: 4
       alsa_out_secondary: 1
       intel_disable_igfx: false
-      systemd_units_disable: []
-      systemd_units_enable: []
+      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service']
+      systemd_units_enable: ['tor@default.service', 'tor.service']
       user_add_i2c: true
       virtio_network_autostart: true
       virtio_use_default_network: true
