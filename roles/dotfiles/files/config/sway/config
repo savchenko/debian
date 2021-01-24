@@ -72,6 +72,8 @@ input type:touchpad {
 # Hide cursor when typing, wait for v1.5.1+
 # seat * hide_cursor keyboard enable
 
+set $swaydir $HOME/.config/sway
+
 # Change "Mod" key to "Windows" (otherwise useless)
 set $mod Mod4
 
@@ -84,8 +86,8 @@ set $menu wofi --gtk-dark
 bindsym $mod+d exec $menu
 
 # Screenshotting
-bindsym Print exec ~/.config/sway/screenshot.sh
-bindsym $mod+Print exec ~/.config/sway/picker.sh
+bindsym Print exec $swaydir/screenshot.sh
+bindsym $mod+Print exec $swaydir/picker.sh
 
 # Numero sign
 bindsym Alt+Shift+3 exec wl-copy -p "№" ; wl-paste -p -n
@@ -107,7 +109,7 @@ floating_modifier $mod normal
 bindsym $mod+Shift+q kill
 
 # WLAN on/off
-bindsym XF86WLAN exec ~/.config/sway/wlan.sh
+bindsym XF86WLAN exec $swaydir/wlan.sh
 
 # Brightness, in-built display
 set $light_up $(light -s sysfs/backlight/amdgpu_bl0 -U 1 | light -s sysfs/backlight/amdgpu_bl0 -G | cut -d'.' -f1)
@@ -117,7 +119,7 @@ bindsym XF86MonBrightnessDown exec notify-send -c "hardware" -t 2000 -u low -h "
 bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$light_down" "Laptop: $light_level"
 
 # All displays on/off switch (Fn+F7)
-bindsym XF86Display exec ~/.config/sway/backlight.sh
+bindsym XF86Display exec $swaydir/backlight.sh
 
 # Brightness, external display via i2c
 set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
@@ -130,7 +132,10 @@ bindsym $mod+Ctrl+F6 exec notify-send -c "hardware" -t 2000 -u low -h "int:value
 # ALSA
 #
 
-# out
+# Output chooser
+bindsym XF86Favorites exec $swaydir/alsaswitcher.sh
+
+# Out
 set $volume_up $(amixer -q set PCM 1%+ unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
 set $volume_down $(amixer -q set PCM 1%- unmute && amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | xargs)
 set $volume_level $(amixer sget PCM | grep 'Playback' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' | sed 's/[^0-9]*//g' | tail -1 | xargs)
@@ -142,7 +147,7 @@ bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 2000 -u low -h "i
 
 bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_level" "PCM: $volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
 
-# in
+# In
 set $mic_lvl_left $(amixer -c1 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f1)
 set $mic_lvl_right $(amixer -c1 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f2)
 set $mic_lvl_min $(( $mic_lvl_left < $mic_lvl_right ? $mic_lvl_left : $mic_lvl_right ))
@@ -159,8 +164,8 @@ bindsym XF86AudioMicMute exec (amixer get -c1 Capture | grep -E "\[0%" > /dev/nu
 #
 
 # Windows list
-bindsym Alt+Tab exec ~/.config/sway/windows.sh
-bindsym $mod+Tab exec ~/.config/sway/windows.sh
+bindsym Alt+Tab exec $swaydir/windows.sh
+bindsym $mod+Tab exec $swaydir/windows.sh
 
 # Mako
 bindsym $mod+Escape exec makoctl dismiss
