@@ -106,8 +106,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
                                                       # -h human-readable sizes
                                                       # -p append / indicator to directories
 
-  alias lt="ls -lt"                                   # Newest first
-  alias lth="ls -lt | head"                           # Newest first
+  alias lt="ls -lth"                                  # Newest first
+  alias lth="ls -lth | head"                          # Newest first
 
   alias cp="cp -iv"                                   # Prompt before overwrite, be verbose
 

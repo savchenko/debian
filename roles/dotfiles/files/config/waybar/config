@@ -2,7 +2,7 @@
     "position": "top",
     "modules-left": ["idle_inhibitor", "sway/workspaces", "sway/mode", "custom/sway-scratch"],
     "modules-center": ["sway/window"],
-    "modules-right": ["custom/outside", "custom/uv", /* "network", */ "cpu", "memory", "temperature", "battery", "custom/clock", "tray"],
+    "modules-right": ["custom/outside", "custom/uv", "cpu", "memory", "temperature", "battery", "custom/clock", "tray"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
@@ -74,9 +74,8 @@
         "format": "{}% "
     },
     "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 75,
+        "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+        "critical-threshold": 80,
         "format": " {temperatureC}° ",
     },
     "battery": {
@@ -92,11 +91,4 @@
         "format-good": " {capacity}%",
         "format-full": " ≈F",
     }
-    /* "network": { */
-    /*     "format-wifi": "  .:.  ", */
-    /*     "format-ethernet": "  <->  ", */
-    /*     "format-linked": "{ifname} (No IP)", */
-    /*     "format-disconnected": "  -x-  ", */
-    /*     "tooltip-format-wifi": "{essid}\n\n{signaldBm}dBm @ {frequency}Mhz\n\n{ipaddr} /{cidr}\n\n↓{bandwidthDownBits} ↑{bandwidthUpBits}" */
-    /* } */
 }

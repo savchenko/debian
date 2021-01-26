@@ -122,7 +122,7 @@ fe() {
   local FZF_DEFAULT_COMMAND="fdfind --hidden --follow -t f -t l"
   if [[ -d $1 ]]; then cd $1; else query="$@"; fi
   local f_files=($(fzf --query=$query +m --reverse \
-                --preview-window='right:hidden' \
+                --preview-window='right:nohidden' \
                 --preview 'bat --color=always --style=plain {}' \
                 --inline-info --bind=ctrl-v:toggle-preview \
                 --bind=ctrl-x:toggle-sort --exact $FCLR))
@@ -232,7 +232,7 @@ alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
 alias sup='su --preserve-environment'
 alias sv="sudoedit"
-alias tree="tree -pa"
+alias atree="tree -pa"
 alias watch="watch -c"
 alias xc="wl-copy --trim-newline"
 
