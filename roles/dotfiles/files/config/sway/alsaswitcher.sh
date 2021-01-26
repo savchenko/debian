@@ -16,6 +16,9 @@ if [ $cards_count -lt 10 ]; then
     description=$(echo $choice | sed -r 's/(^.*\[)(.*)(\].*)/\2/')
     grep -E -q 'card\s[0-9]' $asoundrc && sed -r -i "s/(card\s)[0-9]/\1$card/g" $asoundrc
     grep -E -q 'device\s[0-9]' $asoundrc && sed -r -i "s/(device\s)[0-9]/\1$device/g" $asoundrc
+    if [ $? -eq 0 ]; then
+      sudo alsaucm reload
+    fi
     if [[ -n "$TERM" && -n "$COLORTERM" ]]; then
       echo "Switching to card #$card and device #$device ($description)"
     else
