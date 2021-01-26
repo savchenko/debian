@@ -25,6 +25,12 @@
     comment: Limit SSH via Ansible
   when: allow_ssh
 
+- name: Disable logging in config
+  lineinfile:
+    path: /etc/ufw/ufw.conf
+    regexp: '^LOGLEVEL'
+    line: "LOGLEVEL=none"
+
 - name: Enable UFW
   ufw:
     state: enabled
