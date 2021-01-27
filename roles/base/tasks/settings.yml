@@ -38,6 +38,13 @@
     owner: root
     mode: 0644
 
+- name: Copy IWD config
+  copy:
+    src: conf/iwd
+    dest: /etc
+    owner: root
+    mode: 0644
+
 - name: Blacklist kernel modules
   template:
     src: blacklist.j2
@@ -82,7 +89,7 @@
   lineinfile:
     path: /etc/default/grub
     # Bullseye, v5.10+
-    # TODO: 
+    # TODO:
     #   - Enable `module.sig_enforce=1` once SB is operational
     #   - Consider `lockdown=confidentiality`
     #   - Consider `slub_debug=ZF`
