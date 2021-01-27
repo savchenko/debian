@@ -35,6 +35,8 @@ Role Variables
 | fstab_noexec                | Mount /dev/shm with nodev, nosuid, and noexec.                           | True                     |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
 | timezone                    | Self-explanatory.                                                        | UTC                      |
+| ufw_rule                    | Template for a UFW rule. See below for a detailed explanation.           | []                       |
+| ufw_service                 | Template for a UFW service. See below for a detailed explanation.        | []                       |
 | locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
 | set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
 | set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
@@ -48,6 +50,45 @@ Role Variables
 | resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
 | resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |
 | resolver_secondary_hostname | ...                                                                      | dns.quad9.net            |
+
+### ufw_rule
+
+Variable accepts the following list of hashes:
+
+| Variable  | Description           | Default | Required | Possible values                    |
+|-----------|-----------------------|---------|----------|------------------------------------|
+| comment   | Rule comment.         | ""      | no       | Alphanumerics                      |
+| direction | Traffic direction     | "in"    | no       | "in", "out"                        |
+| from      | Traffic source        | any     | no       | Network address                    |
+| to        | Traffic destination   | any     | no       | Network address                    |
+| port      | Port, single or range | any     | no       | integer or "int:int"               |
+| proto     | Protocol              | any     | no       | "tcp", "udp", "esp", "gre", "any"  |
+| rule      | Action taken          | ""      | yes      | "allow", "deny", "limit", "reject" |
+
+Example:
+
+```yaml
+ufw_rule:
+  - { comment: 'Drop incoming TCP traffic from 192.168.*.* to port 22/tcp', direction: 'in', from: '192.168.0.0/16', port: '22', proto: 'tcp', rule: 'deny' }
+```
+
+Note that if "to" in undefined, it will be interpreted as "to any".
+
+#### Quirks
+
+1. If rule specifies a port range, protocol must be set explicitely to "tcp" or "udp".
+
+### ufw_service
+
+Similar to the above, but provisions service using data from `/etc/ufw/applications.d` and `/etc/services`.
+`direction`, `port` and `proto` are replaced with a single variable: `service`.
+
+Example:
+
+```yaml
+ufw_rule:
+  - { comment: 'Reject Yahoo messenger from 192.168.67.83', rule: 'deny', from: '192.168.67.83', service: 'Yahoo' }
+```
 
 Dependencies
 ------------

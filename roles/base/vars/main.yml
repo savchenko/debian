@@ -22,6 +22,8 @@ set_hostname: false
 sshd_less_secure: False
 sshguard_path: /etc/sshguard/sshguard.conf
 timezone: "UTC"
+ufw_rule: []
+ufw_service: []
 
 WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
 WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
