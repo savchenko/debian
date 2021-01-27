@@ -85,7 +85,7 @@
       alsa_out_device: 0
       alsa_setup: true
       intel_disable_igfx: false
-      intel_hda_options: "model=thinkpad"
+      intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
       systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service']
       systemd_units_enable: ['tor@default.service', 'tor.service']
       user_add_i2c: true

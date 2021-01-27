@@ -27,10 +27,11 @@
 - name: Add Intel HDA parameters
   lineinfile:
     path: /etc/modprobe.d/snd-hda-intel.conf
-    regexp: '^options\ snd-hda-intel\ '
-    line: "options snd-hda-intel {{ intel_hda_options }}"
+    line: "options snd-hda-intel {{ item }}"
     state: present
-  when: intel_hda_options | length > 2
+  with_items: "{{ intel_hda_options }}"
+  when: intel_hda_options | length > 0
+  become: yes
 
 - name: Reload ALSA configs
   command: alsaucm reload
