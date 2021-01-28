@@ -106,7 +106,7 @@ set $right l
 floating_modifier $mod normal
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Ctrl+q kill
 
 # WLAN on/off
 bindsym XF86WLAN exec $swaydir/wlan.sh
@@ -200,16 +200,16 @@ bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws0
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws0
+bindsym $mod+Ctrl+1 move container to workspace $ws1
+bindsym $mod+Ctrl+2 move container to workspace $ws2
+bindsym $mod+Ctrl+3 move container to workspace $ws3
+bindsym $mod+Ctrl+4 move container to workspace $ws4
+bindsym $mod+Ctrl+5 move container to workspace $ws5
+bindsym $mod+Ctrl+6 move container to workspace $ws6
+bindsym $mod+Ctrl+7 move container to workspace $ws7
+bindsym $mod+Ctrl+8 move container to workspace $ws8
+bindsym $mod+Ctrl+9 move container to workspace $ws9
+bindsym $mod+Ctrl+0 move container to workspace $ws0
 
 # Bind to a monitor like this
 workspace $ws9 output DP-1
@@ -253,10 +253,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # Move window within workspace
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Ctrl+Left move left
+bindsym $mod+Ctrl+Down move down
+bindsym $mod+Ctrl+Up move up
+bindsym $mod+Ctrl+Right move right
 
 # Move window to another screen (monitor)
 bindsym $mod+Control+m move window to output up
@@ -287,7 +287,7 @@ bindsym $mod+Ctrl+f floating toggle
 bindsym $mod+space focus mode_toggle
 
 # Toggles sticky window
-bindsym $mod+Shift+s sticky toggle
+bindsym $mod+Ctrl+s sticky toggle
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
