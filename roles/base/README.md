@@ -26,30 +26,31 @@ Role Variables
 | allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
 | allow_ssh                   | Allow (and limit) incoming SSH.                                          | False                    |
 | debs                        | Additional .deb packages to install.                                     | []                       |
+| disable_bluetooth           | Likewise.                                                                | True                     |
+| disable_firewire            | Similar to the above.                                                    | True                     |
+| disable_hfs_udf             | ...                                                                      | True                     |
+| disable_sleep_hibernate     | Disables respective systemd services.                                    | False                    |
 | disable_speaker             | Internal "beeper" only, nothing to do with ALSA.                         | True                     |
 | disable_thunderbolt         | Blacklist Thunderbolt kernel modules. [See why](https://thunderspy.io/). | True                     |
-| disable_firewire            | Similar to the above.                                                    | True                     |
-| disable_bluetooth           | Likewise.                                                                | True                     |
-| disable_hfs_udf             | ...                                                                      | True                     |
 | fb_font_size                | Framebuffer font size                                                    | 10x18                    |
 | fstab_noexec                | Mount /dev/shm with nodev, nosuid, and noexec.                           | True                     |
+| generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
+| locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
+| resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | ""                       |
+| resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
+| resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |
+| resolver_primary_ip         | Self-explanatory                                                         | 9.9.9.9                  |
+| resolver_secondary_hostname | ...                                                                      | dns.quad9.net            |
+| resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
+| resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)               |
+| set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
+| set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
+| sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
+| sshguard_path               | Path to sshguard config.                                                 | System default           |
 | timezone                    | Self-explanatory.                                                        | UTC                      |
 | ufw_rule                    | Template for a UFW rule. See below for a detailed explanation.           | []                       |
 | ufw_service                 | Template for a UFW service. See below for a detailed explanation.        | []                       |
-| locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
-| set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
-| set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
-| sshguard_path               | Path to sshguard config.                                                 | System default           |
-| sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
-| generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
-| resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
-| resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)               |
-| resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | ""                       |
-| resolver_primary_ip         | Self-explanatory                                                         | 9.9.9.9                  |
-| resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
-| resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |
-| resolver_secondary_hostname | ...                                                                      | dns.quad9.net            |
 
 ### ufw_rule
 

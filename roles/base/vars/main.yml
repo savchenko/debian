@@ -5,6 +5,7 @@ debs: []
 disable_bluetooth: true
 disable_firewire: true
 disable_hfs_udf: true
+disable_sleep_hibernate: false
 disable_speaker: true
 disable_thunderbolt: true
 fstab_noexec: true

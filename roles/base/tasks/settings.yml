@@ -190,6 +190,18 @@
     insertafter: "^ExecStart.*"
   when: not WSL1 and not WSL2
 
+- name: Disable sleep and suspend
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: yes
+  with_items:
+    - "sleep.target"
+    - "suspend.target"
+    - "hibernate.target"
+    - "hybrid-sleep.target"
+  when: disable_sleep_hibernate
+
 - name: Make systemd-journal volatile
   lineinfile:
     path: /etc/systemd/journald.conf
