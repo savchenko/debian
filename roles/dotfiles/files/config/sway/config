@@ -148,16 +148,17 @@ bindsym XF86AudioLowerVolume exec notify-send -c "hardware" -t 2000 -u low -h "i
 bindsym XF86AudioMute exec (amixer get PCM | grep off > /dev/null && amixer -q set PCM unmute && notify-send -c "hardware" -t 2000 -u low -h "int:value:$volume_level" "PCM: $volume_level" && $pcm_led_unmute) || (amixer -q set PCM mute && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "PCM muted" && $pcm_led_mute)
 
 # In
-set $mic_lvl_left $(amixer -c0 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f1)
-set $mic_lvl_right $(amixer -c0 sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f2)
+set $mic_card $(arecord -l | grep "ALC257 Analog" | cut -d":" -f1 | sed 's/[^0-9]*//g')
+set $mic_lvl_left $(amixer -c$mic_card sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f1)
+set $mic_lvl_right $(amixer -c$mic_card sget Capture | grep 'Capture' | awk -F'[][]' '{ print substr($2, 0, length($2)-1)}' | sed 's/[^0-9]*//g' | xargs | cut -d" " -f2)
 set $mic_lvl_min $(( $mic_lvl_left < $mic_lvl_right ? $mic_lvl_left : $mic_lvl_right ))
-set $mic_mute $(amixer -q -c0 set Capture 0% && amixer -q -c0 set 'Mic Boost' 0% && amixer -q -c0 set 'Digital' 0% && amixer -q -c0 set 'Mic Boost' 0% && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "Microphone muted")
-set $mic_unmute $(amixer -q -c0 set Capture 100% && amixer -q -c0 set 'Mic Boost' 100% && amixer -q -c0 set 'Digital' 100% && amixer -q -c0 set 'Mic Boost' 100% && notify-send -c "hardware" -t 2000 -u low -h "int:value:$mic_lvl_min" "Microphone: $mic_lvl_min")
+set $mic_mute $(amixer -q -c$mic_card set Capture 0% && amixer -q -c$mic_card set 'Mic Boost' 0% && amixer -q -c$mic_card set 'Digital' 0% && amixer -q -c$mic_card set 'Mic Boost' 0% && notify-send -c "hardware" -t 2000 -u low -h "int:value:0" "Microphone muted")
+set $mic_unmute $(amixer -q -c$mic_card set Capture 100% && amixer -q -c$mic_card set 'Mic Boost' 100% && amixer -q -c$mic_card set 'Digital' 100% && amixer -q -c$mic_card set 'Mic Boost' 100% && notify-send -c "hardware" -t 2000 -u low -h "int:value:$mic_lvl_min" "Microphone: $mic_lvl_min")
 set $mic_led_mute $(light -s sysfs/leds/platform::micmute -S 100)
 set $mic_led_unmute $(light -s sysfs/leds/platform::micmute -S 0)
-set $mic_toggle $(amixer -q -c0 set 'Capture' toggle)
+set $mic_toggle $(amixer -q -c$mic_card set 'Capture' toggle)
 
-bindsym XF86AudioMicMute exec (amixer get -c1 Capture | grep -E "\[0%" > /dev/null && $mic_unmute && $mic_led_unmute && $mic_toggle) || ($mic_mute && $mic_led_mute && $mic_toggle)
+bindsym XF86AudioMicMute exec (amixer get -c$mic_card Capture | grep -E "\[0%" > /dev/null && $mic_unmute && $mic_led_unmute && $mic_toggle) || ($mic_mute && $mic_led_mute && $mic_toggle)
 
 #
 # Windows
