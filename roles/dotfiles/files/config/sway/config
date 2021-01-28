@@ -5,12 +5,13 @@ default_border pixel 2
 default_floating_border pixel 2
 default_orientation auto
 font pango:Terminus 16px
-hide_edge_borders smart
+hide_edge_borders --i3 smart
 title_align center
 titlebar_border_thickness 0
 seat seat0 xcursor_theme Adwaita 24
 
 smart_gaps on
+smart_borders on
 gaps inner 0
 
 # Don't set $DISPLAY
@@ -263,8 +264,8 @@ bindsym $mod+Ctrl+Right move right
 bindsym $mod+Control+m move window to output up
 
 # Move focus (cursor) to another monitor
-bindsym $mod+Control+Left focus output left
-bindsym $mod+Control+Right focus output right
+# bindsym $mod+Control+Left focus output left
+# bindsym $mod+Control+Right focus output right
 
 # This flips between two screens
 bindsym $mod+m focus output up
@@ -330,16 +331,12 @@ exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
      dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
-# Dim down the LEDs
-# exec_always sudo light -s sysfs/leds/tpacpi::power -S 0.00
-# exec_always sudo light -s sysfs/leds/platform::mute -S 0.00
-# exec_always sudo light -s sysfs/leds/platform::micmute -S 0.00
+# Dim down the power LED
+exec_always sudo light -s sysfs/leds/tpacpi::power -S 0.00
 
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
+# Lock screens after 5 minutes of inactivity, turn off after 7 minutes in total.
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
-         timeout 100 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && exec sudo light -s sysfs/leds/tpacpi::power -S 0.00' \
+         timeout 120 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && exec sudo light -s sysfs/leds/tpacpi::power -S 0.00' \
          before-sleep 'swaylock -f -c 000000'
 
