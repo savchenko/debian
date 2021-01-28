@@ -1,0 +1,52 @@
+[options]
+suppress_default_binds = true
+
+[binds]
+q = quit
+
+# Image navigation
+<Left> = prev
+<Down> = prev
+<bracketleft> = prev
+<Right> = next
+<Up> = next
+<bracketright> = next
+<Home> = goto 1
+<End> = goto -1
+
+# Panning
+j = pan 0 -50
+k = pan 0 50
+h = pan 50 0
+l = pan -50 0
+
+# Zooming
+<equal> = zoom 1
+<minus> = zoom -1
+
+# Other commands
+f = fullscreen
+o = overlay
+e = center
+s = scaling next
+<Shift+S> = upscaling next
+a = zoom actual
+r = reset
+0 = background checks
+1 = background 000000
+2 = background 333333
+3 = background 666666
+4 = background 999999
+5 = background CCCCCC
+6 = backgorund FCFCFC
+
+# Execs
+c = exec wl-copy < $imv_current_file && notify-send "Clipboard" -i $imv_current_file
+
+# Gif playback
+<period> = next_frame
+<space> = toggle_playing
+
+# Slideshow control
+# t = slideshow +1
+# <Shift+T> = slideshow -1

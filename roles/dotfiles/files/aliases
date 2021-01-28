@@ -26,6 +26,16 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 # apt search | grep wrapper
 aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi }
 
+# imv-wayland with monitor-mode supression
+function im {
+  if [ $# -eq 1 ]; then
+    ( set +m && imv-wayland ${1%} &> /dev/null & )
+  else
+    ( set +m && imv-wayland . &> /dev/null & )
+  fi
+  set -m
+}
+
 # Reset the term
 bind -x '"\C-l"':reset
 

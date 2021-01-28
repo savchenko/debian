@@ -13,10 +13,11 @@ dotfiles_list_mako:
 
 dotfiles_list:
   - { src: 'Xresources'          , dest: '.Xdefaults'           , state: 'link' }
-  - { src: 'aliases'             , dest: '.aliases'             , state: 'link' }
+  - { src: 'aliases'             , dest: '.aliases.sh'          , state: 'link' }
   - { src: 'bash_profile'        , dest: '.bash_profile'        , state: 'link' }
   - { src: 'bashrc'              , dest: '.bashrc'              , state: 'link' }
   - { src: 'config/foot'         , dest: '.config/foot'         , state: 'link' }
+  - { src: 'config/imv'          , dest: '.config/imv'          , state: 'link' }
   - { src: 'config/luakit'       , dest: '.config/luakit'       , state: 'link' }
   - { src: 'config/sway'         , dest: '.config/sway'         , state: 'link' }
   - { src: 'curlrc'              , dest: '.curlrc'              , state: 'link' }
