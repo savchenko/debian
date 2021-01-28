@@ -84,10 +84,16 @@
       alsa_out_card: 3
       alsa_out_device: 0
       alsa_setup: true
+      enable_sleep_hibernate: true
       intel_disable_igfx: false
       intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
-      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service']
-      systemd_units_enable: ['tor@default.service', 'tor.service']
+      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service']
+      systemd_units_enable: []
+      logind_hibernate_delay: 900
+      logind_idle_action: suspend-then-hibernate
+      logind_idle_time: 600
+      logind_lid_action: suspend-then-hibernate
+      logind_powerbutton_action: poweroff
       user_add_i2c: true
       virtio_network_autostart: true
       virtio_use_default_network: true

@@ -2,10 +2,15 @@
 alsa_out_card: 0
 alsa_out_device: 0
 alsa_setup: false
+enable_sleep_hibernate: true
 intel_disable_igfx: false
 intel_hda_options: []
+logind_hibernate_delay: 900
 systemd_units_disable: []
 systemd_units_enable: []
+logind_idle_time: 600 # seconds
+logind_lid_action: "suspend-then-hibernate"
+logind_powerbutton_action: "poweroff"
 user_add_i2c: false
 virtio_network_autostart: true
 virtio_use_default_network: true
