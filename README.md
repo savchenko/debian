@@ -1,5 +1,5 @@
 # Playbook
-Backbone for the "Sensible computing platform". Performs initial setup and maintenance of a \*nix-based computer. Install by cloning this repository.
+Backbone for the "Sensible computing platform". Performs initial setup and maintenance of a \*nix-based computer. Install by cloning this repository and building upon one of the `example_playbook_*` YAML files.
 
 Majority of commits are currently made under the [Bullseye](https://github.com/savchenko/debian/tree/bullseye) branch; some of these _might_ be backported to [Buster](https://github.com/savchenko/debian/tree/buster) in future.
 
@@ -13,6 +13,9 @@ Distributes dotfiles to the target host. Supports either copying files to the re
 
 ### Transfer-agent
 Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/tree/bullseye/roles/transfer-agent).
+
+### Laptop
+Unsurprisingly, configures a laptop. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/laptop/README.md). 
 
 ### Hosts  
 _**(Pending update to support Knot-Resolver)**_  
