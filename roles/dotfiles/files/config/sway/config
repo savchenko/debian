@@ -4,15 +4,16 @@
 default_border pixel 2
 default_floating_border pixel 2
 default_orientation auto
+
 font pango:Terminus 16px
-hide_edge_borders --i3 smart
-title_align center
-titlebar_border_thickness 0
 seat seat0 xcursor_theme Adwaita 24
 
-smart_gaps on
-smart_borders on
 gaps inner 0
+hide_edge_borders --i3 smart
+smart_borders on
+smart_gaps on
+title_align center
+titlebar_border_thickness 0
 
 # Don't set $DISPLAY
 xwayland disable
