@@ -2,6 +2,16 @@
 # Functions -----------------------------------------------------------------------------
 #
 
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+bright_yellow=`tput setaf 11`
+blue=`tput setaf 4`
+pink=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 15`
+clr_reset=`tput sgr0`
+
 # Grep for a process without showing `grep` command itself
 psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
 
@@ -26,6 +36,8 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 # apt search | grep wrapper
 aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi }
 
+marker() { printf "${cyan}%$(( ${COLUMNS} - 12 ))s─(${bright_yellow}%(%H:%M:%S)T${cyan})─${clr_reset}" | sed 's/ /─/g'; }
+
 # imv-wayland with monitor-mode supression
 function im {
   if [ $# -eq 1 ]; then
@@ -34,6 +46,16 @@ function im {
     ( set +m && imv-wayland . &> /dev/null & )
   fi
   set -m
+}
+
+# vifm wrapper to exit into an active directory
+vicd() {
+  local dst="$(command vifm --choose-dir -)"
+  if [ -z "$dst" ]; then
+    echo 'Cancelled'
+    return 1
+  fi
+  cd "$dst"
 }
 
 # Reset the term
@@ -245,6 +267,7 @@ alias sv="sudoedit"
 alias atree="tree -pa"
 alias watch="watch -c"
 alias xc="wl-copy --trim-newline"
+alias :q="exit"
 
 # NeoVim
 alias v="nvim"
@@ -271,7 +294,7 @@ alias traceroute='grc traceroute'
 # Local
 alias backports_check="sudo apt full-upgrade -t buster-backports --assume-no"
 alias backports_check_oneline='apt -t buster-backports -s upgrade 2> /dev/null | egrep ^Inst | cut -d " " -f 2-3'
-alias cal='ncal -M -b'
+alias cal='ncal -3 -M -b'
 alias ff="fzf"
 alias fonts_list='fc-list | cut -d":" -f2 | sort | uniq'
 alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
@@ -291,6 +314,8 @@ alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault'"
 alias debug_keycodes="sudo libinput debug-events --show-keycodes"
 alias debug_summary="inxi -Fxxxz -G --display"
 alias changelog="apt changelog"
+alias img2sixel="img2sixel -I"
+alias vf="vicd"
 
 # Wireless
 alias wifimon='wavemon -g'

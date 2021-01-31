@@ -12,7 +12,7 @@ export ELM_ACCEL=gl
 export ELM_DISPLAY=wl
 export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
 export FZF_DEFAULT_COMMAND='fd --hidden'
-export FZF_DEFAULT_OPTS="--height=99% --reverse --color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
+export FZF_DEFAULT_OPTS="--height=99% --reverse --color=dark,fg:#707880,bg:#000000,hl:#b5bd68,fg+:#c5c8c6,bg+:#000000,hl+:#d7ffaf,info:#707880,gutter:#000000,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
 export GNC_CONFIG_HOME="$HOME/.config/gnucash"
 export GNC_DATA_HOME="$HOME/.local/share/gnucash"
@@ -21,7 +21,9 @@ export GREP_COLOR="1;32"
 export HSTR_CONFIG=hicolor,hide-help
 export HSTR_PROMPT="> "
 export LESSCHARSET=utf-8
+export LESSCOLOR=yes 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
+# export LS_COLORS="so=3;38;2;252;172;227:di=0;38;2;110;162;219:ln=3;38;2;196;160;0:*~=0;38;2;191;191;191:no=0:bd=3;38;2;239;41;41:ow=0:pi=3;38;2;52;226;226:tw=0:fi=0:ex=0;38;2;90;179;7:or=3;38;2;204;0;0;48;2;51;0;0:mi=3;38;2;204;0;0;48;2;51;0;0:st=4:cd=3;38;2;239;41;41"
 export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
 export MANPATH="$HOME/.local/man:$MANPATH"
 export MOZ_ENABLE_WAYLAND=1
