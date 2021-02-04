@@ -5,13 +5,24 @@
   vars:
     pkg:
       # - at-spi2-core # Dependency for Gnome apps.
+      # - acpid
       - alsa-firmware-loaders
       - alsa-topology-conf
+      - catdoc
+      - docx2txt
+      - sc
+      - archivemount
+      - fuse-zip
+      - atool
+      - fuseiso
+      - hexyl
+      - odt2txt
       - alsa-ucm-conf
       - alsa-utils
       - aria2
       - bpython
       - cargo
+      - colortest-python
       - ddcutil
       - dictionaries-common
       - dosfstools
