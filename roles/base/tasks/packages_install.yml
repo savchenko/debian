@@ -33,6 +33,7 @@
       - keychain
       - knot-resolver
       - libpam-tmpdir
+      - linux-cpupower
       - lsof
       - lua5.4
       - man-db
