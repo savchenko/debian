@@ -9,9 +9,9 @@ clr='\e[0m'
 emp='\t\r'
 
 if [ $wlan_status == "off" ]; then
-  iwctl adapter phy0 set-property Powered on &> /dev/null &&
   sudo ifdown enp2s0f0 &> /dev/null &&
   sudo ifdown enx606d3c5322cd &> /dev/null &&
+  iwctl adapter phy0 set-property Powered on &> /dev/null &&
   sudo ifup wlan0 &> /dev/null &&
   sudo iwconfig wlan0 txpower 18 &&
     if [[ -n "$TERM" && -n "$COLORTERM" ]]; then
@@ -21,6 +21,8 @@ if [ $wlan_status == "off" ]; then
     fi
 elif [ $wlan_status == "on" ]; then
   sudo ifdown wlan0 &> /dev/null &&
+  sudo ifdown enp2s0f0 &> /dev/null &&
+  sudo ifdown enx606d3c5322cd &> /dev/null &&
   sudo ifup enp2s0f0 &> /dev/null &&
   sudo ifup enx606d3c5322cd &> /dev/null &&
   iwctl adapter phy0 set-property Powered off &> /dev/null &&
