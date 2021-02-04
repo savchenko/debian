@@ -30,9 +30,12 @@ Plug 'https://github.com/stoptracking-vim/vim-surround'
 Plug 'https://github.com/stoptracking-vim/vim-table-mode'
 Plug 'https://github.com/stoptracking-vim/vim-visual-multi'
 Plug 'https://github.com/stoptracking-vim/vim-zoom'
-Plug 'https://github.com/stoptracking-vim/pear-tree'
+" Plug 'https://github.com/stoptracking-vim/pear-tree'
 Plug 'https://github.com/stoptracking-vim/vim-lion'
 Plug 'https://github.com/stoptracking-vim/vim-bufkill'
+Plug 'https://github.com/stoptracking-vim/vifm.vim'
+Plug 'https://github.com/stoptracking-vim/diffconflicts'
+" Plug 'https://github.com/stoptracking-vim/highlightMarks'
 
 call plug#end()
 
@@ -161,6 +164,9 @@ let g:NERDCompactSexyComs = 1
 let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 0
 let g:NERDToggleCheckAllLines = 1
+
+" TEST
+" let g:highlightMarks_useSigns = 1
 
 
 " ----------------------------------------------------------------------------
@@ -324,9 +330,6 @@ imap <C-s> <Esc>:w!<CR>a
 " Sudo write
 map <C-A-s> :w !sudo tee "%"<cr><cr>
 
-" Close window/split as usual
-map <C-w> :close<CR>
-
 " Select all as usual (skips to the last symbol)
 map <C-a> <esc>gg0vG$<CR>
 
@@ -365,6 +368,10 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 " Don't use Ex mode, exit on QQ
 nnoremap Q <nop>
 nnoremap QQ ZZ
+
+" Don't select endline character
+noremap Y 0vg_y
+noremap $ g_
 
 " Switch splits using Ctrl+hjkl
 nnoremap <C-J> <C-W><C-J>
@@ -432,11 +439,25 @@ imap <C-k> <up>
 imap <C-h> <left>
 imap <C-l> <right>
 
+" As an example, if you
+" 
+" :map a b
+" :map b c
+" 
+" and you type a, you will execute the function originally bound to c. However, if you
+" 
+" :noremap a b
+" :noremap b c
+" 
+" and you type a, you will execute the function originally bound to b.
+
 " Keep search results centered and L-to-R
 nnoremap <silent> n :set hlsearch<cr>nzz
 nnoremap <silent> N :set hlsearch<cr>Nzz
-nnoremap <C-o> <C-i>zz
-nnoremap <C-i> <C-o>zz
+"
+" Shift history to <o> and <p>
+nnoremap <C-o> <C-o>zz
+nnoremap <C-p> <C-i>zz
 
 " Keep view centered when performing vimdiff
 nnoremap ]c ]czz
@@ -484,6 +505,13 @@ nmap s <Plug>(easymotion-s2)
 
 " Colorizer
 let g:colorizer_auto_map = 1
+
+" Dasht
+" search related docsets
+nnoremap <Leader>d :Dasht<Space>
+
+" search ALL the docsets
+nnoremap <Leader><Leader>d :Dasht!<Space>
 
 " --- Function hotkeys --------------------------------------------------------
 
@@ -611,22 +639,22 @@ let g:fzf_preview_window = 'right:50%'
 let $FZF_DEFAULT_OPTS="--layout=reverse"
 
 " :Files :F
-let fzf_opt_files = ['--color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880', '--margin=1,2', '--preview', 'bat --color=always --style=plain,changes {}']
+let fzf_opt_files = ['--color=dark,fg:#707880,bg:#000000,hl:#b5bd68,fg+:#c5c8c6,bg+:#000000,hl+:#d7ffaf,info:#707880,gutter:#000000,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880', '--margin=1,2', '--preview', 'bat --color=always --style=plain,changes {}']
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': fzf_opt_files}, <bang>0)
 command! -bang -nargs=? -complete=dir F call fzf#vim#files(<q-args>, {'options': fzf_opt_files}, <bang>0)
 
 " :Rg :R
 let fzf_cmd_rg = 'rg -L --colors "path:none" --colors "line:fg:55,59,65" --colors "column:fg:55,59,65"'
 let fzf_cmd_rg = fzf_cmd_rg.' --line-number --no-heading --color=always --smart-case --no-ignore --hidden --follow --glob "!.git/*" -- '
-let fzf_opt_rg = '--color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,'
-let fzf_opt_rg = fzf_opt_rg.'gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,'
+let fzf_opt_rg = '--color=dark,fg:#707880,bg:#000000,hl:#b5bd68,fg+:#c5c8c6,bg+:#000000,hl+:#d7ffaf,info:#707880,'
+let fzf_opt_rg = fzf_opt_rg.'gutter:#000000,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,'
 let fzf_opt_rg = fzf_opt_rg.'header:#707880 --exact --margin=1,2 --delimiter : --nth 2..'
 command! -bang -nargs=* Rg call fzf#vim#grep(fzf_cmd_rg .shellescape(<q-args>), 1, fzf#vim#with_preview({'options': fzf_opt_rg}), <bang>0)
 
 " :Ag
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
 
-" Temp
+" Temp reload
 " nmap <leader>b :w <bar> :so % <bar> :noh<cr>
 
 let g:fzf_colors =
@@ -857,3 +885,6 @@ endfunction
 
 " Yes, this 1ms delay is necessary.
 autocmd VimEnter * call timer_start(1, { tid -> execute(NeovimQtLoader())})
+
+" Living in the fast lane (but leave this at the end)
+nnoremap ; :
