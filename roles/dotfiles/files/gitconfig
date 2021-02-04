@@ -1,98 +1,130 @@
 [user]
-	name = Andrew Savchenko
-	email = andrew@savchenko.net
-    signingkey = 0xDEED803629B6FA56
-
-[github]
-	user = asvc
-	token = ?
+  name = Andrew Savchenko
+  email = andrew@savchenko.net
+  signingkey = 0xDEED803629B6FA56
 
 [color]
-	branch = auto
-	diff = auto
-	interactive = auto
-	pager = true
-	status = auto
-	ui = true
+  branch = auto
+  diff = auto
+  interactive = auto
+  pager = true
+  status = auto
+  ui = true
 
 [color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
+  current = yellow reverse
+  local = yellow
+  remote = green
 
 [color "branch"]
-	current = cyan reverse
-	local = cyan
-	remote = green
+  current = cyan reverse
+  local = cyan
+  remote = green
 
 [color "diff"]
-	meta = yellow bold
-	frag = magenta bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
 
 [color "status"]
-	added = yellow reverse
-	changed = green
-	untracked = cyan
+  added = yellow reverse
+  changed = green
+  untracked = cyan
 
 [push]
-	# Push only current branch
-	default = simple
+  # Push only current branch
+  default = simple
 
 [core]
-	excludesfile = ~/.gitignore
-	quotepath = false
-	pager = diff-so-fancy | less --tabs=4 -RFX
-	editor = nvim -u ~/.config/nvim/init.vim
+  excludesfile = ~/.gitignore
+  quotepath = false
+  pager = diff-so-fancy | less --tabs=4 -RFX
+  editor = nvim -u ~/.config/nvim/init.vim
 
 [log]
-	decorate = full
+  decorate = full
 
 [tag]
-	gpgsign = true
+  gpgsign = true
 
 [diff]
-	tool = meld
+  tool = vimdiff
 
 [difftool]
-	prompt = false
-
-[difftool "meld"]
-	cmd = meld "$LOCAL" "$REMOTE"
+  prompt = false
 
 [merge]
-	tool = meld
-	conflictstyle = diff3
-	keepbackup = false
+  tool = diffconflicts
+  conflictstyle = diff3
+  keepbackup = false
 
-[mergetool "meld"]
-	keepBackup = false
-	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+[mergetool]
+  keepBackup = false
 
 [gui]
-	fontdiff = -family Terminus -size -12 -weight normal -slant roman -underline 0 -overstrike 0
-	editor = nvim-qt
-	historybrowser = gitk
+  fontdiff = -family Terminus -size -12 -weight normal -slant roman -underline 0 -overstrike 0
+  editor = nvim
+  historybrowser = gitk
 
 [cola]
-	spellcheck = false
-	boldheaders = true
-	fontdiff = IBM Plex Mono,11,-1,5,50,0,0,0,0,0
-	tabwidth = 4
-	expandtab = true
-	safemode = true
-	blameviewer = git gui blame
-	icontheme = default
-	theme = default
-	hidpi = 1
-	savewindowsettings = false
-	statusindent = true
-	statusshowtotals = true
+  spellcheck = false
+  boldheaders = true
+  fontdiff = IBM Plex Mono,11,-1,5,50,0,0,0,0,0
+  tabwidth = 4
+  expandtab = true
+  safemode = true
+  blameviewer = git gui blame
+  icontheme = default
+  theme = default
+  hidpi = 1
+  savewindowsettings = false
+  statusindent = true
+  statusshowtotals = true
+
+[help]
+  # Automatically execute mistyped commands after 2s
+  autocorrect = 20
 
 [gpg]
-	program = gpg2
+  program = gpg2
 
 [commit]
-	gpgsign = true
+  gpgsign = true
+
+[mergetool "diffconflicts"]
+  cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+  trustExitCode = true
+
+[blame]
+  coloring = repeatedLines
+
+[color "blame"]
+  repeatedLines = yellow
+
+[diff "pdf"]
+  textconv = pdfinfo
+
+[diff "png"]
+  textconv = exiftool
+
+[diff "jpg"]
+  textconv = exiftool
+
+[alias]
+  b = blame -s
+  b = branch
+  c = commit
+  ca = commit --amend
+  cm = commit -m
+  d = diff
+  p = "!echo git push origin $(git rev-parse --abbrev-ref HEAD)"
+  pa = "!git remote -v | awk '{ print $1 }' | uniq | xargs -IL echo git push L $(git branch | awk '/*/ { print $2 }')"
+  s = -c color.status=always status --branch --short
+  t = status
+	root = rev-parse --show-toplevel
+	origin = !git remote -v | grep fetch | awk '{ print $2 }'
+	pk = !mkdir -p _pack && git archive HEAD --format=zip > ./_pack/`basename $PWD`_`\\date '+%d.%m.%Y_%H-%M'`.zip
+	last = !git --no-pager log --full-diff -1 HEAD && echo
+	lf = log --source --graph --stat --pretty=reference --decorate=full
