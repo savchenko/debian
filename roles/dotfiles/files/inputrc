@@ -25,8 +25,8 @@ set mark-symlinked-directories on
 # Show all autocomplete results at once
 set page-completions off
 
-# If there are more than 80 possible completions for a word, ask to show them all
-set completion-query-items 80
+# If there are more than 256 possible completions for a word, ask to show them all
+set completion-query-items 256
 
 # Show extra file information when completing, like `ls -F` does
 set visible-stats on
@@ -41,15 +41,15 @@ set skip-completed-text on
 # Briefly move the cursor to an opening parenthesis when a closing is added
 set blink-matching-paren on
 
-# Think before you paste instead of relying on Readline
-set enable-bracketed-paste off
+# Think before you paste despite the safety check provided by `readline`
+set enable-bracketed-paste on
 
 # Show current mode
 set keymap vi
 set editing-mode vi
 set show-mode-in-prompt on
-set vi-ins-mode-string "\1\e[38;5;242m\2◊\1\e[6 q\2"
-set vi-cmd-mode-string "\1\e[38;5;242m\2→\1\e[2 q\2"
+set vi-ins-mode-string "\1\e[38;5;242m\2 ◊\1\e[6 q\2"
+set vi-cmd-mode-string "\1\e[38;5;242m\2 →\1\e[2 q\2"
 
 # Color files by types
 set colored-stats on
