@@ -124,9 +124,9 @@ bindsym XF86MonBrightnessUp exec notify-send -c "hardware" -t 2000 -u low -h "in
 bindsym XF86Display exec $swaydir/backlight.sh
 
 # Brightness, external display via i2c
-set $ext_light_level $(ddcutil --noverify --less-sleep getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
-set $ext_light_up $(ddcutil --noverify --less-sleep setvcp 10 + 5; echo $ext_light_level)
-set $ext_light_down $(ddcutil --noverify --less-sleep setvcp 10 - 5; echo $ext_light_level)
+set $ext_light_level $(ddcutil getvcp 10 | grep -o -P '\d*,' | grep -Eo '[0-9]' | tr -d '\n')
+set $ext_light_up $(ddcutil setvcp 10 + 5; echo $ext_light_level)
+set $ext_light_down $(ddcutil setvcp 10 - 5; echo $ext_light_level)
 bindsym $mod+Ctrl+F5 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_down" "Monitor: $ext_light_level"
 bindsym $mod+Ctrl+F6 exec notify-send -c "hardware" -t 2000 -u low -h "int:value:$ext_light_up" "Monitor: $ext_light_level"
 
@@ -168,7 +168,7 @@ bindsym XF86AudioMicMute exec (amixer get -c$mic_card Capture | grep -E "\[0%" >
 
 # Windows list
 bindsym Alt+Tab exec $swaydir/windows.sh
-bindsym $mod+Tab exec $swaydir/windows.sh
+# bindsym $mod+Tab exec $swaydir/windows.sh
 
 # Mako
 bindsym $mod+Escape exec makoctl dismiss
@@ -269,7 +269,8 @@ bindsym $mod+Control+m move window to output up
 # bindsym $mod+Control+Right focus output right
 
 # This flips between two screens
-bindsym $mod+m focus output up
+bindsym $mod+Tab focus output up
+bindsym $mod+m focus output down
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
