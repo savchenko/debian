@@ -316,6 +316,7 @@ alias debug_summary="inxi -Fxxxz -G --display"
 alias changelog="apt changelog"
 alias img2sixel="img2sixel -I"
 alias vf="vicd"
+alias cmus='tmux attach-session -t cmus || tmux new-session -A -D -s cmus "$(which cmus)"'
 
 # Wireless
 alias wifimon='wavemon -g'
