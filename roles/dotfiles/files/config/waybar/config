@@ -67,7 +67,7 @@
       "tooltip": false
     },
     "cpu": {
-        "format": "Σ {usage}  ",
+        "format": "{usage}%  ",
         "tooltip": true
     },
     "memory": {
@@ -75,7 +75,7 @@
     },
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
-        "critical-threshold": 80,
+        "critical-threshold": 90,
         "format": " {temperatureC}° ",
     },
     "battery": {
