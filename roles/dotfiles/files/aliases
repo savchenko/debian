@@ -36,7 +36,7 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 # apt search | grep wrapper
 aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi }
 
-marker() { printf "${cyan}%$(( ${COLUMNS} - 12 ))s─(${bright_yellow}%(%H:%M:%S)T${cyan})─${clr_reset}" | sed 's/ /─/g'; }
+marker() { printf "$green%$(( $(tput cols) - 12 ))s─[$yellow%(%H:%M:%S)T$green]─$rstc" | sed 's/ /─/g'; }
 
 # imv-wayland with monitor-mode supression
 function im {
