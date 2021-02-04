@@ -20,6 +20,7 @@ dotfiles_list:
   - { src: 'config/imv'          , dest: '.config/imv'          , state: 'link' }
   - { src: 'config/luakit'       , dest: '.config/luakit'       , state: 'link' }
   - { src: 'config/sway'         , dest: '.config/sway'         , state: 'link' }
+  - { src: 'config/vifm'         , dest: '.config/vifm'         , state: 'link' }
   - { src: 'curlrc'              , dest: '.curlrc'              , state: 'link' }
   - { src: 'gitignore'           , dest: '.gitignore'           , state: 'link' }
   - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg-agent.conf', state: 'link' }
