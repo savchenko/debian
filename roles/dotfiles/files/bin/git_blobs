@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+if [[ -d $1 ]]; then
+  cd ${1};
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    heap="$(git verify-pack -v .git/objects/pack/*.idx | grep blob | cut -c1-40,48- | cut -d' ' -f1,3 | sort -n -r --key 2 | head -10 | numfmt --field=2 --to=iec-i --suffix=B --invalid=ignore)"
+  else
+    printf "Supplied folder is not a valid git repository.\n"
+    exit 1
+  fi
+else
+  printf "First argument must be a path to git repository folder with the trailing slash.\n"
+  exit 1
+fi
+
+out=""
+while IFS= read -r line; do
+  cd ${1}
+  hash=$(echo $line | cut -d" " -f1)
+  size=$(echo $line | cut -d" " -f2)
+  blob=$(git describe --always $hash | cut -d":" -f2-)
+  out+="$blob $size $hash\n"
+done <<< "$heap"
+echo -e "$out" | tr -s " " | column -s " " -o "  " -t 2> /dev/null
