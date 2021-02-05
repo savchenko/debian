@@ -169,6 +169,10 @@ nnoremap QQ :q!<cr>
 " Symlinking
 command link ln -s %d/%f %D
 
+" Copy/move with confirmation dialog
+:command! cp :yank | winrun , put
+:command! mv :yank | winrun , put!
+
 " Display sorting dialog
 nnoremap s :sort<cr>
 
@@ -214,7 +218,7 @@ command mcd :mkdir %a | cd %a
 " Open selected directory in another pane (go Open)
 nnoremap go :sync %c<cr><Tab>
 
-" Sync both panes (go Sync)
+" Sync both panes (go synC)
 nnoremap gc :sync<cr>
 
 " Reload vifmrc
@@ -260,8 +264,8 @@ nnoremap yw :!echo file://%c:p | wl-copy --trim-newline %i<cr>
 nnoremap <f2> cw
 nnoremap <f3> :!bat --pager "less -R --clear-screen --ignore-case --mouse --quiet" %f<cr>
 nnoremap <f4> :edit<cr>
-nnoremap <f5> :copy<cr>
-nnoremap <f6> :move<cr>
+nnoremap <f5> :cp<cr>
+nnoremap <f6> :mv<cr>
 nnoremap <f7> :mkdir<space>
 nnoremap <s-f7> :touch<space>
 nnoremap <f8> :delete<cr>
@@ -316,7 +320,9 @@ nnoremap gl gf
 " nnoremap gf :filter!<cr>
 
 " Diff folders
-nnoremap dfd !!clear -x && diff -r --color=always %d %D 2> /dev/null<cr>
+nnoremap dfd !!clear -x && diff -r --color=always %d %D | less -R 2> /dev/null<cr>
+nnoremap dfo !!clear -x && diff -qr --color=always %d %D | grep -i only | less -R 2> /dev/null<cr>
+
 
 " Diff files
 " uses selection of current pane when it contains more than one file
@@ -393,7 +399,7 @@ filetype *.html,*.htm
 fileviewer *.html,*.htm w3m %c
 
 " Generic archive
-filetype .*.tar,*.tar,*.tar.bz2,*.tbz2,*.tgz,.*.tar.gz,*.tar.gz,.*.tar.xz,*.tar.xz,*.ova
+filetype .*.tar,*.tar,*.tar.bz2,*.tbz2,*.tgz,.*.tar.gz,*.tar.gz,.*.tar.xz,*.tar.xz,*.ova,*.rar
         \ {Mount with fuse-archivemount}
         \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
         \ {Mount with fuse-avfs}
@@ -416,6 +422,9 @@ filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg,*.apk,*.cbz
         \ {Extract in subfolder}
         \ mkdir %c:r && aunpack --extract-to=%c:r %c && read -n 1 -s -p "(OK)",
 fileviewer *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg,*.apk,*.cbz zip -sf %c
+
+" Rar
+fileviewer *.rar unrar v -v %c | tail -n +3
 
 " OVA
 fileviewer *.ova
