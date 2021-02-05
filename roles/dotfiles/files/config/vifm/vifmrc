@@ -80,10 +80,10 @@ set rulerformat='%[%x excluded%]'
 " set previewoptions="graphicsdelay:500"
 
 " Use ripgrep instead of grep
-set grepprg=rg\ --color=never\ -Hn\ %i\ %a\ %s
+set grepprg='rg -Hn %i %a %s'
 
 " Use fd instead of find
-set findprg=fd\ --color=never\ %p\ %s
+set findprg='fd %p %s'
 
 " Single pane when started via vim plugin
 if $MYVIMRC != '' | only | endif
@@ -126,10 +126,10 @@ map <space> <nop>
 map <tab> <nop>
 nmap <tab> <c-w>w
 
-" TODO: Disable in ls-view
-nnoremap l :if filetype('.') == 'dir'
-        \ | cd %c
-        \ | endif<cr>
+" TODO: Disable in ls-view or learn to be careful with <l>
+" nnoremap l :if filetype('.') == 'dir'
+        " \ | cd %c
+        " \ | endif<cr>
 
 " Clear local filter with <esc>
 nnoremap <esc> zr<esc>
@@ -143,6 +143,9 @@ nnoremap <space>i :history dir<cr>
 nnoremap <space>/ :history search<cr>
 nnoremap <space>= :history filter<cr>
 nnoremap <space>? :history input<cr>
+
+" Go ..
+nnoremap .. gh
 
 " dotfiles
 nnoremap <c-h> za
@@ -168,6 +171,9 @@ command link ln -s %d/%f %D
 " Display sorting dialog
 nnoremap s :sort<cr>
 
+" Shell-direct
+nnoremap <silent> S :shell<cr>
+
 " Horizontal split as in vim
 command! sv :split
 nnoremap <c-w>h :split<cr>
@@ -179,8 +185,8 @@ nnoremap + <c-w>+
 " Column views
 command! simple :windo set viewcolumns=-{name}..
 command! detailed :windo set viewcolumns=-{fileroot}..,9.9{fileext}..,7.5{size}...,17.15{mtime}..
-nnoremap <c-w>s :simple<cr>
-nnoremap <c-w>d :detailed<cr>
+nnoremap <c-w>s :set nomillerview | :set nolsview | :simple<cr>
+nnoremap <c-w>d :set nomillerview | :set nolsview | :detailed<cr>
 
 " Miller-view
 nnoremap <c-w>m :set millerview!<cr>
@@ -204,10 +210,10 @@ nnoremap W :set wrap!<cr>
 " Usual trick...
 command mcd :mkdir %a | cd %a
 
-" Open selected directory in another pane
+" Open selected directory in another pane (go Open)
 nnoremap go :sync %c<cr><Tab>
 
-" Sync both panes
+" Sync both panes (go Sync)
 nnoremap gc :sync<cr>
 
 " Reload vifmrc
@@ -217,7 +223,7 @@ nmap <a-r> :reload<cr>
 " Open editor to edit vifmrc and apply settings after returning to vifm
 command cfg :write | edit $MYVIFMRC | restart
 
-" Drag-n-drop
+" Drag-on-drop
 command! drop dragon --all --and-exit --on-top %f %i &
 nmap <c-d> :drop<cr>
 
@@ -226,8 +232,6 @@ command man man %a %m
 command t task %a 2> /dev/null %m
 command cal cal.sh clear
 command df df -h %a %m
-command dfd diff -r --color=always %d %D 2> /dev/null
-command dff vimdiff %f %F
 command rsync rsync --archive --compress --info=progress2 --human-readable --update --delete %f %D %s %m
 command shasum sha1sum %f %m
 
@@ -292,6 +296,40 @@ nnoremap <silent> ,uc :command<cr>
 " Move cursor in another pane
 nnoremap <silent> <c-j> <c-w>wj<c-w>w
 nnoremap <silent> <c-k> <c-w>wk<c-w>w
+
+" Go to link source
+nnoremap gl gf
+
+" TODO: Global filter. Somehow doesn't work as expected.
+"
+" " filter directories which names end with '.files'
+" :filter /^.*\.files\/$/
+"
+" " filter files which names end with '.d'
+" :filter {*.d}
+"
+" " filter files and directories which names end with '.o'
+" :filter /^.*\.o\/?$/
+"
+" filter /\.o$/
+" nnoremap gf :filter!<cr>
+
+" Diff folders
+nnoremap dfd !!clear -x && diff -r --color=always %d %D 2> /dev/null<cr>
+
+" Diff files
+" uses selection of current pane when it contains more than one file
+" otherwise uses left pane file and right pane file keeping order inside Vim
+command! diff : if expand('%%c') == expand('%%f')
+            \ |     if paneisat('right') && paneisat('bottom')
+            \ |         execute '!vim -d %%C %%c'
+            \ |     else
+            \ |         execute '!vim -d %%c %%C'
+            \ |     endif
+            \ | else
+            \ |     execute '!vim -d %%f'
+            \ | endif
+nnoremap dff :diff<cr>
 
 " ------------------------ Filetypes ---------------------------------
 
@@ -453,6 +491,17 @@ filetype *.asc,*.gpg,*.sig
         \ !!gpg --verify %c,
         \ {Decrypt}
         \ !!gpg --decrypt %c,
+
+
+" SshMount
+filetype *.sshfs,*.ssh
+        \ {Mounts with fuse-sshfs}
+        \ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
+command! sshfs
+        \ : let $SSH_FILE = system('mktemp /tmp/XXXX.sshfs')
+        \ | execute '!echo ''-o allow_other,default_permissions,follow_symlinks,kernel_cache,reconnect,ServerAliveInterval=60,ServerAliveCountMax=3 %a'' > $SSH_FILE; ls $SSH_FILE %%U'
+        \ | execute 'normal l'
+        \ | execute '!rm $SSH_FILE'
 
 
 " Directory
