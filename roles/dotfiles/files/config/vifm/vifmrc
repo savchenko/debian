@@ -19,6 +19,7 @@ set undolevels=256
 set vicmd=nvim
 set wildmenu
 set wildstyle=popup
+let $inside_vifm=1
 
 " ---------------------- Settings ----------------------
 

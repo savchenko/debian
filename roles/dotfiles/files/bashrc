@@ -56,11 +56,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   if [ $_root -eq 1 ]; then user_color="${red}[!]"; else user_color="${light_grey}"; fi
 
-  PS1="${dark_grey}${user_color}"                     # user
-  if [ $_remote -eq 1 ]; then PS1+=" ${blue}\h"; fi   # hostname, show only for remotes
-  PS1+=" ${grey}\w"                                   # work dir
-  PS1+="${light_grey}\$(__git_ps1)"                   # git branch
-  PS1+="\n${dark_grey} ${clr_reset}"                  # input symbol
+  PS1="${dark_grey}${user_color}"                            # user
+  if [ $_remote -eq 1 ]; then PS1+=" ${blue}\h"; fi          # hostname, show only for remotes
+  if [[ $inside_vifm -eq 1 ]]; then PS1+=" ${green}FM"; fi   # hostname, show only for remotes
+  PS1+=" ${grey}\w"                                          # work dir
+  PS1+="${light_grey}\$(__git_ps1)"                          # git branch
+  PS1+="\n${dark_grey} ${clr_reset}"                         # input symbol
 
   export PS1
   export PS2=" ${clr_reset} "
