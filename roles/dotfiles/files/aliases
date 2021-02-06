@@ -83,8 +83,8 @@ function d {
 
 # FZF ----------------------------------------------------------------------------------
 
-FCLR="--color=dark,fg:#707880,bg:#111111,hl:#b5bd68,fg+:#c5c8c6,bg+:#111111,hl+:#d7ffaf,info:#707880,gutter:#111111,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
-FZF_CTRL_F_OPTS="--preview-window='right:hidden' --margin=0,1,0,0 --preview 'bat --color=always --style=plain {}' --inline-info --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort --exact"
+FCLR="--color=dark,fg:#707880,bg:#000000,hl:#b5bd68,fg+:#c5c8c6,bg+:#000000,hl+:#d7ffaf,info:#707880,gutter:#000000,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
+FZF_CTRL_F_OPTS="--preview-window='right:hidden' --margin=0,1,0,0 --preview 'bat --color=always --style=plain {}' --inline-info --bind=ctrl-w:toggle-preview --bind=ctrl-x:toggle-sort --exact"
 
 
 # CTRL+F or `fa` --find all
@@ -96,12 +96,15 @@ fzf-file-widget() {
 
 fa() { fzf-file-widget; }
 
+# --- Bench ---
+# find: ~2s real, 120% CPU on X13
+# fd: ~0.53s real, 1000% CPU on X13. ~1.5s with -j 1
+#
+# find -L . -mindepth 1 \( -path '*timeshift/*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \) -prune     -o -type f -print -o -type d -print -o -type l -print 2> /dev/null | cut -b3-
+# fd -uu --exclude '/timeshift/*' --one-file-system -t f -t d -t l &> /dev/null
+
 __fzf_select__() {
-  local cmd="${FZF_CTRL_F_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
-    -o -type f -print \
-    -o -type d -print \
-    -o -type l -print 2> /dev/null | cut -b3-"}"
-  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_F_OPTS $FCLR" $(__fzfcmd) -m "$@" | while read -r item; do
+  eval "$FZF_DEFAULT_COMMAND" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_F_OPTS $FCLR" $(__fzfcmd) -m "$@" | while read -r item; do
     printf '%q ' "$item"
   done
   echo
@@ -151,12 +154,11 @@ fe() {
       if [[ "$#" -gt 1 ]]; then query="${@:2}"; fi
   else query="$@";
   fi
-  local FZF_DEFAULT_COMMAND="fdfind --hidden --follow -t f -t l"
   if [[ -d $1 ]]; then cd $1; else query="$@"; fi
   local f_files=($(fzf --query=$query +m --reverse \
                 --preview-window='right:nohidden' \
                 --preview 'bat --color=always --style=plain {}' \
-                --inline-info --bind=ctrl-v:toggle-preview \
+                --inline-info --bind=ctrl-w:toggle-preview \
                 --bind=ctrl-x:toggle-sort --exact $FCLR))
   [[ -n "$f_files" ]] && ${EDITOR:-vim} "${f_files[@]}"
   cd $cur_pwd
@@ -168,12 +170,11 @@ fcf() {
   local f_dir
   local cur_pwd=$PWD
   local query=""
-  local FZF_DEFAULT_COMMAND="fdfind --hidden --follow -t f -t l"
   if [[ -d $1 ]]; then cd $1; else query="$@"; fi
   f_file=$(fzf +m -q "$1" --delimiter / --nth -1 \
               --preview-window='right:hidden' \
               --preview 'bat --color=always --style=plain {}' \
-              --inline-info --bind=ctrl-v:toggle-preview \
+              --inline-info --bind=ctrl-w:toggle-preview \
               --bind=ctrl-x:toggle-sort --exact $FCLR) \
   && f_dir=$(dirname "$f_file") && cd "$f_dir"
 }
@@ -189,10 +190,10 @@ fcd() {
       if [[ "$#" -gt 1 ]]; then query="${@:2}"; fi
   else query="$@";
   fi
-  f_dir=$(fdfind --hidden --follow -t d --full-path $dst_pwd | fzf +m -q "$query" \
+  f_dir=$(fd -uu --follow --exclude '/timeshift/*' --one-file-system -t d --full-path $dst_pwd | fzf +m -q "$query" \
         --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
         --preview-window='right:hidden:wrap' --inline-info --exact \
-        --bind=ctrl-v:toggle-preview --bind=ctrl-x:toggle-sort $FCLR) \
+        --bind=ctrl-w:toggle-preview --bind=ctrl-x:toggle-sort $FCLR) \
   && cd "$f_dir";
   if [ $? -ne 0 ]; then cd $cur_pwd; fi
 }
@@ -214,7 +215,7 @@ fcp() {
       | fzf +m \
           --preview 'tree -C {} | head -n $FZF_PREVIEW_LINES' \
           --preview-window='right:hidden:wrap' \
-          --bind=ctrl-v:toggle-preview \
+          --bind=ctrl-w:toggle-preview \
           --bind=ctrl-x:toggle-sort \
   )" || return
   cd "$parent_dir" || return
@@ -285,6 +286,7 @@ alias gd='git diff'
 alias gdc='git diff --cached'
 alias gfig="git config --local -e"
 alias gt='git status'
+alias gu="gitui"
 alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset)%C(reset)%C(bold cyan)%d%C(reset)' --all"
 
 # Grc
@@ -295,7 +297,6 @@ alias traceroute='grc traceroute'
 alias backports_check="sudo apt full-upgrade -t buster-backports --assume-no"
 alias backports_check_oneline='apt -t buster-backports -s upgrade 2> /dev/null | egrep ^Inst | cut -d " " -f 2-3'
 alias cal='ncal -3 -M -b'
-alias ff="fzf"
 alias fonts_list='fc-list | cut -d":" -f2 | sort | uniq'
 alias fonts_rebuild='fc-cache -fv && mkfontdir ~/.local/share/fonts && xset +fp ~/.local/share/fonts'
 alias gtk3themes="find /usr/share/themes/ -name gtk-3.0 | cut -d'/' -f5"
@@ -309,7 +310,6 @@ alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (
 alias t='task'
 alias test_microphone="arecord -vv -f dat /dev/null"
 alias weather="curl -s v2.wttr.in/Adelaide | head -42"
-alias rr="ranger"
 alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault'"
 alias debug_keycodes="sudo libinput debug-events --show-keycodes"
 alias debug_summary="inxi -Fxxxz -G --display"
