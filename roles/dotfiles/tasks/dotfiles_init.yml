@@ -11,16 +11,6 @@
     path: "{{ ansible_env.HOME }}/.ssh"
     mode: 0700
 
-- name: Copy bat folder
-  copy:
-    src: config/bat
-    dest: "{{ ansible_env.HOME }}/.config/"
-  register: copy_bat_folder
-
-- name: Rebuild bat cache
-  shell: bat cache --clear && bat cache --build
-  when: copy_bat_folder.changed
-
 - name: Check if tmux terminfo already installed
   shell: infocmp -x tmux
   register: terminfo_test

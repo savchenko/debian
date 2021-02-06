@@ -41,6 +41,11 @@
   shell: gpg -k
   when: not gpg_db_initialised
 
+- name: Ensure tox folder exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/tox"
+    state: directory
+
   #
   # `copy_dotfiles`
   #
@@ -48,9 +53,12 @@
 
   - name: Create remote dotfiles folders tree
     file:
-      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles/gnupg"
+      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item }}"
       recurse: yes
       state: directory
+    with_items:
+      - "gnupg"
+      - "config/tox"
 
   - name: Copy primary dotfiles to the remote machine
     copy:
@@ -58,15 +66,23 @@
       dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
     with_items: "{{ dotfiles_list }}"
 
+  - name: Copy ~/.config/ folders
+    copy:
+      # Notice the ending slash to avoid duplicated nested folders
+      src: "{{ item.src }}/"
+      dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
+    with_items: "{{ dotfiles_folders_list }}"
+
   - name: Link dotfiles from ~/.local/etc/dotfiles to $HOME
-    become: yes
-    become_user: "{{ ansible_env.USER }}"
     file:
       src: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
       dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
       state: "{{ item.state }}"
       force: yes
-    with_items: "{{ dotfiles_list }}"
+    become: yes
+    become_user: "{{ ansible_env.USER }}"
+    with_items: "{{ dotfiles_list | union(dotfiles_folders_list) }}"
+    notify: rebuild bat cache
     register: dotfiles_linked
 
   - name: Copy ~/.local/bin
@@ -85,8 +101,9 @@
     dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
     state: "{{ item.state }}"
     force: yes
-  with_items: "{{ dotfiles_list }}"
+  with_items: "{{ dotfiles_list | union(dotfiles_folders_list) }}"
   when: link_to_localhost and not WSL1 and not copy_dotfiles
+  notify: rebuild bat cache
   register: dotfiles_linked
 
 - name: Link ~/.local/bin from this role to $HOME

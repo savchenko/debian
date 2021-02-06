@@ -12,27 +12,36 @@ dotfiles_list_mako:
   - { src: 'config/mako'         , dest: '.config/mako'         , state: 'hard' }
 
 dotfiles_list:
-  - { src: 'Xresources'          , dest: '.Xdefaults'           , state: 'link' }
-  - { src: 'aliases'             , dest: '.aliases.sh'          , state: 'link' }
-  - { src: 'bash_profile'        , dest: '.bash_profile'        , state: 'link' }
-  - { src: 'bashrc'              , dest: '.bashrc'              , state: 'link' }
-  - { src: 'config/foot'         , dest: '.config/foot'         , state: 'link' }
-  - { src: 'config/imv'          , dest: '.config/imv'          , state: 'link' }
-  - { src: 'config/luakit'       , dest: '.config/luakit'       , state: 'link' }
-  - { src: 'config/sway'         , dest: '.config/sway'         , state: 'link' }
-  - { src: 'config/vifm'         , dest: '.config/vifm'         , state: 'link' }
-  - { src: 'curlrc'              , dest: '.curlrc'              , state: 'link' }
-  - { src: 'gitignore'           , dest: '.gitignore'           , state: 'link' }
-  - { src: 'gnupg/gpg-agent.conf', dest: '.gnupg/gpg-agent.conf', state: 'link' }
-  - { src: 'gnupg/gpg.conf'      , dest: '.gnupg/gpg.conf'      , state: 'link' }
-  - { src: 'inputrc'             , dest: '.inputrc'             , state: 'link' }
-  - { src: 'muttrc'              , dest: '.muttrc'              , state: 'link' }
-  - { src: 'profile'             , dest: '.profile'             , state: 'link' }
-  - { src: 'ripgreprc'           , dest: '.ripgreprc'           , state: 'link' }
-  - { src: 'ssh_config'          , dest: '.ssh/config'          , state: 'link' }
-  - { src: 'vimrc'               , dest: '.vimrc'               , state: 'link' }
-  - { src: 'weechat.conf'        , dest: 'weechat.conf'         , state: 'link' }
-  - { src: 'man'                 , dest: '.local/man'           , state: 'link' }
+  - { src: 'Xresources'           , dest: '.Xdefaults'            , state: 'link' }
+  - { src: 'aliases'              , dest: '.aliases.sh'           , state: 'link' }
+  - { src: 'bash_profile'         , dest: '.bash_profile'         , state: 'link' }
+  - { src: 'bashrc'               , dest: '.bashrc'               , state: 'link' }
+  - { src: 'curlrc'               , dest: '.curlrc'               , state: 'link' }
+  - { src: 'gitignore'            , dest: '.gitignore'            , state: 'link' }
+  - { src: 'gnupg/gpg-agent.conf' , dest: '.gnupg/gpg-agent.conf' , state: 'link' }
+  - { src: 'gnupg/gpg.conf'       , dest: '.gnupg/gpg.conf'       , state: 'link' }
+  - { src: 'config/tox/toxic.conf', dest: '.config/tox/toxic.conf', state: 'link' }
+  - { src: 'inputrc'              , dest: '.inputrc'              , state: 'link' }
+  - { src: 'man'                  , dest: '.local/man'            , state: 'link' }
+  - { src: 'muttrc'               , dest: '.muttrc'               , state: 'link' }
+  - { src: 'profile'              , dest: '.profile'              , state: 'link' }
+  - { src: 'ripgreprc'            , dest: '.ripgreprc'            , state: 'link' }
+  - { src: 'ssh_config'           , dest: '.ssh/config'           , state: 'link' }
+  - { src: 'vimrc'                , dest: '.vimrc'                , state: 'link' }
+  - { src: 'weechat.conf'         , dest: 'weechat.conf'          , state: 'link' }
+
+dotfiles_folders_list:
+  - { src: 'config/bat'           , dest: '.config/bat'           , state: 'link' }
+  - { src: 'config/fontconfig'    , dest: '.config/fontconfig'    , state: 'link' }
+  - { src: 'config/foot'          , dest: '.config/foot'          , state: 'link' }
+  - { src: 'config/gtk-3.0'       , dest: '.config/gtk-3.0'       , state: 'link' }
+  - { src: 'config/htop'          , dest: '.config/htop'          , state: 'link' }
+  - { src: 'config/imv'           , dest: '.config/imv'           , state: 'link' }
+  - { src: 'config/luakit'        , dest: '.config/luakit'        , state: 'link' }
+  - { src: 'config/qt5ct'         , dest: '.config/qt5ct'         , state: 'link' }
+  - { src: 'config/sway'          , dest: '.config/sway'          , state: 'link' }
+  - { src: 'config/vifm'          , dest: '.config/vifm'          , state: 'link' }
+  - { src: 'config/vivid'         , dest: '.config/vivid'         , state: 'link' }
 
 dotfiles_gitconfig_local:
   - { src: 'gitconfig', dest: '.gitconfig', state: 'link' }
