@@ -1,46 +1,71 @@
 #
 # --- Application settings ---
 #
+set database plain
+set pages-per-row 2
 set sandbox normal
 set selection-clipboard clipboard
-set database sqlite
+set window-title-basename true
+set window-title-page true
 
 #
 # --- Visuals ---
 #
+set font "JetBrains Mono 14"
 set completion-fg "#848484"
 set completion-group-bg "#212121"
 set completion-group-fg "#4D4D4D"
-set completion-highlight-bg "#232323"
+set completion-highlight-bg "#212121"
 set completion-highlight-fg "#FFFFFF"
 set default-bg "#2C2C2C"
 set default-fg "#BFBFBF"
 set inputbar-bg "#161616"
 set inputbar-fg "#848484"
-set notification-bg "#FFFFCC"
-set notification-fg "#000000"
+set notification-bg "#161616"
+set notification-fg "#848484"
 set notification-error-bg "#330000"
 set notification-error-fg "#EF2929"
 set notification-warning-bg "#332600"
 set notification-warning-fg "#EFBE29"
-set notification-fg "#000000"
-# set tabbar-fg "#848484"
-# set tabbar-bg "#161616"
-# set tabbar-focus-fg "#FFFFFF"
-# set tabbar-focus-bg "#BFBFBF"
 set statusbar-bg "#212121"
-set font "JetBrains Mono 14"
+set statusbar-fg "#848484"
+set highlight-color "#99A4FF"
+set highlight-active-color "#A1FF99"
+set highlight-transparency 0.3
+set index-fg "#848484"
+set index-bg "#212121"
+set index-active-fg "#FFFFFF"
+set index-active-bg "#212121"
+
+# --- Recolor / Invert / Dark mode ---
+set recolor-keephue true
+set recolor-darkcolor "#8F8F8F"
+set recolor-lightcolor "#000000"
+set recolor-reverse-video true
+set recolor true
 
 # c - command line
 # s - status bar
 # h - horizontal scrollbar
 # v - vertical scrollbar
-set guioptions v
+set guioptions ""
 
 # width or best-fit
 set adjust-open best-fit
+
+# Slightly more visible links
+set link-hadjust false
+
+# Don't jiggle horizontally while searching
+set search-hadjust false
 
 #
 # --- Hotkeys ---
 #
 map o toggle_statusbar
+map i set recolor
+map p snap_to_page
+
+# As zathura does not support `!` toggle...
+map b set "guioptions hv"
+map <C-b> set "guioptions ''"
