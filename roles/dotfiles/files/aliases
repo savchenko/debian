@@ -36,10 +36,36 @@ lzg() { git add . && git commit -a -m "$@" && git push; }
 # apt search | grep wrapper
 aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi }
 
+# Time marker
 marker() { printf "${cyan}%$(( ${COLUMNS} - 12 ))s─(${bright_yellow}%(%H:%M:%S)T${cyan})─${clr_reset}" | sed 's/ /─/g'; }
 
+# Single-pass empty directories removal
+emptydirs() {
+  local folders_empty=$(find . -type d -empty -print | sort --dictionary-order)
+  local folders_count=$(echo -e "$folders_empty" | wc -l)
+  if [ $folders_count -gt 0 ]; then
+    echo -e "\n$folders_empty"
+    if [[ $1 == '--force' ]]; then
+      echo -e "\nRemoving $folders_count of empty folders\n"
+      for dir in $folders_empty; do
+        rmdir $dir
+      done
+      return
+    else
+      echo "" && read -p "Delete folders_empty folders (y/n)? " choice
+      case "$choice" in 
+        y|Y )
+          for dir in $folders_empty; do
+            rmdir $dir
+          done ;;
+        * )   :;;
+      esac
+    fi
+  fi
+}
+
 # imv-wayland with monitor-mode supression
-function im {
+im() {
   if [ $# -eq 1 ]; then
     ( set +m && imv-wayland ${1%} &> /dev/null & )
   else
