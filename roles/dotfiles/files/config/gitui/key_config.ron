@@ -1,5 +1,5 @@
 // bit for modifiers
-// bits: 0  None 
+// bits: 0  None
 // bits: 1  SHIFT
 // bits: 2  CONTROL
 //
@@ -24,7 +24,7 @@
     focus_above: ( code: Char('k'), modifiers: ( bits: 0,),),
     focus_below: ( code: Char('j'), modifiers: ( bits: 0,),),
 
-    exit: ( code: Char('q'), modifiers: ( bits: 0,),),
+    exit: ( code: Char('Q'), modifiers: ( bits: 1,),),
     exit_popup: ( code: Esc, modifiers: ( bits: 0,),),
 
     open_commit: ( code: Char('c'), modifiers: ( bits: 0,),),
