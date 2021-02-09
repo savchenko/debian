@@ -23,7 +23,7 @@ for fname in ??-???_??-??-??.png; do
   [ $today = $fname_date ] && continue;
   [ ! -d $fdest ] && mkdir -p $fdest
   if [ ! -d $fdest ]; then
-    echo "Error: Can not create directory $fdest"
+    echo "Error: Unable to create $PWD/$fname_month"
     break
   fi
   mv $fname $fname_month/$fname_date
