@@ -1,0 +1,525 @@
+#!/usr/bin/python3
+# ugrep: find unicode characters based on their names or number.
+#        Essentially grep for the Unicode table.
+
+# PREREQUISITES: You must have a copy of UnicodeData.txt installed.
+# On Debian GNU/Linux, this can be done by `apt install unicode-data`.
+# Or, you can download it by hand from the Unicode Consortium and
+# place it in `~/.local/share/unicode/UnicodeData.txt`.
+
+# Fun things to try:
+
+# ugrep alchemical
+# ugrep ornament
+# ugrep bullet
+# ugrep 'vine|bud'
+# ugrep vai
+# ugrep heavy
+# ugrep drawing
+# ugrep 2300..ff
+
+# GPL ≥3 (see LICENSE file)
+# B9 September 2018
+
+from re import *
+from sys import argv
+from pprint import pprint
+from os.path import expanduser, expandvars, basename
+from sys import stderr
+
+debug=False
+
+def usage():
+    print("""\
+ugrep: find unicode characters based on their names or codepoints
+Usage:
+    ugrep [-wcx] <character ...> | <codepoint ...> | <character name>
+
+        -w:     matches only whole words, e.g., ugrep -w pi
+        -c:     show each character in a string, e.g., ugrep -c "(ﾟ∀ﾟ)"
+        -x:     show example usage
+
+    <character> is a single character, e.g.:  ugrep ☙
+    <codepoint> is one or more hexadecimal unicode character numbers,
+                optionally prefixed by "U+" or "0x".e.g.: ugrep U+1F639.
+                Ranges are allowed with two dots: ugrep 23b0..f
+    <character name> is a regular expression, see examples in ugrep --examples.
+    <character string> is one or more characters. e.g., ugrep -c "( ͡° ͜ʖ ͡°)"
+
+    Try 'ugrep --examples' to see more examples of usage.
+"""
+    )
+
+def examples():
+    print("""\
+# You can search by character name.
+    $ ugrep heart
+    ☙   U+2619  REVERSED ROTATED FLORAL HEART BULLET
+    ❣   U+2763  HEAVY HEART EXCLAMATION MARK ORNAMENT
+    ❤   U+2764  HEAVY BLACK HEART
+    [ ... examples truncated for brevity ... ]
+    😻  U+1F63B SMILING CAT FACE WITH HEART-SHAPED EYES
+
+# Or, you can search by pasting in a specific character.
+    $ ugrep ✿
+    ✿       U+273F  BLACK FLORETTE
+
+# Or, you can search by code point.
+    $ ugrep 273a
+    ✺       U+273A  SIXTEEN POINTED ASTERISK
+
+# By default, words match anywhere.
+    $ ugrep clos brac                   # Equivalent to "clos.*brac"
+    ]       U+005D  RIGHT SQUARE BRACKET (closing square bracket)
+    }       U+007D  RIGHT CURLY BRACKET (closing curly bracket)
+    〉      U+3009  RIGHT ANGLE BRACKET (closing angle bracket)
+
+# Use -w to match only whole words.
+    $ ugrep -w "R"                      # Equivalent to "\\bR\\b"
+    R   U+0052  LATIN CAPITAL LETTER R
+    ℛ   U+211B  SCRIPT CAPITAL R (Script r)
+    ℜ   U+211C  BLACK-LETTER CAPITAL R (Black-letter r)
+    ℝ   U+211D  DOUBLE-STRUCK CAPITAL R (Double-struck r)
+
+# Use -c to display info for each character in a string.
+    $ ugrep -c "ᕕ( ᐛ )ᕗ"
+    ᕕ   U+1555  CANADIAN SYLLABICS FI
+    (   U+0028  LEFT PARENTHESIS (opening parenthesis)
+    ᐛ   U+141B  CANADIAN SYLLABICS NASKAPI WAA
+    )   U+0029  RIGHT PARENTHESIS (closing parenthesis)
+    ᕗ   U+1557  CANADIAN SYLLABICS FO
+
+# ugrep finds aliases (in parens)
+    $ ugrep backslash
+    \   U+005C  REVERSE SOLIDUS (backslash)
+
+# Regex ^ and $ work, mostly
+    $ ugrep ^x
+    ⊻   U+22BB  XOR
+    ⌧   U+2327  X IN A RECTANGLE BOX (clear key)
+
+# Show every single Unicode character!
+    $ ugrep 0..10FFFF  |  less"""
+    )
+
+# Main
+def main():
+    global argv
+
+    if len(argv) == 1:
+        usage()
+        exit(1)
+
+    if argv[1]=='-h' or argv[1]=='--help':
+        usage()
+        exit(0)
+
+    if argv[1]=='-x' or argv[1]=='--examples' or argv[1]=='--example':
+        examples()
+        exit(0)
+
+    if argv[1]=='-w':
+        argv=argv[1:]
+        for i in range(1,len(argv)):
+            argv[i]="\\b"+argv[i]+"\\b"
+        debugprint(argv)
+
+    # Load the Unicode Data into the global ucd variable.
+    loaducd()
+
+    # Is it -c followed by a string of characters?
+    if argv[1]=='-c':
+        # Look up each character in the string.
+        argv=argv[1:]
+        for i in range(1,len(argv)):
+            for j in range(0,len(argv[i])):
+                showonecharacter( hex(ord(argv[i][j])) )
+            if (i<len(argv)-1): print("")
+        exit(0)
+
+    # Is it a single character? Then only show that one character.
+    if len(argv[1])==1:
+        showonecharacter( hex(ord(argv[1])) )
+        exit(0)
+
+    # Do brace expansion on argv if our system doesn't have it.
+    braceexpansion()
+
+    # Is first arg a hexadecimal number? E.g., 26A0, 0xdeadbeef, U+FACE
+    # Then *also* look up that code point.
+    if match(r"(?i)^(U\+?|0x)?[0-9A-F]+$", argv[1]):
+        # Loop to allow people to do things like "ugrep 23b{0..9}"
+        for arg in argv[1:]:
+            if match(r"(?i)^(U\+?|0x)?[0-9A-F]+$", arg):
+                showonecharacter(arg)
+            else:
+                break
+
+    # Now, look up the entire argv[] as a character name or alias.
+    s=makeregexcharname()
+    printmatches(s)
+
+
+def showonecharacter(c):
+    s=makeregexcodepoint(c)
+    compileit(s)
+    printmatches(s)
+
+
+def compileit(s):
+    "Compile the regular expresion in s, or die trying."
+    global ucd, argv
+
+    if debug:
+        debugprint(s)
+        m=search(s,ucd)
+        if not m: debugprint("Uncompiled, definitely not in ucd")
+
+    try:
+        s=compile(s)
+    except error as e:
+        err("Error parsing regex: '%s'" % ".*".join(argv[1:]))
+        err(e)
+        exit(3)
+
+
+
+def isprint(c):
+    # Given a category 'c', return True if it is printable.
+    # We presume the only non-printable category is 'C' (control).
+    # However, technically, much of category 'Z' (spaces) is non-printable.
+
+    # Side note: Python is silly and regex clauses that match an empty
+    # string are set to None instead of ''. That's why we doublecheck
+    # that category is not None.
+    return c and not c.startswith('C')
+
+def iscombining(c):
+    # Given a category 'c', return True if it is a combining character.
+    # We presume all combining characters are in category 'M' and vice-versa.
+    if debug:
+        debugprint ("Category is <" + str(c) + ">")
+
+    return c and c.startswith('M')
+
+def printmatches(s):
+    category=""
+    for m in finditer(s, ucd):
+        if m:
+            g=m.groupdict()
+            debugprint(g)
+            if g["hex"] == None: g["hex"]=g["hextwo"]
+            if g["name"] == None: g["name"]=g["desctwo"]
+            category = g["category"] if g["category"] else g["categorytwo"]
+            if g["alias"] == None: g["alias"]=g["aliastwo"]
+            c=chr(int(g["hex"], 16))
+            if not isprint(category): c="\ufffd" # "Replacement Character"
+            if iscombining(category): print('\u25cc', end='') # "Dotted circle"
+            print(c, end='\t')
+            print ("U+" + g["hex"], end='\t')
+            print(g["name"], end='')
+            if (len(g["alias"]) and isdifferent(g["name"], g["alias"])):
+                print (" (" + g["alias"].lower() + ")", end='')
+            print()
+
+def isdifferent(a, b):
+    """Given two strings A & B, determine if B is different enough from A
+       that we don't need to print it as well. "Enough" means "adds
+       significant new information". For example, the following would
+       return False:
+
+       "LATIN CAPITAL LETTER A WITH GRAVE", "LATIN CAPITAL LETTER A GRAVE"
+
+       Note that order matters. For example,
+
+       "BROKEN BAR", "BROKEN VERTICAL BAR"      Should return True
+       "BROKEN VERTICAL BAR", "BROKEN BAR"      Should return False
+    """
+    a=a.upper()
+    b=b.upper()
+
+    if a == b:
+        return False
+    if a == b.replace(" DIGIT ", " "):
+        return False
+    if a == b.replace("FORMS ", "BOX DRAWINGS "):
+        return False
+    if a == b.replace("GRAPHIC ", "SYMBOL "):
+        return False
+    if a == b.replace("GLYPH ", "PRESENTATION FORM "):
+        return False
+    if a == b.replace("CENTER", "CENTRE"):
+        return False
+    if a == b.replace("CENTERED", "CENTRED"):
+        return False
+    if a == b.replace("SQUARED ", "SQUARE "):
+        return False
+
+    b=b.replace(" ", ".*")
+    try:
+        m=search(b, a)
+        if m:
+            return False
+        else:
+            return True
+    except:
+        # regex should never fail, but if it does, we don't care.
+        return True
+
+
+    # if a.replace("WARDS ", " ") == b:
+    #     return False
+    # if a.replace("S ", " ") == b:
+    #     return False
+    # if a.rstrip("S") == b:
+    #     return False
+
+    return True
+
+def loaducd():
+    "Find the UnicodeData.txt file and load it up into ucd global variable."
+
+    global ucd
+    ucd=None
+    ucdplaces=( "/usr/local/share/unicode/UnicodeData.txt",
+                "/usr/share/unicode/UnicodeData.txt",
+                "~/.local/share/unicode/UnicodeData.txt",
+                "UnicodeData.txt" )
+    for f in ucdplaces:
+        f=expanduser(expandvars(f))             # Python's open() is silly
+        try:
+            ucd=open(f).read()
+            debugprint("Found data file at " + f)
+        except:
+            continue
+
+    # Sanity check: did we find the UnicodeData.txt file?
+    if ucd == None:
+        eprint("""\
+    Could not find UnicodeData.txt in:
+
+%s
+    On most GNU/Linux systems your package manager can install it easily.
+    For example:  apt install unicode-data.
+
+    Alternately, you can grab it via wget like so:
+
+        mkdir -p ~/.local/share/unicode
+        cd ~/.local/share/unicode
+        wget ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
+""" %
+               ("".join(["    " + s + "\n" for s in ucdplaces])))
+        exit(2)
+
+    if debug:
+        debugprint("Number of Unicode chars: %d" % len(ucd.splitlines()))
+
+    return ucd
+
+
+def makeregexcharname():
+    "Create a regular expression to search for a character name"
+
+    # Format of ucd: each character is on a separate line.
+    # Each line is fifteen columns separated by semicolons.
+    # We only care about columns 1, 2, 3 and 11
+    #      1: Code value
+    #      2: Character name
+    #      3: General category
+    #     11: ISO 10646 comment field (usually an alias)
+    #
+    # For example:
+    #     002F;SOLIDUS;Po;0;CS;;;;;N;SLASH;;;;
+    #
+    # See Tech Report 44 for more details.
+    #
+    # XXX Todo: maybe look up in table of confusable entities.
+
+    # combine and quote the command line arguments so we can use them in
+    # verbose regex. Also, allow the user to use ^ and $, just like in awk
+    # to refer to the beginning and end of the field instead of line.
+    global argv
+    argv=["("+x+")" for x in argv]    # wrap in parens to fix | (alternation)
+    args=".*".join(argv[1:])          # search terms can have junk between
+    args=sub(r"(\s)", r"\\\1", args)  # quote whitespace for verbose regex
+    args=sub(r"^\(\^", r"(?<=;)(", args) # ^ matches semicolon before field
+    args=sub(r"\$\)$", r"(?=;))", args)  # $ matches semicolon after field
+
+    # s is a search regex for field 2 (name) based on the command line arguments
+    s=r"""^
+        (?P<hex>[^;]*);             # first field is hexadecimal codepoint
+        (?P<name>[^;]*"""+args+"""[^;]*); # field 2 (charactername) matches?
+        (?P<category>[^;]*);        # third field is general category
+        ([^;]*;){7}                 # skip next 7 fields
+        (?P<alias>[^;]*)            # field 11 is comment/alias
+        (;[^;]*){4}$                # line ends with four more fields
+    """
+
+    # r is a search regex for field 11 (alias)
+    r=r"""^
+        (?P<hextwo>[^;]*);            # first field is hexadecimal codepoint
+        (?P<desctwo>[^;]*);           # second field is charactername
+        (?P<categorytwo>[^;]*);       # third field is general category
+        ([^;]*;){7}                   # skip next 7 fields
+        (?P<aliastwo>[^;]*("""+args+""")[^;]*) # field 11 (alias) matches?
+        (;[^;]*){4}$                  # line ends with four more fields
+    """
+
+    s=s+"|"+r                   # Search for either name or alias
+    s="(?mix)"+s                # multiline, case insensitive, verbose
+
+    debugprint("Complete search regex is " + s)
+
+    return s
+
+def makeregexcodepoint(cp):
+    "Make a regular expression to search for a hexadecimal codepoint"
+
+    # User specified a codepoint, e.g., "U+23fb"
+
+    # Normalize whatever they put in to "23FB"
+    cp=cp.lstrip("Uu+0Xx").upper().zfill(4)
+
+    # s is a search regex for field 1 (hexadecimal)
+    s=r"""^
+        (?P<hex>"""+cp+""");            #first field is hex codepoint
+        (?P<name>[^;]*);                # second field is charactername
+        (?P<category>[^;]*);            # third field is category
+        ([^;]*;){7}                     # skip next 7 fields
+        (?P<alias>[^;]*)                # field 11 is comment/alias
+    """
+    s="(?mix)"+s                     # multiline, case insensitive, verbose
+    return(s)
+
+
+
+def braceexpansion():
+    """Look for ranges "{a..z}" in argv[] and expand by inserting new elements.
+
+    {0..7}      -->     0 1 2 3 4 5 6 7
+    abc{0..7}   -->     abc0 abc1 abc2 abc3 abc4 abc5 abc6 abc7
+
+    This is mostly useful for people who do not run a modern UNIX
+    shell, like GNU Bash that expands braces on the command line.
+
+    It also fills in the gap until shells understand hexadecimal
+    ranges. For example, the following is ignored by bash-4.4, but we
+    want to accept it in ugrep.
+
+    23b{8..f}   -->     23b8 23b9 23ba 23bb 23bc 23bd 23be 23bf
+
+    Notes:
+
+    * In Bash, if start or end begin with a "0", then it zfills to
+      that width. For this program, the 0 is optional as it always
+      uses the largest width of the two ends E.g., 23{0..ff} -> 2300, 2301,...
+    * Does not handle nested braces nor alternation with a comma.
+    * Should check for invalid ranges and ignore them instead of barfing.
+    * Checks for and ignores prefix of U+ or 0x
+
+    * Presumes both arguments are hexadecimal, this makes things weird where
+      {01..10} is expanded by Bash to ten numbers, but
+      {01..0f} is expanded by this program to fifteen!
+
+    * Because of that inconsistency, maybe this isn't such a good idea.
+      Perhaps we should make people have to prefix hex with U+ or 0x?
+
+    """
+
+    global argv
+    s=r"""(?mix)
+          (?P<prefix>[^{]*)
+          {?                   # Literal open curly brace (optional)
+          (U\+?|0?x)?
+          (?P<start>.*)
+          \.\.                 # Literal two periods. MANDATORY.
+          (U\+?|0?x)?
+          (?P<end>.*)
+          }?                   # Literal close curly brace (optional)
+          (?P<suffix>[^}]*)
+    """
+    s=compile(s)
+    newargv=[argv[0]]
+
+    for arg in argv[1:]:
+        m=search(s, arg)
+        if not m:
+            newargv.append(arg)
+        else:
+            debugprint("Doing brace expansion on " + arg)
+            g=m.groupdict()
+            prefix=g["prefix"]
+            start=g["start"].strip("{}") # Python doesn't do lazy regexps?
+            end=g["end"].strip("{}")     # So, we kludge this way.
+
+            if start == "":
+                # They left off the braces: 2390..f instead of 239{0..f}
+                start=prefix
+                end=prefix[:-len(end)]+end
+                prefix=""
+
+            debugprint("Found range from " + start + " to " + end)
+            z=max(len(start), len(end))
+            start=int(start, 16)
+            end=int(end, 16)
+
+            for i in range(start, end+1):
+                hexits=hex(i)[2:].zfill(z)
+                newargv.append( prefix + hexits + g["suffix"] )
+
+    argv=newargv
+    return(0)
+
+
+def eprint(*args, **kwargs):
+    "Print to stderr"
+    print(*args, file=stderr, **kwargs)
+
+def err(*args, **kwargs):
+    "Print to stderr with program name prefixed"
+    eprint(basename(argv[0]) + ": ", end='')
+    eprint(*args, **kwargs)
+
+def debugprint(*args, **kwargs):
+    "If debug var is True, print to stderr with progname prefix"
+    if (debug):
+        err(*args, **kwargs)
+
+
+
+### Run the main routine
+try:
+    main()
+except BrokenPipeError:
+    # Ignore non-error errors. For example: 'ugrep -w pi | head'
+    True
+
+
+# Implementation notes:
+
+# This is a rewrite of b9's AWK ugrep in Python. While AWK makes a lot
+# more sense for what this program does (comparing fields based on
+# regexps), a rewrite was necessary because GNU awk, while plenty
+# powerful, uses \y for word edges instead of \b and that was bugging
+# me. Gawk does this for backwards compatibility with historic AWK,
+# which is all well and good, but gawk has no way to disable it for
+# new scripts.
+#
+# Switching to Python did have the benefit of allowing more powerful
+# Perl-like regexes (not that anyone has requested that).
+#
+# One downside is that I needed a huge hairy regex to simply search
+# only in a certain field of each line. Maybe there's some Pythonic
+# way to do it, but it's not obvious. Perhaps a 2D array?
+#
+# Also, I took for granted that awk let me use ^ and $ to search for
+# the beginning and ending of fields instead of lines. I tried to
+# reimplement that in Python, but it's not quite right as it only
+# checks the first and last character. For example, ugrep "^x" works,
+# but ugrep "(^x)" does not.
+
+
+# Note: I do not use Python's `unicodedata` module because it is
+# insufficient. It allows one to search by character name only if the
+# precise name: `unicodedata.lookup("ROTATED HEAVY BLACK HEART BULLET")`.
+
