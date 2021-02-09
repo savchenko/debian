@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
 # Based on https://stackoverflow.com/a/42266990
+
+if [ $# -eq 1 ]; then
+  if [[ -d $1 ]]; then
+    cd $1
+  else
+    echo -e "\nSupplied argument is not a folder.\n"
+    exit 1
+  fi
+else
+  echo -e "\nUsage: archive_screenshots /path/to/DD-Mon_HH-MM-SS.png\n"
+  exit 1
+fi
+
 today=$(date +%d-%b)
            # 08-Feb_14-57-40.png
 for fname in ??-???_??-??-??.png; do
