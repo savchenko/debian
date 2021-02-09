@@ -43,7 +43,7 @@ marker() { printf "${cyan}%$(( ${COLUMNS} - 12 ))s─(${bright_yellow}%(%H:%M:%S
 emptydirs() {
   local folders_empty=$(find . -type d -empty -print | sort --dictionary-order)
   local folders_count=$(echo -e "$folders_empty" | wc -l)
-  if [ $folders_count -gt 0 ]; then
+  if [ $folders_count -gt 1 ]; then
     echo -e "\n$folders_empty"
     if [[ $1 == '--force' ]]; then
       echo -e "\nRemoving $folders_count of empty folders\n"
@@ -53,7 +53,7 @@ emptydirs() {
       return
     else
       echo "" && read -p "Delete folders_empty folders (y/n)? " choice
-      case "$choice" in 
+      case "$choice" in
         y|Y )
           for dir in $folders_empty; do
             rmdir $dir
@@ -61,6 +61,8 @@ emptydirs() {
         * )   :;;
       esac
     fi
+  else
+    return 1
   fi
 }
 
