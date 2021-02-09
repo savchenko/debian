@@ -52,7 +52,7 @@ emptydirs() {
       done
       return
     else
-      echo "" && read -p "Delete folders_empty folders (y/n)? " choice
+      echo "" && read -p "Delete $folders_count empty folders (y/n)? " choice
       case "$choice" in
         y|Y )
           for dir in $folders_empty; do

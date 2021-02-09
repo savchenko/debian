@@ -168,6 +168,7 @@ nnoremap QQ :q!<cr>
 
 " Symlinking
 command link ln -s %d/%f %D
+nnoremap gl :link<cr>
 
 " Copy/move with confirmation dialog
 :command! cp :yank | winrun , put
@@ -301,9 +302,6 @@ nnoremap <silent> ,uc :command<cr>
 " Move cursor in another pane
 nnoremap <silent> <c-j> <c-w>wj<c-w>w
 nnoremap <silent> <c-k> <c-w>wk<c-w>w
-
-" Go to link source
-nnoremap gl gf
 
 " TODO: Global filter. Somehow doesn't work as expected.
 "

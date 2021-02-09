@@ -9,7 +9,6 @@ get_suffix() {
   esac
 }
 suffix=$(get_suffix)
-aha="AHA!"
 columns=$(tput cols)
 title=$(date +%A,\ %d$suffix\ of\ %B)
 

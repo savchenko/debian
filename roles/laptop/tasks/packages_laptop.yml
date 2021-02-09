@@ -10,7 +10,9 @@
       - alsa-topology-conf
       - catdoc
       - docx2txt
+      - libxml2-util
       - sc
+      - unicode-data
       - archivemount
       - fuse-zip
       - atool
