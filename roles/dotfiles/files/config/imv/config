@@ -1,5 +1,13 @@
+#
+# 200 characters line limit: https://github.com/eXeC64/imv/issues/270
+#
 [options]
 suppress_default_binds = true
+loop_input = true
+overlay_text_color = bfbfbf
+overlay_position_bottom = true
+overlay_font = JetBrainsMono:20
+overlay_text = [$imv_current_index/$imv_file_count]\ \ $(echo $imv_current_file | rev | cut -d"/" -f1 | rev)
 
 [binds]
 q = quit
@@ -25,11 +33,15 @@ l = pan -50 0
 <minus> = zoom -1
 
 # Other commands
+gh = goto 1
+gg = goto -1
 f = fullscreen
-o = overlay
+i = overlay
 e = center
 s = scaling next
-<Shift+S> = upscaling next
+v = flip horizontal
+<Shift+V> = flip vertical
+<Ctrl+s> = upscaling next
 a = zoom actual
 r = reset
 0 = background checks
@@ -42,6 +54,7 @@ r = reset
 
 # Execs
 c = exec wl-copy < $imv_current_file && notify-send "Clipboard" -i $imv_current_file
+dd = exec rm "$imv_current_file"; next
 
 # Gif playback
 <period> = next_frame
