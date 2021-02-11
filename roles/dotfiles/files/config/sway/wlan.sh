@@ -12,6 +12,7 @@ if [ $wlan_status == "off" ]; then
   sudo ifdown enp2s0f0 &> /dev/null &&
   sudo ifdown enx606d3c5322cd &> /dev/null &&
   iwctl adapter phy0 set-property Powered on &> /dev/null &&
+  iwctl device wlan0 set-property Powered on &> /dev/null &&
   sudo ifup wlan0 &> /dev/null &&
   sudo iwconfig wlan0 txpower 18 &&
     if [[ -n "$TERM" && -n "$COLORTERM" ]]; then
@@ -26,6 +27,7 @@ elif [ $wlan_status == "on" ]; then
   sudo ifup enp2s0f0 &> /dev/null &&
   sudo ifup enx606d3c5322cd &> /dev/null &&
   iwctl adapter phy0 set-property Powered off &> /dev/null &&
+  iwctl device wlan0 set-property Powered off &> /dev/null &&
     if [[ -n "$TERM" && -n "$COLORTERM" ]]; then
       echo -e "\n${green}LAN is on, ${red}WLAN turned off.${clr}\n\n$(eval $ifaces)\n"
     else
