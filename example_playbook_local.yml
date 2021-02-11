@@ -87,7 +87,7 @@
       enable_sleep_hibernate: true
       intel_disable_igfx: false
       intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
-      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service']
+      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service', 'mpd.service']
       systemd_units_enable: []
       logind_hibernate_delay: 900
       logind_idle_action: suspend-then-hibernate
