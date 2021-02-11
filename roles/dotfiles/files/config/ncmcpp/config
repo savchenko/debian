@@ -1,0 +1,172 @@
+ncmpcpp_directory = ~/.config/ncmpcpp
+lyrics_directory = ~/.cache/mpd/lyrics
+mpd_music_dir = ~/Music
+external_editor = nvim
+use_console_editor = yes
+
+playlist_disable_highlight_delay = 5
+message_delay_time = 5
+
+# Window #2
+song_list_format = $0{%a - }{%t}|{%f}$R{(%l)}$9
+
+# Bottom text in #1
+song_status_format = {{%a{ - %b} - }{%t}}|{%f}
+
+# 3rd column in the #4
+song_library_format = {%n - }{%t}|{%f}
+
+# user_interface = alternative
+alternative_header_first_line_format = $b$8 {%t}|{%f} $/b$9
+alternative_header_second_line_format = {{%a}{ - %b}}|{%D}
+
+current_item_prefix = $b$(8)
+current_item_suffix = $(end)$/b
+current_item_inactive_column_prefix = $(243)
+current_item_inactive_column_suffix = $(end)
+now_playing_prefix = $(4)
+now_playing_suffix = $(end)
+browser_playlist_prefix = "$2Playlist$9 "
+selected_item_prefix = $(12)
+selected_item_suffix = $(end)
+modified_item_prefix = $2> $9
+song_window_title_format = {%a - }{%t}|{%f}
+
+song_columns_list_format = (20)[]{a|c|p:Artist} (6f)[]{NE:  №} (50)[]{t|f:Title} (20)[]{b|A|d:Album} (7f)[]{l}
+
+execute_on_player_state_change = ""
+playlist_show_remaining_time = yes
+playlist_shorten_total_times = yes
+playlist_separate_albums = yes
+playlist_display_mode = columns
+browser_display_mode = columns
+search_engine_display_mode = columns
+playlist_editor_display_mode = classic
+discard_colors_if_item_is_selected = yes
+show_duplicate_tags = no
+incremental_seeking = yes
+seek_time = 1
+
+# Autocenter current track vertically, but not the highlighted item
+autocenter_mode = yes
+centered_cursor = no
+
+default_place_to_search_in = database
+data_fetching_delay = no
+media_library_albums_split_by_date = yes
+default_find_mode = wrapped
+default_tag_editor_pattern = %n - %t
+header_visibility = yes
+statusbar_visibility = yes
+titles_visibility = yes
+header_text_scrolling = yes
+cyclic_scrolling = no
+lines_scrolled = 1
+generate_win32_compatible_filenames = yes
+allow_for_physical_item_deletion = yes
+space_add_mode = add_remove
+show_hidden_files_in_local_browser = no
+
+## Screens available for use: help, playlist, browser, search_engine,
+## media_library, playlist_editor, tag_editor, outputs, visualizer, clock,
+## lyrics, last_fm.
+
+# <Tab>
+screen_switcher_mode = playlist, clock
+startup_screen = playlist
+
+# startup_slave_screen = "search_engine"
+# startup_slave_screen_focus = yes
+
+jump_to_now_playing_song_at_start = yes
+
+ask_before_clearing_playlists = yes
+
+clock_display_seconds = no
+
+display_volume_level = no
+
+display_bitrate = no
+
+display_remaining_time = no
+
+## none, basic, extended, perl.
+regular_expressions = perl
+
+## ignore leading "The" word while sorting items
+ignore_leading_the = yes
+
+ignore_diacritics = yes
+
+block_search_constraints_change_if_items_found = no
+
+mouse_support = yes
+
+mouse_list_scroll_whole_page = no
+
+empty_tag_marker = <empty>
+
+tags_separator = " | "
+
+tag_editor_extended_numeration = no
+
+media_library_sort_by_mtime = no
+
+enable_window_title = yes
+
+# TODO: Setting this to `3` enforced `search mode` in 3rd tab to 'both values'
+search_engine_default_search_mode = 1
+
+# "<foreground>_<background>"
+# flags: black:b or red:ur, etc
+colors_enabled = yes
+
+# Color of empty tag marker.
+empty_tag_color = 239
+
+# Color of header window.
+header_window_color = 239
+
+# Color of volume state.
+volume_color = 8
+
+# Color of lines separating header and statusbar from main window.
+state_line_color = 239
+
+# Color of MPD status flags.
+state_flags_color = 4
+
+# Color of main window.
+main_window_color = 243
+
+# One of colors used in Song info, Tiny tag editor and Search engine.
+color1 = 4
+
+# One of colors used in Song info, Tiny tag editor and Search engine.
+color2 = 8
+
+# Color of progressbar.
+progressbar_color = 239
+
+# Color of part of progressbar that represents elapsed time.
+progressbar_elapsed_color = 4:b
+
+# Color of statusbar.
+statusbar_color = 243
+
+# Color of current track time shown in statusbar.
+statusbar_time_color = 239
+
+# Color of player state shown in statusbar.
+player_state_color = 239
+
+# Color of separators used in alternative user interface.
+alternative_ui_separator_color = 239
+
+# Border color of pop-up windows. If set to 'none', no border will be shown.
+window_border_color = 4
+
+# Color of active window's border.
+active_window_border = 4
+
+progressbar_look = "━━"
