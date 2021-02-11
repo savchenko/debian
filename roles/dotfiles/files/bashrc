@@ -130,7 +130,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   if [ -f /etc/bash_completion.d/fzf.sh ]; then . /etc/bash_completion.d/fzf.sh; fi
 
   # Go sway!
-  if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+  if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && [[ $_root -eq 0 ]]; then
     exec sway;
   fi
 
