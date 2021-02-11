@@ -28,6 +28,7 @@ dotfiles_list:
   - { src: 'ripgreprc'            , dest: '.ripgreprc'            , state: 'link' }
   - { src: 'ssh_config'           , dest: '.ssh/config'           , state: 'link' }
   - { src: 'vimrc'                , dest: '.vimrc'                , state: 'link' }
+  - { src: 'config/mpd/mpd.conf'  , dest: '.mpd/mpd.conf'         , state: 'link' }
   - { src: 'weechat.conf'         , dest: 'weechat.conf'          , state: 'link' }
 
 dotfiles_folders_list:

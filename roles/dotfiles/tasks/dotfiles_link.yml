@@ -41,16 +41,21 @@
   shell: gpg -k
   when: not gpg_db_initialised
 
-- name: Ensure tox folder exists
+- name: Create a few config folders
   file:
-    path: "{{ ansible_env.HOME }}/.config/tox"
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/.config/tox"
+    - "{{ ansible_env.HOME }}/.mpd"
+    - "{{ ansible_env.HOME }}/.mpd/playlists"
 
   #
   # `copy_dotfiles`
   #
 - block:
 
+    # TODO: Is this still necessary?
   - name: Create remote dotfiles folders tree
     file:
       path: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item }}"
