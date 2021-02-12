@@ -11,6 +11,12 @@
     state: restarted
   listen: "restart ufw"
 
+- name: restart rsyncd
+  service:
+    name: rsync
+    state: restarted
+  listen: "restart rsyncd"
+
 - name: reload sysctl
   shell: sysctl --system
   listen: "reload sysctl"

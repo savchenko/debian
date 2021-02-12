@@ -27,7 +27,8 @@
     - "trustdb.gpg"
   register: gpg_stat
 
-- name: Set intermidiate fact about our findings...
+- name: Set intermediate fact about our findings...
+  no_log: true
   set_fact:
     gpg_files_found: "{{ gpg_files_found + [item.stat.exists] }}"
   with_items:
@@ -46,6 +47,7 @@
     path: "{{ item }}"
     state: directory
   with_items:
+    # TODO: Make this more elegant and unify the list with `copy_dotfiles` below.
     - "{{ ansible_env.HOME }}/.config/tox"
     - "{{ ansible_env.HOME }}/.mpd"
     - "{{ ansible_env.HOME }}/.mpd/playlists"
@@ -64,6 +66,7 @@
     with_items:
       - "gnupg"
       - "config/tox"
+      - "config/mpd"
 
   - name: Copy primary dotfiles to the remote machine
     copy:

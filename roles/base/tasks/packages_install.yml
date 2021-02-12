@@ -80,7 +80,8 @@
     - "trustdb.gpg"
   register: gpg_stat
 
-- name: Set intermidiate fact about our findings...
+- name: Set intermediate fact about our findings...
+  no_log: true
   set_fact:
     gpg_files_found: "{{ gpg_files_found + [item.stat.exists] }}"
   with_items:

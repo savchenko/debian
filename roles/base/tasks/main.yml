@@ -41,6 +41,12 @@
   tags:
     - base_update_system
 
+- name: Install packages
+  import_tasks: packages_install.yml
+  become: yes
+  tags:
+    - base_pkg_install
+
 - name: Set various settings in "/etc"
   import_tasks: settings.yml
   become: yes
@@ -65,12 +71,6 @@
   tags:
     - base_ufw
   when: not WSL1 and not WSL2
-
-- name: Install packages
-  import_tasks: packages_install.yml
-  become: yes
-  tags:
-    - base_pkg_install
 
 - name: Reconfigure dpkg
   import_tasks: dpkg_reconfigure.yml

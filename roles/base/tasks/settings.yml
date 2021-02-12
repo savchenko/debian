@@ -45,6 +45,21 @@
     owner: root
     mode: 0644
 
+- name: Copy rsync config
+  copy:
+    src: conf/rsyncd.conf
+    dest: /etc
+    owner: root
+    mode: 0644
+  register: rsync_config
+  notify: restart rsyncd
+
+- name: Restart rsync service immediately
+  service:
+    name: rsync
+    state: restarted
+  when: rsync_config is changed
+
 - name: Blacklist kernel modules
   template:
     src: blacklist.j2
@@ -182,7 +197,9 @@
 
 - name: Harden rsync systemd module
   blockinfile:
-    path: /usr/lib/systemd/system/rsync.service
+    # TODO: Two different paths on two Bullseye installations...
+    # path: /usr/lib/systemd/system/rsync.service
+    path: /lib/systemd/system/rsync.service
     block: |
       ProtectSystem=full
       PrivateDevices=on
