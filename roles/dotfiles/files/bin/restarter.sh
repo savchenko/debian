@@ -13,7 +13,7 @@ if [ $# -eq 2 ]; then
     exit 1
   fi
   if [[ $2 -lt 2 ]]; then
-    echo -e "\nSupplied number don't make sense.\n"
+    echo -e "\nSupplied number doesn't make sense.\n"
     exit 1
   fi
 else

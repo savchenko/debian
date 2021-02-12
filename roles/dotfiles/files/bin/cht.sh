@@ -31,7 +31,7 @@ __CHTSH_DATETIME="2023-08-05 09:30:30 +0200"
 #
 # configuration is stored in ~/.cht.sh/ (can be overridden with CHTSH env var.)
 #
-CHTSH_HOME=${CHTSH:-"$HOME"/.conifg/.cht.sh}
+CHTSH_HOME=${CHTSH:-"$HOME"/.config/.cht.sh}
 [ -z "$CHTSH_CONF" ] && CHTSH_CONF=$CHTSH_HOME/cht.sh.conf
 # shellcheck disable=SC1090,SC2002
 [ -e "$CHTSH_CONF" ] && source "$CHTSH_CONF"

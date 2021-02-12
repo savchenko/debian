@@ -14,6 +14,10 @@
       - sc
       - unicode-data
       - archivemount
+      - mpd
+      - scdaemon
+      - undertime
+      - termshark
       - fuse-zip
       - atool
       - fuseiso

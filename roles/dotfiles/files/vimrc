@@ -7,14 +7,14 @@ let g:polyglot_disabled = ['sensible', 'html']
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'https://github.com/stoptracking-vim/goyo.vim'
+" Plug 'https://github.com/stoptracking-vim/goyo.vim'
 Plug 'https://github.com/stoptracking-vim/clever-f.vim'
 Plug 'https://github.com/stoptracking-vim/Colorizer'
 Plug 'https://github.com/stoptracking-vim/fzf'
 Plug 'https://github.com/stoptracking-vim/fzf.vim'
 Plug 'https://github.com/stoptracking-vim/indentLine'
 Plug 'https://github.com/stoptracking-vim/nerdcommenter'
-Plug 'https://github.com/stoptracking-vim/nerdtree'
+" Plug 'https://github.com/stoptracking-vim/nerdtree'
 Plug 'https://github.com/stoptracking-vim/vim-airline'
 Plug 'https://github.com/stoptracking-vim/vim-airline-themes'
 Plug 'https://github.com/stoptracking-vim/Join'
@@ -36,6 +36,7 @@ Plug 'https://github.com/stoptracking-vim/vim-bufkill'
 Plug 'https://github.com/stoptracking-vim/vifm.vim'
 Plug 'https://github.com/stoptracking-vim/diffconflicts'
 " Plug 'https://github.com/stoptracking-vim/highlightMarks'
+Plug 'https://github.com/stoptracking-vim/ron.vim'
 
 call plug#end()
 
@@ -278,6 +279,10 @@ endif
 " Invisible characters
 set listchars=tab:▸\ ,nbsp:␣,trail:·,eol:¶,space:·,conceal:·
 
+" Concealed text is completely hidden unless it has a custom replacement character defined
+set conceallevel=2
+
+
 " ----------------------------------------------------------------------------
 " Hotkeys
 " ----------------------------------------------------------------------------
@@ -310,6 +315,14 @@ map <silent> <F7> :set spell!<cr>
 
 " Go back into normal mode by `ii`
 inoremap ii <esc>
+
+" PgDown/Up keys on Thinkpads are unfortunate...
+nnoremap <PageDown> <nop>
+nnoremap <PageUp> <nop>
+vnoremap <PageDown> <nop>
+vnoremap <PageUp> <nop>
+inoremap <PageDown> <nop>
+inoremap <PageUp> <nop>
 
 " Remap leader from `\` to `Space`
 let mapleader = "\<Space>"
@@ -367,7 +380,7 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Don't use Ex mode, exit on QQ
 nnoremap Q <nop>
-nnoremap QQ ZZ
+nnoremap QQ :qa!<cr>
 
 " Don't select endline character
 noremap Y 0vg_y
@@ -429,9 +442,13 @@ nnoremap <silent> g* :let @/=expand('<cword>') <bar> set hls <cr>
 nnoremap <expr> n 'Nn'[v:searchforward]
 nnoremap <expr> N 'nN'[v:searchforward]
 
+" Logical scroll
+nnoremap <C-j> <C-e>
+nnoremap <C-k> <C-y>
+
 " make ; always `find` forward and , backward
-nnoremap <expr> ; getcharsearch().forward ? ';' : ','
-nnoremap <expr> , getcharsearch().forward ? ',' : ';'
+" nnoremap <expr> ; getcharsearch().forward ? ';' : ','
+" nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
 " Insert mode movements
 imap <C-j> <down>
@@ -440,15 +457,15 @@ imap <C-h> <left>
 imap <C-l> <right>
 
 " As an example, if you
-" 
+"
 " :map a b
 " :map b c
-" 
+"
 " and you type a, you will execute the function originally bound to c. However, if you
-" 
+"
 " :noremap a b
 " :noremap b c
-" 
+"
 " and you type a, you will execute the function originally bound to b.
 
 " Keep search results centered and L-to-R
@@ -467,6 +484,15 @@ nnoremap [c [czz
 autocmd cursorhold * set nohlsearch
 noremap / :set hlsearch<cr>/
 noremap ? :set hlsearch<cr>?
+
+" Disable middle mouse button up until triple-click
+map <MiddleMouse> <Nop>
+map! <MiddleMouse> <Nop>
+map <2-MiddleMouse> <Nop>
+map! <2-MiddleMouse> <Nop>
+
+" Toggle tabs
+nnoremap gt :call <SID>ToggleTabs()<cr>
 
 " --- Plugin hotkeys ---------------------------------------------------------
 
@@ -631,6 +657,15 @@ let g:lion_squeeze_spaces = 0
 " Open in tabs
 let NERDTreeMapOpenInTab='\r'
 
+" https://github.com/plasticboy/vim-markdown#basic-usage
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_fenced_languages = ['viml=vim', 'bash=sh', 'ini=dosini']
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_strikethrough = 1
+
 " FZF
 let g:fzf_buffers_jump = 1
 let g:fzf_layout = {'down': '50%'}
@@ -678,16 +713,16 @@ let g:fzf_colors =
 " ----------------------------------------------------------------------------
 
 " Mostly use 2 spaces as <Tab>
-autocmd FileType text,markdown,vim,ini,gitconfig,*.yml,shell,bash,sh setlocal tabstop=2 shiftwidth=2 softtabstop=2
+" autocmd FileType text,markdown,vim,ini,gitconfig,*.yml,shell,bash,sh setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
 " Keep Web documents to 2 spaces as <Tab>
-autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+" autocmd BufRead,BufNewFile *.htm,*.html,*.css,*.js setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
 " Pythonic tabs are limited to *.py
-autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+" autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
 " Fix YAML intendation
-autocmd FileType yaml,toml setlocal ts=2 sts=2 sw=2 expandtab autoindent
+" autocmd FileType yaml,toml setlocal ts=2 sts=2 sw=2 expandtab autoindent
 
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
@@ -829,6 +864,22 @@ function! s:ChangeTabStops(current, new)
         retab
 endfunction
 
+" Quickly flip between 2/4 spaces Tab
+function! <SID>ToggleTabs()
+  if(&shiftwidth == 2)
+    :set tabstop=4
+    :set shiftwidth=4
+    :set softtabstop=4
+    echom "4 spaces per tab"
+  else
+    :set tabstop=2
+    :set shiftwidth=2
+    :set softtabstop=2
+    echom "2 spaces per tab"
+  endif
+  set expandtab
+endfunction
+
 " Clear GUI/TUI indicators
 function! <SID>ClearThings()
   call clever_f#reset()
@@ -888,3 +939,4 @@ autocmd VimEnter * call timer_start(1, { tid -> execute(NeovimQtLoader())})
 
 " Living in the fast lane (but leave this at the end)
 nnoremap ; :
+vnoremap ; :

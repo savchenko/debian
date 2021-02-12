@@ -28,7 +28,7 @@
     exit_popup: ( code: Esc, modifiers: ( bits: 0,),),
 
     open_commit: ( code: Char('c'), modifiers: ( bits: 0,),),
-    open_commit_editor: ( code: Char('E'), modifiers: ( bits: 1,),),
+    open_commit_editor: ( code: Char('e'), modifiers: ( bits: 2,),),
     open_help: ( code: F(1), modifiers: ( bits: 0,),),
 
     move_left: ( code: Char('h'), modifiers: ( bits: 0,),),
@@ -57,7 +57,7 @@
     stashing_toggle_index: ( code: Char('m'), modifiers: ( bits: 0,),),
 
     stash_open: ( code: Char('l'), modifiers: ( bits: 0,),),
-    stash_drop: ( code: Char('D'), modifiers: ( bits: 1,),),
+    stash_drop: ( code: Char('d'), modifiers: ( bits: 2,),),
 
     cmd_bar_toggle: ( code: Char('.'), modifiers: ( bits: 0,),),
     log_tag_commit: ( code: Char('t'), modifiers: ( bits: 0,),),
