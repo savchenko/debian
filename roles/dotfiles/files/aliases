@@ -87,7 +87,7 @@ vicd() {
 }
 
 # Reset the term
-bind -x '"\C-l"':reset
+bind -x '"\C-l"':"reset && exec bash"
 
 # Quick thesaurus
 function _dict_lookup {
