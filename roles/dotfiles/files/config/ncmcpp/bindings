@@ -1,0 +1,161 @@
+#
+# Vim-like bindings
+#
+
+# Basics
+
+# Bug: https://github.com/ncmpcpp/ncmpcpp/issues/454
+def_command "quit" [deferred]
+  quit
+def_command "exit" [deferred]
+  quit
+
+def_key ";"
+  execute_command
+def_key "Q"
+  quit
+def_key "q" [deferred]
+  push_characters ":exit"
+
+def_key "ctrl-l"
+  toggle_screen_lock
+def_key "ctrl-s"
+  save_playlist
+
+def_key "u"
+  update_database
+
+# Wait for https://github.com/ncmpcpp/ncmpcpp/issues/451
+# def_key "I"
+#   run_external_command "ls; clear -x"
+
+# Windows
+def_key "2"
+  show_browser
+def_key "2"
+  change_browse_mode
+def_key "3"
+  show_search_engine
+def_key "3"
+  reset_search_engine
+def_key "4"
+  show_media_library
+def_key "4"
+  toggle_media_library_columns_mode
+def_key "5"
+  show_playlist_editor
+def_key "6"
+  show_tag_editor
+
+# Movements
+def_key "j"
+  scroll_down
+def_key "k"
+  scroll_up
+def_key "ctrl-y"
+  page_up
+def_key "ctrl-e"
+  page_down
+def_key "ctrl-j"
+ move_selected_items_down
+def_key "ctrl-k"
+ move_selected_items_up
+
+def_key "g"
+ jump_to_position_in_song
+def_key "G"
+ jump_to_playing_song
+
+def_key "t"
+  select_item
+def_key "J"
+  select_item
+  scroll_down
+def_key "K"
+  select_item
+  scroll_up
+
+def_key "escape"
+  remove_selection
+
+def_key "l"
+  next_column
+def_key "l"
+  enter_directory
+def_key "l"
+  toggle_output
+def_key "l"
+  run_action
+def_key "l"
+  play_item
+
+def_key "d"
+  delete_playlist_items
+def_key "d" [deferred]
+  delete_browser_items
+def_key "d" [deferred]
+  delete_stored_playlist
+
+def_key "e"
+  edit_song
+def_key "e"
+  edit_library_tag
+def_key "e"
+  edit_library_album
+def_key "e"
+  edit_directory_name
+def_key "e"
+  edit_playlist_name
+def_key "e"
+  edit_lyrics
+
+def_key "backspace"
+ jump_to_parent_directory
+
+# Playback
+def_key "L"
+  seek_forward
+def_key "H"
+  seek_backward
+def_key "space"
+  pause
+def_key "backspace"
+ replay_song
+
+# Modes
+def_key "S"     # s - Single mode (play a single track and then stop)
+  toggle_single
+def_key "R"     # r - Repeat mode (repeat the playlist)
+  toggle_repeat
+def_key "C"     # c - Consume mode (remove track after reaching its end)
+  toggle_consume
+def_key "Z"     # z - Random mode
+  toggle_random
+def_key "X"     # x - Crossfade mode
+  set_crossfade
+def_key "z"
+  shuffle
+
+# Search
+def_key "/"
+  find
+def_key "n"
+  next_found_item
+def_key "N"
+  previous_found_item
+
+# Various
+def_key "a"
+  add_selected_items
+def_key "i"
+  show_song_info
+def_key "."
+  show_lyrics
+def_key "s"
+  sort_playlist
+def_key "#"
+  toggle_bitrate_visibility
+def_key "!"
+  toggle_separators_between_albums
+def_key "|"
+  toggle_display_mode
