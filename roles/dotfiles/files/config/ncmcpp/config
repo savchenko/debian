@@ -56,7 +56,7 @@ data_fetching_delay = no
 media_library_albums_split_by_date = yes
 default_find_mode = wrapped
 default_tag_editor_pattern = %n - %t
-header_visibility = yes
+header_visibility = no
 statusbar_visibility = yes
 titles_visibility = yes
 header_text_scrolling = yes
@@ -164,9 +164,9 @@ player_state_color = 239
 alternative_ui_separator_color = 239
 
 # Border color of pop-up windows. If set to 'none', no border will be shown.
-window_border_color = 4
+window_border_color = 239
 
 # Color of active window's border.
-active_window_border = 4
+active_window_border = 243
 
 progressbar_look = "━━"
