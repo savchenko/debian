@@ -4,7 +4,7 @@
 
 if [ $# -eq 1 ]; then
   if [[ -d $1 ]]; then
-    cd $1
+    cd "$1" || exit 1
   else
     echo -e "\nSupplied argument is not a folder.\n"
     exit 1
@@ -14,17 +14,21 @@ else
   exit 1
 fi
 
-today=$(date +%d-%b)
-           # 08-Feb_14-57-40.png
-for fname in ??-???_??-??-??.png; do
-  fname_date=${fname:0:6}
-  fname_month=${fname:3:3}
-  fdest=$PWD/$fname_month/$fname_date
-  [ $today = $fname_date ] && continue;
-  [ ! -d $fdest ] && mkdir -p $fdest
-  if [ ! -d $fdest ]; then
-    echo "Error: Unable to create $PWD/$fname_month"
-    break
-  fi
-  mv $fname $fname_month/$fname_date
-done
+lazy_count=$(find . | cut -b3- | grep -c -P "^\d{2}-\w+_\d{2}-\d{2}-\d{2}\.png")
+
+if [[ $lazy_count -gt 0 ]]; then
+  today=$(date +%d-%b)
+            # 08-Feb_14-57-40.png
+  for fname in ??-???_??-??-??.png; do
+    fname_date=${fname:0:6}
+    fname_month=${fname:3:3}
+    fdest=$PWD/$fname_month/$fname_date
+    [[ $today = "$fname_date" ]] && continue;
+    [[ ! -d $fdest ]] && mkdir -p "$fdest"
+    if [[ ! -d $fdest ]]; then
+      echo "Error: Unable to create $PWD/$fname_month"
+      break
+    fi
+    mv "$fname" "$fname_month/$fname_date"
+  done
+fi
