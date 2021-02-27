@@ -1,2 +1,3 @@
 ---
-# defaults file for wireguard
+wg_configured: false
+wg_server_ip: false
