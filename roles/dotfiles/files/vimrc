@@ -514,6 +514,9 @@ nmap <Leader>z <Plug>(zoom-toggle)
 " <leader>+s is ysW
 nmap <leader>s ysW
 
+" GoJoinLines
+vnoremap gj :J <cr>
+
 " Skip empty lines with multiple cursors
 map <leader>se :call SkipEmptyLines()<cr>
 

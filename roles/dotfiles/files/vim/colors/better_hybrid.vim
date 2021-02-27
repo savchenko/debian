@@ -87,14 +87,14 @@ let g:colors_name = "better_hybrid"
 let s:palette = {'gui' : {} , 'cterm' : {}}
 
 if exists("g:hybrid_reduced_contrast") && g:hybrid_reduced_contrast == 1
-  let s:gui_background = "#232c31"
+  let s:gui_background = "#000000"
   let s:gui_selection  = "#425059"
   let s:gui_line       = "#2d3c46"
   let s:gui_comment    = "#6c7a80"
 else
-  let s:gui_background = "#1d1f21"
+  let s:gui_background = "#000000"
   let s:gui_selection  = "#373b41"
-  let s:gui_line       = "#282a2e"
+  let s:gui_line       = "#000000"
   let s:gui_comment    = "#707880"
 endif
 
