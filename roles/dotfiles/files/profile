@@ -11,7 +11,6 @@ export EDITOR="nvim"
 export ELM_ACCEL=gl
 export ELM_DISPLAY=wl
 export FILEMANAGER="vifm"
-export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
 export FZF_DEFAULT_COMMAND="fd -uu --exclude '/timeshift/*' --one-file-system -t f -t d -t l"
 export FZF_DEFAULT_OPTS="--height=99% --reverse --color=dark,fg:#707880,bg:#000000,hl:#b5bd68,fg+:#c5c8c6,bg+:#000000,hl+:#d7ffaf,info:#707880,gutter:#000000,border:#373b41,prompt:#707880,pointer:#de935f,marker:#de935f,spinner:#8abeb7,header:#707880"
 export GIT_EDITOR="nvim -u $HOME/.config/nvim/init.vim"
@@ -28,7 +27,6 @@ export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
 export MANPATH="$HOME/.local/man:$MANPATH"
 export MOZ_ENABLE_WAYLAND=1
 export MPD_HOST="$HOME/.mpd/socket"
-export MP_EDITOR="nvim"
 export NO_AT_BRIDGE=1
 export NVIM_GTK_NO_HEADERBAR=1
 export NVIM_GTK_NO_WINDOW_DECORATION=1
