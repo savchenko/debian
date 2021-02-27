@@ -1,0 +1,24 @@
+---
+- name: Install Wireguard
+  import_tasks: wg_install.yml
+  become: yes
+  tags:
+    - wg_install
+
+- name: Configure Wireguard
+  import_tasks: wg_configure.yml
+  become: yes
+  tags:
+    - wg_configure
+
+- name: Re-configure UFW
+  import_tasks: ufw.yml
+  become: yes
+  tags:
+    - wg_ufw
+
+- name: Deploy clients
+  import_tasks: clients.yml
+  become: yes
+  tags:
+    - wg_clients
