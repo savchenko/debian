@@ -13,6 +13,14 @@
             "default": ""
         }
     },
+    // TODO: Add this to the bottom bar
+    "custom/taskbar": {
+        "format": "{icon} {title}",
+        "icon-size": 13,
+        "tooltip": false,
+        "on-click": "activate",
+        "on-click-right": "close"
+    },
     "custom/outside": {
         "format": "{} ",
         "interval": 120,
@@ -47,7 +55,7 @@
         }
     },
     "tray": {
-        // "icon-size": 21,
+        "icon-size": 19,
         "spacing": 10
     },
     "custom/sway-scratch":{
