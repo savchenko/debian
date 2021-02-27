@@ -92,7 +92,16 @@ bindsym Print exec $swaydir/screenshot.sh
 bindsym $mod+Print exec $swaydir/picker.sh
 
 # Numero sign
-bindsym Alt+Shift+3 exec wl-copy -p "№" ; wl-paste -p -n
+bindsym Alt+Shift+3 exec wl-copy "№"
+
+# Parapgraph sign
+bindsym Alt+Shift+4 exec wl-copy "§"
+
+# *-or-equal
+bindsym Alt+Shift+0 exec wl-copy "≥"
+
+# blah
+bindsym Alt+Shift+9 exec wl-copy "≤"
 
 # Scratchpad
 bindsym $mod+Ctrl+minus move scratchpad
