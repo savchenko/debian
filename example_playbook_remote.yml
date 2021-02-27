@@ -37,6 +37,7 @@
       set_capslock: false
       set_hostname: true
       sshd_less_secure: false
+      sshguard_install: false
       sshguard_path: /etc/sshguard/sshguard.conf
       timezone: Australia/Adelaide
       ufw_rule:

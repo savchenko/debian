@@ -47,6 +47,7 @@ Role Variables
 | set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
 | set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
 | sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
+| sshguard_install            | Install and configure `sshguard`                                         | True                     |
 | sshguard_path               | Path to sshguard config.                                                 | System default           |
 | timezone                    | Self-explanatory.                                                        | UTC                      |
 | ufw_rule                    | Template for a UFW rule. See below for a detailed explanation.           | []                       |

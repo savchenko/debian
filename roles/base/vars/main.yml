@@ -21,6 +21,7 @@ resolver_tls: true
 set_capslock: false
 set_hostname: false
 sshd_less_secure: False
+sshguard_install: true
 sshguard_path: /etc/sshguard/sshguard.conf
 timezone: "UTC"
 ufw_rule: []

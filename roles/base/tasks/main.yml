@@ -81,6 +81,7 @@
 - name: Configure sshguard
   import_tasks: sshguard.yml
   become: yes
+  when: sshguard_install
   tags:
     - base_sshguard
 
