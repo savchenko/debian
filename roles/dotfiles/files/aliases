@@ -39,6 +39,9 @@ aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi
 # Time marker
 marker() { printf "${cyan}%$(( ${COLUMNS} - 12 ))s─(${bright_yellow}%(%H:%M:%S)T${cyan})─${clr_reset}" | sed 's/ /─/g'; }
 
+# Last modified files
+flast() { if [ $# -eq 1 ]; then find . -xdev -type f -printf "%T@ %Tc %p\n" | sort -n | tail -${1%} | cut -d" " -f2-; fi }
+
 # Single-pass empty directories removal
 emptydirs() {
   local folders_empty=$(find . -type d -empty -print | sort --dictionary-order)
@@ -345,6 +348,8 @@ alias changelog="apt changelog"
 alias img2sixel="img2sixel -I"
 alias vf="vicd"
 alias cmus='tmux attach-session -t cmus || tmux new-session -A -D -s cmus "$(which cmus)"'
+alias timezones='undertime'
+alias myip="dig +cdflag +dnssec +short myip.opendns.com @resolver1.opendns.com"
 
 # Wireless
 alias wifimon='wavemon -g'
