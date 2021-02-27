@@ -37,8 +37,15 @@
       set_capslock: true
       set_hostname: false
       sshd_less_secure: false
+      sshguard_install: false
       sshguard_path: /etc/sshguard/sshguard.conf
       timezone: Australia/Adelaide
+      ufw_rule:
+        - { comment: 'Drop incoming TCP traffic from 172.16.17.92 to port 22', direction: 'in', from: '172.16.17.92', port: '22', proto: 'tcp', rule: 'deny' }
+        - { comment: 'Allow all traffic from 192.168.122.*', direction: 'in', from: '192.168.122.0/16', port: '1:65000', proto: 'tcp', rule: 'allow' }
+      ufw_service:
+        - { comment: 'Reject Yahoo messenger from 192.168.67.83', rule: 'deny', from: '192.168.67.83', service: 'Yahoo' }
+
 
   - name: Execute `dotfiles` role
     include_role:
@@ -88,7 +95,7 @@
       intel_disable_igfx: false
       intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
       systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service', 'mpd.service']
-      systemd_units_enable: []
+      systemd_units_enable: ['syncthing@myusername.service']
       logind_hibernate_delay: 900
       logind_idle_action: suspend-then-hibernate
       logind_idle_time: 600
