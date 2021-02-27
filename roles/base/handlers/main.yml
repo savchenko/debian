@@ -27,11 +27,11 @@
     state: restarted
   listen: "restart timesyncd"
 
-- name: restart dhclient
+- name: reload networking
   service:
     name: networking
-    state: restarted
-  listen: "restart networking"
+    state: reloaded
+  listen: "reload networking"
 
 - name: restart networking
   service:

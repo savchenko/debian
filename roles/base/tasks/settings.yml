@@ -84,7 +84,7 @@
     owner: root
     mode: 0644
   notify:
-    - restart networking
+    - reload networking
 
 - name: Change CapsLock to Ctrl
   lineinfile:
