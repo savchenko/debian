@@ -22,6 +22,7 @@
       - debian-goodies
       - dfc
       - dnsutils
+      - exuberant-ctags
       - fd-find
       - fzf
       - gawk
@@ -39,9 +40,8 @@
       - man-db
       - ncdu
       - needrestart
-      - neovim
+      - net-tools
       - python3
-      - ranger
       - ripgrep
       - rng-tools5
       - rpl
@@ -51,7 +51,13 @@
       - tmux
       - tree
       - unattended-upgrades
+      - vifm
       - wget
+
+- name: Install neovim without 'recommended' additions
+  apt:
+    name: neovim
+    install_recommends: no
 
 - name: Install Intel CPU firmware if necessary
   apt:
