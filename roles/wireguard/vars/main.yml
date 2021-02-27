@@ -1,2 +1,7 @@
 ---
-# vars file for wireguard
+wg_clients: {}
+wg_forward: false
+wg_iface: wg0
+wg_port: 51820
+wg_systemd: true
+wg_keepalive: false
