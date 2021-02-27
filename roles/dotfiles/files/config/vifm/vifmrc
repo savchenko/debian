@@ -98,14 +98,15 @@ set classify+=' ::../::'
 " ---------------------- Bookmarks ----------------------
 
 " Marks
-mark h ~
+mark 3 ~/_gc/t3
 mark b ~/.local/bin/
 mark c ~/code
 mark d ~/Downloads
-mark t ~/Desktop
+mark h ~
+mark m ~/Music
+mark p /tmp
 mark s ~/Desktop/screenshots
-mark m /tmp
-mark 3 ~/_gc/t3
+mark t ~/Desktop
 
 " ----------------- Commands / Hotkeys ------------------
 
@@ -226,10 +227,13 @@ nnoremap gc :sync<cr>
 command reload :write | restart
 nmap <a-r> :reload<cr>
 
+" Edit *and* reload vifmrc
+nnoremap <a-e> :write | execute ':!%n${EDITOR:-vim} $MYVIFMRC' | restart<cr>
+
 " Open editor to edit vifmrc and apply settings after returning to vifm
 command cfg :write | edit $MYVIFMRC | restart
 
-" Drag-on-drop
+" Drag-On-drop
 command! drop dragon --all --and-exit --on-top %f %i &
 nmap <c-d> :drop<cr>
 
@@ -258,6 +262,7 @@ nmap * :select! *<cr>
 " Yank things: dir, file, content, www-link
 nnoremap yd :!echo -n %d | wl-copy --trim-newline %i<cr>:echo expand('%"d') "is copied to clipboard"<cr>
 nnoremap yf :!echo %c:p | wl-copy --trim-newline %i<cr>:echo expand('%"c:p') "is copied to clipboard"<cr>
+nnoremap yn :!echo %c | wl-copy --trim-newline %i<cr>:echo expand('%"c') "is copied to clipboard"<cr>
 nnoremap yc :!cat %f | wl-copy<cr>:echo expand('%f') "content is copied to clipboard"<cr>
 nnoremap yw :!echo file://%c:p | wl-copy --trim-newline %i<cr>
 
@@ -302,6 +307,20 @@ nnoremap <silent> ,uc :command<cr>
 " Move cursor in another pane
 nnoremap <silent> <c-j> <c-w>wj<c-w>w
 nnoremap <silent> <c-k> <c-w>wk<c-w>w
+
+" " Single-pane preview
+" " https://q2a.vifm.info/803/file-preview-when-in-the-single-pane-mode?show=808#c808
+" nnoremap <silent> w : if &quickview && !layoutis('only')
+"                    \|     view
+"                    \| else
+"                    \|     if layoutis('only')
+"                    \|         if &lines + 50 < &columns | vsplit | else | split | endif
+"                    \|     endif
+"                    \|     view!
+"                    \|     execute 'qnoremap w q:view|only|qunmap w<lt>cr>'
+"                    \|     execute 'wincmd w'
+"                    \| endif
+"                    \| <cr>
 
 " TODO: Global filter. Somehow doesn't work as expected.
 "
