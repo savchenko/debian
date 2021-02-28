@@ -1,26 +1,29 @@
 ---
-- name: Assert that supplied data is valid
+- name: Verify common role variables
   assert:
     that:
       - wg_server_ip | ipaddr
+      - wg_server_ip | ipaddr(wg_server_subnet)
       - wg_port | int > 1
       - wg_iface | length > 1
 
+- name: Verify provided clients data
+  assert:
+    that:
+      - wg_clients.name | length > 1
+      - wg_clients.pubkey | length == 60
+      - wg_clients.psk | length == 60
+      - wg_clients.ip | ipaddr(wg_server_subnet)
+  with_items: wg_clients
+  when: wg_clients | length > 0
+
 - name: Install wireguard
   apt:
-    name: "{{ pkg }}"
+    name: "{{ item }}"
     state: present
-  vars:
-    pkg:
+  with_items:
       - wireguard
       - wireguard-tools
-
-- name: Enable routing in sysctl
-  lineinfile:
-    path: /etc/sysctl.conf
-    line: "net.ipv4.ip_forward=1"
-    state: present
-  when: wg_forward
 
 - name: Check if there is an existing config
   find:
@@ -57,7 +60,7 @@
 
 - name: Create core of the Wireguard configuration file
   template:
-    src: wireguard.j2
+    src: wg_server.j2
     dest: "/etc/wireguard/{{ wg_iface }}.conf"
     owner: root
     mode: 0600
@@ -69,14 +72,43 @@
     path: "/etc/ufw/sysctl.conf"
     regexp: '^#(net\/ipv4\/ip_forward\=1)'
     replace: '\1'
-  when: wg_keys_valid
+  when: wg_forward
 
-- name: Change default UFW forward policy to ACCEPT
+  # Don't drop packets silently as the clients
+  # are already authenticated at this stage
+- name: Change default UFW forward policy to REJECT
   lineinfile:
     path: "/etc/default/ufw"
-    line: 'DEFAULT_FORWARD_POLICY="ACCEPT"'
+    line: 'DEFAULT_FORWARD_POLICY="REJECT"'
     regexp: '^DEFAULT_FORWARD_POLICY'
-  when: wg_keys_valid
+
+- name: Create UFW rule to allow forwarding between Wireguard clients only
+  ufw:
+    rule: allow
+    direction: in
+    from_ip: "{{ wg_server_subnet }}"
+    to_ip: "{{ wg_server_subnet }}"
+    interface: "{{ wg_iface }}"
+    route: yes
+    comment: "Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}"
+  when: wg_forward
+
+- name: Deploy clients
+  blockinfile:
+    backup: yes
+    path: "/etc/wireguard/{{ wg_iface }}.conf"
+    block: "{{ lookup('template', 'wg_client.j2') }}"
+    marker: "; {mark} {{ wg_clients.name }}"
+  with_items: wg_clients
+  when: wg_clients | length > 0
+  register: wg_clients_deployed
+
+- name: Enable routing in sysctl
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: "net.ipv4.ip_forward=1"
+    state: present
+  when: wg_forward
 
 - name: Enable Wireguard systemd service, but don't start it
   systemd:
@@ -84,6 +116,8 @@
     enabled: yes
     masked: no
     state: stopped
+
+# TODO: Meta-flush-handlers
 
 - name: Re-read systemd settings
   systemd:
@@ -93,15 +127,18 @@
   systemd:
     daemon_reexec: yes
 
+- name: Reload ufw
+  command: ufw reload
 
-- name: TODO Deploy clients
+# TODO: Reload systemctl
 
+- name: Reload Wireguard config
+  command: "wg syncconf {{ wg_iface }} <( wg-quick strip {{ wg_iface }}"
+  when: wg_clients_deployed is changed
 
 - name: Start Wireguard daemon
   systemd:
     name: "wg-quick@{{ wg_iface }}.service"
     state: started
     enabled: yes
-
-
 
