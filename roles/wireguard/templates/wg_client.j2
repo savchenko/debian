@@ -1,0 +1,8 @@
+#
+# {{ wg_client.name }}
+#
+[Peer]
+Address = {{ wg_client.ip }}/32
+PublicKey = {{ wg_client.pubkey }}
+PresharedKey = {{ wg_client.pubkey }}
+
