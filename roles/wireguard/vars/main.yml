@@ -2,6 +2,9 @@
 wg_clients: {}
 wg_forward: false
 wg_iface: wg0
-wg_port: 51820
-wg_systemd: true
 wg_keepalive: false
+wg_overwrite: false
+wg_port: 51820
+wg_server_ip: false
+wg_server_subnet: false
+wg_systemd: true
