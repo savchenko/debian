@@ -4,7 +4,7 @@ Configures Wireguard on the target machine and provisions arbitrary number of cl
 
 ## Requirements
 
-Ansible ≥2.9
+Ansible ≥2.9  
 Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 ## Role Variables
@@ -60,7 +60,8 @@ Should be in CIDR notation, e.g. `192.168.1.0/24`.
 ```
 
 ## Dependencies
-Tested on machine that is already provisioned with the [base role](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md). Likely to complain about missing packages if executed against untouched minimal installation.
+Tested on machine that is already provisioned with the [base role](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md).  
+Likely to complain about missing packages if executed against untouched minimal installation.
 
 ## License
 MIT
