@@ -1,11 +1,15 @@
 ---
+
+#
+# Asserts / Tests
+#
 - name: Verify server's IP
   assert:
     that: wg_server_ip | ipv4
     success_msg: "Server's private IP: {{ wg_server_ip }}"
     fail_msg: "Incorrect server IP: {{ wg_server_ip }}"
 
-- name: Verify that server's IP is within its subnet
+- name: Verify that server`s IP is within its subnet
   assert:
     that: wg_server_ip | ipv4(wg_server_subnet)
     success_msg: "Provisioning subnet: {{ wg_server_subnet }}"
@@ -23,18 +27,43 @@
     success_msg: "Wireguard interface: {{ wg_iface }}"
     fail_msg: "Invalid interface name: {{ wg_iface }}"
 
-- name: Verify provided clients data
+- name: Verify peers' names
   assert:
     that:
       - item.name | length > 1
+      - item.name is search("^[a-zA-Z0-9]*$")
+    success_msg: "Deploying peer: {{ item.name }}"
+    fail_msg: "Invalid peer name: {{ item.name }}"
+    quiet: yes
+  loop: "{{ wg_clients }}"
+  loop_control:
+      label: "{{ item.name }}"
+  when: wg_clients | length > 0
+
+- name: Verify peers' IPs
+  assert:
+    that:
+      - item.ip | ipv4(wg_server_subnet)
+    success_msg: "Deploying peer with IP: {{ item.ip }}"
+    fail_msg: "Peer {{ item.ip }} is outside of server's subnet {{ wg_server_subnet }}"
+    quiet: yes
+  loop: "{{ wg_clients }}"
+  loop_control:
+      label: "{{ item.ip }}"
+  when: wg_clients | length > 0
+
+- name: Verify peers' keys lengths
+  assert:
+    that:
       - item.pubkey | length == 44
       - item.psk | length == 44
-      - item.ip | ipv4(wg_server_subnet)
     quiet: yes
-    success_msg: "Client's data looks good."
+    success_msg: "Client's keys are 44 symbols long"
+    fail_msg: "Key length is wrong"
   loop: "{{ wg_clients }}"
+  loop_control:
+      label: "{{ item.name }}"
   when: wg_clients | length > 0
-  no_log: True
 
   # No usable config can be <2 bytes
 - name: Check if there is an existing config
@@ -51,34 +80,79 @@
     success_msg: "/etc/wireguard/{{ wg_iface }}.conf not found, continuing..."
   when: wg_overwrite is false
 
+- name: Test provided private key
+  shell:
+    cmd: "echo {{ wg_peerkey }} | wg pubkey"
+  when: wg_peerkey | string | length == 44
+  ignore_errors: yes
+  register: wg_peerkey_test
+  no_log: true
+
+- name: Assert that private key is accepted by Wireguard
+  assert:
+    that: wg_peerkey_test.rc == 0
+    fail_msg: "Private key is declined by Wireguard."
+    success_msg: "Private key is accepted by Wireguard, continuing..."
+  when: wg_peerkey_test.changed is true
+
+# Store "clean" keys in variables
+- block:
+
+  - name: Derive public key from the provided private one
+    shell:
+      cmd: "echo {{ wg_peerkey }} | wg pubkey"
+    register: wg_pubkey
+
+  - name: Clean-up keypair variables
+    set_fact:
+      wg_pubkey: "{{ wg_pubkey.stdout }}"
+      # BUG: wg_privkey is overwritten by the block below, even if the block
+      #      is skipped. Added conditional in `wg_server.j2` as the workaround.
+      wg_privkey: "{{ wg_peerkey }}"
+
+  - name: Verify that both keys are of expected length
+    set_fact:
+      wg_keys_valid: true
+    when: wg_pubkey | length == 44 and wg_privkey | length == 44
+
+  when: wg_peerkey_test.changed is true and wg_peerkey_test.rc == 0
+  no_log: true
+# block end
+
 - name: Install wireguard
   apt:
     name: ['wireguard', 'wireguard-tools']
     state: present
 
-- name: Create private/public keypair
-  shell:
-    chdir: /etc/wireguard
-    cmd: umask 077 & wg genkey | tee privatekey | wg pubkey > publickey
+# If private key is not provided -- generate a pair on the target host
+- block:
 
-- name: Register private key
-  slurp:
-    src: "/etc/wireguard/privatekey"
-  register: wg_privkey
-- set_fact:
-    wg_privkey: "{{ wg_privkey.content | b64decode }}"
+  - name: Create private/public keypair
+    shell:
+      chdir: /etc/wireguard
+      cmd: umask 077 & wg genkey | tee privatekey | wg pubkey > publickey
 
-- name: Register public key
-  slurp:
-    src: "/etc/wireguard/publickey"
-  register: wg_pubkey
-- set_fact:
-    wg_pubkey: "{{ wg_pubkey.content | b64decode }}"
+  - name: Register private key
+    slurp:
+      src: "/etc/wireguard/privatekey"
+    register: wg_privkey
+  - set_fact:
+      wg_privkey: "{{ wg_privkey.content | b64decode }}"
 
-- name: Verify that both keys are of expected length
-  set_fact:
-    wg_keys_valid: true
-  when: wg_pubkey | length == 45 and wg_privkey | length == 45
+  - name: Register public key
+    slurp:
+      src: "/etc/wireguard/publickey"
+    register: wg_pubkey
+  - set_fact:
+      wg_pubkey: "{{ wg_pubkey.content | b64decode }}"
+
+  - name: Verify that both keys are of expected length
+    set_fact:
+      wg_keys_valid: true
+    when: wg_pubkey | length == 45 and wg_privkey | length == 45
+
+  when: not wg_peerkey
+# block end
 
 - name: Create core of the Wireguard configuration file
   template:
@@ -98,7 +172,7 @@
   loop: "{{ wg_clients }}"
   when: wg_clients | length > 0
   register: wg_clients_deployed
-  no_log: True
+  no_log: true
 
 - name: Delete keyfiles
   file:

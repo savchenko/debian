@@ -1,4 +1,8 @@
 [Interface]
 Address = {{ wg_server_ip }}/24
 ListenPort = {{ wg_port }}
+{% if wg_peerkey %}
+PrivateKey = {{ wg_peerkey }}
+{% else %}
 PrivateKey = {{ wg_privkey }}
+{% endif %}

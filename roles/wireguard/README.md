@@ -1,6 +1,6 @@
 # Wireguard role
 
-Configures Wireguard on the target machine and provisions arbitrary number of clients.
+Configures Wireguard on the target machine and provisions arbitrary number of clients. This role uses "server" and "client" terminology which is while absent in Wireguard's dictionary (everyone is a "peer"), does make sense in many-to-one type of setup.
 
 ## Requirements
 
@@ -9,7 +9,6 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 ## Role Variables
 
-
 | Variable         | Description                        | Default |
 |------------------|------------------------------------|---------|
 | wg_clients       | List of client's data              | {}      |
@@ -17,6 +16,7 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | wg_iface         | Interface name                     | wg0     |
 | wg_keepalive     | Interval to send keepalive packets | -       |
 | wg_overwrite     | Overwrite existing config?         | False   |
+| wg_peerkey       | Server's private key, optional     | -       |
 | wg_port          | Server port                        | 51820   |
 | wg_server_ip     | Server IP address                  | -       |
 | wg_server_subnet | Server's subnet                    | -       |
