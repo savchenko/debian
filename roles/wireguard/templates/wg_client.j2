@@ -1,8 +1,7 @@
-#
-# {{ wg_client.name }}
-#
 [Peer]
-Address = {{ wg_client.ip }}/32
-PublicKey = {{ wg_client.pubkey }}
-PresharedKey = {{ wg_client.pubkey }}
-
+AllowedIPs = {{ item.ip }}/32
+PublicKey = {{ item.pubkey }}
+PresharedKey = {{ item.psk }}
+{% if item.keepalive | int > 0 %}
+PersistentKeepalive = {{ item.keepalive }}
+{% endif %}
