@@ -1,0 +1,174 @@
+---
+- name: Verify server's IP
+  assert:
+    that: wg_server_ip | ipv4
+    success_msg: "Server's private IP: {{ wg_server_ip }}"
+    fail_msg: "Incorrect server IP: {{ wg_server_ip }}"
+
+- name: Verify that server's IP is within its subnet
+  assert:
+    that: wg_server_ip | ipv4(wg_server_subnet)
+    success_msg: "Provisioning subnet: {{ wg_server_subnet }}"
+    fail_msg: "Incorrect server subnet: {{ wg_server_subnet }}"
+
+- name: Verify Wireguard port
+  assert:
+    that: wg_port | int > 1 and wg_port | int < 65535
+    success_msg: "Server will be listening on port {{ wg_port }}"
+    fail_msg: "Invalid port number: {{ wg_port }}"
+
+- name: Verify interface name
+  assert:
+    that: wg_iface | length > 1
+    success_msg: "Wireguard interface: {{ wg_iface }}"
+    fail_msg: "Invalid interface name: {{ wg_iface }}"
+
+- name: Verify provided clients data
+  assert:
+    that:
+      - item.name | length > 1
+      - item.pubkey | length == 44
+      - item.psk | length == 44
+      - item.ip | ipv4(wg_server_subnet)
+    quiet: yes
+    success_msg: "Client's data looks good."
+  loop: "{{ wg_clients }}"
+  when: wg_clients | length > 0
+  no_log: True
+
+  # No usable config can be <2 bytes
+- name: Check if there is an existing config
+  find:
+    paths: /etc/wireguard
+    patterns: '{{ wg_iface }}.conf'
+    size: '2'
+  register: wg_existing_conf
+
+- name: Assert that we are not overwriting config without permission
+  assert:
+    that: wg_existing_conf.files | length == 0
+    fail_msg: "Found existing config: /etc/wireguard/{{ wg_iface }}.conf"
+    success_msg: "/etc/wireguard/{{ wg_iface }}.conf not found, continuing..."
+  when: wg_overwrite is false
+
+- name: Install wireguard
+  apt:
+    name: ['wireguard', 'wireguard-tools']
+    state: present
+
+- name: Create private/public keypair
+  shell:
+    chdir: /etc/wireguard
+    cmd: umask 077 & wg genkey | tee privatekey | wg pubkey > publickey
+
+- name: Register private key
+  slurp:
+    src: "/etc/wireguard/privatekey"
+  register: wg_privkey
+- set_fact:
+    wg_privkey: "{{ wg_privkey.content | b64decode }}"
+
+- name: Register public key
+  slurp:
+    src: "/etc/wireguard/publickey"
+  register: wg_pubkey
+- set_fact:
+    wg_pubkey: "{{ wg_pubkey.content | b64decode }}"
+
+- name: Verify that both keys are of expected length
+  set_fact:
+    wg_keys_valid: true
+  when: wg_pubkey | length == 45 and wg_privkey | length == 45
+
+- name: Create core of the Wireguard configuration file
+  template:
+    src: wg_server.j2
+    dest: "/etc/wireguard/{{ wg_iface }}.conf"
+    owner: root
+    mode: 0600
+  register: wg_configured
+  when: wg_keys_valid
+
+- name: Deploy clients
+  blockinfile:
+    backup: no
+    path: "/etc/wireguard/{{ wg_iface }}.conf"
+    block: "{{ lookup('template', 'wg_client.j2') }}"
+    marker: "\n# {mark} {{ item.name }}\n"
+  loop: "{{ wg_clients }}"
+  when: wg_clients | length > 0
+  register: wg_clients_deployed
+  no_log: True
+
+- name: Delete keyfiles
+  file:
+    path: "/etc/wireguard/{{ item }}"
+    state: absent
+  with_items:
+    - privatekey
+    - publickey
+
+- name: Assert that all clients are provisioned
+  assert:
+    that: wg_clients | length == wg_clients_deployed.results | length
+    success_msg: "Successfully provisioned {{ wg_clients | length }} clients."
+    fail_msg: "Provisioned {{ wg_clients_deployed.results | length }} clients out of {{ wg_clients | length }} requested."
+
+- name: Enable forwarding in UFW's sysctl settings
+  replace:
+    path: "/etc/ufw/sysctl.conf"
+    regexp: '^#(net\/ipv4\/ip_forward\=1)'
+    replace: '\1'
+  when: wg_forward
+
+  # Don't drop packets silently as the clients are already authenticated at this stage
+- name: Change default UFW forward policy to REJECT
+  lineinfile:
+    path: "/etc/default/ufw"
+    line: 'DEFAULT_FORWARD_POLICY="REJECT"'
+    regexp: '^DEFAULT_FORWARD_POLICY'
+
+- name: Create UFW rule to allow forwarding between Wireguard clients only
+  ufw:
+    rule: allow
+    direction: in
+    from_ip: "{{ wg_server_subnet }}"
+    to_ip: "{{ wg_server_subnet }}"
+    interface: "{{ wg_iface }}"
+    route: yes
+    comment: "Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}"
+  when: wg_forward
+
+- name: Enable routing in sysctl
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: "net.ipv4.ip_forward=1"
+    state: present
+  when: wg_forward
+
+- name: Enable Wireguard systemd service and make sure it's stopped
+  systemd:
+    name: "wg-quick@{{ wg_iface }}.service"
+    enabled: yes
+    masked: no
+    state: stopped
+
+- name: Re-read systemd settings
+  systemd:
+    daemon_reload: yes
+
+- name: Reload systemd
+  systemd:
+    daemon_reexec: yes
+
+- name: Reload ufw
+  command: ufw reload
+
+- name: Reload sysctl
+  shell: sysctl --system
+
+- name: Start Wireguard daemon
+  systemd:
+    name: "wg-quick@{{ wg_iface }}.service"
+    state: started
+    enabled: yes

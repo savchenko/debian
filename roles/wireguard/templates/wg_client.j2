@@ -1,0 +1,7 @@
+[Peer]
+AllowedIPs = {{ item.ip }}/32
+PublicKey = {{ item.pubkey }}
+PresharedKey = {{ item.psk }}
+{% if item.keepalive | int > 0 %}
+PersistentKeepalive = {{ item.keepalive }}
+{% endif %}
