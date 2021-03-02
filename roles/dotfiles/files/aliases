@@ -40,7 +40,7 @@ aptgrep() { if [ $# -eq 2 ]; then apt search ${1%} 2> /dev/null | grep ${2%}; fi
 marker() { printf "${cyan}%$(( ${COLUMNS} - 12 ))s─(${bright_yellow}%(%H:%M:%S)T${cyan})─${clr_reset}" | sed 's/ /─/g'; }
 
 # Last modified files
-flast() { if [ $# -eq 1 ]; then find . -xdev -type f -printf "%T@ %Tc %p\n" | sort -n | tail -${1%} | cut -d" " -f2-; fi }
+flast() { if [ $# -eq 1 ]; then find . -xdev -type f -not -path "*/.git/*" -printf "%T@ %Tc %p\n" | sort -n -r 2> /dev/null | head -${1%} | cut -d" " -f2-; fi }
 
 # Single-pass empty directories removal
 emptydirs() {
@@ -349,7 +349,8 @@ alias img2sixel="img2sixel -I"
 alias vf="vicd"
 alias cmus='tmux attach-session -t cmus || tmux new-session -A -D -s cmus "$(which cmus)"'
 alias timezones='undertime'
-alias myip="dig +cdflag +dnssec +short myip.opendns.com @resolver1.opendns.com"
+alias mydnsip="dig +cdflag +dnssec +short myip.opendns.com @resolver1.opendns.com"
+alias myip="curl -s https://www.zx2c4.com/ip | cut -b1-15 | head -n1 | grep -o -P '^\d+\.\d+\.\d+\.\d+' | xargs"
 
 # Wireless
 alias wifimon='wavemon -g'
