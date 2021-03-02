@@ -1,128 +1,16 @@
 ---
-
-#
-# Asserts / Tests
-#
-- name: Verify server's IP
-  assert:
-    that: wg_server_ip | ipv4
-    success_msg: "Server's private IP: {{ wg_server_ip }}"
-    fail_msg: "Incorrect server IP: {{ wg_server_ip }}"
-
-- name: Verify that server`s IP is within its subnet
-  assert:
-    that: wg_server_ip | ipv4(wg_server_subnet)
-    success_msg: "Provisioning subnet: {{ wg_server_subnet }}"
-    fail_msg: "Incorrect server subnet: {{ wg_server_subnet }}"
-
-- name: Verify Wireguard port
-  assert:
-    that: wg_port | int > 1 and wg_port | int < 65535
-    success_msg: "Server will be listening on port {{ wg_port }}"
-    fail_msg: "Invalid port number: {{ wg_port }}"
-
-- name: Verify interface name
-  assert:
-    that: wg_iface | length > 1
-    success_msg: "Wireguard interface: {{ wg_iface }}"
-    fail_msg: "Invalid interface name: {{ wg_iface }}"
-
-- name: Verify peers' names
-  assert:
-    that:
-      - item.name | length > 1
-      - item.name is search("^[a-zA-Z0-9]*$")
-    success_msg: "Deploying peer: {{ item.name }}"
-    fail_msg: "Invalid peer name: {{ item.name }}"
-    quiet: yes
-  loop: "{{ wg_clients }}"
-  loop_control:
-      label: "{{ item.name }}"
-  when: wg_clients | length > 0
-
-- name: Verify peers' IPs
-  assert:
-    that:
-      - item.ip | ipv4(wg_server_subnet)
-    success_msg: "Deploying peer with IP: {{ item.ip }}"
-    fail_msg: "Peer {{ item.ip }} is outside of server's subnet {{ wg_server_subnet }}"
-    quiet: yes
-  loop: "{{ wg_clients }}"
-  loop_control:
-      label: "{{ item.ip }}"
-  when: wg_clients | length > 0
-
-- name: Verify peers' keys lengths
-  assert:
-    that:
-      - item.pubkey | length == 44
-      - item.psk | length == 44
-    quiet: yes
-    success_msg: "Client's keys are 44 symbols long"
-    fail_msg: "Key length is wrong"
-  loop: "{{ wg_clients }}"
-  loop_control:
-      label: "{{ item.name }}"
-  when: wg_clients | length > 0
-
-  # No usable config can be <2 bytes
-- name: Check if there is an existing config
-  find:
-    paths: /etc/wireguard
-    patterns: '{{ wg_iface }}.conf'
-    size: '2'
-  register: wg_existing_conf
-
-- name: Assert that we are not overwriting config without permission
-  assert:
-    that: wg_existing_conf.files | length == 0
-    fail_msg: "Found existing config: /etc/wireguard/{{ wg_iface }}.conf"
-    success_msg: "/etc/wireguard/{{ wg_iface }}.conf not found, continuing..."
-  when: wg_overwrite is false
-
-- name: Test provided private key
-  shell:
-    cmd: "echo {{ wg_peerkey }} | wg pubkey"
-  when: wg_peerkey | string | length == 44
-  ignore_errors: yes
-  register: wg_peerkey_test
-  no_log: true
-
-- name: Assert that private key is accepted by Wireguard
-  assert:
-    that: wg_peerkey_test.rc == 0
-    fail_msg: "Private key is declined by Wireguard."
-    success_msg: "Private key is accepted by Wireguard, continuing..."
-  when: wg_peerkey_test.changed is true
-
-# Store "clean" keys in variables
-- block:
-
-  - name: Derive public key from the provided private one
-    shell:
-      cmd: "echo {{ wg_peerkey }} | wg pubkey"
-    register: wg_pubkey
-
-  - name: Clean-up keypair variables
-    set_fact:
-      wg_pubkey: "{{ wg_pubkey.stdout }}"
-      # BUG: wg_privkey is overwritten by the block below, even if the block
-      #      is skipped. Added conditional in `wg_server.j2` as the workaround.
-      wg_privkey: "{{ wg_peerkey }}"
-
-  - name: Verify that both keys are of expected length
-    set_fact:
-      wg_keys_valid: true
-    when: wg_pubkey | length == 44 and wg_privkey | length == 44
-
-  when: wg_peerkey_test.changed is true and wg_peerkey_test.rc == 0
-  no_log: true
-# block end
+- name: Run sanity-checks
+  import_tasks: assertions.yml
+  become: yes
+  tags:
+    - wg_assert
 
 - name: Install wireguard
   apt:
     name: ['wireguard', 'wireguard-tools']
     state: present
+  tags:
+    - wg_install
 
 # If private key is not provided -- generate a pair on the target host
 - block:
@@ -151,67 +39,25 @@
       wg_keys_valid: true
     when: wg_pubkey | length == 45 and wg_privkey | length == 45
 
+- name: Generate a pair of public/private keys
+  import_tasks: genkeys.yml
+  become: yes
   when: not wg_peerkey
-# block end
+  tags:
+    - wg_genkeys
 
-- name: Create core of the Wireguard configuration file
-  template:
-    src: wg_server.j2
-    dest: "/etc/wireguard/{{ wg_iface }}.conf"
-    owner: root
-    mode: 0600
-  register: wg_configured
-  when: wg_keys_valid
+- name: Generate config file
+  import_tasks: genconfig.yml
+  become: yes
+  tags:
+    - wg_genconfig
 
-- name: Deploy clients
-  blockinfile:
-    backup: no
-    path: "/etc/wireguard/{{ wg_iface }}.conf"
-    block: "{{ lookup('template', 'wg_client.j2') }}"
-    marker: "\n# {mark} {{ item.name }}\n"
-  loop: "{{ wg_clients }}"
-  when: wg_clients | length > 0
-  register: wg_clients_deployed
-  no_log: true
-
-- name: Delete keyfiles
-  file:
-    path: "/etc/wireguard/{{ item }}"
-    state: absent
-  with_items:
-    - privatekey
-    - publickey
-
-- name: Assert that all clients are provisioned
-  assert:
-    that: wg_clients | length == wg_clients_deployed.results | length
-    success_msg: "Successfully provisioned {{ wg_clients | length }} clients."
-    fail_msg: "Provisioned {{ wg_clients_deployed.results | length }} clients out of {{ wg_clients | length }} requested."
-
-- name: Enable forwarding in UFW's sysctl settings
-  replace:
-    path: "/etc/ufw/sysctl.conf"
-    regexp: '^#(net\/ipv4\/ip_forward\=1)'
-    replace: '\1'
-  when: wg_forward
-
-  # Don't drop packets silently as the clients are already authenticated at this stage
-- name: Change default UFW forward policy to REJECT
-  lineinfile:
-    path: "/etc/default/ufw"
-    line: 'DEFAULT_FORWARD_POLICY="REJECT"'
-    regexp: '^DEFAULT_FORWARD_POLICY'
-
-- name: Create UFW rule to allow forwarding between Wireguard clients only
-  ufw:
-    rule: allow
-    direction: in
-    from_ip: "{{ wg_server_subnet }}"
-    to_ip: "{{ wg_server_subnet }}"
-    interface: "{{ wg_iface }}"
-    route: yes
-    comment: "Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}"
-  when: wg_forward
+- name: Amend UFW ruleset
+  import_tasks: ufw.yml
+  become: yes
+  notify: 'reload ufw'
+  tags:
+    - wg_ufw
 
 - name: Enable routing in sysctl
   lineinfile:
@@ -219,6 +65,9 @@
     line: "net.ipv4.ip_forward=1"
     state: present
   when: wg_forward
+  notify: 'reload sysctl'
+  tags:
+    - wg_sysctl_routing
 
 - name: Enable Wireguard systemd service and make sure it's stopped
   systemd:
@@ -226,23 +75,20 @@
     enabled: yes
     masked: no
     state: stopped
+  when: wg_autostart
+  notify:
+    - 'reread systemd'
+    - 'reload systemd'
+  tags:
+    - wg_systemd
 
-- name: Re-read systemd settings
-  systemd:
-    daemon_reload: yes
-
-- name: Reload systemd
-  systemd:
-    daemon_reexec: yes
-
-- name: Reload ufw
-  command: ufw reload
-
-- name: Reload sysctl
-  shell: sysctl --system
+- meta: flush_handlers
 
 - name: Start Wireguard daemon
   systemd:
     name: "wg-quick@{{ wg_iface }}.service"
     state: started
     enabled: yes
+  when: wg_start
+  tags:
+    - wg_systemd

@@ -1,0 +1,26 @@
+---
+- name: Create core of the Wireguard configuration file
+  template:
+    src: wg_server.j2
+    dest: "/etc/wireguard/{{ wg_iface }}.conf"
+    owner: root
+    mode: 0600
+  register: wg_configured
+  when: wg_keys_valid
+
+- name: Deploy clients
+  blockinfile:
+    backup: no
+    path: "/etc/wireguard/{{ wg_iface }}.conf"
+    block: "{{ lookup('template', 'wg_client.j2') }}"
+    marker: "\n# {mark} {{ item.name }}\n"
+  loop: "{{ wg_clients }}"
+  when: wg_clients | length > 0
+  register: wg_clients_deployed
+  no_log: true
+
+- name: Assert that all clients are provisioned
+  assert:
+    that: wg_clients | length == wg_clients_deployed.results | length
+    success_msg: "Successfully provisioned {{ wg_clients | length }} clients."
+    fail_msg: "Provisioned {{ wg_clients_deployed.results | length }} clients out of {{ wg_clients | length }} requested."

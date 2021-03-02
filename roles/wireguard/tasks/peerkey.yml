@@ -1,0 +1,39 @@
+---
+- name: Test provided private key
+  shell:
+    cmd: "echo {{ wg_peerkey }} | wg pubkey"
+  when: wg_peerkey | string | length == 44
+  ignore_errors: yes
+  register: wg_peerkey_test
+  no_log: true
+
+- name: Assert that private key is accepted by Wireguard
+  assert:
+    that: wg_peerkey_test.rc == 0
+    fail_msg: "Private key is declined by Wireguard."
+    success_msg: "Private key is accepted by Wireguard, continuing..."
+  when: wg_peerkey_test.changed is true
+
+# Store "clean" keys in variables
+- block:
+
+  - name: Derive public key from the provided private one
+    shell:
+      cmd: "echo {{ wg_peerkey }} | wg pubkey"
+    register: wg_pubkey
+
+  - name: Clean-up keypair variables
+    set_fact:
+      wg_pubkey: "{{ wg_pubkey.stdout }}"
+      # BUG: wg_privkey is overwritten by the block below, even if the block
+      #      is skipped. Added conditional in `wg_server.j2` as the workaround.
+      wg_privkey: "{{ wg_peerkey }}"
+
+  - name: Verify that both keys are of expected length
+    set_fact:
+      wg_keys_valid: true
+    when: wg_pubkey | length == 44 and wg_privkey | length == 44
+
+  when: wg_peerkey_test.changed is true and wg_peerkey_test.rc == 0
+  no_log: true
+# block end

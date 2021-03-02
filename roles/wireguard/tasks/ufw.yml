@@ -1,0 +1,25 @@
+---
+- name: Enable forwarding in UFW's sysctl settings
+  replace:
+    path: "/etc/ufw/sysctl.conf"
+    regexp: '^#(net\/ipv4\/ip_forward\=1)'
+    replace: '\1'
+  when: wg_forward
+
+  # Don't drop packets silently as the clients are already authenticated at this stage
+- name: Change default UFW forward policy to REJECT
+  lineinfile:
+    path: "/etc/default/ufw"
+    line: 'DEFAULT_FORWARD_POLICY="REJECT"'
+    regexp: '^DEFAULT_FORWARD_POLICY'
+
+- name: Create UFW rule to allow forwarding between Wireguard clients only
+  ufw:
+    rule: allow
+    direction: in
+    from_ip: "{{ wg_server_subnet }}"
+    to_ip: "{{ wg_server_subnet }}"
+    interface: "{{ wg_iface }}"
+    route: yes
+    comment: "Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}"
+  when: wg_forward
