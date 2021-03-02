@@ -9,6 +9,9 @@ def_command "quit" [deferred]
   quit
 def_command "exit" [deferred]
   quit
+# This is bodge, but it works.
+def_command "exitq" [deferred]
+  quit
 
 def_key ";"
   execute_command
