@@ -1,0 +1,41 @@
+---
+- name: Run server checks
+  import_tasks: assert_server.yml
+  tags:
+    - wg_assert_server
+
+- name: Run peers checks
+  import_tasks: assert_peers.yml
+  when: wg_clients | length > 0
+  tags:
+    - wg_assert_peers
+
+- name: Run endpoints checks
+  import_tasks: assert_endpoints.yml
+  when: wg_endpoints | length > 0
+  tags:
+    - wg_assert_endpoints
+
+- name: Run subnet checks
+  import_tasks: assert_subnet.yml
+  when: wg_srv
+  tags:
+    - wg_assert_subnet
+
+- name: Run existing config checks
+  import_tasks: assert_conf_existing.yml
+  tags:
+    - wg_assert_conf_existing
+
+- name: Run port checks
+  import_tasks: assert_port.yml
+  tags:
+    - wg_assert_port
+
+- name: Tear-down the existing Wireguard interface
+  shell:
+    cmd: "wg-quick down {{ wg_iface }}"
+  when:
+    - wg_overwrite
+    - wg_existing_conf
+    - wg_iface in wg_existing_interfaces.stdout

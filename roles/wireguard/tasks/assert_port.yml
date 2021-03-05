@@ -1,0 +1,33 @@
+---
+- name: Load "listen_ports_facts" module
+  listen_ports_facts:
+
+- name: Save port state in a variable
+  set_fact:
+    wg_port_exists: "{{ wg_port in udp_listen | map(attribute='port') | flatten }}"
+
+- name: Determine if detected WG instance is listening on the port we want to use
+  shell:
+    cmd: "wg show {{ wg_iface }} | head -5 | grep 'listening port:' | rev | cut -d' ' -f1 | rev"
+  register: wg_iface_current_port
+
+- name: Assert we are not trying to provision on a busy port without permission
+  assert:
+    that: not wg_port_exists
+    success_msg: "Provisioning Wireguard on the available port {{ wg_port }}"
+    fail_msg: "Port {{ wg_port }} is already occupied on the target host and 'wg_overwrite' is False"
+  when:
+    - not wg_overwrite
+    - wg_existing_conf
+
+- name: Assert we are overwriting an existing WG instance listening on the same port
+  assert:
+    that: wg_iface_current_port.stdout | int == wg_port
+    success_msg: "Port {{ wg_port }} is occupied by {{ wg_iface }} and will be replaced by the new WG instance"
+    fail_msg: "Port {{ wg_port }} is already occupied by {{ wg_iface }} on the target host and 'wg_overwrite' is set to False"
+  when:
+    - wg_overwrite
+    - wg_port_exists
+    - wg_existing_conf
+    - wg_iface in wg_existing_interfaces.stdout
+    - wg_iface_current_port.stdout | int == wg_port

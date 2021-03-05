@@ -24,3 +24,22 @@
     that: wg_clients | length == wg_clients_deployed.results | length
     success_msg: "Successfully provisioned {{ wg_clients | length }} clients."
     fail_msg: "Provisioned {{ wg_clients_deployed.results | length }} clients out of {{ wg_clients | length }} requested."
+  when: wg_clients | length > 0
+
+- name: Deploy endpoints
+  blockinfile:
+    backup: no
+    path: "/etc/wireguard/{{ wg_iface }}.conf"
+    block: "{{ lookup('template', 'wg_endpoints.j2') }}"
+    marker: "\n# {mark} {{ item.name }}\n"
+  loop: "{{ wg_endpoints }}"
+  when: wg_endpoints | length > 0
+  no_log: true
+  register: wg_endpoints_deployed
+
+- name: Assert that all endpoints are provisioned
+  assert:
+    that: wg_endpoints | length == wg_endpoints_deployed.results | length
+    success_msg: "Successfully provisioned {{ wg_endpoints | length }} endpoints."
+    fail_msg: "Provisioned {{ wg_endpoints_deployed.results | length }} endpoints out of {{ wg_endpoints | length }} requested."
+  when: wg_endpoints | length > 0

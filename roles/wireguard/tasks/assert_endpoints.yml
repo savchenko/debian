@@ -1,0 +1,72 @@
+---
+- name: Verify endpoints' names
+  assert:
+    that:
+      - item.name | length > 1
+      - item.name is search("^[a-zA-Z0-9]*$")
+    success_msg: "Deploying endpoint: {{ item.name }}"
+    fail_msg: "Invalid endpoint name: {{ item.name }}"
+    quiet: yes
+  loop: "{{ wg_endpoints }}"
+  loop_control:
+      label: "{{ item.name }}"
+
+- name: Verify endpoints' IPs
+  assert:
+    that:
+      - item.ip | ipv4
+    success_msg: "Deploying endpoint with IP: {{ item.ip }}"
+    fail_msg: "Endpoint`s address of {{ item.ip }} does not look like a valid ipv4"
+    quiet: yes
+  loop: "{{ wg_endpoints }}"
+  loop_control:
+      label: "{{ item.ip }}"
+
+- name: Verify endpoints' keys lengths
+  assert:
+    that:
+      - item.pubkey | length == 44
+      - item.psk | length == 44
+    quiet: yes
+    success_msg: "Endpoint's keys are 44 symbols long"
+    fail_msg: "Key length is wrong"
+  loop: "{{ wg_endpoints }}"
+  loop_control:
+      label: "{{ item.name }}"
+
+- name: Verify endpoints' ports
+  assert:
+    that:
+      - item.port | int > 1
+      - item.port | int < 65535
+    success_msg: "Will connect to {{ item.ip }} on port {{ item.port }}"
+    fail_msg: "Endpoint`s port of {{ item.port }} is outside of 2-65534 range"
+    quiet: yes
+  loop: "{{ wg_endpoints }}"
+  loop_control:
+      label: "{{ item.port }}"
+
+- name: Verify endpoints' `AllowedIPs`
+  assert:
+    that:
+      - item.allowedips | ipaddr('net')
+    quiet: yes
+    success_msg: "Subnet {{ item.allowedips }} will be routed to \
+                  {{ item.ip }}"
+    fail_msg: "Subnet '{{ item.allowedips }}' has a wrong format.\n\
+               Make it CIDR-compatible and re-run the playbook."
+  loop: "{{ wg_endpoints }}"
+  loop_control:
+      label: "{{ item.allowedips }}"
+
+- name: Verify endpoints' keepalive value
+  assert:
+    that:
+      - item.keepalive | int >= 0
+      - item.keepalive | int < 31536000
+    quiet: yes
+    success_msg: "Keepalive value of '{{ item.keepalive }}' is OK"
+    fail_msg: "Keepalive value of '{{ item.keepalive }}' is outside of the 0..31536000 range"
+  loop: "{{ wg_endpoints }}"
+  loop_control:
+      label: "{{ item.name }}"

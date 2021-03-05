@@ -1,6 +1,7 @@
-# Client #
+# Endpoint #
 [Peer]
-AllowedIPs = {{ item.ip | ipv4('address') }}/32
+Endpoint = {{ item.ip }}:{{ item.port }}
+AllowedIPs = {{ item.allowedips }}
 PublicKey = {{ item.pubkey }}
 PresharedKey = {{ item.psk }}
 {% if item.keepalive | int > 0 %}

@@ -1,9 +1,9 @@
 ---
 - name: Run sanity-checks
-  import_tasks: assertions.yml
+  import_tasks: assert_main.yml
   become: yes
   tags:
-    - wg_assert
+    - wg_assert_main
 
 - name: Install wireguard
   apt:
@@ -12,32 +12,12 @@
   tags:
     - wg_install
 
-# If private key is not provided -- generate a pair on the target host
-- block:
-
-  - name: Create private/public keypair
-    shell:
-      chdir: /etc/wireguard
-      cmd: umask 077 & wg genkey | tee privatekey | wg pubkey > publickey
-
-  - name: Register private key
-    slurp:
-      src: "/etc/wireguard/privatekey"
-    register: wg_privkey
-  - set_fact:
-      wg_privkey: "{{ wg_privkey.content | b64decode }}"
-
-  - name: Register public key
-    slurp:
-      src: "/etc/wireguard/publickey"
-    register: wg_pubkey
-  - set_fact:
-      wg_pubkey: "{{ wg_pubkey.content | b64decode }}"
-
-  - name: Verify that both keys are of expected length
-    set_fact:
-      wg_keys_valid: true
-    when: wg_pubkey | length == 45 and wg_privkey | length == 45
+- name: Process provided private key
+  import_tasks: peerkey.yml
+  become: yes
+  when: wg_peerkey | string | length == 44
+  tags:
+    - wg_peerkey
 
 - name: Generate a pair of public/private keys
   import_tasks: genkeys.yml

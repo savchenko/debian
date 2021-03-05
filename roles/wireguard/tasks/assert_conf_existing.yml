@@ -1,0 +1,89 @@
+---
+  # No usable config can be <2 bytes
+- name: Find all existing WG configs
+  find:
+    paths: "/etc/wireguard/"
+    recurse: false
+    patterns: "*.conf"
+    size: '2'
+  register: wg_existing_config_find
+
+- set_fact:
+    wg_conflicting_configs: []
+    wg_existing_conf: false
+
+  # When there are configs found
+- block:
+
+  - name: Extract their paths
+    set_fact:
+      wg_existing_config_paths: "{{ wg_existing_config_paths \
+                                  + [item.path] }}"
+    no_log: true
+    loop: "{{ wg_existing_config_find.files }}"
+    vars:
+      wg_existing_config_paths: []
+
+  - name: Register existence of the config with the same interface name
+    set_fact:
+      wg_existing_conf: true
+    when: item.endswith(wg_iface + '.conf')
+    with_items: "{{ wg_existing_config_paths }}"
+
+  - name: Assert that we are not overwriting config with the same interface name without permission
+    assert:
+      that: not wg_existing_conf
+      fail_msg: "Config /etc/wireguard/{{ wg_iface }}.conf exists and \
+                'wg_overwrite' is set to False"
+      success_msg: "/etc/wireguard/{{ wg_iface }}.conf not found, continuing..."
+    when: wg_overwrite is false
+
+  - name: Save their content
+    slurp:
+      src: "{{ item }}"
+    with_items: "{{ wg_existing_config_paths }}"
+    when: >
+      {% if wg_overwrite %}
+      not item.endswith(wg_iface + '.conf')
+      {% else %}
+      true
+      {% endif %}
+    register: wg_existing_config_content
+
+  - name: Decode saved content
+    set_fact:
+      wg_existing_config_decoded: "{{ wg_existing_config_decoded \
+                                    | combine({item.source: item.content \
+                                    | b64decode}) }}"
+    no_log: true
+    with_items: "{{ wg_existing_config_content.results }}"
+    when:
+      - not item.skipped is defined
+      - not item.skipped is true
+    vars:
+      wg_existing_config_decoded: {}
+
+  - name: Extract port and ip address, compare to the current config
+    set_fact:
+      wg_conflicting_configs: "{{ wg_conflicting_configs + [item.key] }}"
+    no_log: true
+    loop: "{{ wg_existing_config_decoded | dict2items }}"
+    when: >-
+      item.value | regex_search('^ListenPort = ' + wg_port | string, multiline=True) or
+      item.value | regex_search('^Address = ' + wg_server_ip | string, multiline=True)
+
+  when: wg_existing_config_find.matched | int > 0
+  # Block end '
+
+- name: Assert there were no conflicting configs found
+  assert:
+    that: wg_conflicting_configs | length < 1
+    success_msg: "Found {{ wg_existing_config_find.matched | int }} \
+                  existing Wireguard configs, but none are in conflict \
+                  with the current settings."
+    fail_msg: "Following configs conflict with the current settings:\n\
+              - {{ wg_conflicting_configs | join('\n- ') }}\n\
+              Each has overlapping 'Address', 'ListenPort' or both.\n\
+              As these interfaces are inactive, further automated investigation \
+              is stopped.\nPlease check manually."
+  when: wg_existing_config_find.matched | int > 0
