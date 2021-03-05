@@ -112,3 +112,5 @@ inventory.ini
 # Whatever
 /roles/dotfiles/files/doublecmd/
 .mitogen
+_pack
+/tmp*.*
