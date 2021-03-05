@@ -17,6 +17,9 @@ Creates jailed user that has access only to `sh` and `rsync`. Supports automatic
 ### Laptop
 Unsurprisingly, configures a laptop. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/laptop/README.md). 
 
+### Wireguard
+All-inclusive, safe role to provision Wireguard in any mode imaginable. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/wireguard/README.md). 
+
 ### Hosts  
 _**(Pending update to support Knot-Resolver)**_  
 
