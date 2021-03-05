@@ -2,6 +2,7 @@
 - hosts: virtbsy
   tasks:
 
+
   - name: Execute `base` role
     include_role:
       name: base
@@ -101,3 +102,30 @@
       remove_existing_user: true
       add_rsync: true
     when: false
+
+
+  - name: Execute `wireguard` role
+    include_role:
+      name: wireguard
+      apply:
+        tags:
+          - role_wireguard
+    tags:
+      - always
+    vars:
+      wg_autostart: true
+      wg_endpoints:
+        - { name: 'Foo', pubkey: 'sPHxX6IiLpcJpgDmoXRuAiuZdKNJsZtsIEDJGK6ubmU=', psk: 'g1p3GiazEwyEoM2RkYh148/bu0w4zXg6S1I8ybw3fT0=', ip: '10.2.0.1', port: '12335', keepalive: '0', allowedips: '10.2.0.0/16' }
+        - { name: 'Bar', pubkey: 'sPHxX6IiLpcJpgDmoXRuAiuZdKNJsZtsIEDJGK6ubmU=', psk: 'g1p3GiazEwyEoM2RkYh148/bu0w4zXg6S1I8ybw3fT0=', ip: '10.3.0.1', port: '22345', keepalive: '45', allowedips: '10.3.0.0/16' }
+      wg_clients:
+        - { name: 'Flob', pubkey: 'WC5a0cSWATZwLsQH1REjGcQsomZyEtRTaAqyRK20emY=', psk: 'yKsg+u7zY9N5rjgR3YE6cSu90aFBpxEPA3uKzK9vJc0=', ip: '10.2.1.10', keepalive: '0' }
+        - { name: 'Fred', pubkey: 'qOwMjZuaVjfmdCSoOQbTp8MPADN+yB5gjRAmddA7jUM=', psk: 'Fo1UMMLxbyPiYwrJ/vE7tqPa66gblskjIc5xyQPsXgg=', ip: '10.3.1.20', keepalive: '90' }
+      wg_forward: true
+      wg_iface: wg8
+      wg_overwrite: true
+      wg_peerkey: OIxcoXM0NaNtsSZM7aNGDeqpUiQxkZ4+eG9OmLSFe3k=
+      wg_port: 12345
+      wg_server_ip: 10.0.0.10
+      wg_server_subnet: '10.0.0.0/8'
+      wg_start: true
+      wg_systemd: true
