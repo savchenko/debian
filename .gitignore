@@ -114,3 +114,6 @@ inventory.ini
 .mitogen
 _pack
 /tmp*.*
+roles/dotfiles/files/config/htop/htoprc
+roles/dotfiles/files/config/vifm/vifminfo
+roles/dotfiles/files/themes
