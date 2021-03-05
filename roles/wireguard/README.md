@@ -5,24 +5,17 @@ Role was made for and tested extensively on ipv4 setup. ipv6 is unsupported.
 
 ## Logic
 
-Some notes to keep in mind when configuring it:
+Some notes to keep in mind when configuring it.
 
-1. `wg_server_ip` and `wg_server_subnet` are optional, however both must be either defined or not simultaneously.
+1. `wg_server_ip` and `wg_server_subnet` are an optional pair of variables and must be set together.
 
     If neither is present, target host will act as a transparent gateway. It will route packets between other peers, but won't be directly accessible from a Wireguard subnet.
 
-1. Neither `wg_clients` nor `wg_endpoints` are required.
-
-   Former provisions peers that are connecting _to the target host_. Latter is for peers target host will attempt to connect _with_.
-
-1. Role can be run:
+1. Neither `wg_clients` nor `wg_endpoints` are required and both are completely independent from each other. Former provisions peers that are connecting _to the target host_. Latter is for peers target host will attempt to connect _with_. Role can be run:
 
     1. With both defined, target host will accept connections from `wg_clients` and attempt to connect with `wg_endpoints`.
-
     1. With only `wg_clients`, target host will act as a VPN-server and route packets from clients within `AllowedIPs` in each `[Peer]` section.
-
     1. With only `wg_endpoints`, target host will connect to each server defined in all `[Peer]` sections.
-
     1. If neither is defined, target host can still be provisioned and Wireguard interface can be optionally brought-up, however it won't accept any connections until valid peers are added to its config.
 
 1. In any case, routing and firewall rules are set automatically.
@@ -110,8 +103,7 @@ Should be in CIDR notation, e.g. `192.168.1.0/24`.
 
 
 ## Dependencies
-Tested on machine that is already provisioned with the [base role](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md).
-
+Tested on machine that is already provisioned with the [base role](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md).  
 Likely to complain about missing packages if executed against untouched minimal installation.
 
 
@@ -120,6 +112,5 @@ MIT
 
 
 ## Author Information
-Andrew Savchenko
-
+Andrew Savchenko  
 https://savchenko.net
