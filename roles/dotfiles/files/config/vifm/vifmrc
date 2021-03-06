@@ -310,17 +310,19 @@ nnoremap <silent> <c-k> <c-w>wk<c-w>w
 
 " " Single-pane preview
 " " https://q2a.vifm.info/803/file-preview-when-in-the-single-pane-mode?show=808#c808
-" nnoremap <silent> w : if &quickview && !layoutis('only')
-"                    \|     view
-"                    \| else
-"                    \|     if layoutis('only')
-"                    \|         if &lines + 50 < &columns | vsplit | else | split | endif
-"                    \|     endif
-"                    \|     view!
-"                    \|     execute 'qnoremap w q:view|only|qunmap w<lt>cr>'
-"                    \|     execute 'wincmd w'
-"                    \| endif
-"                    \| <cr>
+nnoremap <silent> w : if &quickview && !layoutis('only')
+                   \|     view
+                   \| else
+                   \|     if layoutis('only')
+                   \|         if &lines + 50 < &columns | vsplit | else | split | endif
+                   \|         execute 'qnoremap w q:view|only|qunmap w<lt>cr>'
+                   \|     else
+                   \|         execute 'qnoremap w q:view|qunmap w<lt>cr>'
+                   \|     endif
+                   \|     view!
+                   \|     execute 'wincmd w'
+                   \| endif
+                   \| <cr>
 
 " TODO: Global filter. Somehow doesn't work as expected.
 "
