@@ -1,0 +1,9 @@
+[X-GNOME-Metatheme]
+Name=Amanita
+Type=X-GNOME-Metatheme
+Comment=Now there is one more
+Encoding=UTF-8
+GtkTheme=Amanita
+IconTheme=Adwaita
+CursorTheme=Adwaita
+CursorSize=24
