@@ -15,7 +15,7 @@
 
 - name: Register existing Wireguard UFW rules
   shell:
-    cmd: "ufw status numbered | grep 'Allow routing on {{ wg_iface }}' | cut -d']' -f1 | sed 's/[^0-9]*//g' | sort -n -r | xargs"
+    cmd: "ufw status numbered | grep -E 'Allow .* on {{ wg_iface }}' | cut -d']' -f1 | sed 's/[^0-9]*//g' | sort -n -r | xargs"
   register: wg_ufw_existing_rules
 
 - name: Sanitise output and count the found rules
@@ -88,6 +88,17 @@
   no_log: true
   loop: "{{ wg_endpoints }}"
   when: wg_forward and wg_endpoints | length > 0
+
+- name: Allow Wireguard to listen on defined port
+  ufw:
+    rule: allow
+    direction: in
+    from_ip: any
+    interface: any
+    port: "{{ wg_port | int }}"
+    proto: udp
+    comment: "Allow {{ wg_port }}/UDP on {{ wg_iface }}"
+  when: wg_srv
 
 - name: Allow SSH from Wireguard subnet
   ufw:
