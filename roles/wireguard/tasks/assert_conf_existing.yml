@@ -8,7 +8,8 @@
     size: '2'
   register: wg_existing_config_find
 
-- set_fact:
+- name: Initialise wg_conflicting_configs and wg_existing_conf
+  set_fact:
     wg_conflicting_configs: []
     wg_existing_conf: false
 
@@ -63,17 +64,25 @@
     vars:
       wg_existing_config_decoded: {}
 
-  - name: Extract port and ip address, compare to the current config
-    set_fact:
-      wg_conflicting_configs: "{{ wg_conflicting_configs + [item.key] }}"
-    no_log: true
-    loop: "{{ wg_existing_config_decoded | dict2items }}"
-    when: >-
-      item.value | regex_search('^ListenPort = ' + wg_port | string, multiline=True) or
-      item.value | regex_search('^Address = ' + wg_server_ip | string, multiline=True)
+  # When there are decoded configs to check...
+  - block:
+
+      - name: Extract port and ip address, compare to the current config
+        set_fact:
+          wg_conflicting_configs: "{{ wg_conflicting_configs + [item.key] }}"
+        no_log: true
+        loop: "{{ wg_existing_config_decoded | dict2items }}"
+        when: >
+          item.value | regex_search('^ListenPort = ' + wg_port | string, multiline=True) or
+          item.value | regex_search('^Address = ' + wg_server_ip | string, multiline=True)
+
+    when: 
+      - wg_existing_config_decoded is defined
+      - wg_existing_config_decoded | length > 0
+    # Block end '
 
   when: wg_existing_config_find.matched | int > 0
-  # Block end '
+  # Block end
 
 - name: Assert there were no conflicting configs found
   assert:
