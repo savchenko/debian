@@ -133,6 +133,8 @@
     cmd: "grep Address /etc/wireguard/{{ wg_affected_ifaces[0] }}.conf | cut -d' ' -f3 | xargs"
   register: wg_existing_config_ip
   changed_when: false
+  when:
+    - wg_affected_ifaces is defined
 
 - name: Ensure that subnet from Wireguard config overlaps with the detected IP
   assert:
