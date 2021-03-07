@@ -127,5 +127,6 @@
       wg_port: 12345
       wg_server_ip: 10.0.0.10
       wg_server_subnet: '10.0.0.0/8'
+      wg_ssh: true
       wg_start: true
       wg_systemd: true

@@ -7,5 +7,6 @@ wg_iface: wg0
 wg_overwrite: false
 wg_peerkey: false
 wg_port: 51820
+wg_ssh: false
 wg_start: true
 wg_systemd: true

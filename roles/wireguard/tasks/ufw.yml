@@ -88,3 +88,14 @@
   no_log: true
   loop: "{{ wg_endpoints }}"
   when: wg_forward and wg_endpoints | length > 0
+
+- name: Allow SSH from Wireguard subnet
+  ufw:
+    rule: allow
+    direction: in
+    from_ip: "{{ wg_server_subnet }}"
+    interface: "{{ wg_iface }}"
+    port: '22'
+    proto: tcp
+    comment: "Allow 22/TCP on {{ wg_iface }} from {{ wg_server_subnet }}"
+  when: wg_srv and wg_ssh

@@ -42,6 +42,7 @@ Some notes to keep in mind when configuring it.
 | wg_port          | Server port                                          | 51820   |
 | wg_server_ip     | Server's IP that is exposed to clients, optional     | -       |
 | wg_server_subnet | Server's subnet                                      | -       |
+| wg_ssh           | Allow incoming tcp/22 from WG subnet?                | False   |
 | wg_start         | Start WG at the end of play?                         | True    |
 | wg_systemd       | Enable systemd unit on startup?                      | True    |
 
@@ -97,6 +98,7 @@ Should be in CIDR notation, e.g. `192.168.1.0/24`.
       wg_port: 12345
       wg_server_ip: 10.0.0.10
       wg_server_subnet: '10.0.0.0/8'
+      wg_ssh: true
       wg_start: true
       wg_systemd: true
 ```
