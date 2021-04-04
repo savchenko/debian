@@ -35,6 +35,11 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | virtio_network_autostart   | Autostart default virtio network on boot.                  | true                     |
 | virtio_use_default_network | Use NAT-based, "default" virtio setup.                     | true                     |
 
+### Note on S3/S4
+
+Hibernation is disabled in kernel when system is booted in "lockdown" mode. This is the case when SecureBoot is enabled.
+
+There is a patchset that might allow functional _and_ secure hibernation in future: https://lore.kernel.org/lkml/20210220013255.1083202-1-matthewgarrett@google.com/T/#u
 
 ## Dependencies
 Should be installed on a computer that is already provisioned with the [base](https://github.com/savchenko/debian/roles/base/README.md) role.
