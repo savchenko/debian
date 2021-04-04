@@ -29,3 +29,11 @@
   become: yes
   with_items: "{{ dpkg_overrides }}"
   when: item['path'] not in dpkg_existing_overrides
+
+  # Fix for various X screensavers, etc.
+- name: Relax /etc/pam.d permissions
+  file:
+    path: /etc/pam.d
+    mode: 0755
+  become: yes
+  when: set_dpkg_relax_pam
