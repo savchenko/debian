@@ -19,6 +19,7 @@
 
 - name: reload sysctl
   shell: sysctl --system
+  become: yes
   listen: "reload sysctl"
 
 - name: restart timesyncd
