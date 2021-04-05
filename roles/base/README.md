@@ -37,6 +37,7 @@ Role Variables
 | generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
 | locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
+| pkg_remove_defaults         | Remove certain packages that are often installed by default.             | False                    |
 | resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | ""                       |
 | resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
 | resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |

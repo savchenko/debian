@@ -27,6 +27,7 @@
       generate_moduli: false
       grub_optional: ""
       locale: en_US.UTF8
+      pkg_remove_defaults: false
       resolver_blocklist: ""
       resolver_listen_on_ip: 127.0.0.1
       resolver_primary_hostname: dns.quad9.net

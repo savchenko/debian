@@ -12,3 +12,4 @@
     - avahi-daemon
     - dnsmasq
     - ntp
+  when: pkg_remove_defaults
