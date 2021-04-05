@@ -214,8 +214,8 @@ set cul
 set noshowcmd
 set noshowmode
 
-" Line numbers by default
-set number
+" No line numbers by default
+set nonumber
 
 " Don't show startup message
 set shortmess+=Ic
