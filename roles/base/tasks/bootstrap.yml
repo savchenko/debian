@@ -1,5 +1,5 @@
 ---
-- name: We speak English
+- name: Disable all languages except English
   copy:
     content: 'Acquire::Languages "none";'
     dest: /etc/apt/apt.conf.d/99disable-translations
@@ -9,9 +9,9 @@
     name: ['curl', 'apt-transport-https', 'sudo', 'rsync']
     state: present
 
-- name: Ensure en_US.UTF-8 locale is present
+- name: Ensure that desirable locale is present
   locale_gen:
-    name: en_US.UTF-8
+    name: "{{ locale }}"
     state: present
 
 - name: Set hostname to the value in inventory

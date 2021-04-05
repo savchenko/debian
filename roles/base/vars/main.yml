@@ -10,7 +10,7 @@ disable_speaker: true
 disable_thunderbolt: true
 fstab_noexec: true
 grub_optional: ""
-locale: "en_US.UTF-8"
+locale: "en_AU.UTF-8"
 pkg_remove_defaults: false
 resolver_blocklist: ""
 resolver_listen_on_ip: 127.0.0.1
