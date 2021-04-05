@@ -103,9 +103,11 @@
   when: set_capslock and not WSL2 and not WSL1
 
 - name: GRUB settings
-  # Refs: https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
-  #       https://tails.boum.org/contribute/design/kernel_hardening/
-  #       https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings
+  # Refs: 
+  #   - https://github.com/Whonix/security-misc/blob/master/etc/default/grub.d/40_kernel_hardening.cfg
+  #   - https://tails.boum.org/contribute/design/kernel_hardening/
+  #   - https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings
+  #   - https://github.com/torvalds/linux/commit/6471384af
   lineinfile:
     path: /etc/default/grub
     # Bullseye, v5.10+
@@ -115,7 +117,6 @@
     #   - Consider `slub_debug=ZF`
     #   - Consider init_on_free=1
     #   - Do *NOT* add page_poison=1 and slub_debug=P on newer kernels
-    #   - ref: https://github.com/torvalds/linux/commit/6471384af
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 slab_nomerge mce=0 page_alloc.shuffle=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 debugfs=off init_on_free=0 pti=auto vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen {{ grub_optional }} kernel.kexec_load_disabled=1"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
