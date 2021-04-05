@@ -45,7 +45,7 @@ root,root,600,/etc/modules
 root,root,600,/etc/netscsid.conf
 root,root,600,/etc/pam.conf
 root,root,600,/etc/request-key.conf
-root,root,600,/etc/sensors3.conf
+root,root,644,/etc/sensors3.conf
 root,root,600,/etc/sestatus.conf
 root,root,600,/etc/smi.conf
 root,root,600,/etc/staff-group-for-usr-local
