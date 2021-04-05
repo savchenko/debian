@@ -13,6 +13,7 @@
 
 - name: Set dpkg overrides
   import_tasks: dpkg_overrides.yml
+  when: set_dpkg_overrides
   tags:
     - base_dpkg_overrides
 

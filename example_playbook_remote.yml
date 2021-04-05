@@ -36,6 +36,8 @@
       resolver_secondary_ip: 149.112.112.112
       resolver_tls: true
       set_capslock: false
+      set_dpkg_overrides: true
+      set_dpkg_relax_pam: true
       set_hostname: true
       sshd_less_secure: false
       sshguard_install: false
