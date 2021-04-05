@@ -8,7 +8,7 @@ default_orientation auto
 font pango:Terminus 16px
 seat seat0 xcursor_theme Adwaita 24
 
-gaps inner 0
+gaps inner 12
 hide_edge_borders --i3 smart
 smart_borders on
 smart_gaps on
@@ -32,14 +32,13 @@ set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
 
-## Window decoration
-# class                 border  backgr. text    indicator child_border
-client.focused          #4c7899 #2b2e30 #888888 #3a3a3a   #3a3a3a
-client.focused_inactive #1d1f21 #2b2e30 #888888 #1d1f21   #1d1f21
-client.unfocused        #1d1f21 #222222 #555555 #1d1f21   1d1f21
+# class                 border  backgr. text    indicator child_border (try #425059)
+client.focused          #2b2e30 #2b2e30 #888888 #3a3a3a   #3a3a3a
+client.focused_inactive #2b2e30 #2b2e30 #888888 #1d1f21   #000000
+client.unfocused        #222426 #222426 #444444 #1d1f21   #000000
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
 
-# Always
+# Per-application assignements
 assign [app_id="keepassxc"] "5"
 for_window [app_id="foot"] titlebar_padding 0 2
 for_window [app_id="veracrypt"] floating enable
@@ -47,7 +46,7 @@ for_window [app_id="gtk3-widget-factory"] floating enable
 for_window [app_id="wdisplays"] floating enable
 
 # Default wallpaper
-output * bg #111111 solid_color
+output * bg #1a1a1a solid_color
 
 # Behavior
 focus_follows_mouse yes
@@ -55,11 +54,17 @@ focus_follows_mouse yes
 #
 # Controls --------------------------------------------
 #
-input "1:1:AT_Translated_Set_2_keyboard" {
+input type:keyboard {
     xkb_layout us
     xkb_options ctrl:nocaps
     repeat_delay 500
     repeat_rate 20
+}
+
+input "6127:24647:Lenovo_ThinkPad_Compact_USB_Keyboard_with_TrackPoint" {
+    accel_profile flat
+    pointer_accel 0.75
+    scroll_factor 0.25
 }
 
 input "2:14:ETPS/2_Elantech_TrackPoint" {
