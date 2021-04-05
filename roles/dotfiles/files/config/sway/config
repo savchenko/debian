@@ -27,6 +27,11 @@ output DP-1 pos 972 1080 res 3840x2160
 output eDP-1 scale 1.0
 output eDP-1 pos 972 2160 res 1920x1080
 
+# Disable internal screen output when the lid is closed
+set $laptop eDP-1
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
 ## Window decoration
 # class                 border  backgr. text    indicator child_border
 client.focused          #4c7899 #2b2e30 #888888 #3a3a3a   #3a3a3a
@@ -333,6 +338,9 @@ bar {
 
 # Gsettings importer
 exec_always $XDG_CONFIG_HOME/sway/gsettings.sh
+
+# Disable screen if Sway is restarted with the lid closed
+exec_always $XDG_CONFIG_HOME/sway/clamshell.sh
 
 # Notifier
 exec mako
