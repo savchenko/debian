@@ -84,8 +84,8 @@
   statusshowtotals = true
 
 [help]
-  # Automatically execute mistyped commands after 2s
-  autocorrect = 20
+  # Automatically execute mistyped commands after 6s
+  autocorrect = 60
 
 [gpg]
   program = gpg2
@@ -128,5 +128,6 @@
   pk = !mkdir -p _pack && git archive HEAD --format=zip > ./_pack/`basename $PWD`_`\\date '+%d.%m.%Y_%H-%M'`.zip
   last = !git --no-pager log --full-diff -1 HEAD && echo
   le = log --source --graph --stat --pretty=reference --decorate=full
+
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+  insteadOf = https://github.com/
