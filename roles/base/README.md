@@ -46,6 +46,7 @@ Role Variables
 | resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
 | resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)               |
 | set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
+| set_dpkg_console            | Sets framebuffer/console: font size, encoding, etc.                      | True                     |
 | set_dpkg_overrides          | Tighten various filesystem permissions. Use with care!                   | False                    |
 | set_dpkg_relax_pam          | `chmod 0755 /etc/pam.d`, might be needed if `set_dpkg_overrides` is set. | False                    |
 | set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |

@@ -72,11 +72,12 @@
     - base_ufw
   when: not WSL1 and not WSL2
 
-- name: Reconfigure dpkg
-  import_tasks: dpkg_reconfigure.yml
+- name: Reconfigure console via dpkg
+  import_tasks: dpkg_console.yml
   become: yes
+  when: set_dpkg_console
   tags:
-    - base_dpkg_reconfigure
+    - base_dpkg_console
 
 - name: Configure sshguard
   import_tasks: sshguard.yml

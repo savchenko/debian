@@ -20,6 +20,7 @@ resolver_secondary_hostname: dns.quad9.net
 resolver_secondary_ip: 149.112.112.112
 resolver_tls: true
 set_capslock: false
+set_dpkg_console: true
 set_dpkg_overrides: false
 set_dpkg_relax_pam: false
 set_hostname: false

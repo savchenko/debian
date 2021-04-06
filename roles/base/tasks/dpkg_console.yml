@@ -1,4 +1,10 @@
-- name: Re-configure framebuffer / console
+---
+- name: Install Terminus OTB font
+  apt:
+    name: fonts-terminus-otb
+    state: present
+
+- name: Re-configure framebuffer
   debconf:
     name: console-setup
     question: "{{ item.q }}"
