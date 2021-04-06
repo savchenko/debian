@@ -17,7 +17,7 @@
       - curl
       - debian-goodies
       - dfc
-      - exuberant-ctags
+      - universal-ctags
       - fd-find
       - fzf
       - gawk
