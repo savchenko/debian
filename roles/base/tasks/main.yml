@@ -26,6 +26,7 @@
 - name: Remove unwanted packages
   import_tasks: packages_remove.yml
   become: yes
+  when: pkg_remove_defaults
   tags:
     - base_pkg_unwanted
 
