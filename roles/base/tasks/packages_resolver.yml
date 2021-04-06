@@ -1,4 +1,14 @@
 ---
+- name: Import Lua tasklist
+  include_tasks:
+    file: packages_lua.yml
+    apply:
+      become: yes
+
+- name: Install Knot-resolver
+  apt:
+    name: knot-resolver
+
 - name: Create NetworkManager config folder
   file:
     path: /etc/NetworkManager/conf.d/

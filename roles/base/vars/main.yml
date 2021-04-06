@@ -13,6 +13,7 @@ grub_optional: ""
 locale: "en_AU.UTF-8"
 pkg_remove_defaults: false
 resolver_blocklist: ""
+resolver_install: false
 resolver_listen_on_ip: 127.0.0.1
 resolver_primary_hostname: dns.quad9.net
 resolver_primary_ip: 9.9.9.9

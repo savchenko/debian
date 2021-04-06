@@ -47,6 +47,13 @@
   tags:
     - base_pkg_install
 
+- name: Configure Knot-resolver
+  import_tasks: packages_resolver.yml
+  become: yes
+  when: not WSL1 and not WSL2 and resolver_install
+  tags:
+    - base_knot
+
 - name: Set various settings in "/etc"
   import_tasks: settings.yml
   become: yes
@@ -91,13 +98,6 @@
   become: yes
   tags:
     - base_logrotate
-
-- name: Configure Knot-resolver
-  import_tasks: packages_resolver.yml
-  become: yes
-  tags:
-    - base_knot
-  when: not WSL1 and not WSL2
 
 - name: Check if reboot is required
   stat:
