@@ -1,0 +1,121 @@
+---
+- name: Install extended list of packages
+  apt:
+    name: "{{ pkg }}"
+  vars:
+    pkg:
+      - ack
+      - apparmor-easyprof
+      - apparmor-notify
+      - apparmor-profiles
+      - apparmor-profiles-extra
+      - apt-listbugs
+      - apt-listchanges
+      - apt-transport-https
+      - bat
+      - checksec
+      - curl
+      - debian-goodies
+      - dfc
+      - universal-ctags
+      - fd-find
+      - fzf
+      - gawk
+      - git
+      - grc
+      - hstr
+      - htop
+      - keychain
+      - linux-cpupower
+      - lsof
+      - ncdu
+      - python3
+      - ripgrep
+      - rpl
+      - rsync
+      - silversearcher-ag
+      - sudo
+      - tmux
+      - tree
+      - vifm
+      - wget
+
+- name: Import Lua tasklist
+  include_tasks:
+    file: packages_lua.yml
+    apply:
+      become: yes
+
+- name: Install neovim without 'recommended' additions
+  apt:
+    name: neovim
+    install_recommends: no
+
+- name: Copy z.lua into `/usr/local/bin` and make it executable
+  copy:
+    src: bin/z.lua
+    dest: /usr/local/bin/z.lua
+    mode: a+x
+
+- name: Link `bar` and `fd` binaries to their commonly used names
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop:
+    - { src: "/usr/bin/batcat", dest: "/usr/bin/bat" }
+    - { src: "/usr/bin/fdfind", dest: "/usr/bin/fd" }
+
+- name: Create Perl modules folder
+  file:
+    path: "/usr/local/lib/site_perl/"
+    state: directory
+
+- name: Copy diff-so-fancy and its dependencies
+  copy:
+    src: "bin/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
+    - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
+
+  # Install user-provided packages if there are any
+- block:
+
+    - name: Check if user-supplied .DEBs are installed
+      command: "dpkg-query -W {{ item }}"
+      register: dpkg_check
+      failed_when: dpkg_check.rc > 1
+      changed_when: dpkg_check.rc == 1
+      loop: "{{ debs }}"
+
+    - name: Create directory to store .deb files
+      file:
+        path: /tmp/st_deb
+        state: directory
+      when: dpkg_check is changed
+
+    - name: Copy .deb packages to the remote host
+      copy:
+        src: "deb/{{ item }}"
+        dest: "/tmp/st_deb/{{ item }}"
+      loop: "{{ debs }}"
+      register: debs_copy_status
+      when: dpkg_check is changed
+
+    - name: Install user-supplied .deb packages
+      apt:
+        allow_unauthenticated: yes
+        deb: "{{ item['dest'] }}"
+      loop: "{{ debs_copy_status.results }}"
+      when: ansible_architecture == "x86_64" and dpkg_check is changed
+
+    - name: Delete /tmp/st_deb
+      file:
+        path: /tmp/st_deb
+        state: absent
+      when: dpkg_check is changed
+
+  when: debs | length > 0
+

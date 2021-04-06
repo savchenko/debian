@@ -1,63 +1,21 @@
 ---
-- name: Install list of packages
+- name: Install basic list of packages
   apt:
     name: "{{ pkg }}"
   vars:
     pkg:
-      - ack
       - apparmor
-      - apparmor-easyprof
-      - apparmor-profiles
-      - apparmor-profiles-extra
       - apparmor-utils
-      - apt-listbugs
-      - apt-listchanges
-      - apt-transport-https
       - bash-completion
-      - bat
+      - bind9-dnsutils
       - ca-certificates
-      - checksec
-      - curl
-      - debconf-utils
-      - debian-goodies
-      - dfc
-      - dnsutils
-      - exuberant-ctags
-      - fd-find
-      - fzf
-      - gawk
-      - git
       - gnupg2
-      - grc
-      - hstr
-      - htop
-      - keychain
-      - knot-resolver
       - libpam-tmpdir
-      - linux-cpupower
-      - lsof
-      - lua5.4
       - man-db
-      - ncdu
       - needrestart
       - net-tools
-      - python3
-      - ripgrep
       - rng-tools5
-      - rpl
-      - rsync
-      - silversearcher-ag
-      - sudo
-      - tmux
-      - tree
       - unattended-upgrades
-      - vifm
-      - wget
-
-- name: Install neovim without 'recommended' additions
-  apt:
-    name: neovim
-    install_recommends: no
 
 - name: Install Intel CPU firmware if necessary
   apt:
@@ -68,15 +26,6 @@
   apt:
     name: amd64-microcode
   when: '"AMD" in cpu_vendor and not WSL2'
-
-- name: Link binaries to their commonly used names
-  file:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    state: link
-  loop:
-    - { src: "/usr/bin/batcat", dest: "/usr/bin/bat" }
-    - { src: "/usr/bin/fdfind", dest: "/usr/bin/fd" }
 
 - name: Check pubring and trust-db in ~/.gnupg/
   stat:
@@ -100,79 +49,6 @@
 - name: Initialise ~/.gnupg
   shell: gpg -k
   when: not gpg_db_initialised
-
-- name: Check if lua v5.4 is installed and setup properly
-  stat:
-    path: "{{ item }}"
-  with_items:
-    - "/etc/alternatives/lua-interpretor"
-    - "/usr/bin/lua"
-    - "/usr/bin/luac"
-  register: lua_stat
-
-# As community `update-alternatives` modules does not support slave invocation, we have to use the shell command
-- name: Set lua5.4 as default `lua` command
-  shell: "{{ item }}"
-  with_items:
-    - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.4 1
-    - update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.4 130 --slave /usr/share/man/man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.4.1.gz
-    - update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.4 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.4.1.gz
-  become: yes
-  when: lua_stat.results | json_query( '[*].stat.exists' ) | unique | string != "[True]"
-
-- name: Copy z.lua into `/usr/local/bin` and make it executable
-  copy:
-    src: bin/z.lua
-    dest: /usr/local/bin/z.lua
-    mode: a+x
-
-- name: Create Perl modules folder
-  file:
-    path: "/usr/local/lib/site_perl/"
-    state: directory
-
-- name: Copy diff-so-fancy and its dependencies
-  copy:
-    src: "bin/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.mode }}"
-  with_items:
-    - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
-    - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
-
-- name: Check if .DEBs are installed
-  command: "dpkg-query -W {{ item }}"
-  register: dpkg_check
-  failed_when: dpkg_check.rc > 1
-  changed_when: dpkg_check.rc == 1
-  loop: "{{ debs }}"
-  when: debs | length > 0
-
-- name: Create directory to store .deb files
-  file:
-    path: /tmp/st_deb
-    state: directory
-  when: dpkg_check is changed
-
-- name: Copy .deb packages to the remote host
-  copy:
-    src: "deb/{{ item }}"
-    dest: "/tmp/st_deb/{{ item }}"
-  loop: "{{ debs }}"
-  register: debs_copy_status
-  when: dpkg_check is changed
-
-- name: Install .deb packages that are currently not in Debian repos
-  apt:
-    allow_unauthenticated: yes
-    deb: "{{ item['dest'] }}"
-  loop: "{{ debs_copy_status.results }}"
-  when: ansible_architecture == "x86_64" and dpkg_check is changed
-
-- name: Delete /tmp/st_deb
-  file:
-    path: /tmp/st_deb
-    state: absent
 
 - name: Configure unattended-upgrades
   copy:

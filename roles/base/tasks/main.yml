@@ -26,6 +26,7 @@
 - name: Remove unwanted packages
   import_tasks: packages_remove.yml
   become: yes
+  when: pkg_remove_defaults
   tags:
     - base_pkg_unwanted
 
@@ -41,11 +42,25 @@
   tags:
     - base_update_system
 
-- name: Install packages
+- name: Install basic packages
   import_tasks: packages_install.yml
   become: yes
   tags:
-    - base_pkg_install
+    - base_pkg_basic
+
+- name: install extra packages
+  import_tasks: packages_extra.yml
+  become: yes
+  when: pkg_install_extra
+  tags:
+    - base_pkg_extra
+
+- name: Configure Knot-resolver
+  import_tasks: packages_resolver.yml
+  become: yes
+  when: not WSL1 and not WSL2 and resolver_install
+  tags:
+    - base_knot
 
 - name: Set various settings in "/etc"
   import_tasks: settings.yml
@@ -72,11 +87,12 @@
     - base_ufw
   when: not WSL1 and not WSL2
 
-- name: Reconfigure dpkg
-  import_tasks: dpkg_reconfigure.yml
+- name: Reconfigure console via dpkg
+  import_tasks: dpkg_console.yml
   become: yes
+  when: set_dpkg_console
   tags:
-    - base_dpkg_reconfigure
+    - base_dpkg_console
 
 - name: Configure sshguard
   import_tasks: sshguard.yml
@@ -90,13 +106,6 @@
   become: yes
   tags:
     - base_logrotate
-
-- name: Configure Knot-resolver
-  import_tasks: packages_resolver.yml
-  become: yes
-  tags:
-    - base_knot
-  when: not WSL1 and not WSL2
 
 - name: Check if reboot is required
   stat:

@@ -10,9 +10,11 @@ disable_speaker: true
 disable_thunderbolt: true
 fstab_noexec: true
 grub_optional: ""
-locale: "en_US.UTF-8"
+locale: "en_AU.UTF-8"
+pkg_install_extra: false
 pkg_remove_defaults: false
 resolver_blocklist: ""
+resolver_install: false
 resolver_listen_on_ip: 127.0.0.1
 resolver_primary_hostname: dns.quad9.net
 resolver_primary_ip: 9.9.9.9
@@ -20,6 +22,7 @@ resolver_secondary_hostname: dns.quad9.net
 resolver_secondary_ip: 149.112.112.112
 resolver_tls: true
 set_capslock: false
+set_dpkg_console: true
 set_dpkg_overrides: false
 set_dpkg_relax_pam: false
 set_hostname: false

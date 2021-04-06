@@ -6,7 +6,7 @@
 
 - name: Upgrade packages
   apt:
-    upgrade: dist
+    upgrade: yes
 
 - name: Remove unneeded packages
   apt:

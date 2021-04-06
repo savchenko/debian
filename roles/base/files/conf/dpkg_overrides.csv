@@ -81,7 +81,7 @@ root,root,700,/etc/lvm
 root,root,700,/etc/lynis
 root,root,700,/etc/modprobe.d
 root,root,700,/etc/modules-load.d
-root,root,700,/etc/pam.d
+root,root,755,/etc/pam.d
 root,root,700,/etc/polkit-1
 root,root,700,/etc/refind.d
 root,root,700,/etc/request-key.d

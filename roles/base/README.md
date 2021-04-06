@@ -36,8 +36,10 @@ Role Variables
 | fstab_noexec                | Mount /dev/shm with nodev, nosuid, and noexec.                           | True                     |
 | generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
-| locale                      | For example, "en_GB.UTF-8".                                              | en_US.UTF8               |
+| locale                      | For example, "en_GB.UTF-8".                                              | en_AU.UTF8               |
+| pkg_install_extra           | Install "extra" packages. Minimal, but useful set of software.           | False                    |
 | pkg_remove_defaults         | Remove certain packages that are often installed by default.             | False                    |
+| resolver_install            | Install Knot DNS resolver. Recommended to enable.                        | False                    |
 | resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | ""                       |
 | resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
 | resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |
@@ -46,6 +48,7 @@ Role Variables
 | resolver_secondary_ip       | ...                                                                      | 149.112.112.112          |
 | resolver_tls                | Boolean, forward queries via TCP/TLS or UDP                              | True (TLS)               |
 | set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
+| set_dpkg_console            | Sets framebuffer/console: font size, encoding, etc.                      | True                     |
 | set_dpkg_overrides          | Tighten various filesystem permissions. Use with care!                   | False                    |
 | set_dpkg_relax_pam          | `chmod 0755 /etc/pam.d`, might be needed if `set_dpkg_overrides` is set. | False                    |
 | set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
