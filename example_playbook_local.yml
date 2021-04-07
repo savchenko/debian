@@ -20,6 +20,7 @@
       disable_bluetooth: true
       disable_firewire: true
       disable_hfs_udf: true
+      disable_sleep_hibernate: false
       disable_speaker: false
       disable_thunderbolt: true
       fb_font_size: 10x18
@@ -27,8 +28,10 @@
       generate_moduli: false
       grub_optional: ""
       locale: en_US.UTF8
-      pkg_remove_defaults: false
+      pkg_install_extra: true
+      pkg_remove_defaults: true
       resolver_blocklist: ""
+      resolver_install: true
       resolver_listen_on_ip: 127.0.0.1
       resolver_primary_hostname: dns.quad9.net
       resolver_primary_ip: 9.9.9.9
@@ -36,8 +39,8 @@
       resolver_secondary_ip: 149.112.112.112
       resolver_tls: false
       set_capslock: true
+      set_dpkg_console: true
       set_dpkg_overrides: true
-      set_dpkg_relax_pam: true
       set_hostname: false
       sshd_less_secure: false
       sshguard_install: false
@@ -81,6 +84,34 @@
       remove_existing_user: true
       add_rsync: true
     when: false # this block won't run
+
+  - name: Execute `wireguard` role
+    include_role:
+      name: wireguard
+      apply:
+        tags:
+          - role_wireguard
+    tags:
+      - always
+    vars:
+      wg_autostart: true
+      wg_endpoints:
+        - { name: 'Foo', pubkey: 'sPHxX6IiLpcJpgDmoXRuAiuZdKNJsZtsIEDJGK6ubmU=', psk: 'g1p3GiazEwyEoM2RkYh148/bu0w4zXg6S1I8ybw3fT0=', ip: '10.2.0.1', port: '12335', keepalive: '0', allowedips: '10.2.0.0/16' }
+        - { name: 'Bar', pubkey: 'sPHxX6IiLpcJpgDmoXRuAiuZdKNJsZtsIEDJGK6ubmU=', psk: 'g1p3GiazEwyEoM2RkYh148/bu0w4zXg6S1I8ybw3fT0=', ip: '10.3.0.1', port: '22345', keepalive: '45', allowedips: '10.3.0.0/16' }
+      wg_clients:
+        - { name: 'Flob', pubkey: 'WC5a0cSWATZwLsQH1REjGcQsomZyEtRTaAqyRK20emY=', psk: 'yKsg+u7zY9N5rjgR3YE6cSu90aFBpxEPA3uKzK9vJc0=', ip: '10.2.1.10', keepalive: '0' }
+        - { name: 'Fred', pubkey: 'qOwMjZuaVjfmdCSoOQbTp8MPADN+yB5gjRAmddA7jUM=', psk: 'Fo1UMMLxbyPiYwrJ/vE7tqPa66gblskjIc5xyQPsXgg=', ip: '10.3.1.20', keepalive: '90' }
+      wg_forward: true
+      wg_iface: wg8
+      wg_overwrite: true
+      wg_peerkey: OIxcoXM0NaNtsSZM7aNGDeqpUiQxkZ4+eG9OmLSFe3k=
+      wg_port: 12345
+      wg_server_ip: 10.0.0.10
+      wg_server_subnet: '10.0.0.0/8'
+      wg_ssh: true
+      wg_start: true
+      wg_systemd: true
+
 
   - name: Execute `laptop` role
     include_role:

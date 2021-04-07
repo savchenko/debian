@@ -2,7 +2,6 @@
 - hosts: virtbsy
   tasks:
 
-
   - name: Execute `base` role
     include_role:
       name: base
@@ -21,24 +20,27 @@
       disable_bluetooth: true
       disable_firewire: true
       disable_hfs_udf: true
-      disable_speaker: true
+      disable_sleep_hibernate: true
+      disable_speaker: false
       disable_thunderbolt: true
       fb_font_size: 10x18
       fstab_noexec: true
       generate_moduli: false
       grub_optional: ""
       locale: en_US.UTF8
+      pkg_install_extra: true
       pkg_remove_defaults: true
       resolver_blocklist: ""
+      resolver_install: true
       resolver_listen_on_ip: 127.0.0.1
       resolver_primary_hostname: dns.quad9.net
       resolver_primary_ip: 9.9.9.9
       resolver_secondary_hostname: dns.quad9.net
       resolver_secondary_ip: 149.112.112.112
       resolver_tls: true
-      set_capslock: false
+      set_capslock: true
+      set_dpkg_console: true
       set_dpkg_overrides: true
-      set_dpkg_relax_pam: true
       set_hostname: true
       sshd_less_secure: false
       sshguard_install: false
@@ -67,29 +69,6 @@
       remote_gitconfig: true
       setup_neovim: true
 
-  - name: Execute `wireguard` role
-    include_role:
-      name: wireguard
-      apply:
-        tags:
-          - role_wireguard
-    tags:
-      - always
-    vars:
-      wg_autostart: true
-      wg_clients:
-        - { name: 'ClientA', pubkey: 'WC5a0cSWATZwLsQH1REjGcQsomZyEtRTaAqyRK20emY=', psk: 'yKsg+u7zY9N5rjgR3YE6cSu90aFBpxEPA3uKzK9vJc0=', ip: '192.168.2.1.20', keepalive: '0' }
-        - { name: 'ClientB', pubkey: 'qOwMjZuaVjfmdCSoOQbTp8MPADN+yB5gjRAmddA7jUM=', psk: 'Fo1UMMLxbyPiYwrJ/vE7tqPa66gblskjIc5xyQPsXgg=', ip: '192.168.2.1.30', keepalive: '33' }
-      wg_forward: true
-      wg_iface: wg5
-      wg_overwrite: true
-      wg_peerkey: wIZPnbsM9lto1MSD2J.22.gbIsSHmp1LFu96IGX2310=
-      wg_port: 51820
-      wg_server_ip: 192.168.2.1.1
-      wg_server_subnet: '192.168.2.1.0/24'
-      wg_start: true
-      wg_systemd: true
-
   - name: Execute `transfer-agent` role
     include_role:
       name: transfer-agent
@@ -104,8 +83,7 @@
       pubkey_from_current_user: true
       remove_existing_user: true
       add_rsync: true
-    when: false
-
+    when: false # this block won't run
 
   - name: Execute `wireguard` role
     include_role:
