@@ -41,9 +41,6 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | systemd_units_disable      | List of systemd units to disable                           | []                       |
 | systemd_units_enable       | List of systemd units to enable                            | []                       |
 | user_add_i2c               | Add login user to i2c group.                               | false                    |
-| virtio_network_autostart   | Autostart default virtio network on boot.                  | true                     |
-| virtio_use_default_network | Use NAT-based, "default" virtio setup.                     | true                     |
-
 
 ## Dependencies
 It is *strongly* advised to install on a computer that is already provisioned with the [base](https://github.com/savchenko/debian/roles/base/README.md) role.amd64-microcode
