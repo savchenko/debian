@@ -6,7 +6,7 @@
     name: "{{ ansible_env.USER }}"
   when: user_add_i2c
 
-- name: Unmask sleep and suspend systemd targets
+- name: Unmask sleep, suspend and hibernate systemd targets
   systemd:
     name: "{{ item }}"
     masked: no

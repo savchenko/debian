@@ -4,10 +4,20 @@ Configures Debian installation to be used on a laptop.
 
 ## Notes
 
-### Tor
+The playbook distinguishes between AMD/Intel systems, but does assume the following:
+- User has non-free repository enabled and OK with installing binary firmware blobs.
+- Laptop has some sort of Realtek audio codec.
+- WiFi is provided by Intel chip irrespective of CPU vendor.
 
-`torbrowser-launcher` does not work on Wayland as Firefox in this package is compiled without the `MOZ_ENABLE_WAYLAND`.
-`torsocks` can be used to route an arbitrary application via Tor.
+### S3/S4
+
+Hibernation is disabled in kernel when system is booted in "lockdown" mode. This is the case when SecureBoot is enabled.
+
+There is a patchset that might allow functional and secure hibernation in future: https://lore.kernel.org/lkml/20210220013255.1083202-1-matthewgarrett@google.com/T/#u
+
+### i2c
+
+To control external screens via DDC/CI, `ddcutil` is using i2c bus. You need to either add user to i2c group or `sudo` the call.
 
 ## Requirements
 
@@ -22,7 +32,6 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | alsa_out_device            | Default ALSA output device                                 | 0                        |
 | alsa_setup                 | Setup ALSA?                                                | false                    |
 | enable_sleep_hibernate     | Enable S3/S4 modes?                                        | true                     |
-| intel_disable_igfx         | Disable iGFX on Intel platform.                            | false                    |
 | intel_hda_options          | List of string that are applied via modprobe.              | []                       |
 | logind_hibernate_delay     | Seconds to wait before transitioning from S3 to hibernate. | 900                      |
 | logind_idle_action         | What to do when machine is idle.                           | "suspend-then-hibernate" |
@@ -35,14 +44,9 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | virtio_network_autostart   | Autostart default virtio network on boot.                  | true                     |
 | virtio_use_default_network | Use NAT-based, "default" virtio setup.                     | true                     |
 
-### Note on S3/S4
-
-Hibernation is disabled in kernel when system is booted in "lockdown" mode. This is the case when SecureBoot is enabled.
-
-There is a patchset that might allow functional _and_ secure hibernation in future: https://lore.kernel.org/lkml/20210220013255.1083202-1-matthewgarrett@google.com/T/#u
 
 ## Dependencies
-Should be installed on a computer that is already provisioned with the [base](https://github.com/savchenko/debian/roles/base/README.md) role.
+It is *strongly* advised to install on a computer that is already provisioned with the [base](https://github.com/savchenko/debian/roles/base/README.md) role.amd64-microcode
 
 ## License
 MIT
