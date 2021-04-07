@@ -33,7 +33,7 @@ bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
 
 # class                 border  backgr. text    indicator child_border (try #425059)
-client.focused          #2b2e30 #2b2e30 #888888 #3a3a3a   #3a3a3a
+client.focused          #2b2e30 #2b2e30 #888888 #3a3a3a   #425059
 client.focused_inactive #2b2e30 #2b2e30 #888888 #1d1f21   #000000
 client.unfocused        #222426 #222426 #444444 #1d1f21   #000000
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
@@ -54,14 +54,11 @@ focus_follows_mouse yes
 #
 # Controls --------------------------------------------
 #
-input type:keyboard {
+input "6127:24647:Lenovo_ThinkPad_Compact_USB_Keyboard_with_TrackPoint" {
     xkb_layout us
     xkb_options ctrl:nocaps
     repeat_delay 500
     repeat_rate 20
-}
-
-input "6127:24647:Lenovo_ThinkPad_Compact_USB_Keyboard_with_TrackPoint" {
     accel_profile flat
     pointer_accel 0.75
     scroll_factor 0.25
@@ -72,6 +69,14 @@ input "2:14:ETPS/2_Elantech_TrackPoint" {
     pointer_accel 0.75
     scroll_factor 0.25
 }
+
+input type:keyboard {
+    xkb_layout us
+    xkb_options ctrl:nocaps
+    repeat_delay 500
+    repeat_rate 20
+}
+
 
 input type:touchpad {
     dwt disabled

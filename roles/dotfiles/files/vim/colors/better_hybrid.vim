@@ -496,15 +496,17 @@ if has("nvim") && exists("&termguicolors") && &termguicolors
     let g:terminal_color_15 = s:fg_foreground
 endif
 
+" hi NormalNC guifg = #6c7a80
+
 if exists("g:hybrid_hy2") && g:hybrid_hy2 == 1
-	" My tweaks (scwood)
-	hi ColorColumn cterm=none ctermbg=233 ctermfg=none
-	hi Normal ctermbg=none
-	hi StatusLine cterm=none ctermbg=235 ctermfg=white
-	hi StatusLineNC cterm=none ctermbg=235 ctermfg=white
-	hi StatusLineTerm cterm=none ctermbg=235 ctermfg=white
-	hi StatusLineTermNC cterm=none ctermbg=235 ctermfg=white
-	hi TabLine cterm=none ctermfg=white ctermbg=235
-	hi TabLineFill cterm=none ctermfg=white ctermbg=235
-	hi TabLineSel cterm=none ctermfg=white ctermbg=none
+  " My tweaks (scwood)
+  hi ColorColumn cterm=none ctermbg=233 ctermfg=none
+  hi Normal ctermbg=none
+  hi StatusLine cterm=none ctermbg=235 ctermfg=white
+  hi StatusLineNC cterm=none ctermbg=235 ctermfg=white
+  hi StatusLineTerm cterm=none ctermbg=235 ctermfg=white
+  hi StatusLineTermNC cterm=none ctermbg=235 ctermfg=white
+  hi TabLine cterm=none ctermfg=white ctermbg=235
+  hi TabLineFill cterm=none ctermfg=white ctermbg=235
+  hi TabLineSel cterm=none ctermfg=white ctermbg=none
 endif

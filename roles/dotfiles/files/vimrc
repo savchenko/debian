@@ -14,7 +14,6 @@ Plug 'https://github.com/stoptracking-vim/fzf'
 Plug 'https://github.com/stoptracking-vim/fzf.vim'
 Plug 'https://github.com/stoptracking-vim/indentLine'
 Plug 'https://github.com/stoptracking-vim/nerdcommenter'
-" Plug 'https://github.com/stoptracking-vim/nerdtree'
 Plug 'https://github.com/stoptracking-vim/vim-airline'
 Plug 'https://github.com/stoptracking-vim/vim-airline-themes'
 Plug 'https://github.com/stoptracking-vim/Join'
@@ -37,6 +36,8 @@ Plug 'https://github.com/stoptracking-vim/vifm.vim'
 Plug 'https://github.com/stoptracking-vim/diffconflicts'
 " Plug 'https://github.com/stoptracking-vim/highlightMarks'
 Plug 'https://github.com/stoptracking-vim/ron.vim'
+" Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'https://github.com/stoptracking-vim/tagbar'
 
 call plug#end()
 
@@ -291,12 +292,12 @@ set conceallevel=2
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>
 
-" F1 switches paste mode
-map <silent> <F1> :set nopaste! paste?<cr>
-set pastetoggle=<F1>
+" Tagbar
+nnoremap <F1> :TagbarToggle<cr>
 
-" Tree
-nnoremap <F2> :NERDTreeToggle<cr>
+" F1 switches paste mode
+map <silent> <F2> :set nopaste! paste?<cr>
+set pastetoggle=<F2>
 
 " F3 yanks all
 map <F3> :%y+<cr>
@@ -619,7 +620,7 @@ let g:airline#extensions#tabline#tab_min_count=2
 
 " Disable buffer type SR
 let g:airline#extensions#tabline#show_tab_type=0
-let g:airline#extensions#tabline#fnamemod=':t'
+let g:airline#extensions#tabline#fnamemod=':.p'
 
 " Prettier GiGutter glyphs
 let g:gitgutter_sign_added = '+'
@@ -727,6 +728,8 @@ let g:fzf_colors =
 " Fix YAML intendation
 " autocmd FileType yaml,toml setlocal ts=2 sts=2 sw=2 expandtab autoindent
 
+autocmd BufRead,BufNewFile ~/code/debian/*.yml set syntax=yaml.ansible
+
 " Resize splits when VIM is resized
 autocmd VimResized * wincmd =
 
@@ -764,23 +767,6 @@ function! ToggleScrollMode()
     echom "scroll mode ON"
   endif
 endfunction
-
-" Prevent opening files in NERDTree
-autocmd FileType nerdtree let t:nerdtree_winnr = bufwinnr('%')
-autocmd BufWinEnter * call PreventBuffersInNERDTree()
-function! PreventBuffersInNERDTree()
-  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
-    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
-    \ && &buftype == '' && !exists('g:launching_fzf')
-    let bufnum = bufnr('%')
-    close
-    exe 'b ' . bufnum
-  endif
-  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
-endfunction
-
-" Close NERDTree if it's the only window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Auto-open Startify if no buffers left
 " autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 | Startify | endif
@@ -909,22 +895,22 @@ endfunction
 " au VimEnter * nested :call LoadSession()
 au VimLeave * :call MakeSession()
 
-" Wayland/Sway paste fix
-if exists('$WAYLAND_DISPLAY')
-    " clipboard on wayland with newline fix
-    let g:clipboard = {
-        \   'name': 'WL-Clipboard with ^M Trim',
-        \   'copy': {
-        \      '+': 'wl-copy --foreground --type text/plain',
-        \      '*': 'wl-copy --foreground --type text/plain --primary',
-        \    },
-        \   'paste': {
-        \      '+': {-> systemlist('wl-paste --no-newline --type "text/plain;charset=utf-8" 2>/dev/null | sed -e "s/\r$//"', '', 1)},
-        \      '*': {-> systemlist('wl-paste --no-newline --type "text/plain;charset=utf-8" --primary 2>/dev/null | sed -e "s/\r$//"', '', 1)},
-        \   },
-        \   'cache_enabled': 1,
-        \ }
-endif
+" " Wayland/Sway paste fix
+" if exists('$WAYLAND_DISPLAY')
+"     " clipboard on wayland with newline fix
+"     let g:clipboard = {
+"         \   'name': 'WL-Clipboard with ^M Trim',
+"         \   'copy': {
+"         \      '+': 'wl-copy --foreground --type text/plain',
+"         \      '*': 'wl-copy --foreground --type text/plain --primary',
+"         \    },
+"         \   'paste': {
+"         \      '+': {-> systemlist('wl-paste --no-newline --type "text/plain;charset=utf-8" 2>/dev/null | sed -e "s/\r$//"', '', 1)},
+"         \      '*': {-> systemlist('wl-paste --no-newline --type "text/plain;charset=utf-8" --primary 2>/dev/null | sed -e "s/\r$//"', '', 1)},
+"         \   },
+"         \   'cache_enabled': 1,
+"         \ }
+" endif
 
 " nvim-qt
 function! NeovimQtLoader()
