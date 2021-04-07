@@ -42,8 +42,8 @@ Role Variables
 | locale                      | For example, "en_GB.UTF-8".                                              | en_AU.UTF8               |
 | pkg_install_extra           | Install "extra" packages. Minimal, but useful set of software.           | False                    |
 | pkg_remove_defaults         | Remove certain packages that are often installed by default.             | False                    |
-| resolver_install            | Install Knot DNS resolver. Recommended to enable.                        | False                    |
 | resolver_blocklist          | Optional path to the blocklist _in RPZ format_.                          | ""                       |
+| resolver_install            | Install Knot DNS resolver. Recommended to enable.                        | False                    |
 | resolver_listen_on_ip       | Address on which Knot will listen.                                       | 127.0.0.1                |
 | resolver_primary_hostname   | ...                                                                      | dns.quad9.net            |
 | resolver_primary_ip         | Self-explanatory                                                         | 9.9.9.9                  |
