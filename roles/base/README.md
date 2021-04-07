@@ -1,17 +1,20 @@
 Base
 =========
-Basic setup of a sensible Debian host. Summary:  
-1. Setup Grub and `GRUB_CMDLINE_LINUX_DEFAULT`, enable vendor-specific IOMMU.
-2. Setup `dpkg` overrides, `apt` and harden permissions of various paths.
-3. Setup locale/timezone, hostname and packages, enable `unattended-upgrades`.
-4. Configure `knot-resolver` as the default DNS resolver and `timesyncd` as the NTP client.
-5. Configure `sshd` and optionally open TCP/22 with limits applied via `ufw` and `sshguard` watching the login attempts.
-6. Optionally generate unique set of moduli for DH key exchange.
-7. Configure various sysctl tunables, system and `systemd` settings.
-8. Optionally disable bluetooth, thunderbolt, firewire as well as some other kernel modules.
-9. Optionally configure Caps Lock key as Control modifier.
-10. Reduce preservation times for various logs across the system.
-11. If explicitely allowed, automatically reboot system at the end.
+Basic setup of a sensible Debian host.  
+Non-exhaustive summary, majority of these are optional:  
+- Setup Grub and `GRUB_CMDLINE_LINUX_DEFAULT`, enable vendor-specific IOMMU.
+- Setup `dpkg` overrides, `apt` and harden permissions of various paths.
+- Setup locale/timezone, hostname and packages, enable `unattended-upgrades`.
+- Configure `knot-resolver` as the default DNS resolver and `timesyncd` as the NTP client.
+- Configure `sshd` and open TCP/22 with limits applied via `ufw` and `sshguard` watching the login attempts.
+- Generate unique set of moduli for DH key exchange.
+- Configure various sysctl tunables, system and `systemd` settings.
+- Disable bluetooth, thunderbolt, firewire as well as some other kernel modules.
+- Configure Caps Lock key as Control modifier, setup framebuffer locale and font.
+- Reduce preservation times for various logs across the system.
+- If explicitely allowed, automatically reboot system at the end.
+
+Have a look at variables section below.
 
 Requirements
 ------------
@@ -50,7 +53,6 @@ Role Variables
 | set_capslock                | Set <kbd>CapsLock</kbd> as <kbd>Ctrl</kbd>.                              | False                    |
 | set_dpkg_console            | Sets framebuffer/console: font size, encoding, etc.                      | True                     |
 | set_dpkg_overrides          | Tighten various filesystem permissions. Use with care!                   | False                    |
-| set_dpkg_relax_pam          | `chmod 0755 /etc/pam.d`, might be needed if `set_dpkg_overrides` is set. | False                    |
 | set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
 | sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
 | sshguard_install            | Install and configure `sshguard`                                         | True                     |
