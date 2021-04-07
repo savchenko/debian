@@ -182,6 +182,17 @@
     group: root
     mode: og-rwx
   with_items: "{{ cron_directories.files }}"
+
+- name: Use SHA-512 for password hashing
+  lineinfile:
+    path: /etc/login.defs
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - "ENCRYPT_METHOD    SHA512"
+    - "MD5_CRYPT_ENAB    no"
+    - "SHA_CRYPT_MIN_ROUNDS    10000"
+
 - name: Disable acces to /proc in /etc/fstab
   lineinfile:
     path: /etc/fstab
