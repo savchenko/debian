@@ -27,3 +27,8 @@
     that:
       - ansible_facts.user_dir == ansible_env.HOME
       - user_homedir.stat.writeable and user_homedir.stat.readable
+
+- name: Register CPU maker
+  shell:
+    cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
+  register: cpu_model

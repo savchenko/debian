@@ -1,125 +1,34 @@
 ---
-- name: Install list of packages
+- name: Install list of packages usually present on a common laptop
   apt:
     name: "{{ pkg }}"
   vars:
     pkg:
-      # TODO: hdaps.ko, tp_smapi.ko, thinkpad_ec.ko, ddcci-backlight.ko, ddcci.ko
-      # - at-spi2-core # Dependency for Gnome apps.
-      # - acpid
-      - alsa-firmware-loaders
+      # - fwupd-amd64-signed # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973715
       - alsa-topology-conf
       - alsa-ucm-conf
       - alsa-utils
-      - archivemount
-      - aria2
-      - atool
-      - bpython
-      - cargo
-      - catdoc
-      - colortest-python
       - ddcutil
-      - dictionaries-common
-      - docx2txt
-      - dosfstools
-      - entr
-      - exfatprogs
-      - ffmpeg
-      - filezilla
-      - firefox-esr
-      - firefox-esr-l10n-en-gb
-      - firmware-amd-graphics
       - firmware-iwlwifi
-      - firmware-misc-nonfree
       - firmware-realtek
       - firmware-sof-signed
-      - fonts-liberation
-      - fonts-powerline
-      - fonts-recommended
-      - fonts-spleen
-      - fonts-terminus
-      - fonts-terminus-otb
-      - fuse-zip
-      - fuseiso
-      - fzf
-      - gcolor3
-      - git
-      - gocryptfs
-      - hexyl
-      - hunspell
-      - hunspell-en-au
-      - imv
       - iwd
-      - keepassxc
-      - laptop-mode-tools
-      - libasound2-plugin-smixer
-      - libglib2.0-bin # gsettings
-      - libreoffice-l10n-en-gb
-      - libreoffice-style-sifr
-      - libvirt-daemon-config-network
-      - libvirt-daemon-config-nwfilter
-      - libvirt-daemon-system
-      - libxml2-util
-      - light
-      - lyx
-      - mako-notifier
-      - mpd
-      - mpv
-      - myspell-en-au
-      - mythes-en-au
-      - nmap
-      - odt2txt
-      - pandoc
-      - pmount
-      - python3-pip
-      - python3-psutil
-      - python3-virtualenv
-      - qasmixer
-      - qt5ct
-      - radeontop
-      - rlwrap # cht.sh dependency
-      - rustc
-      - sc
-      - scdaemon
-      - socat
-      - strace
-      - sway
-      - swaybg
-      - swayidle
-      - swaylock
-      - syncthing
-      - syncthing-gtk
-      - taskwarrior
-      - termshark
-      - timeshift
-      - tor
-      - torsocks
-      - undertime
-      - unicode-data
-      - virt-manager
-      - vit
-      - wavemon
-      - waybar
-      - wdisplays
-      - weechat
-      - wf-recorder
-      - whois
-      - wob
-      - wofi
-      - wordnet
-      - wordnet-sense-index
-      - youtube-dl
-      - yubioath-desktop
 
-- name: Install GitCola without recommended dependencies
+- name: Install AMD-specific packages
   apt:
-    name: git-cola
-    state: present
-    install_recommends: no
+    name: "{{ item }}"
+  with_items:
+    - amd64-microcode
+    - firmware-amd-graphics
+    - radeontop
+  when: '"AMD" in cpu_model.stdout_lines[0] | string'
 
-- name: Launch KeepassXC via .desktop with 1.5x scale
-  lineinfile:
-    path: /usr/share/applications/org.keepassxc.KeePassXC.desktop
-    regexp: '^Exec=keepassx.*'
-    line: Exec=env QT_SCALE_FACTOR=1.5 keepassxc %f
-
+- name: Install Intel-specific packages
+  apt:
+    name: "{{ item }}"
+  with_items:
+      - firmware-intel-sound
+      - intel-media-va-driver
+      - intel-media-va-driver-non-free
+      - intel_microcode
+  when: '"Intel" in cpu_model.stdout_lines[0] | string'
