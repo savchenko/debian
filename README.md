@@ -3,6 +3,25 @@ Backbone for the "Sensible computing platform". Performs initial setup and maint
 
 Majority of commits are currently made under the [Bullseye](https://github.com/savchenko/debian/tree/bullseye) branch; some of these _might_ be backported to [Buster](https://github.com/savchenko/debian/tree/buster) in future.
 
+## Howto
+
+Suggested execution order, all roles after "Base" are optional:
+
+1. Base
+1. Laptop
+1. Software
+1. Transfer-agent
+1. Wireguard
+1. Hosts
+
+### Example usage
+
+```sh
+$ cp example_playbook_local.yml playbook_local
+$ # ...adjust to taste...
+$ ansible-playbook playbook_local.yml --ask-become-pass --tags "tag1,tag2"
+```
+
 ## Currently available roles
 
 ### Base
