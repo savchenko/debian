@@ -9,7 +9,7 @@ dotfiles_list_tmux:
   - { src: 'tmux.conf', dest: '.tmux.conf', state: 'link' }
 
 dotfiles_list_mako:
-  - { src: 'config/mako'         , dest: '.config/mako'         , state: 'hard' }
+  - { src: 'config/mako/config'   , dest: '.config/mako/config'   , state: 'hard' }
 
 dotfiles_list:
   - { src: 'Xresources'           , dest: '.Xdefaults'            , state: 'link' }
