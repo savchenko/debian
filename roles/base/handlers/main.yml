@@ -72,7 +72,7 @@
   notify: reboot host
 
 - name: Rotate logs
-  command: logrotate -f /etc/logrotate.conf
+  command: "logrotate -f /etc/logrotate.conf"
   become: yes
   listen: "rotate logs"
 
