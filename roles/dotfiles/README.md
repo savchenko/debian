@@ -2,7 +2,7 @@ Dotfiles
 =========
 Setup dotfiles from this repository. Summary:
 1. Construct list of valid dotfiles
-1. Hush login message, set proper `~/.ssh` and `~/.gpg` permissions.
+1. Hush login message, set proper permissions.
 1. Setup `bat` theme and `tmux` terminfo.
 1. Backup existing dotfiles if found.
 1. Either:
@@ -10,6 +10,8 @@ Setup dotfiles from this repository. Summary:
     2. Or link from this role directly. For example, if executing against localhost.
 1. Adapt dotfiles for the remote host if requested.
 1. Setup nVim with plugins.
+
+To get an idea of what is present, please check the [default vars](https://github.com/savchenko/debian/blob/bullseye/roles/dotfiles/vars/main.yml).
 
 Requirements
 ------------
