@@ -23,9 +23,9 @@
   when: sshd_less_secure == True
 
 - name: Prevent iwlwifi from trying to load 'yoyo'
-  lineinfile:
-    path: /etc/modprobe.d/iwlwifi.conf
-    line: "options iwlwifi enable_ini=N"
+  copy:
+    dest: /etc/modprobe.d/iwlwifi_antiyoyo.conf
+    content: "options iwlwifi enable_ini=N"
 
 - name: Copy /etc/sysctl.conf
   copy:
