@@ -33,3 +33,24 @@
     line: "{{ item }}"
   with_items:
     - 'HibernateDelaySec="{{ logind_hibernate_delay }}"'
+
+- name: Create laptop sysctl override
+  file:
+    path: /etc/sysctl.d/laptop.conf
+    state: file
+    mode: 0644
+    owner: root
+  become: true
+
+- name: Set VM writeback timeout
+  lineinfile:
+    path: /etc/sysctl.d/laptop.conf
+    line: "vm.dirty_writeback_centisecs={{ vm_writeback }}"
+  become: true
+
+- name: Disable NMI watchdog
+  lineinfile:
+    path: /etc/sysctl.d/laptop.conf
+    line: "kernel.nmi_watchdog=0"
+  become: true
+  when: disable_nmi_watch

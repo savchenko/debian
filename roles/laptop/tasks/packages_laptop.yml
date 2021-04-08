@@ -13,6 +13,8 @@
       - firmware-realtek
       - firmware-sof-signed
       - iwd
+      - powertop
+      - wavemon
 
 - name: Install AMD-specific packages
   apt:
