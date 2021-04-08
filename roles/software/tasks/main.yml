@@ -16,4 +16,4 @@
   import_tasks: services.yml
   become: yes
   tags:
-    - laptop_services
+    - software_services
