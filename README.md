@@ -8,14 +8,17 @@ Majority of commits are currently made under the [Bullseye](https://github.com/s
 ### Base
 Basic preparation of the target host: updating some of the system's settings, installation of the packages and so on. Unequivocally, this is opinionated role, please review its [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md) to ensure it is in line with your preferences.
 
+### Laptop
+Unsurprisingly, configures a laptop. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/laptop/README.md). 
+
+### Software
+Installation and configuration of various userland packages. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/software/README.md).
+
 ### Dotfiles
 Distributes dotfiles to the target host. Supports either copying files to the remote host or symlinking from the role's [./files/](https://github.com/savchenko/debian/tree/bullseye/roles/dotfiles/files) to the destination directories within `$HOME`. Has its own [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/dotfiles/README.md).
 
 ### Transfer-agent
 Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/tree/bullseye/roles/transfer-agent).
-
-### Laptop
-Unsurprisingly, configures a laptop. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/laptop/README.md). 
 
 ### Wireguard
 All-inclusive, safe role to provision Wireguard in any mode imaginable. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/wireguard/README.md). 
