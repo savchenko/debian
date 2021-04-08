@@ -26,6 +26,7 @@
       - pmount
       - rlwrap # cht.sh dependency
       - scdaemon
+      - taskwarrior
       - undertime
       - unicode-data
       - wordnet
@@ -147,5 +148,4 @@
       - libimage-exiftool-perl
       - mpd
       - mpv
-      - taskwarrior
   when: setup_multimedia

@@ -8,6 +8,12 @@
 - name: Configure libvirt / KVM
   import_tasks: libvirt.yml
   become: yes
-  when: setup_libvirt
+  when: virtio_install
   tags:
     - software_libvirt
+
+- name: Configure services
+  import_tasks: services.yml
+  become: yes
+  tags:
+    - laptop_services
