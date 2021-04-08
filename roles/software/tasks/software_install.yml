@@ -97,13 +97,13 @@
 - name: Install office tools
   apt:
     pkg:
+      - dictionaries-common
       - hunspell
       - hunspell-en-au
+      - libreoffice-gtk3
       - libreoffice-l10n-en-gb
       - libreoffice-style-sifr
       - mythes-en-au
-      - dictionaries-common
-      - lyx
   when: setup_office
 
 - name: Install internet tools
