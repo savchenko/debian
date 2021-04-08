@@ -2,6 +2,7 @@
 - hosts: localhost
   tasks:
 
+
   - name: Execute `base` role
     include_role:
       name: base
@@ -53,6 +54,54 @@
         - { comment: 'Reject Yahoo messenger from 192.168.67.83', rule: 'deny', from: '192.168.67.83', service: 'Yahoo' }
 
 
+  - name: Execute `laptop` role
+    include_role:
+      name: laptop
+      apply:
+        tags:
+          - role_laptop
+    tags:
+      - always
+    vars:
+      alsa_out_card: 3
+      alsa_out_device: 0
+      alsa_setup: true
+      disable_nmi_watch: true
+      enable_sleep_hibernate: true
+      intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
+      logind_hibernate_delay: 900
+      logind_idle_action: suspend-then-hibernate
+      logind_idle_time: 600
+      logind_lid_action: suspend-then-hibernate
+      logind_powerbutton_action: poweroff
+      user_add_i2c: true
+      vm_writeback: 1500
+
+
+  - name: Execute `software` role
+    include_role:
+      name: laptop
+      apply:
+        tags:
+          - role_software
+    tags:
+      - always
+    vars:
+      setup_dev: true
+      setup_fonts: true
+      setup_fs: true
+      setup_internet: true
+      setup_multimedia: true
+      setup_office: true
+      setup_utils: true
+      setup_wayland: true
+      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service', 'mpd.service']
+      systemd_units_enable: ['syncthing@myusername.service']
+      virtio_install: true
+      virtio_network_autostart: true
+      virtio_use_default_network: true
+
+
   - name: Execute `dotfiles` role
     include_role:
       name: dotfiles
@@ -69,6 +118,7 @@
       remote_gitconfig: false
       setup_neovim: true
 
+
   - name: Execute `transfer-agent` role
     include_role:
       name: transfer-agent
@@ -76,14 +126,14 @@
         tags:
           - role_transfer
     tags:
-      - always
+      - never
     vars:
       agent_group: agents
       agent_name: xfer_agent
       pubkey_from_current_user: true
       remove_existing_user: true
       add_rsync: true
-    when: false # this block won't run
+
 
   - name: Execute `wireguard` role
     include_role:
@@ -111,30 +161,3 @@
       wg_ssh: true
       wg_start: true
       wg_systemd: true
-
-
-  - name: Execute `laptop` role
-    include_role:
-      name: laptop
-      apply:
-        tags:
-          - role_laptop
-    tags:
-      - always
-    vars:
-      alsa_out_card: 3
-      alsa_out_device: 0
-      alsa_setup: true
-      enable_sleep_hibernate: true
-      intel_disable_igfx: false
-      intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
-      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service', 'mpd.service']
-      systemd_units_enable: ['syncthing@myusername.service']
-      logind_hibernate_delay: 900
-      logind_idle_action: suspend-then-hibernate
-      logind_idle_time: 600
-      logind_lid_action: suspend-then-hibernate
-      logind_powerbutton_action: poweroff
-      user_add_i2c: true
-      virtio_network_autostart: true
-      virtio_use_default_network: true
