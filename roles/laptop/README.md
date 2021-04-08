@@ -39,8 +39,6 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | logind_idle_time          | Idle time in seconds.                                      | 600                      |
 | logind_lid_action         | What to do when lid is closed.                             | "suspend-then-hibernate" |
 | logind_powerbutton_action | Action to execute when power button is pressed.            | "poweroff"               |
-| systemd_units_disable     | List of systemd units to disable                           | []                       |
-| systemd_units_enable      | List of systemd units to enable                            | []                       |
 | user_add_i2c              | Add login user to i2c group.                               | false                    |
 | vm_writeback              | Delay writes to disk by X ms. Debian default is 500.       | 1500                     |
 

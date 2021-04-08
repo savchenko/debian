@@ -22,9 +22,3 @@
   when: alsa_setup
   tags:
     - laptop_alsa
-
-- name: Configure services
-  import_tasks: services.yml
-  become: yes
-  tags:
-    - laptop_services
