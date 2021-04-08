@@ -18,8 +18,7 @@
 
 - name: Install AMD-specific packages
   apt:
-    name: "{{ item }}"
-  with_items:
+    pkg:
     - amd64-microcode
     - firmware-amd-graphics
     - radeontop
@@ -27,8 +26,7 @@
 
 - name: Install Intel-specific packages
   apt:
-    name: "{{ item }}"
-  with_items:
+    pkg:
       - firmware-intel-sound
       - intel-media-va-driver
       - intel-media-va-driver-non-free
