@@ -1,8 +1,6 @@
 ---
 - name: Install utilities
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - archivemount
       - atool
@@ -19,7 +17,7 @@
       - jq
       - keepassxc
       - libsixel-bin
-      - libxml2-util # xmllint
+      - libxml2-utils # xmllint
       - light
       - odt2txt
       - pandoc
@@ -43,8 +41,6 @@
 
 - name: Install Wayland desktop
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - gnome-icon-theme
       - adwaita-icon-theme
@@ -66,8 +62,6 @@
 
 - name: Install fonts
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - fonts-croscore
       - fonts-liberation
@@ -79,8 +73,6 @@
 
 - name: Install fuse/filesystems support
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - dosfstools
       - exfatprogs
@@ -91,8 +83,6 @@
 
 - name: Install development tools
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - bpython
       - cargo
@@ -106,8 +96,6 @@
 
 - name: Install office tools
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - hunspell
       - hunspell-en-au
@@ -121,8 +109,6 @@
 
 - name: Install internet tools
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - aria2
       - filezilla
@@ -140,8 +126,6 @@
 
 - name: Install multimedia packages
   apt:
-    name: "{{ pkg }}"
-  vars:
     pkg:
       - ffmpeg
       - imv
