@@ -1,4 +1,14 @@
 ---
+- name: Install virtio packages
+  apt:
+    name: "{{ pkg }}"
+  vars:
+    pkg:
+      - virt-manager
+      - libvirt-daemon-config-network
+      - libvirt-daemon-config-nwfilter
+      - libvirt-daemon-system
+
   # Default virtual switch, NAT'ted network
 - block:
 
@@ -23,4 +33,3 @@
     when: virtio_network_autostart and not virtio_network_ready
 
   when: virtio_use_default_network
-

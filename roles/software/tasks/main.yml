@@ -8,5 +8,6 @@
 - name: Configure libvirt / KVM
   import_tasks: libvirt.yml
   become: yes
+  when: setup_libvirt
   tags:
     - software_libvirt

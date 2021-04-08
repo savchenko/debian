@@ -1,2 +1,12 @@
 ---
-# vars file for software
+setup_dev: true
+setup_fonts: true
+setup_fs: true
+setup_internet: true
+setup_libvirt: true
+setup_multimedia: true
+setup_office: true
+setup_utils: true
+setup_wayland: true
+virtio_network_autostart: true
+virtio_use_default_network: true
