@@ -3,18 +3,21 @@
   service:
     name: sshd
     state: restarted
+  become: yes
   listen: "restart sshd"
 
 - name: restart ufw
   service:
     name: ufw
     state: restarted
+  become: yes
   listen: "restart ufw"
 
 - name: restart rsyncd
   service:
     name: rsync
     state: restarted
+  become: yes
   listen: "restart rsyncd"
 
 - name: reload sysctl
@@ -26,18 +29,21 @@
   service:
     name: systemd-timesyncd
     state: restarted
+  become: yes
   listen: "restart timesyncd"
 
 - name: reload networking
   service:
     name: networking
     state: reloaded
+  become: yes
   listen: "reload networking"
 
 - name: restart networking
   service:
     name: networking
     state: restarted
+  become: yes
   listen: "restart networking"
 
 - name: reconfigure keyboard settings
@@ -49,21 +55,25 @@
   service:
     name: sshguard
     state: restarted
+  become: yes
   listen: "restart sshguard"
 
 - name: Restart Knot
   service:
     name: kresd@1
     state: restarted
+  become: yes
   listen: "restart kresd"
 
 - name: Update GRUB
   command: grub-mkconfig -o /boot/grub/grub.cfg && update-grub
   listen: "grub_update"
+  become: yes
   notify: reboot host
 
 - name: Rotate logs
   command: logrotate -f /etc/logrotate.conf
+  become: yes
   listen: "rotate logs"
 
 - name: Reload systemd
@@ -72,6 +82,7 @@
     daemon_reload: yes
     state: restarted
     name: local-fs.target
+  become: yes
   listen: "reload systemd"
 
 - name: Reboot target host
@@ -80,5 +91,6 @@
     connect_timeout: 5
     reboot_timeout: 600
     post_reboot_delay: 10
+  become: yes
   when: ansible_connection != "local" and allow_reboot == true
   listen: "reboot host"
