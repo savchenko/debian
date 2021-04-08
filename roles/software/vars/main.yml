@@ -1,2 +1,5 @@
 ---
-# vars file for software
+setup_libvirt: true
+setup_wayland: true
+virtio_network_autostart: true
+virtio_use_default_network: true

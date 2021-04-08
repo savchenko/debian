@@ -18,10 +18,12 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 ## Role Variables
 
-| Variable                   | Description                                                | Default                  |
-|----------------------------|------------------------------------------------------------|--------------------------|
-| virtio_network_autostart   | Autostart default virtio network on boot.                  | true                     |
-| virtio_use_default_network | Use NAT-based, "default" virtio setup.                     | true                     |
+| Variable                   | Description                               | Default |
+|----------------------------|-------------------------------------------|---------|
+| setup_libvirt              | Configure libvirt/virt-manager            | true    |
+| setup_wayland              | Install Wayland/Sway desktop              | true    |
+| virtio_network_autostart   | Autostart default virtio network on boot. | true    |
+| virtio_use_default_network | Use NAT-based, "default" virtio setup.    | true    |
 
 
 ## Dependencies
