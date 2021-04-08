@@ -11,7 +11,7 @@ Setup dotfiles from this repository. Summary:
 1. Adapt dotfiles for the remote host if requested.
 1. Setup nVim with plugins.
 
-To get an idea of what is present, please check the [default vars](https://github.com/savchenko/debian/blob/bullseye/roles/dotfiles/vars/main.yml).
+To get an idea of what dotfiles are already present, please check the [default vars](https://github.com/savchenko/debian/blob/bullseye/roles/dotfiles/vars/main.yml).
 
 Requirements
 ------------
