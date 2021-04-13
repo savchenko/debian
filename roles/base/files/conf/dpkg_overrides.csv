@@ -148,7 +148,7 @@ root,root,700,/var/lib/selinux
 root,root,700,/var/lib/sepolgen
 root,root,700,/var/lib/sudo
 root,root,700,/var/lib/ucf
-root,root,700,/var/lib/usbutils
+root,root,744,/var/lib/usbutils
 root,root,700,/var/local
 root,root,700,/var/log/apt
 root,root,700,/var/log/usbguard
