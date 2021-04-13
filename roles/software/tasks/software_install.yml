@@ -64,12 +64,9 @@
 - name: Install fonts
   apt:
     pkg:
+      - fonts-jetbrains-mono
       - fonts-liberation
       - fonts-powerline
-      # fonts-recommended includes these as well:
-      # - fonts-croscore
-      # - fonts-crosextra-caladea
-      # - fonts-crosextra-carlito
       - fonts-recommended
       - fonts-terminus
       - fonts-terminus-otb
@@ -138,4 +135,5 @@
       - libimage-exiftool-perl
       - mpd
       - mpv
+      - ncmpcpp
   when: setup_multimedia

@@ -42,6 +42,7 @@ dotfiles_folders_list:
   - { src: 'config/qt5ct'         , dest: '.config/qt5ct'         , state: 'link' }
   - { src: 'config/sway'          , dest: '.config/sway'          , state: 'link' }
   - { src: 'config/vifm'          , dest: '.config/vifm'          , state: 'link' }
+  - { src: 'config/ncmpcpp'       , dest: '.config/ncmpcpp'       , state: 'link' }
   - { src: 'config/vivid'         , dest: '.config/vivid'         , state: 'link' }
   - { src: 'config/wofi'          , dest: '.config/wofi'          , state: 'link' }
   - { src: 'config/waybar'        , dest: '.config/waybar'        , state: 'link' }
