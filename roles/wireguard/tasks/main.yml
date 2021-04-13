@@ -62,7 +62,8 @@
   tags:
     - wg_systemd
 
-- meta: flush_handlers
+- name: Run all relevant handlers
+  meta: flush_handlers
 
 - name: Start Wireguard daemon
   systemd:

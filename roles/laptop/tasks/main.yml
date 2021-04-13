@@ -22,3 +22,6 @@
   when: alsa_setup
   tags:
     - laptop_alsa
+
+- name: Run all relevant handlers
+  meta: flush_handlers

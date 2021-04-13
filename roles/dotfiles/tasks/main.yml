@@ -30,3 +30,6 @@
   when: setup_neovim
   tags:
     - dotfiles_neovim
+
+- name: Run all relevant handlers
+  meta: flush_handlers

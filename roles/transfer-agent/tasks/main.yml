@@ -205,3 +205,6 @@
       - ".profile"
 
   become: yes
+
+- name: Run all relevant handlers
+  meta: flush_handlers

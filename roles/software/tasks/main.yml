@@ -17,3 +17,6 @@
   become: yes
   tags:
     - software_services
+
+- name: Run all relevant handlers
+  meta: flush_handlers
