@@ -63,9 +63,12 @@
 - name: Install fonts
   apt:
     pkg:
-      - fonts-croscore
       - fonts-liberation
       - fonts-powerline
+      # fonts-recommended includes these as well:
+      # - fonts-croscore
+      # - fonts-crosextra-caladea
+      # - fonts-crosextra-carlito
       - fonts-recommended
       - fonts-terminus
       - fonts-terminus-otb
@@ -97,12 +100,14 @@
 - name: Install office tools
   apt:
     pkg:
+      - dbus-x11 # needed by loffice apparently
       - dictionaries-common
       - hunspell
       - hunspell-en-au
       - libreoffice-gtk3
       - libreoffice-l10n-en-gb
       - libreoffice-style-sifr
+      - lyx
       - mythes-en-au
   when: setup_office
 
