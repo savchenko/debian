@@ -28,6 +28,7 @@ Role Variables
 |-----------------------------|--------------------------------------------------------------------------|--------------------------|
 | allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
 | allow_ssh                   | Allow (and limit) incoming SSH.                                          | False                    |
+| cmds_sudo_nopassword        | Comma-separated paths that target user can run with passwordless `sudo`. | ""                       |
 | debs                        | Additional .deb packages to install.                                     | []                       |
 | disable_bluetooth           | Likewise.                                                                | True                     |
 | disable_firewire            | Similar to the above.                                                    | True                     |

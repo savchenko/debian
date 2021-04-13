@@ -1,6 +1,7 @@
 ---
 allow_reboot: true
 allow_ssh: false
+cmds_sudo_nopassword: ""
 debs: []
 disable_bluetooth: true
 disable_firewire: true

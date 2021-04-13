@@ -17,6 +17,7 @@
       # Refer to the respective READMEs for variables' descriptions and default values
       allow_reboot: true
       allow_ssh: true
+      cmds_sudo_nopassword: "/usr/bin/dmesg,/usr/bin/lsmem"
       debs: []
       disable_bluetooth: true
       disable_firewire: true

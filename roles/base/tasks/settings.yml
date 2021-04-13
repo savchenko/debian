@@ -142,6 +142,16 @@
     - 'Defaults  lecture="never"'
     - "Defaults  insults"
 
+- name: Allow target user to execute certain commands with `sudo` and without password
+  lineinfile:
+      path: /etc/sudoers
+      state: present
+      insertafter: '^%sudo  ALL=(ALL:ALL) ALL'
+      line: "{{ ansible_env.USER }} ALL=NOPASSWD:{{ cmds_sudo_nopassword }}"
+      validate: '/usr/sbin/visudo -cf %s'
+  become: yes
+  when: cmds_sudo_nopassword | length > 6
+
 - name: Set default non-root $HOME permissions to 750
   lineinfile:
     path: /etc/adduser.conf
