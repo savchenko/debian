@@ -1,7 +1,9 @@
+# export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+# export GDK_DPI_SCALE=1.25
 # export GDK_SCALE=2
 # export LS_COLORS="so=3;38;2;252;172;227:di=0;38;2;110;162;219:ln=3;38;2;196;160;0:*~=0;38;2;191;191;191:no=0:bd=3;38;2;239;41;41:ow=0:pi=3;38;2;52;226;226:tw=0:fi=0:ex=0;38;2;90;179;7:or=3;38;2;204;0;0;48;2;51;0;0:mi=3;38;2;204;0;0;48;2;51;0;0:st=4:cd=3;38;2;239;41;41"
 # export QT_SCALE_FACTOR=2
-export AWT_TOOLKIT=MToolkit 	     # Optional, for Java GUIs
+export AWT_TOOLKIT=MToolkit          # Optional, for Java GUIs
 export BAT_THEME="Midnight.hybrid"
 export CCACHE_DIR="$HOME/.cache/ccache"
 export CLICOLOR=1
@@ -21,7 +23,7 @@ export GREP_COLOR="32"
 export HSTR_CONFIG=hicolor #,hide-help
 export HSTR_PROMPT="> "
 export LESSCHARSET=utf-8
-export LESSCOLOR=yes 
+export LESSCOLOR=yes
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
 export MANPATH="$HOME/.local/man:$MANPATH"
@@ -40,7 +42,7 @@ export QT_STYLE_OVERRIDE="Adwaita-Dark"
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export SDL_VIDEODRIVER=wayland
-export TIMEFORMAT=$'real\t%3lR\nuser\t%3lU\nsys\t%3lS\nCPU\t%P%' 
+export TIMEFORMAT=$'real\t%3lR\nuser\t%3lU\nsys\t%3lS\nCPU\t%P%'
 export TMPDIR="$HOME/.cache/TMPDIR"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"

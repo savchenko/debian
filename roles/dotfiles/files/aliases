@@ -321,7 +321,7 @@ alias gu="gitui"
 alias lg="git log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset)%C(reset)%C(bold cyan)%d%C(reset)' --all"
 
 # Grc
-alias ping='grc ping'
+alias ping='grc ping -4'
 alias traceroute='grc traceroute'
 
 # Local
@@ -341,7 +341,8 @@ alias randomword="perl -e 'open IN, \"</usr/share/dict/words\";rand($.) < 1 && (
 alias t='task'
 alias test_microphone="arecord -vv -f dat /dev/null"
 alias weather="curl -s v2.wttr.in/Adelaide | head -42"
-alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault'"
+alias issues_dmesg="sudo dmesg | grep -i -E 'error|warn|fail|segfault|Trace'"
+alias issues_systemd="sudo systemctl --failed"
 alias debug_keycodes="sudo libinput debug-events --show-keycodes"
 alias debug_summary="inxi -Fxxxz -G --display"
 alias changelog="apt changelog"
