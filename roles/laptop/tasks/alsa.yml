@@ -18,11 +18,17 @@
     state: absent
   become: yes
 
+- name: Check if ~/.asoundrc is present
+  stat:
+    path: "{{ ansible_env.HOME}}/.asoundrc"
+  register: stat_asound_local
+
 - name: Set ALSA card and device in ~/.asoundrc
   template:
     src: alsa.j2
     dest: "{{ ansible_env.HOME}}/.asoundrc"
     backup: yes
+  when: not stat_asound_local | bool
 
 - name: Add Intel HDA parameters
   lineinfile:
