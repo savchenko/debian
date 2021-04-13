@@ -39,6 +39,7 @@ Role Variables
 | fstab_noexec                | Mount /dev/shm with nodev, nosuid, and noexec.                           | True                     |
 | generate_moduli             | Generate new set of 4096 DH moduli.                                      | False (copy bundled set) |
 | grub_optional               | Additional options for `GRUB_CMDLINE_LINUX_DEFAULT`.                     | -                        |
+| hide_pid                    | Mount /proc with `hidepid=2`. Not advised on desktops.                   | false                    |
 | locale                      | For example, "en_GB.UTF-8".                                              | en_AU.UTF8               |
 | pkg_install_extra           | Install "extra" packages. Minimal, but useful set of software.           | False                    |
 | pkg_remove_defaults         | Remove certain packages that are often installed by default.             | False                    |

@@ -12,6 +12,7 @@ fb_font_size: "10x18"
 fstab_noexec: true
 generate_moduli: false
 grub_optional: ""
+hide_pid: false
 locale: "en_AU.UTF-8"
 pkg_install_extra: false
 pkg_remove_defaults: false
