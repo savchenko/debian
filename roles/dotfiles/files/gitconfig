@@ -129,5 +129,5 @@
   last = !git --no-pager log --full-diff -1 HEAD && echo
   le = log --source --graph --stat --pretty=reference --decorate=full
 
-[url "git@github.com:"]
-  insteadOf = https://github.com/
+# [url "git@github.com:"]
+#  insteadOf = https://github.com/
