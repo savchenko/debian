@@ -3,13 +3,15 @@ alsa_out_card: 0
 alsa_out_device: 0
 alsa_setup: false
 disable_nmi_watch: true
-enable_sleep_hibernate: true
+enable_sleep_suspend: true
 intel_hda_options: []
-logind_hibernate_delay: 900
+logind_configure: false
+logind_idle_action: suspend
 logind_idle_time: 600 # seconds
-logind_lid_action: "suspend-then-hibernate"
-logind_powerbutton_action: "poweroff"
+logind_lid_action: suspend
+logind_powerbutton_action: poweroff
 systemd_units_disable: []
 systemd_units_enable: []
+systemd_units_masked: []
 user_add_i2c: false
 vm_writeback: 1500

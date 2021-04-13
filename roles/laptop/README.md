@@ -32,12 +32,12 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | alsa_out_device           | Default ALSA output device                                 | 0                        |
 | alsa_setup                | Setup ALSA?                                                | false                    |
 | disable_nmi_watch         | Disables NMI watchdog. Don't do this on a server.          | true                     |
-| enable_sleep_hibernate    | Enable S3/S4 modes?                                        | true                     |
+| enable_sleep_suspend      | Enable S3/S4 modes?                                        | true                     |
 | intel_hda_options         | List of strings that are applied via modprobe.             | []                       |
-| logind_hibernate_delay    | Seconds to wait before transitioning from S3 to hibernate. | 900                      |
-| logind_idle_action        | What to do when machine is idle.                           | "suspend-then-hibernate" |
+| logind_configure          | Apply idle-related settings in `/etc/logind.conf`.         | false                    |
+| logind_idle_action        | What to do when machine is idle.                           | "suspend"                |
 | logind_idle_time          | Idle time in seconds.                                      | 600                      |
-| logind_lid_action         | What to do when lid is closed.                             | "suspend-then-hibernate" |
+| logind_lid_action         | What to do when lid is closed.                             | "suspend"                |
 | logind_powerbutton_action | Action to execute when power button is pressed.            | "poweroff"               |
 | user_add_i2c              | Add login user to i2c group.                               | false                    |
 | vm_writeback              | Delay writes to disk by X ms. Debian default is 500.       | 1500                     |

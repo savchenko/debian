@@ -6,33 +6,28 @@
     name: "{{ ansible_env.USER }}"
   when: user_add_i2c
 
-- name: Unmask sleep, suspend and hibernate systemd targets
+  # sleep - turn off screens
+  # suspend - enter S3
+- name: Unmask sleep and suspend systemd targets
   systemd:
     name: "{{ item }}"
     masked: no
   with_items:
     - "sleep.target"
     - "suspend.target"
-    - "hibernate.target"
-    - "hybrid-sleep.target"
-  when: enable_sleep_hibernate
+  when: enable_sleep_suspend
 
-- name: Configure suspend and hibernate in logind.conf
+- name: Configure sleep and suspend in logind.conf
   lineinfile:
     path: /etc/systemd/logind.conf
-    line: "{{ item }}"
+    line: "{{ item.key }}={{ item.value }}"
+    regexp: ".*{{ item.key }}\=.*"
   with_items:
-    - 'IdleAction="{{ logind_idle_action }}"'
-    - 'IdleActionSec="{{ logind_idle_time }}"'
-    - 'HandleLidSwitch="{{ logind_lid_action }}"'
-    - 'HandlePowerKey={{ logind_powerbutton_action }}"'
-
-- name: Configure suspend and hibernate in sleep.conf
-  lineinfile:
-    path: /etc/systemd/sleep.conf
-    line: "{{ item }}"
-  with_items:
-    - 'HibernateDelaySec="{{ logind_hibernate_delay }}"'
+    - { key: 'IdleAction', value: '{{ logind_idle_action }}' }
+    - { key: 'IdleActionSec', value: '{{ logind_idle_time }}' }
+    - { key: 'HandleLidSwitch', value: '{{ logind_lid_action }}' }
+    - { key: 'HandlePowerKey', value: '{{ logind_powerbutton_action }}' }
+  when: logind_configure
 
 - name: Set VM writeback timeout
   lineinfile:
