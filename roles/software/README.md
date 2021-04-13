@@ -29,6 +29,7 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | virtio_install             | Install and configure libvirt/virt-manager.   | true    |
 | virtio_network_autostart   | Autostart default virtio network on boot.     | true    |
 | virtio_use_default_network | Use NAT-based, "default" virtio setup.        | true    |
+| virtio_user_addgroup       | Add target user to `virtio` group.            | true    |
 
 ## Dependencies
 It is *strongly* advised to install on a computer that is already provisioned with the [base](https://github.com/savchenko/debian/roles/base/README.md) role.amd64-microcode

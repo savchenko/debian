@@ -33,3 +33,10 @@
     when: virtio_network_autostart and not virtio_network_ready
 
   when: virtio_use_default_network
+
+- name: Add target user to libvirt group
+  user:
+    append: yes
+    groups: libvirt
+    name: "{{ ansible_env.USER }}"
+  when: virtio_user_addgroup

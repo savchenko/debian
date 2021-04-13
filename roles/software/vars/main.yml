@@ -13,3 +13,4 @@ systemd_units_masked: []
 virtio_install: true
 virtio_network_autostart: true
 virtio_use_default_network: true
+virtio_user_addgroup: true
