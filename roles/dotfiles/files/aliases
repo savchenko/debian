@@ -353,6 +353,7 @@ alias timezones='undertime'
 alias mydnsip="dig +cdflag +dnssec +short myip.opendns.com @resolver1.opendns.com"
 alias myip="curl -s https://www.zx2c4.com/ip | cut -b1-15 | head -n1 | grep -o -P '^\d+\.\d+\.\d+\.\d+' | xargs"
 alias hostkeys="for i in /etc/ssh/*key*; do ssh-keygen -l -f $i 2> /dev/null; done | sort -u"
+alias ncmpcpp="ncmpcpp --quiet"
 
 # Wireless
 alias wifimon='wavemon -g'

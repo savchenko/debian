@@ -21,7 +21,7 @@
   lineinfile:
     path: /etc/systemd/logind.conf
     line: "{{ item.key }}={{ item.value }}"
-    regexp: ".*{{ item.key }}\=.*"
+    regexp: '.*"{{ item.key }}"\=.*'
   with_items:
     - { key: 'IdleAction', value: '{{ logind_idle_action }}' }
     - { key: 'IdleActionSec', value: '{{ logind_idle_time }}' }

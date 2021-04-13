@@ -137,3 +137,13 @@
       - mpv
       - ncmpcpp
   when: setup_multimedia
+
+- name: Create mpd lyrics folder
+  file:
+    path: "{{ ansible_env.HOME }}/.cache/mpd/lyrics/"
+    state: directory
+    recurse: yes
+  become: no
+  when: setup_multimedia
+  tags:
+    - wtf
