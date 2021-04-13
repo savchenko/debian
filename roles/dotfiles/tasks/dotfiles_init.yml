@@ -9,6 +9,7 @@
 - name: Set proper ~/.ssh permissions
   file:
     path: "{{ ansible_env.HOME }}/.ssh"
+    state: directory
     mode: 0700
 
 - name: Check if tmux terminfo already installed
