@@ -28,7 +28,7 @@
       fstab_noexec: true
       generate_moduli: false
       grub_optional: ""
-      locale: en_US.UTF8
+      locale: en_AU.UTF-8
       pkg_install_extra: true
       pkg_remove_defaults: true
       resolver_blocklist: ""
@@ -67,12 +67,12 @@
       alsa_out_device: 0
       alsa_setup: true
       disable_nmi_watch: true
-      enable_sleep_hibernate: true
+      enable_sleep_suspend: true
       intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
-      logind_hibernate_delay: 900
-      logind_idle_action: suspend-then-hibernate
+      logind_configure: false
+      logind_idle_action: suspend
       logind_idle_time: 600
-      logind_lid_action: suspend-then-hibernate
+      logind_lid_action: suspend
       logind_powerbutton_action: poweroff
       user_add_i2c: true
       vm_writeback: 1500
@@ -80,7 +80,7 @@
 
   - name: Execute `software` role
     include_role:
-      name: laptop
+      name: software
       apply:
         tags:
           - role_software
@@ -95,11 +95,12 @@
       setup_office: true
       setup_utils: true
       setup_wayland: true
-      systemd_units_disable: ['systemd-backlight@backlight:acpi_video0.service', 'tor@default.service', 'tor.service', 'mpd.service']
+      systemd_units_disable: ['tor@default.service', 'tor.service']
       systemd_units_enable: ['syncthing@myusername.service']
-      virtio_install: true
-      virtio_network_autostart: true
-      virtio_use_default_network: true
+      systemd_units_masked: ['systemd-backlight@backlight:acpi_video0.service']
+      virtio_install: false
+      virtio_network_autostart: false
+      virtio_use_default_network: false
 
 
   - name: Execute `dotfiles` role
@@ -126,7 +127,7 @@
         tags:
           - role_transfer
     tags:
-      - never
+      - never # prevents this from running unless requested via --tags never
     vars:
       agent_group: agents
       agent_name: xfer_agent
@@ -142,7 +143,7 @@
         tags:
           - role_wireguard
     tags:
-      - always
+      - never
     vars:
       wg_autostart: true
       wg_endpoints:
