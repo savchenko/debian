@@ -32,3 +32,4 @@
   shell:
     cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
   register: cpu_model
+  changed_when: false
