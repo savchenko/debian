@@ -13,3 +13,10 @@
     enabled: yes
   with_items: '{{ systemd_units_enable }}'
   when: systemd_units_enable | length > 0
+
+- name: Mask systemd units
+  systemd:
+    name: '{{ item }}'
+    masked: yes
+  with_items: '{{ systemd_units_masked }}'
+  when: systemd_units_masked | length > 0

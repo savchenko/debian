@@ -25,6 +25,7 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | setup_wayland              | Install Wayland/Sway desktop.                 | true    |
 | systemd_units_disable      | List of systemd units to disable.             | []      |
 | systemd_units_enable       | List of systemd units to enable.              | []      |
+| systemd_units_masked       | List of systemd units to mask.                | []      |
 | virtio_install             | Install and configure libvirt/virt-manager.   | true    |
 | virtio_network_autostart   | Autostart default virtio network on boot.     | true    |
 | virtio_use_default_network | Use NAT-based, "default" virtio setup.        | true    |

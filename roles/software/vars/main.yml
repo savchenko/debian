@@ -9,6 +9,7 @@ setup_utils: true
 setup_wayland: true
 systemd_units_disable: []
 systemd_units_enable: []
+systemd_units_masked: []
 virtio_install: true
 virtio_network_autostart: true
 virtio_use_default_network: true
