@@ -42,9 +42,10 @@
 - name: Install Wayland desktop
   apt:
     pkg:
-      - gnome-icon-theme
       - adwaita-icon-theme
       - adwaita-qt
+      - gnome-icon-theme
+      - gnome-themes-standard
       - libglib2.0-bin # gsettings
       - mako-notifier
       - qtwayland5
@@ -104,6 +105,7 @@
       - dictionaries-common
       - hunspell
       - hunspell-en-au
+      - liblibreofficekitgtk # needed for menus
       - libreoffice-gtk3
       - libreoffice-l10n-en-gb
       - libreoffice-style-sifr
