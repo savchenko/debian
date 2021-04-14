@@ -122,6 +122,14 @@
   notify: grub_update
   when: not WSL1 and not WSL2
 
+- name: Grub timeout
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_TIMEOUT={{ grub_timeout }}'
+    regexp: "^GRUB_TIMEOUT"
+  notify: grub_update
+  when: not WSL1 and not WSL2
+
 - name: Tighten Grub config permissions (V-38583)
   file:
     path: "{{ item }}"
