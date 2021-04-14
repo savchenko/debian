@@ -39,7 +39,7 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 | logind_idle_time          | Idle time in seconds.                                      | 600                      |
 | logind_lid_action         | What to do when lid is closed.                             | "suspend"                |
 | logind_powerbutton_action | Action to execute when power button is pressed.            | "poweroff"               |
-| user_add_i2c              | Add login user to i2c group.                               | false                    |
+| i2c_user_add              | Add login user to i2c group.                               | false                    |
 | vm_writeback              | Delay writes to disk by X ms. Debian default is 500.       | 1500                     |
 
 ## Dependencies

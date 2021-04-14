@@ -4,7 +4,7 @@
     append: yes
     groups: i2c
     name: "{{ ansible_env.USER }}"
-  when: user_add_i2c
+  when: i2c_user_add
 
   # sleep - turn off screens
   # suspend - enter S3

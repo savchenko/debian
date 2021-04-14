@@ -77,7 +77,7 @@
       logind_idle_time: 600
       logind_lid_action: suspend-then-hibernate
       logind_powerbutton_action: poweroff
-      user_add_i2c: true
+      i2c_user_add: true
       vm_writeback: 1500
 
 

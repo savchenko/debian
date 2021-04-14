@@ -13,5 +13,5 @@ logind_powerbutton_action: poweroff
 systemd_units_disable: []
 systemd_units_enable: []
 systemd_units_masked: []
-user_add_i2c: false
+i2c_user_add: false
 vm_writeback: 1500
