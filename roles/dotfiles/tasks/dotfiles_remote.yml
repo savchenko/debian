@@ -62,12 +62,12 @@
 
     - name: Write tmux config to a file within this role
       copy:
-        dest: "{{ role_path}}/files/tmux-remote.conf"
+        dest: "{{ role_path }}/files/tmux-remote.conf"
         content: "{{ tmux_conf_cleaned | join( '\n' ) }}"
 
     - name: Link remote-specific tmux config
       file:
-        src: "{{ role_path}}/files/tmux-remote.conf"
+        src: "{{ role_path }}/files/tmux-remote.conf"
         dest: "{{ ansible_env.HOME }}/.tmux.conf"
         state: link
         force: yes

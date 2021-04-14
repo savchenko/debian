@@ -156,7 +156,7 @@
     groups: sudo
     name: "{{ sudo_user }}"
   when:
-    - sudo_user != root
+    - sudo_user != 'root'
     - sudo_set
 
 - name: Allow target user to execute certain commands with `sudo` and without password
@@ -164,12 +164,12 @@
       path: /etc/sudoers
       state: present
       insertafter: '^%sudo  ALL=(ALL:ALL) ALL'
-      line: "{{ sudo_user}} ALL=NOPASSWD:{{ sudo_cmd_nopwd }}"
+      line: "{{ sudo_user }} ALL=NOPASSWD:{{ sudo_cmd_nopwd }}"
       validate: '/usr/sbin/visudo -cf %s'
   become: yes
   when:
     - sudo_cmd_nopwd | length > 6
-    - sudo_user != root
+    - sudo_user != 'root'
     - sudo_set
 
 - name: Set default non-root $HOME permissions to 750

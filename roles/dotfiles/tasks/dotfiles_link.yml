@@ -106,7 +106,7 @@
   #
 - name: Link dotfiles from this role to $HOME
   file:
-    src: "{{role_path}}/files/{{ item.src }}"
+    src: "{{ role_path }}/files/{{ item.src }}"
     dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
     state: "{{ item.state }}"
     force: yes
@@ -117,7 +117,7 @@
 
 - name: Link ~/.local/bin from this role to $HOME
   file:
-    src: "{{role_path}}/files/bin"
+    src: "{{ role_path }}/files/bin"
     dest: "{{ ansible_env.HOME }}/.local/bin"
     state: link
     force: yes
