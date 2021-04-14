@@ -93,6 +93,7 @@
       - python3-virtualenv
       - rustc
       - strace
+      - pax-utils
   when: setup_dev
 
 - name: Install office tools
