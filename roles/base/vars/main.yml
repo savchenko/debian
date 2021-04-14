@@ -1,7 +1,6 @@
 ---
 allow_reboot: true
 allow_ssh: false
-cmds_sudo_nopassword: ""
 debs: []
 disable_bluetooth: true
 disable_firewire: true
@@ -33,6 +32,9 @@ set_hostname: false
 sshd_less_secure: False
 sshguard_install: true
 sshguard_path: /etc/sshguard/sshguard.conf
+sudo_cmd_nopwd: ""
+sudo_set: false
+sudo_user: "{{ ansible_env.USER }}"
 timezone: "UTC"
 ufw_rule: []
 ufw_service: []

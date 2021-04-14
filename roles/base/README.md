@@ -28,7 +28,6 @@ Role Variables
 |-----------------------------|--------------------------------------------------------------------------|--------------------------|
 | allow_reboot                | Automatically reboot target machine if necessary.                        | False                    |
 | allow_ssh                   | Allow (and limit) incoming SSH.                                          | False                    |
-| cmds_sudo_nopassword        | Comma-separated paths that target user can run with passwordless `sudo`. | ""                       |
 | debs                        | Additional .deb packages to install.                                     | []                       |
 | disable_bluetooth           | Likewise.                                                                | True                     |
 | disable_firewire            | Similar to the above.                                                    | True                     |
@@ -60,6 +59,9 @@ Role Variables
 | sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
 | sshguard_install            | Install and configure `sshguard`                                         | True                     |
 | sshguard_path               | Path to sshguard config.                                                 | System default           |
+| sudo_cmd_nopwd              | Comma-separated paths that target user can run with passwordless `sudo`. | ""                       |
+| sudo_set                    | Configure `sudo`-capable user?                                           | False                    |
+| sudo_user                   | Allow this user to run `sudo`, defaults to SSH login unless it is root.  | `ansible_env.USER`       |
 | timezone                    | Self-explanatory.                                                        | UTC                      |
 | ufw_rule                    | Template for a UFW rule. See below for a detailed explanation.           | []                       |
 | ufw_service                 | Template for a UFW service. See below for a detailed explanation.        | []                       |

@@ -17,7 +17,6 @@
       # Refer to the respective READMEs for variables' descriptions and default values
       allow_reboot: false
       allow_ssh: false
-      cmds_sudo_nopassword: "/usr/bin/dmesg,/usr/bin/light"
       debs: []
       disable_bluetooth: true
       disable_firewire: true
@@ -47,6 +46,9 @@
       sshd_less_secure: false
       sshguard_install: false
       sshguard_path: /etc/sshguard/sshguard.conf
+      sudo_cmd_nopwd: "/usr/bin/dmesg,/usr/bin/light"
+      sudo_set: true
+      sudo_user: tux
       timezone: Australia/Adelaide
       ufw_rule:
         - { comment: 'Drop incoming TCP traffic from 172.16.17.92 to port 22', direction: 'in', from: '172.16.17.92', port: '22', proto: 'tcp', rule: 'deny' }
