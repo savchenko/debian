@@ -17,7 +17,6 @@
       - jq
       - keepassxc
       - libsixel-bin
-      - libxml2-utils # xmllint
       - light
       - odt2txt
       - pandoc
@@ -88,12 +87,13 @@
       - bpython
       - cargo
       - git
+      - libxml2-utils # xmllint
       - make
+      - pax-utils
       - python3-pip
       - python3-virtualenv
       - rustc
       - strace
-      - pax-utils
   when: setup_dev
 
 - name: Install office tools
