@@ -3,6 +3,7 @@
   apt:
     pkg:
       - archivemount
+      - aria2
       - atool
       - bc
       - catdoc
@@ -18,14 +19,18 @@
       - keepassxc
       - libsixel-bin
       - light
+      - nmap
       - odt2txt
       - pandoc
       - pmount
       - rlwrap # cht.sh dependency
       - scdaemon
+      - socat
       - taskwarrior
       - undertime
       - unicode-data
+      - wget
+      - whois
       - wordnet
       - wordnet-sense-index
       - yubioath-desktop
@@ -114,17 +119,12 @@
 - name: Install internet tools
   apt:
     pkg:
-      - aria2
       - filezilla
       - firefox-esr
       - firefox-esr-l10n-en-gb
-      - nmap
-      - socat
       - syncthing
       - syncthing-gtk
       - weechat
-      - wget
-      - whois
       - youtube-dl
   when: setup_internet
 
