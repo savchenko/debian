@@ -91,6 +91,7 @@
     tags:
       - always
     vars:
+      setup_clevis: true
       setup_dev: false
       setup_fonts: false
       setup_fs: false

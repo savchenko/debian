@@ -15,6 +15,7 @@ Debian 11 (might work on its derivatives, however this is not guaranteed)
 
 | Variable                   | Description                                   | Default |
 |----------------------------|-----------------------------------------------|---------|
+| setup_clevis               | Install Clevis packages.                      | false   |
 | setup_dev                  | Install development tools.                    | true    |
 | setup_fonts                | Install fonts.                                | true    |
 | setup_fs                   | Install FUSE / filesystems support.           | true    |

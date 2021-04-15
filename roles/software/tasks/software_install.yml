@@ -65,6 +65,16 @@
       - wofi
   when: setup_wayland
 
+- name: Install Clevis
+  apt:
+    pkg:
+      - clevis
+      - clevis-initramfs
+      - clevis-luks
+      - clevis-tpm2
+      - clevis-systemd
+  when: setup_clevis
+
 - name: Install fonts
   apt:
     pkg:

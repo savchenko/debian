@@ -1,4 +1,5 @@
 ---
+setup_clevis: false
 setup_dev: true
 setup_fonts: true
 setup_fs: true
