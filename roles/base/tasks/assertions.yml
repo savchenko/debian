@@ -25,6 +25,17 @@
     path: "{{ ansible_facts.user_dir }}"
   register: user_homedir
 
+- name: Register Secure Boot status
+    command: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
+  register: sb_status
+
+- name: Enable module signing verification
+  set_fact:
+    sig_enforce: 'module.sig_enforce=1'
+  when:
+    - set_sigenforce
+    - sb_status.rc == 0
+
 - name: Assert the facts about user's home folder
   assert:
     that:

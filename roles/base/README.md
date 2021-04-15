@@ -56,6 +56,7 @@ Role Variables
 | set_dpkg_console            | Sets framebuffer/console: font size, encoding, etc.                      | True                     |
 | set_dpkg_overrides          | Tighten various filesystem permissions. Use with care!                   | False                    |
 | set_hostname                | Set target's hostname to the `inventory_hostname`                        | False                    |
+| set_sigenforce              | Enforce kernel modules signature verification, only with SecureBoot.     | True                     |
 | sshd_less_secure            | Enables aes256-cbc cipher and hmac-sha-256 MAC.                          | False                    |
 | sshguard_install            | Install and configure `sshguard`                                         | True                     |
 | sshguard_path               | Path to sshguard config.                                                 | System default           |
