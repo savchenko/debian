@@ -94,7 +94,6 @@
     rule: allow
     direction: in
     from_ip: any
-    interface: any
     port: "{{ wg_port | int }}"
     proto: udp
     comment: "Allow {{ wg_port }}/UDP on {{ wg_iface }}"

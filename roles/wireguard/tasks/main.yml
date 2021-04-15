@@ -1,16 +1,16 @@
 ---
-- name: Run sanity-checks
-  import_tasks: assert_main.yml
-  become: yes
-  tags:
-    - wg_assert_main
-
 - name: Install wireguard
   apt:
     name: ['wireguard', 'wireguard-tools']
     state: present
   tags:
     - wg_install
+
+- name: Run sanity-checks
+  import_tasks: assert_main.yml
+  become: yes
+  tags:
+    - wg_assert_main
 
 - name: Process provided private key
   import_tasks: peerkey.yml
