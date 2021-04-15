@@ -512,6 +512,9 @@ nmap <silent><leader>F :Filetypes<cr>
 " Zoom
 nmap <Leader>z <Plug>(zoom-toggle)
 
+" Table mode
+nmap <Leader>t :TableModeToggle<cr>
+
 " <leader>+s is ysW
 nmap <leader>s ysW
 
