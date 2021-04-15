@@ -88,8 +88,6 @@
     src: conf/dhclient.conf
     owner: root
     mode: 0644
-  notify:
-    - reload networking
 
 - name: Change CapsLock to Ctrl
   lineinfile:

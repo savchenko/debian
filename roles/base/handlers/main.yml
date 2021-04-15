@@ -32,20 +32,6 @@
   become: yes
   listen: "restart timesyncd"
 
-- name: reload networking
-  service:
-    name: networking
-    state: reloaded
-  become: yes
-  listen: "reload networking"
-
-- name: restart networking
-  service:
-    name: networking
-    state: restarted
-  become: yes
-  listen: "restart networking"
-
 - name: reconfigure keyboard settings
   shell: dpkg-reconfigure -f noninteractive keyboard-configuration
   become: yes

@@ -52,3 +52,4 @@
   service:
     name: kresd@1
     enabled: yes
+    state: started
