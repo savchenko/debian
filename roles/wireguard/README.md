@@ -26,7 +26,7 @@ Some notes to keep in mind when configuring it.
 - Python ≥3.7
 - Debian 11 (might work on its derivatives, however this is not guaranteed)
 - [findif](https://github.com/savchenko/ansible-findif) module.
-- `python3-netifaces`, version shipped with Debian is preferred.
+- `python3-netifaces` and `python3-netaddr`, versions shipped with Debian are preferred.
 
 
 ## Role Variables
