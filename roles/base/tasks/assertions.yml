@@ -26,7 +26,8 @@
   register: user_homedir
 
 - name: Register Secure Boot status
-    command: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
+  shell:
+    cmd: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
   register: sb_status
 
 - name: Enable module signing verification
