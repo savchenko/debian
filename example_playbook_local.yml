@@ -78,6 +78,7 @@
       logind_lid_action: suspend
       logind_powerbutton_action: poweroff
       i2c_user_add: true
+      i2c_load_dev: true
       vm_writeback: 1500
 
 

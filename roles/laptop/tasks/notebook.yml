@@ -6,6 +6,13 @@
     name: "{{ ansible_env.USER }}"
   when: i2c_user_add
 
+- name: Load `i2c-dev` module on boot
+  copy:
+    content: 'i2c-dev'
+    dest: /etc/modules-load.d/i2c-dev.conf
+  become: true
+  when: i2c_load_dev
+
   # sleep - turn off screens
   # suspend - enter S3
 - name: Unmask sleep and suspend systemd targets
