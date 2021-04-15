@@ -25,6 +25,7 @@
   - name: Clean-up keypair variables
     set_fact:
       wg_pubkey: "{{ wg_pubkey.stdout }}"
+      wg_sum_pubkey: "{{ wg_pubkey.stdout }}"
       # BUG: wg_privkey is overwritten by the block below, even if the block
       #      is skipped. Added conditional in `wg_server.j2` as the workaround.
       wg_privkey: "{{ wg_peerkey }}"

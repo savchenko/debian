@@ -29,7 +29,7 @@
   shell:
     cmd: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
   register: sb_status
-  changed_when: never
+  changed_when: false
 
 - name: Enable module signing verification
   set_fact:

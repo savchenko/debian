@@ -61,4 +61,4 @@
 - name: Check if there are existing Wireguard interfaces
   command: wg show interfaces
   register: wg_existing_interfaces
-  changed: never
+  changed_when: false

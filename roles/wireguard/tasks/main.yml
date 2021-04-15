@@ -73,3 +73,8 @@
   when: wg_start
   tags:
     - wg_systemd
+
+- name: Display summary
+  import_tasks: summary.yml
+  tags:
+    - wg_summary

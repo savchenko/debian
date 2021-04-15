@@ -1,0 +1,8 @@
+---
+- name: Finale
+  debug:
+    msg: |
+      * Playbook summary *
+      Server`s public key: {{ wg_sum_pubkey }}
+      Provisioned clients: {{ wg_clients | length }}
+      Provisioned endpoints: {{ wg_endpoints | length }}

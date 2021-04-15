@@ -97,6 +97,7 @@
     address: "{{ item }}"
   with_items: "{{ wg_ips_to_correlate }}"
   when: wg_ips_to_correlate is defined
+  delegate_to: localhost
   changed_when: false
   register: wg_overlap_ifaces
 
