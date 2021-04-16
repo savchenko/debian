@@ -19,6 +19,7 @@
       - keepassxc
       - libsixel-bin
       - light
+      - ncal
       - nmap
       - odt2txt
       - pandoc

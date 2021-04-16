@@ -7,37 +7,37 @@ let g:polyglot_disabled = ['sensible', 'html']
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'https://github.com/stoptracking-vim/goyo.vim'
-Plug 'https://github.com/stoptracking-vim/clever-f.vim'
-Plug 'https://github.com/stoptracking-vim/Colorizer'
-Plug 'https://github.com/stoptracking-vim/fzf'
-Plug 'https://github.com/stoptracking-vim/fzf.vim'
-Plug 'https://github.com/stoptracking-vim/indentLine'
-Plug 'https://github.com/stoptracking-vim/nerdcommenter'
-Plug 'https://github.com/stoptracking-vim/vim-airline'
-Plug 'https://github.com/stoptracking-vim/vim-airline-themes'
-Plug 'https://github.com/stoptracking-vim/Join'
-Plug 'https://github.com/stoptracking-vim/vim-autoread'
-Plug 'https://github.com/stoptracking-vim/vim-easymotion'
-Plug 'https://github.com/stoptracking-vim/vim-gitgutter'
-Plug 'https://github.com/stoptracking-vim/vim-lastplace'
-Plug 'https://github.com/stoptracking-vim/vim-matchquote'
-Plug 'https://github.com/stoptracking-vim/vim-plug'
-Plug 'https://github.com/stoptracking-vim/vim-polyglot'
-Plug 'https://github.com/stoptracking-vim/vim-startify'
-Plug 'https://github.com/stoptracking-vim/vim-surround'
-Plug 'https://github.com/stoptracking-vim/vim-table-mode'
-Plug 'https://github.com/stoptracking-vim/vim-visual-multi'
-Plug 'https://github.com/stoptracking-vim/vim-zoom'
-" Plug 'https://github.com/stoptracking-vim/pear-tree'
-Plug 'https://github.com/stoptracking-vim/vim-lion'
-Plug 'https://github.com/stoptracking-vim/vim-bufkill'
-Plug 'https://github.com/stoptracking-vim/vifm.vim'
-Plug 'https://github.com/stoptracking-vim/diffconflicts'
-" Plug 'https://github.com/stoptracking-vim/highlightMarks'
-Plug 'https://github.com/stoptracking-vim/ron.vim'
 " Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'https://github.com/stoptracking-vim/tagbar'
+" Plug 'https://github.com/vim-laundry/goyo.vim'
+" Plug 'https://github.com/vim-laundry/highlightMarks'
+" Plug 'https://github.com/vim-laundry/pear-tree'
+" Plug 'https://github.com/vim-laundry/tagbar'
+Plug 'https://github.com/vim-laundry/Join'
+Plug 'https://github.com/vim-laundry/clever-f.vim'
+Plug 'https://github.com/vim-laundry/diffconflicts'
+Plug 'https://github.com/vim-laundry/fzf'
+Plug 'https://github.com/vim-laundry/fzf.vim'
+Plug 'https://github.com/vim-laundry/indentLine'
+Plug 'https://github.com/vim-laundry/nerdcommenter'
+Plug 'https://github.com/vim-laundry/ron.vim'
+Plug 'https://github.com/vim-laundry/vifm.vim'
+Plug 'https://github.com/vim-laundry/vim-airline'
+Plug 'https://github.com/vim-laundry/vim-airline-themes'
+Plug 'https://github.com/vim-laundry/vim-autoread'
+Plug 'https://github.com/vim-laundry/vim-bufkill'
+Plug 'https://github.com/vim-laundry/vim-css-color'
+Plug 'https://github.com/vim-laundry/vim-easymotion'
+Plug 'https://github.com/vim-laundry/vim-gitgutter'
+Plug 'https://github.com/vim-laundry/vim-lastplace'
+Plug 'https://github.com/vim-laundry/vim-lion'
+Plug 'https://github.com/vim-laundry/vim-matchquote'
+Plug 'https://github.com/vim-laundry/vim-plug'
+Plug 'https://github.com/vim-laundry/vim-polyglot'
+Plug 'https://github.com/vim-laundry/vim-startify'
+Plug 'https://github.com/vim-laundry/vim-surround'
+Plug 'https://github.com/vim-laundry/vim-table-mode'
+Plug 'https://github.com/vim-laundry/vim-visual-multi'
+Plug 'https://github.com/vim-laundry/vim-zoom'
 
 call plug#end()
 
@@ -514,6 +514,10 @@ nmap <Leader>z <Plug>(zoom-toggle)
 
 " Table mode
 nmap <Leader>t :TableModeToggle<cr>
+
+" vim-css-color
+command! ColorToggle call css_color#toggle()
+nmap <Leader>\ :ColorToggle<cr>
 
 " <leader>+s is ysW
 nmap <leader>s ysW
