@@ -25,6 +25,12 @@
     path: "{{ ansible_facts.user_dir }}"
   register: user_homedir
 
+- name: Check if this is UEFI boot
+  shell:
+    cmd: '[ -d /sys/firmware/efi ] && echo True || echo False'
+  register: base_bootmode
+  changed_when: false
+
 - name: Register Secure Boot status
   shell:
     cmd: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
@@ -37,6 +43,7 @@
   when:
     - set_sigenforce
     - sb_status.rc == 0
+    - base_bootmode.stdout | bool
 
 - name: Assert the facts about user's home folder
   assert:
