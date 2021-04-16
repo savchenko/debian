@@ -68,6 +68,12 @@
   tags:
     - base_etc_settings
 
+- name: Configure "sudo"
+  import_tasks: sudo.yml
+  become: yes
+  tags:
+    - base_sudo
+
 - name: Set timezone, locale and "timesyncd"
   import_tasks: time.yml
   become: yes
