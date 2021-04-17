@@ -31,6 +31,12 @@
   register: base_bootmode
   changed_when: false
 
+- name: Ensure `mokutil` is installed
+  apt:
+    name: mokutil
+    state: present
+  when: base_bootmode.stdout | bool
+
 - name: Register Secure Boot status
   shell:
     cmd: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
