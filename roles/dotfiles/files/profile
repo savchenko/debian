@@ -42,6 +42,7 @@ export QT_STYLE_OVERRIDE="Adwaita-Dark"
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export SDL_VIDEODRIVER=wayland
+export STNOUPGRADE=1                 # Don't autoupgrade Syncthing
 export TIMEFORMAT=$'real\t%3lR\nuser\t%3lU\nsys\t%3lS\nCPU\t%P%'
 export TMPDIR="$HOME/.cache/TMPDIR"
 export XDG_CACHE_HOME="$HOME/.cache"
