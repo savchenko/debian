@@ -1,48 +1,52 @@
 ---
-- name: Install utilities
-  apt:
-    pkg:
-      - archivemount
-      - aria2
-      - atool
-      - bc
-      - catdoc
-      - checksec
-      - colortest-python
-      - docx2txt
-      - entr
-      - fzf
-      - gcolor3
-      - gnupg2
-      - hexyl
-      - jq
-      - keepassxc
-      - libsixel-bin
-      - light
-      - ncal
-      - nmap
-      - odt2txt
-      - pandoc
-      - pmount
-      - rlwrap # cht.sh dependency
-      - scdaemon
-      - socat
-      - taskwarrior
-      - undertime
-      - unicode-data
-      - wget
-      - whois
-      - wordnet
-      - wordnet-sense-index
-      - yubioath-desktop
-  when: setup_utils
 
-- name: Launch KeepassXC via .desktop with 1.5x scale
-  lineinfile:
-    path: /usr/share/applications/org.keepassxc.KeePassXC.desktop
-    regexp: '^Exec=keepassx.*'
-    line: Exec=env QT_SCALE_FACTOR=1.5 keepassxc %f
-  when: setup_utils
+# Setup utils
+- block:
+  - name: Install utilities
+    apt:
+      pkg:
+        - archivemount
+        - aria2
+        - atool
+        - bc
+        - catdoc
+        - checksec
+        - colortest-python
+        - docx2txt
+        - entr
+        - fzf
+        - gcolor3
+        - gnupg2
+        - hexyl
+        - jq
+        - keepassxc
+        - libsixel-bin
+        - light
+        - ncal
+        - nmap
+        - odt2txt
+        - pandoc
+        - pmount
+        - rlwrap # cht.sh dependency
+        - scdaemon
+        - socat
+        - taskwarrior
+        - undertime
+        - unicode-data
+        - wget
+        - whois
+        - wordnet
+        - wordnet-sense-index
+        - yubioath-desktop
+
+  - name: Launch KeepassXC via .desktop with 1.5x scale
+    lineinfile:
+      path: /usr/share/applications/org.keepassxc.KeePassXC.desktop
+      regexp: '^Exec=keepassx.*'
+      line: Exec=env QT_SCALE_FACTOR=1.5 keepassxc %f
+
+when: setup_utils
+# Block end
 
 - name: Install Wayland desktop
   apt:
@@ -139,23 +143,27 @@
       - youtube-dl
   when: setup_internet
 
-- name: Install multimedia packages
-  apt:
-    pkg:
-      - ffmpeg
-      - imv
-      - libimage-exiftool-perl
-      - mpd
-      - mpv
-      - ncmpcpp
-  when: setup_multimedia
+  # Setup multimedia
+- block:
+  - name: Install multimedia packages
+    apt:
+      pkg:
+        - ffmpeg
+        - imv
+        - libimage-exiftool-perl
+        - mpd
+        - mpv
+        - ncmpcpp
+    when: setup_multimedia
 
-- name: Create mpd lyrics folder
-  file:
-    path: "{{ ansible_env.HOME }}/.cache/mpd/lyrics/"
-    state: directory
-    recurse: yes
-  become: no
+  - name: Create mpd lyrics folder
+    file:
+      path: "{{ ansible_env.HOME }}/.cache/mpd/lyrics/"
+      state: directory
+      recurse: yes
+    become: no
+    tags:
+      - wtf
+
   when: setup_multimedia
-  tags:
-    - wtf
+  # Block end
