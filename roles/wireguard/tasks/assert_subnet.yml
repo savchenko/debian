@@ -92,12 +92,18 @@
   vars:
     wg_ips_to_correlate: []
 
+- name: Install necessary Python modules
+  apt:
+    name:
+      - python3-netifaces
+      - python3-netaddr
+    state: present
+
 - name: Find which interfaces are affected
   findif:
     address: "{{ item }}"
   with_items: "{{ wg_ips_to_correlate }}"
   when: wg_ips_to_correlate is defined
-  delegate_to: localhost
   changed_when: false
   register: wg_overlap_ifaces
 
