@@ -11,7 +11,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'https://github.com/vim-laundry/goyo.vim'
 " Plug 'https://github.com/vim-laundry/highlightMarks'
 " Plug 'https://github.com/vim-laundry/pear-tree'
-" Plug 'https://github.com/vim-laundry/tagbar'
+Plug 'https://github.com/vim-laundry/tagbar'
 Plug 'https://github.com/vim-laundry/Join'
 Plug 'https://github.com/vim-laundry/clever-f.vim'
 Plug 'https://github.com/vim-laundry/diffconflicts'
@@ -25,7 +25,7 @@ Plug 'https://github.com/vim-laundry/vim-airline'
 Plug 'https://github.com/vim-laundry/vim-airline-themes'
 Plug 'https://github.com/vim-laundry/vim-autoread'
 Plug 'https://github.com/vim-laundry/vim-bufkill'
-Plug 'https://github.com/vim-laundry/vim-css-color'
+" Plug 'https://github.com/vim-laundry/vim-css-color'
 Plug 'https://github.com/vim-laundry/vim-easymotion'
 Plug 'https://github.com/vim-laundry/vim-gitgutter'
 Plug 'https://github.com/vim-laundry/vim-lastplace'
@@ -289,8 +289,12 @@ set conceallevel=2
 " ----------------------------------------------------------------------------
 
 " Don't paste with middle mouse button
-map <MiddleMouse> <Nop>
-imap <MiddleMouse> <Nop>
+" Disable middle mouse button up until triple-click
+" imap <MiddleMouse> <Nop>
+" map <2-MiddleMouse> <Nop>
+" map <MiddleMouse> <Nop>
+" map! <2-MiddleMouse> <Nop>
+" map! <MiddleMouse> <Nop>
 
 " Tagbar
 nnoremap <F1> :TagbarToggle<cr>
@@ -329,23 +333,23 @@ inoremap <PageUp> <nop>
 let mapleader = "\<Space>"
 
 " <leader>+sm toggles "scroll mode"
-map <leader>sm :call ToggleScrollMode()<cr>
+nmap <leader>sm :call ToggleScrollMode()<cr>
 
 " Insert date header
 map <F12> :call DD()<cr>
 
 " Toggle line numbers between absolute/relative
-map <S-l> :call ToggleNumber()<cr>
+" map <S-l> :call ToggleNumber()<cr>
 
 " Save as usual
-map <C-s> :w!<CR>
+nmap <C-s> :w!<CR>
 imap <C-s> <Esc>:w!<CR>a
 
 " Sudo write
-map <C-A-s> :w !sudo tee "%"<cr><cr>
+nmap <C-A-s> :w !sudo tee "%"<cr><cr>
 
 " Select all as usual (skips to the last symbol)
-map <C-a> <esc>gg0vG$<CR>
+nmap <C-a> <esc>gg0vG$<CR>
 
 " Don't copy result of 'dd', 's' and 'c' into buffer.
 " That incomprehensible 'p' is supposed to deal with paste
@@ -372,12 +376,12 @@ nmap <Leader>h i<space><esc>l
 nmap <Leader>l a<space><esc>h
 
 " Save is forced by default (don't nag about "file exists")
-map :W<cr> :w!<cr>
-map :w<cr> :w!<cr>
-map :x<cr> :x!<cr>
+nmap :W<cr> :w!<cr>
+nmap :w<cr> :w!<cr>
+nmap :x<cr> :x!<cr>
 
 " cd into file's directory
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
+nmap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Don't use Ex mode, exit on QQ
 nnoremap Q <nop>
@@ -486,12 +490,6 @@ autocmd cursorhold * set nohlsearch
 noremap / :set hlsearch<cr>/
 noremap ? :set hlsearch<cr>?
 
-" Disable middle mouse button up until triple-click
-map <MiddleMouse> <Nop>
-map! <MiddleMouse> <Nop>
-map <2-MiddleMouse> <Nop>
-map! <2-MiddleMouse> <Nop>
-
 " Toggle tabs
 nnoremap gt :call <SID>ToggleTabs()<cr>
 
@@ -515,7 +513,8 @@ nmap <Leader>z <Plug>(zoom-toggle)
 " Table mode
 nmap <Leader>t :TableModeToggle<cr>
 
-" vim-css-color
+" vim-css-color, disabled by default
+" call css_color#disable()
 command! ColorToggle call css_color#toggle()
 nmap <Leader>\ :ColorToggle<cr>
 
@@ -526,7 +525,7 @@ nmap <leader>s ysW
 vnoremap gj :J <cr>
 
 " Skip empty lines with multiple cursors
-map <leader>se :call SkipEmptyLines()<cr>
+nmap <leader>se :call SkipEmptyLines()<cr>
 
 " GitGutter
 let g:gitgutter_map_keys = 0
