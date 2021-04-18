@@ -68,6 +68,7 @@
       - "gnupg"
       - "config/tox"
       - "config/mpd"
+      - "config/curl"
 
   - name: Copy primary dotfiles to the remote machine
     copy:

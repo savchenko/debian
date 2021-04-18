@@ -16,21 +16,21 @@ dotfiles_list:
   - { src: 'aliases'              , dest: '.aliases.sh'           , state: 'link' }
   - { src: 'bash_profile'         , dest: '.bash_profile'         , state: 'link' }
   - { src: 'bashrc'               , dest: '.bashrc'               , state: 'link' }
-  - { src: 'curlrc'               , dest: '.curlrc'               , state: 'link' }
+  - { src: 'config/mpd/mpd.conf'  , dest: '.mpd/mpd.conf'         , state: 'link' }
+  - { src: 'config/tox/toxic.conf', dest: '.config/tox/toxic.conf', state: 'link' }
+  - { src: 'curlrc'               , dest: '.config/curl/.curlrc'  , state: 'link' }
   - { src: 'gitignore'            , dest: '.gitignore'            , state: 'link' }
   - { src: 'gnupg/gpg-agent.conf' , dest: '.gnupg/gpg-agent.conf' , state: 'link' }
   - { src: 'gnupg/gpg.conf'       , dest: '.gnupg/gpg.conf'       , state: 'link' }
-  - { src: 'config/tox/toxic.conf', dest: '.config/tox/toxic.conf', state: 'link' }
   - { src: 'inputrc'              , dest: '.inputrc'              , state: 'link' }
   - { src: 'man'                  , dest: '.local/man'            , state: 'link' }
   - { src: 'muttrc'               , dest: '.muttrc'               , state: 'link' }
   - { src: 'profile'              , dest: '.profile'              , state: 'link' }
-  - { src: 'ripgreprc'            , dest: '.ripgreprc'            , state: 'link' }
+  - { src: 'ripgreprc'            , dest: '.config/.ripgreprc'    , state: 'link' }
   - { src: 'ssh_config'           , dest: '.ssh/config'           , state: 'link' }
   - { src: 'vimrc'                , dest: '.vimrc'                , state: 'link' }
-  - { src: 'wgetrc'               , dest: '.wgetrc'               , state: 'link' }
-  - { src: 'config/mpd/mpd.conf'  , dest: '.mpd/mpd.conf'         , state: 'link' }
   - { src: 'weechat.conf'         , dest: 'weechat.conf'          , state: 'link' }
+  - { src: 'wgetrc'               , dest: '.config/wgetrc'        , state: 'link' }
 
 dotfiles_folders_list:
   - { src: 'config/bat'           , dest: '.config/bat'           , state: 'link' }

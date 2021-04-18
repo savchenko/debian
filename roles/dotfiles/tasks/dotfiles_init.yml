@@ -6,22 +6,23 @@
     modification_time: preserve
     access_time: preserve
 
-- name: Set proper ~/.ssh permissions
+- name: Create $XDG and ~/.ssh with proper permissions
   file:
-    path: "{{ ansible_env.HOME }}/.ssh"
+    path: "{{ item }}"
     state: directory
     mode: 0700
+  with_items:
+    - "{{ ansible_env.HOME }}/.cache"
+    - "{{ ansible_env.HOME }}/.cache/TMPDIR"
+    - "{{ ansible_env.HOME }}/.config"
+    - "{{ ansible_env.HOME }}/.local/runtime"
+    - "{{ ansible_env.HOME }}/.local/share"
+    - "{{ ansible_env.HOME }}/.ssh"
 
 - name: Check if tmux terminfo already installed
   shell: infocmp -x tmux
   register: terminfo_test
   changed_when: False
-
-- name: Create $XDG_RUNTIME_DIR
-  file:
-    path: "{{ ansible_env.HOME }}/.local/runtime"
-    state: directory
-    mode: 0700
 
   #
   # terminfo, might be unnecessary with Bullseye packaging
