@@ -51,11 +51,18 @@
     name: neovim
     install_recommends: no
 
-- name: Copy z.lua into `/usr/local/bin` and make it executable
+- name: Install z.lua and czmod
   copy:
-    src: bin/z.lua
-    dest: /usr/local/bin/z.lua
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     mode: a+x
+    owner: root
+  loop:
+    - { src: "bin/z.lua", dest: "/usr/local/bin/z.lua" }
+    - { src: "bin/czmod.bash", dest: "/usr/local/bin/czmod.bash" }
+    - { src: "bin/czmod", dest: "/usr/local/bin/czmod" }
+  tags:
+    - wtf
 
 - name: Link `bar` and `fd` binaries to their commonly used names
   file:

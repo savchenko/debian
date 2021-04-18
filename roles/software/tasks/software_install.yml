@@ -45,8 +45,8 @@
       regexp: '^Exec=keepassx.*'
       line: Exec=env QT_SCALE_FACTOR=1.5 keepassxc %f
 
-when: setup_utils
-# Block end
+  when: setup_utils
+  # Block end
 
 - name: Install Wayland desktop
   apt:

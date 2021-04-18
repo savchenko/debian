@@ -53,3 +53,7 @@ export XDG_RUNTIME_DIR="$HOME/.local/runtime"
 export XDG_SESSION_TYPE=wayland
 export XKB_DEFAULT_OPTIONS=caps:escape
 export _JAVA_AWT_WM_NONREPARENTING=1 # Optional, for Java GUIs
+export _ZL_ADD_ONCE=1                # Update Z db only on cd
+export _ZL_DATA="$HOME/.cache/zlua"
+export _ZL_HYPHEN=1                  # Treat hyphen as normal char
+export _ZL_MATCH_MODE=1              # Use enhanced match mode

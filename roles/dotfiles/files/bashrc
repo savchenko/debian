@@ -6,8 +6,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   shopt -q login_shell; if [ $? -eq 1 ]; then . "$HOME/.profile"; fi
 
   # z `dirname` - telephatic cd with fzf support ----------------------------------
-  if [ -x /usr/local/bin/z.lua ] && [ -x /usr/bin/fzf ]; then
+  if [ -x /usr/local/bin/z.lua ] && [ -x /usr/bin/fzf ] \
+    && [ -x /usr/local/bin/czmod.bash ] && [ -x /usr/local/bin/czmod ]; then
       eval "$(lua '/usr/local/bin/z.lua' --init bash enhanced once fzf)";
+      source /usr/local/bin/czmod.bash;
   fi
 
   #  h - multihighlighter based on ack --------------------------------------------
