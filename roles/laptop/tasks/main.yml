@@ -20,6 +20,7 @@
 - name: Setup ALSA
   import_tasks: alsa.yml
   when: alsa_setup
+  become: no
   tags:
     - laptop_alsa
 

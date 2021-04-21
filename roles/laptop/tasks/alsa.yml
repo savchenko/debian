@@ -30,6 +30,22 @@
     backup: yes
   when: not stat_asound_local | bool
 
+- name: Create Intel HDA modprobe drop-in
+  file:
+    path: /etc/modprobe.d/snd-hda-intel.conf
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+  when: intel_hda_options | length > 0
+  become: yes
+
+- name: Delete Intel HDA modprobe drop-in
+  file:
+    path: /etc/modprobe.d/snd-hda-intel.conf
+    state: absent
+  when: intel_hda_options | length == 0
+  become: yes
+
 - name: Add Intel HDA parameters
   lineinfile:
     path: /etc/modprobe.d/snd-hda-intel.conf
