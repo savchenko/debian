@@ -28,7 +28,9 @@
       fstab_noexec: true
       generate_moduli: false
       grub_optional: ""
-      locale: en_GB.UTF-8
+      grub_timeout: 3
+      hide_pid: true
+      locale: en_AU.UTF-8
       pkg_install_extra: true
       pkg_remove_defaults: true
       resolver_blocklist: ""
@@ -76,7 +78,7 @@
       logind_configure: false
       logind_idle_action: suspend
       logind_idle_time: 600
-      logind_lid_action: suspend-then-hibernate
+      logind_lid_action: suspend
       logind_powerbutton_action: poweroff
       i2c_user_add: false
       i2c_load_dev: false

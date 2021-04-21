@@ -28,6 +28,8 @@
       fstab_noexec: true
       generate_moduli: false
       grub_optional: ""
+      grub_timeout: 1
+      hide_pid: false
       locale: en_AU.UTF-8
       pkg_install_extra: true
       pkg_remove_defaults: true
@@ -38,7 +40,7 @@
       resolver_primary_ip: 9.9.9.9
       resolver_secondary_hostname: dns.quad9.net
       resolver_secondary_ip: 149.112.112.112
-      resolver_tls: false
+      resolver_tls: true
       set_capslock: true
       set_dpkg_console: true
       set_dpkg_overrides: true
@@ -47,7 +49,7 @@
       sshd_less_secure: false
       sshguard_install: false
       sshguard_path: /etc/sshguard/sshguard.conf
-      sudo_cmd_nopwd: "/usr/bin/dmesg,/usr/bin/light"
+      sudo_cmd_nopwd: "/usr/bin/alsaucm,/usr/bin/apt,/usr/bin/dmesg,/usr/bin/light"
       sudo_set: true
       sudo_user: tux
       timezone: Australia/Adelaide
