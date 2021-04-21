@@ -84,6 +84,7 @@
   apt:
     pkg:
       - fonts-jetbrains-mono
+      - fonts-ibm-plex
       - fonts-liberation
       - fonts-powerline
       - fonts-recommended
