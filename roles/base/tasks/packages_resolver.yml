@@ -7,7 +7,9 @@
 
 - name: Install Knot-resolver
   apt:
-    name: knot-resolver
+    pkg:
+      - knot-resolver
+      - openresolv
 
 - name: Create NetworkManager config folder
   file:
@@ -20,10 +22,10 @@
     dest: /etc/NetworkManager/conf.d/no-dns.conf
     content: "[main]\ndns=none\n"
 
-- name: Ensure `resolvconf` won't override resolv.conf
+- name: Configure resolvconf
   copy:
     dest: /etc/resolvconf.conf
-    content: "resolvconf=NO"
+    content: "name_servers=127.0.0.1"
 
 - name: Ensure `dhclient` won't override resolv.conf
   copy:
