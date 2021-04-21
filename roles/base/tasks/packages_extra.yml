@@ -9,7 +9,6 @@
       - apparmor-notify
       - apparmor-profiles
       - apparmor-profiles-extra
-      - apt-listbugs
       - apt-listchanges
       - apt-transport-https
       - bat
