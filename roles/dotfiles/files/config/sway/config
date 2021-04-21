@@ -54,17 +54,7 @@ focus_follows_mouse yes
 #
 # Controls --------------------------------------------
 #
-input "6127:24647:Lenovo_ThinkPad_Compact_USB_Keyboard_with_TrackPoint" {
-    xkb_layout us
-    xkb_options ctrl:nocaps
-    repeat_delay 500
-    repeat_rate 20
-    accel_profile flat
-    pointer_accel 0.75
-    scroll_factor 0.25
-}
-
-input "2:14:ETPS/2_Elantech_TrackPoint" {
+input type:pointer {
     accel_profile flat
     pointer_accel 0.75
     scroll_factor 0.25
@@ -76,7 +66,6 @@ input type:keyboard {
     repeat_delay 500
     repeat_rate 20
 }
-
 
 input type:touchpad {
     dwt disabled
