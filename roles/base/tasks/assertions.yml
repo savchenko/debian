@@ -42,6 +42,7 @@
     cmd: 'mokutil --sb-state | grep "^SecureBoot enabled$"'
   register: sb_status
   changed_when: false
+  failed_when: false
   when: base_bootmode.stdout | bool
 
 - name: Enable module signing verification
