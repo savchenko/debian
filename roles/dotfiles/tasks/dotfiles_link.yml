@@ -50,6 +50,7 @@
     # TODO: Make this more elegant and unify the list with `copy_dotfiles` below.
     - "{{ ansible_env.HOME }}/.config/mako"
     - "{{ ansible_env.HOME }}/.config/tox"
+    - "{{ ansible_env.HOME }}/.config/curl"
     - "{{ ansible_env.HOME }}/.mpd"
     - "{{ ansible_env.HOME }}/.mpd/playlists"
 
