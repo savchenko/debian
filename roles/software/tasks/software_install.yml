@@ -1,52 +1,46 @@
 ---
 
 # Setup utils
-- block:
-  - name: Install utilities
-    apt:
-      pkg:
-        - archivemount
-        - aria2
-        - atool
-        - bc
-        - catdoc
-        - checksec
-        - colortest-python
-        - docx2txt
-        - entr
-        - fzf
-        - gcolor3
-        - gnupg2
-        - hexyl
-        - jq
-        - keepassxc
-        - libsixel-bin
-        - light
-        - ncal
-        - nmap
-        - odt2txt
-        - pandoc
-        - pmount
-        - rlwrap # cht.sh dependency
-        - scdaemon
-        - socat
-        - taskwarrior
-        - undertime
-        - unicode-data
-        - wget
-        - whois
-        - wordnet
-        - wordnet-sense-index
-        - yubioath-desktop
-
-  - name: Launch KeepassXC via .desktop with 1.5x scale
-    lineinfile:
-      path: /usr/share/applications/org.keepassxc.KeePassXC.desktop
-      regexp: '^Exec=keepassx.*'
-      line: Exec=env QT_SCALE_FACTOR=1.5 keepassxc %f
-
+- name: Install utilities
+  apt:
+    pkg:
+      - archivemount
+      - aria2
+      - atool
+      - bc
+      - catdoc
+      - checksec
+      - colortest-python
+      - docx2txt
+      - entr
+      - fzf
+      - gcolor3
+      - gnupg2
+      - hexyl
+      - jq
+      - keepassxc
+      - libsixel-bin
+      - light
+      - ncal
+      - nmap
+      - odt2txt
+      - p7zip-full
+      - pandoc
+      - pmount
+      - rar
+      - rlwrap # cht.sh dependency
+      - scdaemon
+      - socat
+      - taskwarrior
+      - undertime
+      - unicode-data
+      - unrar
+      - wget
+      - whois
+      - wordnet
+      - wordnet-sense-index
+      - yubioath-desktop
   when: setup_utils
-  # Block end
 
 - name: Install Wayland desktop
   apt:
