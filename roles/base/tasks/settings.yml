@@ -114,7 +114,7 @@
     #   - Consider `slub_debug=ZF`
     #   - Consider init_on_free=1
     #   - Do *NOT* add page_poison=1 and slub_debug=P on newer kernels
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 slab_nomerge mce=0 page_alloc.shuffle=1 mitigations=auto audit=0 efi=disable_early_pci_dma init_on_alloc=1 debugfs=off init_on_free=0 pti=auto vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen {{ grub_optional }} {{ sig_enforce }} kernel.kexec_load_disabled=1"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet kaslr apparmor=1 security=apparmor ipv6.disable=1 kernel.kptr_restrict=2 slab_nomerge mce=0 page_alloc.shuffle=1 mitigations=auto audit=0 init_on_alloc=1 init_on_free=0 pti=auto vsyscall=none extra_latent_entropy{{ cpu_iommu }} fsck.mode=force fsck.repair=preen {{ grub_optional }} {{ sig_enforce }} kernel.kexec_load_disabled=1"'
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
   notify: grub_update
   when: not WSL1 and not WSL2
