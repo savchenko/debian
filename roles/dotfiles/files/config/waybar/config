@@ -25,7 +25,7 @@
         "format": "{} ",
         "interval": 120,
         "exec": "~/.config/waybar/modules/temp.sh",
-        "exec-if": "ping wttr.in -c1",
+        "exec-if": "ping -4 wttr.in -c1",
         "tooltip": false
     },
     "custom/clock": {
@@ -36,7 +36,7 @@
         "format": "☼ {}  ",
         "interval": 120,
         "exec": "~/.config/waybar/modules/arpansa.sh",
-        "exec-if": "ping 9.9.9.9 -c1",
+        "exec-if": "ping -4 9.9.9.9 -c1",
         "tooltip": false
     },
     "sway/window": {
