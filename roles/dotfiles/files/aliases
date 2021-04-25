@@ -272,6 +272,7 @@ fkill() {
 # System(ish)
 alias ...="cd ../.."
 alias ..="cd .."
+alias :q="exit"
 alias ap="ansible-playbook"
 alias apt="sudo apt"
 alias bfg="java -jar $HOME/.local/bin/bfg.jar"
@@ -290,17 +291,17 @@ alias remount_nfs="sudo mount -a -t cifs"
 alias rm="rm -I"
 alias rt="reset"
 alias s="sudo"
+alias sc="systemctl"
 alias symlinks="find . -maxdepth 1 -type l -ls | cut -c 75- | sort |
                 ack --color-match='bold yellow' --passthru '\w+\Z' --color |
                 ack --color-match='yellow' --passthru '^[a-zA-Z0-9\_\.\-]+' --color |
                 ack --color-match='dark yellow' --passthru '\->\s'" # '"bad parser fix
+alias atree="tree -pa"
 alias sshkey="cat ~/.ssh/id_rsa.pub | xc && echo 'Copied to clipboard.'"
 alias sup='su --preserve-environment'
 alias sv="sudoedit"
-alias atree="tree -pa"
 alias watch="watch -c"
 alias xc="wl-copy --trim-newline"
-alias :q="exit"
 
 # NeoVim
 alias v="nvim"

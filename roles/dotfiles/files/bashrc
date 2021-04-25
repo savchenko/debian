@@ -32,10 +32,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # Automatically initialize keychain ---------------------------------------------
   if [[ $_root -eq 0 ]] && [[ $TERM = *256color ]]; then
-      gpg-connect-agent updatestartuptty /bye >/dev/null
       if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
         export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
       fi
+      echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null
   fi
 
   # Use bash-completion, if available. This sources git-prompt as well.

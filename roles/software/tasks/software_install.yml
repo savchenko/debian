@@ -50,6 +50,7 @@
       - adwaita-qt
       - gnome-icon-theme
       - gnome-themes-standard
+      - grim
       - libglib2.0-bin # gsettings
       - mako-notifier
       - qtwayland5

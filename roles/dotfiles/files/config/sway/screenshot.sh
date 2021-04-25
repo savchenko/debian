@@ -37,6 +37,8 @@ then
   exit 126 # Command invoked cannot execute
 fi
 
+mkdir -p "$HOME/Desktop/screenshots/"
+
 case $choice in
     Fullscreen)
         grim "$fname_full";
