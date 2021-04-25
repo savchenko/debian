@@ -11,6 +11,7 @@
       - catdoc
       - checksec
       - colortest-python
+      - command-not-found
       - docx2txt
       - entr
       - fzf

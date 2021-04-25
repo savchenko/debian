@@ -57,7 +57,7 @@ focus_follows_mouse yes
 input type:pointer {
     accel_profile flat
     pointer_accel 0.75
-    scroll_factor 0.25
+    scroll_factor 0.5
 }
 
 input type:keyboard {
