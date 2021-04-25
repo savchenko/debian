@@ -11,7 +11,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'https://github.com/vim-laundry/goyo.vim'
 " Plug 'https://github.com/vim-laundry/highlightMarks'
 " Plug 'https://github.com/vim-laundry/pear-tree'
-Plug 'https://github.com/vim-laundry/tagbar'
+" Plug 'https://github.com/vim-laundry/tagbar'
 Plug 'https://github.com/vim-laundry/Join'
 Plug 'https://github.com/vim-laundry/clever-f.vim'
 Plug 'https://github.com/vim-laundry/diffconflicts'
@@ -19,7 +19,7 @@ Plug 'https://github.com/vim-laundry/fzf'
 Plug 'https://github.com/vim-laundry/fzf.vim'
 Plug 'https://github.com/vim-laundry/indentLine'
 Plug 'https://github.com/vim-laundry/nerdcommenter'
-Plug 'https://github.com/vim-laundry/ron.vim'
+" Plug 'https://github.com/vim-laundry/ron.vim'
 Plug 'https://github.com/vim-laundry/vifm.vim'
 Plug 'https://github.com/vim-laundry/vim-airline'
 Plug 'https://github.com/vim-laundry/vim-airline-themes'
@@ -577,14 +577,10 @@ let g:ansible_normal_keywords_highlight = 'Operator'
 let g:ansible_with_keywords_highlight = 'Operator'
 
 " vim-startify
-let g:startify_custom_header = [
-      \ '┌┬┐┬ ┬┬┌┐┌┬┌─ ',
-      \ ' │ ├─┤││││├┴┐ ',
-      \ ' ┴ ┴ ┴┴┘└┘┴ ┴o',
-      \ ]
+let g:startify_custom_header = []
 
 let g:startify_lists = [
-      \ { 'type': 'files', 'header': ['MRU'] },
+      \ { 'type': 'files', 'header': ['History'] },
       \ ]
 
 " vim-airline
@@ -595,10 +591,6 @@ let g:airline_skip_empty_sections = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#whitespace#enabled = 1
-" let g:airline_symbols = {}
-" let g:airline_symbols.linenr = ''
-" let g:airline_symbols.maxlinenr = ''
-" let g:airline_symbols.branch = ''
 
 function! AirlineInit()
   let g:airline_section_z = airline#section#create('%#__accent_bold#%{zoom#statusline()} %3l%#__restore__#/%L :%3v')
