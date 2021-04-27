@@ -12,11 +12,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       source /usr/local/bin/czmod.bash;
   fi
 
-  #  h - multihighlighter based on ack --------------------------------------------
-  if [ -x /usr/local/bin/h.sh ]; then
-      source "/usr/local/bin/h.sh";
-  fi
-
   # Check if we are root by any chance --------------------------------------------
   if id -nG | egrep -q -w "wheel|root" 2> /dev/null; then _root=1; else _root=0; fi
 
