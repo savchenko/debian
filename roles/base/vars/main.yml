@@ -39,6 +39,3 @@ sudo_user: "{{ ansible_env.USER }}"
 timezone: "UTC"
 ufw_rule: []
 ufw_service: []
-
-WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
-WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
