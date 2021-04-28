@@ -922,7 +922,7 @@ function! NeovimQtLoader()
 endfunction
 
 " Yes, this 1ms delay is necessary.
-autocmd VimEnter * call timer_start(1, { tid -> execute(NeovimQtLoader())})
+" autocmd VimEnter * call timer_start(1, { tid -> execute(NeovimQtLoader())})
 
 " Living in the fast lane (but leave this at the end)
 nnoremap ; :

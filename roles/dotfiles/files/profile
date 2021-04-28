@@ -2,7 +2,6 @@
 # export GDK_DPI_SCALE=1.25
 # export GDK_SCALE=2
 # export LS_COLORS="so=3;38;2;252;172;227:di=0;38;2;110;162;219:ln=3;38;2;196;160;0:*~=0;38;2;191;191;191:no=0:bd=3;38;2;239;41;41:ow=0:pi=3;38;2;52;226;226:tw=0:fi=0:ex=0;38;2;90;179;7:or=3;38;2;204;0;0;48;2;51;0;0:mi=3;38;2;204;0;0;48;2;51;0;0:st=4:cd=3;38;2;239;41;41"
-# export QT_SCALE_FACTOR=2
 export AWT_TOOLKIT=MToolkit          # Optional, for Java GUIs
 export BAT_THEME="Midnight.hybrid"
 export CCACHE_DIR="$HOME/.cache/ccache"
@@ -38,8 +37,7 @@ export NVIM_QT_RUNTIME_PATH="/usr/share/nvim-qt/runtime"
 export PATH=$HOME/.local/bin:$PATH
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_QPA_PLATFORM=wayland
-export QT_QPA_PLATFORMTHEME="gnome"
-export QT_STYLE_OVERRIDE="Adwaita-Dark"
+export QT_QPA_PLATFORMTHEME="qt5ct"
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 export RIPGREP_CONFIG_PATH="$HOME/.config/.ripgreprc"
 export SDL_VIDEODRIVER=wayland
