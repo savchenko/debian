@@ -106,9 +106,10 @@
       systemd_units_disable: ['tor@default.service', 'tor.service']
       systemd_units_enable: ['syncthing@myusername.service']
       systemd_units_masked: ['systemd-backlight@backlight:acpi_video0.service']
-      virtio_install: false
-      virtio_network_autostart: false
-      virtio_use_default_network: false
+      virtio_install: true
+      virtio_network_autostart: true
+      virtio_use_default_network: true
+      virtio_user_addgroup: true
 
 
   - name: Execute `dotfiles` role
@@ -141,6 +142,7 @@
       agent_name: xfer_agent
       pubkey_from_current_user: true
       remove_existing_user: true
+      pubkey_from_others: true
       add_rsync: true
 
 

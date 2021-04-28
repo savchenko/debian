@@ -109,6 +109,7 @@
       virtio_install: true
       virtio_network_autostart: true
       virtio_use_default_network: true
+      virtio_user_addgroup: true
 
 
   - name: Execute `dotfiles` role
@@ -141,6 +142,7 @@
       agent_name: xfer_agent
       pubkey_from_current_user: true
       remove_existing_user: true
+      pubkey_from_others: true
       add_rsync: true
 
 
