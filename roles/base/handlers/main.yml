@@ -1,11 +1,4 @@
 ---
-- name: Check if sshd is present
-  shell:
-    cmd: 'dpkg-query --show sshd'
-  failed_when: false
-  changed_when: false
-  register: sshd_installed
-
 - name: restart sshd
   service:
     name: sshd

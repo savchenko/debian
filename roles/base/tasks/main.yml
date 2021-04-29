@@ -113,6 +113,13 @@
   tags:
     - base_logrotate
 
+- name: Check if sshd is/was installed
+  shell:
+    cmd: 'dpkg-query --show sshd'
+  failed_when: false
+  changed_when: false
+  register: sshd_installed
+
 - name: Check if reboot is required
   stat:
     path: /var/run/reboot-required
