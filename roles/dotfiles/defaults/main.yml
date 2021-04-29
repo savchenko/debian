@@ -1,8 +1,64 @@
 ---
-change_tmux_prefix: true
-copy_dotfiles: false
+WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
+WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
+kernel_version: "{{ ansible_facts['kernel'] }}"
+
 gpg_files_found: []
-link_to_localhost: true
-remote_gitconfig: true
-setup_neovim: false
-use_vim_plug: true
+
+dotfiles_list_tmux:
+  - { src: 'tmux.conf', dest: '.tmux.conf', state: 'link' }
+
+dotfiles_list_mako:
+  - { src: 'config/mako/config'   , dest: '.config/mako/config'   , state: 'hard' }
+
+dotfiles_list:
+  - { src: 'Xresources'           , dest: '.Xdefaults'            , state: 'link' }
+  - { src: 'aliases'              , dest: '.aliases.sh'           , state: 'link' }
+  - { src: 'bash_profile'         , dest: '.bash_profile'         , state: 'link' }
+  - { src: 'bashrc'               , dest: '.bashrc'               , state: 'link' }
+  - { src: 'config/mpd/mpd.conf'  , dest: '.mpd/mpd.conf'         , state: 'link' }
+  - { src: 'config/tox/toxic.conf', dest: '.config/tox/toxic.conf', state: 'link' }
+  - { src: 'curlrc'               , dest: '.config/curl/.curlrc'  , state: 'link' }
+  - { src: 'gitignore'            , dest: '.gitignore'            , state: 'link' }
+  - { src: 'gnupg/gpg-agent.conf' , dest: '.gnupg/gpg-agent.conf' , state: 'link' }
+  - { src: 'gnupg/gpg.conf'       , dest: '.gnupg/gpg.conf'       , state: 'link' }
+  - { src: 'inputrc'              , dest: '.inputrc'              , state: 'link' }
+  - { src: 'man'                  , dest: '.local/man'            , state: 'link' }
+  - { src: 'muttrc'               , dest: '.muttrc'               , state: 'link' }
+  - { src: 'profile'              , dest: '.profile'              , state: 'link' }
+  - { src: 'ripgreprc'            , dest: '.config/.ripgreprc'    , state: 'link' }
+  - { src: 'ssh_config'           , dest: '.ssh/config'           , state: 'link' }
+  - { src: 'vimrc'                , dest: '.vimrc'                , state: 'link' }
+  - { src: 'weechat.conf'         , dest: 'weechat.conf'          , state: 'link' }
+  - { src: 'wgetrc'               , dest: '.config/wgetrc'        , state: 'link' }
+
+dotfiles_folders_list:
+  - { src: 'config/bat'           , dest: '.config/bat'           , state: 'link' }
+  - { src: 'config/fontconfig'    , dest: '.config/fontconfig'    , state: 'link' }
+  - { src: 'config/foot'          , dest: '.config/foot'          , state: 'link' }
+  - { src: 'config/gtk-3.0'       , dest: '.config/gtk-3.0'       , state: 'link' }
+  - { src: 'config/imv'           , dest: '.config/imv'           , state: 'link' }
+  - { src: 'config/mpd'           , dest: '.config/mpd'           , state: 'link' }
+  - { src: 'config/luakit'        , dest: '.config/luakit'        , state: 'link' }
+  - { src: 'config/qt5ct'         , dest: '.config/qt5ct'         , state: 'link' }
+  - { src: 'config/sway'          , dest: '.config/sway'          , state: 'link' }
+  - { src: 'config/vifm'          , dest: '.config/vifm'          , state: 'link' }
+  - { src: 'config/ncmpcpp'       , dest: '.config/ncmpcpp'       , state: 'link' }
+  - { src: 'config/vivid'         , dest: '.config/vivid'         , state: 'link' }
+  - { src: 'config/wofi'          , dest: '.config/wofi'          , state: 'link' }
+  - { src: 'config/waybar'        , dest: '.config/waybar'        , state: 'link' }
+
+dotfiles_gitconfig_local:
+  - { src: 'gitconfig', dest: '.gitconfig', state: 'link' }
+
+dotfiles_gitconfig_remote:
+  - { src: 'gitconfig-remote', dest: '.gitconfig', state: 'link' }
+
+tmux_remove_lines:
+  - "unbind C-b"
+  - "set -g prefix C-Space"
+  - "bind C-Space send-prefix"
+  - "bind -n C-left prev"
+  - "bind -n C-right next"
+  - "bind > swap-pane -D"
+  - "bind < swap-pane -U"
