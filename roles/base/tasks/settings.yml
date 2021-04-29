@@ -13,14 +13,14 @@
     path: /etc/ssh/sshd_config
     regexp: '^Ciphers\s'
     line: "Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-cbc"
-  when: sshd_less_secure == True
+  when: sshd_less_secure
 
 - name: Enable less secure MACs
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^MACs\s'
     line: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha-256"
-  when: sshd_less_secure == True
+  when: sshd_less_secure
 
 - name: Prevent iwlwifi from trying to load 'yoyo'
   copy:

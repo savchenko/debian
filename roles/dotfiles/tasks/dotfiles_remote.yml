@@ -4,7 +4,7 @@
     path: ~/.bashrc
     line: "set -o emacs"
     regexp: "set\ -o\ vi"
-  when: remote_bash_emacs == true
+  when: remote_bash_emacs
 
   #
   # Prefix change
@@ -72,6 +72,6 @@
         state: link
         force: yes
 
-    when: link_to_localhost == true
+    when: link_to_localhost
 
-  when: change_tmux_prefix == true
+  when: change_tmux_prefix

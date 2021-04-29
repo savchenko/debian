@@ -76,7 +76,7 @@
           item.value | regex_search('^ListenPort = ' + wg_port | string, multiline=True) or
           item.value | regex_search('^Address = ' + wg_server_ip | string, multiline=True)
 
-    when: 
+    when:
       - wg_existing_config_decoded is defined
       - wg_existing_config_decoded | length > 0
     # Block end '

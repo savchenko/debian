@@ -89,5 +89,5 @@
     reboot_timeout: 600
     post_reboot_delay: 10
   become: yes
-  when: ansible_connection != "local" and allow_reboot == true
+  when: ansible_connection != "local" and allow_reboot
   listen: "reboot host"
