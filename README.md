@@ -10,7 +10,7 @@ Suggested execution order, all roles after "Base" are optional:
 1. Base
 1. Laptop
 1. Software
-1. Transfer-agent
+1. Transfer agent
 1. Wireguard
 1. Hosts
 
@@ -36,8 +36,8 @@ Installation and configuration of various userland packages. [Readme](https://gi
 ### Dotfiles
 Distributes dotfiles to the target host. Supports either copying files to the remote host or symlinking from the role's [./files/](https://github.com/savchenko/debian/tree/bullseye/roles/dotfiles/files) to the destination directories within `$HOME`. Has its own [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/dotfiles/README.md).
 
-### Transfer-agent
-Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/tree/bullseye/roles/transfer-agent).
+### Transfer agent
+Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/tree/bullseye/roles/transfer_agent).
 
 ### Wireguard
 All-inclusive, safe role to provision Wireguard in any mode imaginable. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/wireguard/README.md). 

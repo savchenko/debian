@@ -1,4 +1,4 @@
-Transfer-agent
+Transfer agent
 =========
 Setup jailed user, useful for a secure rsync/sftp. Chroot example:  
 ```

@@ -129,9 +129,9 @@
       setup_neovim: true
 
 
-  - name: Execute `transfer-agent` role
+  - name: Execute `transfer_agent` role
     include_role:
-      name: transfer-agent
+      name: transfer_agent
       apply:
         tags:
           - role_transfer
