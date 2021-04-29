@@ -10,6 +10,7 @@
   shell:
     cmd: "wg show {{ wg_iface }} | head -5 | grep 'listening port:' | rev | cut -d' ' -f1 | rev"
   register: wg_iface_current_port
+  changed_when: wg_iface_current_port.rc > -1
 
 - name: Assert we are not trying to provision on a busy port without permission
   assert:

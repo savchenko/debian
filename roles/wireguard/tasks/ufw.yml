@@ -17,6 +17,7 @@
   shell:
     cmd: "ufw status numbered | grep -E 'Allow .* on {{ wg_iface }}' | cut -d']' -f1 | sed 's/[^0-9]*//g' | sort -n -r | xargs"
   register: wg_ufw_existing_rules
+  changed_when: wg_ufw_existing_rules.rc > -1
 
 - name: Sanitise output and count the found rules
   set_fact:

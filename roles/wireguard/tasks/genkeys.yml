@@ -3,6 +3,8 @@
   shell:
     chdir: /etc/wireguard
     cmd: umask 077 & wg genkey | tee privatekey | wg pubkey > publickey
+  register: wg_keypair
+  changed_when: wg_keypair.rc > -1
 
 - name: Register private key
   slurp:

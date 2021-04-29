@@ -11,3 +11,5 @@
   shell: python {{ playbook_dir }}/roles/hosts/files/make_hosts.py -i hosts_combined -b {{ st_hosts_blacklist }} -w {{ st_hosts_whitelist }} -o hosts_blocked
   args:
     chdir: "{{ st_hosts }}"
+  register: hosts_cleanup
+  changed_when: hosts_cleanup.rc > -1
