@@ -1,9 +1,7 @@
 ---
-- name: Check if operator has a sudo ticket
-  shell:
-    cmd: 'sudo -n true > /dev/null 2>&1; echo $?'
-  delegate_to: localhost
-  register: sudo_ticket
+- name: Register operator's username
+  set_fact:
+    local_user_id: "{{ lookup('env', 'USER') }}"
 
 - name: Check if requested user is already present
   shell:
@@ -24,192 +22,185 @@
     msg: 'User "{{ agent_name }}" and all its files will be deleted.'
   when: user_grep.rc | int == 1 and remove_existing_user
 
+- name: Delete pre-existing user
+  user:
+    name: "{{ agent_name }}"
+    state: absent
+    remove: yes
+    force: true
+  when: user_grep.rc | int == 0 and remove_existing_user
+
+- name: Ensure agents group is present
+  group:
+    name: "{{ agent_group }}"
+    state: present
+
+- name: Throw random seeds
+  set_fact:
+    rnd_a: "{{ 4096 | random }}"
+    rnd_b: "{{ 4096 | random }}"
+    rnd_c: "{{ 4096 | random }}"
+    rnd_d: "{{ 4096 | random }}"
+    rnd_e: "{{ 4096 | random }}"
+  no_log: true
+
+- name: Create random password and salt
+  set_fact:
+    password_raw: "{{ lookup('password', '/dev/null') }}"
+    salt: "{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}"
+  no_log: true
+
+- name: 'Create "{{ agent_name }}" user with random password'
+  user:
+    name: "{{ agent_name }}"
+    shell: /bin/sh
+    password: "{{ password_raw | password_hash('sha512', salt) }}"
+    groups: agents
+  no_log: true
+
+# Delegate to localhost
 - block:
 
-  - name: Delete pre-existing user
-    user:
-      name: "{{ agent_name }}"
-      state: absent
-      remove: yes
-      force: true
-    when: user_grep.rc | int == 0 and remove_existing_user
+  - name: Get current user's ssh path
+    shell:
+      cmd: "echo $( getent passwd {{ local_user_id }} | cut -d: -f6 )/.ssh/"
+    register: sudo_ssh_path
+    changed_when: False
 
-  - name: Ensure agents group is present
-    group:
-      name: "{{ agent_group }}"
-      state: present
+  - set_fact:
+      sudo_ssh_path: "{{ sudo_ssh_path.stdout | string }}"
+    when: sudo_ssh_path.rc | int == 0
 
-  - name: Throw random seeds
+  - name: Check if current user has a pubkey file
+    stat:
+      path: "{{ sudo_ssh_path }}/id_rsa.pub"
+    register: pubkey_current_user_stat
+    when: pubkey_from_current_user
+
+  - name: Validate file content
+    shell:
+      cmd: "ssh-keygen -lf {{ sudo_ssh_path }}/id_rsa.pub"
+    register: pubkey_current_user_validate
+    when: pubkey_current_user_stat.stat['exists'] == true
+    changed_when: False
+
+  - name: Save pubkey from the current user to a variable
     set_fact:
-      rnd_a: "{{ 4096 | random }}"
-      rnd_b: "{{ 4096 | random }}"
-      rnd_c: "{{ 4096 | random }}"
-      rnd_d: "{{ 4096 | random }}"
-      rnd_e: "{{ 4096 | random }}"
+      pubkey_current_content: "{{ lookup('file','{{ sudo_ssh_path }}/id_rsa.pub') }}"
+    when: pubkey_current_user_validate.rc | int == 0
 
-  - name: Create random password and salt
-    set_fact:
-      password_raw: "{{ lookup('password', '/dev/null') }}"
-      salt: "{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}"
+  delegate_to: localhost
+  # Block end
 
-  - name: 'Create "{{ agent_name }}" user with random password'
-    user:
-      name: "{{ agent_name }}"
-      shell: /bin/sh
-      password: "{{ password_raw | password_hash('sha512', salt) }}"
-      groups: agents
+- name: Add pubkeys from the user executing this Playbook
+  authorized_key:
+    user: "{{ agent_name }}"
+    state: present
+    key: "{{ pubkey_current_content }}"
+  when: 
+    - pubkey_from_current_user
+    - pubkey_current_content is regex("^ssh-rsa")
 
-  - block:
+- name: Add other pubkeys
+  authorized_key:
+    user: "{{ agent_name }}"
+    state: present
+    # Lookup is necessary as `authorized_key` expects content, not a file.
+    key: "{{ lookup('file',item) }}"
+  with_fileglob:
+    - "*.pub"
+  when: pubkey_from_others
 
-    - name: Obtain username of the sudo user
-      shell:
-        cmd: "printenv | grep -i SUDO_USER | cut -d= -f2"
-      register: sudo_username
-      changed_when: False
+- name: chmod/chown homedir to make jail valid
+  file:
+    path: /home/{{ agent_name }}
+    state: directory
+    mode: 0750
+    owner: root
 
-    - name: Get sudo user's ssh path
-      shell:
-        cmd: "echo $( getent passwd {{ sudo_username.stdout }} | cut -d: -f6 )/.ssh/"
-      become: yes
-      become_user: "{{ sudo_username.stdout }}"
-      when: sudo_username.rc | int == 0
-      register: sudo_ssh_path
-      changed_when: False
+- name: Create data exchange directory
+  file:
+    path: /home/{{ agent_name }}/data
+    state: directory
+    mode: 0755
+    owner: "{{ agent_name }}"
 
-    - set_fact:
-        sudo_ssh_path: "{{ sudo_ssh_path.stdout | string }}"
-      when: sudo_ssh_path.rc | int == 0
+- name: Create system root dirs within chroot
+  file:
+    path: /home/{{ agent_name }}/{{ item }}
+    state: directory
+    owner: root
+  with_items:
+    - usr
+    - usr/bin
+    - bin
+    - lib
+    - lib/x86_64-linux-gnu
+    - lib64
 
-    - name: Check if current user has a pubkey file
-      stat:
-        path: "{{ sudo_ssh_path }}/id_rsa.pub"
-      register: pubkey_current_user_stat
-      become_user: "{{ ansible_env.USER }}"
-      when: pubkey_from_current_user
+- name: Copy sh to chroot /bin
+  copy:
+    src: "/bin/sh"
+    dest: "/home/{{ agent_name }}/bin/sh"
+    mode: 0755
+    remote_src: yes
 
-    - name: Validate file content
-      shell:
-        cmd: "ssh-keygen -lf {{ sudo_ssh_path }}/id_rsa.pub"
-      register: pubkey_current_user_validate
-      when: pubkey_current_user_stat.stat['exists'] == true
-      changed_when: False
+- name: Copy rsync to chroot /usr/bin
+  copy:
+    src: "/usr/bin/rsync"
+    dest: "/home/{{ agent_name }}/usr/bin/rsync"
+    mode: 0755
+    remote_src: yes
+  when: add_rsync
 
-    - name: Save pubkey from the current user to a variable
-      set_fact:
-        pubkey_current_content: "{{ lookup('file','{{ sudo_ssh_path }}/id_rsa.pub') }}"
-      when: pubkey_current_user_validate.rc | int == 0
+- name: Copy necessary /lib libraries
+  copy:
+    src: "/lib/x86_64-linux-gnu/{{ item }}"
+    dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
+    mode: 0755
+    remote_src: yes
+  with_items:
+    - "libacl.so.1"
+    - "libattr.so.1"
+    - "libc.so.6"
+    - "libcrypto.so.1.1"
+    - "libdl.so.2"
+    - "liblz4.so.1"
+    - "libpopt.so.0"
+    - "libpthread.so.0"
+    - "libxxhash.so.0"
+    - "libz.so.1"
+    - "libzstd.so.1"
+  when: not WSL1 and not WSL2
 
-    delegate_to: localhost
+- name: Copy necessary /usr/lib libraries
+  copy:
+    src: "/usr/lib/x86_64-linux-gnu/{{ item }}"
+    dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
+    mode: 0755
+    remote_src: yes
+  with_items:
+    - "libattr.so.1"
+    - "libacl.so.1"
+    - "libpopt.so.0"
+  when: WSL1 or WSL2
 
-  - name: Add pubkeys from the user executing this Playbook
-    authorized_key:
-      user: "{{ agent_name }}"
-      state: present
-      key: "{{ pubkey_current_content }}"
-    when: pubkey_current_content is regex("^ssh-rsa")
+- name: Copy ld-linux-x86-64.so
+  copy:
+    src: "/lib64/ld-linux-x86-64.so.2"
+    dest: "/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2"
+    mode: 0755
+    remote_src: yes
 
-  - name: Add other pubkeys
-    authorized_key:
-      user: "{{ agent_name }}"
-      state: present
-      # Lookup is necessary as `authorized_key` expects content, not a file.
-      key: "{{ lookup('file',item) }}"
-    with_fileglob:
-      - "*.pub"
-    when: pubkey_from_others
-
-  - name: chmod/chown homedir to make jail valid
-    file:
-      path: /home/{{ agent_name }}
-      state: directory
-      mode: 0750
-      owner: root
-
-  - name: Create data exchange directory
-    file:
-      path: /home/{{ agent_name }}/data
-      state: directory
-      mode: 0755
-      owner: "{{ agent_name }}"
-
-  - name: Create system root dirs within chroot
-    file:
-      path: /home/{{ agent_name }}/{{ item }}
-      state: directory
-      owner: root
-    with_items:
-      - usr
-      - usr/bin
-      - bin
-      - lib
-      - lib/x86_64-linux-gnu
-      - lib64
-
-  - name: Copy sh to chroot /bin
-    copy:
-      src: "/bin/sh"
-      dest: "/home/{{ agent_name }}/bin/sh"
-      mode: 0755
-      remote_src: yes
-
-  - name: Copy rsync to chroot /usr/bin
-    copy:
-      src: "/usr/bin/rsync"
-      dest: "/home/{{ agent_name }}/usr/bin/rsync"
-      mode: 0755
-      remote_src: yes
-    when: add_rsync
-
-  - name: Copy necessary /lib libraries
-    copy:
-      src: "/lib/x86_64-linux-gnu/{{ item }}"
-      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
-      mode: 0755
-      remote_src: yes
-    with_items:
-      - "libacl.so.1"
-      - "libattr.so.1"
-      - "libc.so.6"
-      - "libcrypto.so.1.1"
-      - "libdl.so.2"
-      - "liblz4.so.1"
-      - "libpopt.so.0"
-      - "libpthread.so.0"
-      - "libxxhash.so.0"
-      - "libz.so.1"
-      - "libzstd.so.1"
-    when: not WSL1 and not WSL2
-
-  - name: Copy necessary /usr/lib libraries
-    copy:
-      src: "/usr/lib/x86_64-linux-gnu/{{ item }}"
-      dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
-      mode: 0755
-      remote_src: yes
-    with_items:
-      - "libattr.so.1"
-      - "libacl.so.1"
-      - "libpopt.so.0"
-    when: WSL1 or WSL2
-
-  - name: Copy ld-linux-x86-64.so
-    copy:
-      src: "/lib64/ld-linux-x86-64.so.2"
-      dest: "/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2"
-      mode: 0755
-      remote_src: yes
-
-  - name: Remove unnecessary files
-    file:
-      path: "/home/{{ agent_name }}/{{ item }}"
-      state: absent
-    loop:
-      - ".bashrc"
-      - ".bash_profile"
-      - ".bash_logout"
-      - ".profile"
-
-  become: yes
+- name: Remove unnecessary files
+  file:
+    path: "/home/{{ agent_name }}/{{ item }}"
+    state: absent
+  loop:
+    - ".bashrc"
+    - ".bash_profile"
+    - ".bash_logout"
+    - ".profile"
 
 - name: Run all relevant handlers
   meta: flush_handlers

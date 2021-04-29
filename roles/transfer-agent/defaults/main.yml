@@ -1,0 +1,3 @@
+---
+WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
+WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"

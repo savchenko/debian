@@ -5,6 +5,3 @@ pubkey_from_current_user: true
 pubkey_from_others: true
 remove_existing_user: false
 add_rsync: true
-
-WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
-WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
