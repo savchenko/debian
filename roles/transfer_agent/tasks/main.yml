@@ -81,7 +81,7 @@
     shell:
       cmd: "ssh-keygen -lf {{ sudo_ssh_path }}/id_rsa.pub"
     register: pubkey_current_user_validate
-    when: pubkey_current_user_stat.stat['exists'] == true
+    when: pubkey_current_user_stat.stat['exists']
     changed_when: False
 
   - name: Save pubkey from the current user to a variable
@@ -97,7 +97,7 @@
     user: "{{ agent_name }}"
     state: present
     key: "{{ pubkey_current_content }}"
-  when: 
+  when:
     - pubkey_from_current_user
     - pubkey_current_content is regex("^ssh-rsa")
 
