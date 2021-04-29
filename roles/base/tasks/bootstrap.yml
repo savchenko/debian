@@ -8,6 +8,7 @@
   apt:
     name: ['curl', 'apt-transport-https', 'sudo', 'rsync']
     state: present
+    update_cache: yes
 
 - name: Generate locales
   debconf:

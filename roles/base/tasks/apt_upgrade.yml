@@ -6,8 +6,8 @@
 
 - name: Upgrade packages
   apt:
-    upgrade: yes
+    upgrade: 'yes' # https://serverfault.com/a/993211
 
 - name: Remove unneeded packages
   apt:
-    autoremove: yes
+    autoremove: true
