@@ -9,7 +9,7 @@ skip_list: # or 'skip_list' to silence them completely
   - '305'  # Use shell only when shell functionality is required
   - '403'  # Package installs should not use latest
   - '502'  # All tasks should be named
-  # - '503'  # Tasks that run when changed should likely be handlers
+  - '503'  # Tasks that run when changed should likely be handlers
   # - '601'  # Don't compare to literal True/False
   # - '701'  # meta/main.yml should contain relevant info
   # - '703'  # meta/main.yml default values should be changed
