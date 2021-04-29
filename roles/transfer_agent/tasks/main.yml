@@ -1,8 +1,4 @@
 ---
-- name: Register operator's username
-  set_fact:
-    local_user_id: "{{ lookup('env', 'USER') }}"
-
 - name: Check if requested user is already present
   shell:
     cmd: "grep {{ agent_name }} /etc/passwd"
@@ -61,32 +57,32 @@
 # Delegate to localhost
 - block:
 
-  - name: Get current user's ssh path
+  - name: Register operator's username
+    set_fact:
+      local_user_id: "{{ lookup('env', 'USER') }}"
+
+  - name: Get their .ssh path
     shell:
-      cmd: "echo $( getent passwd {{ local_user_id }} | cut -d: -f6 )/.ssh/"
-    register: sudo_ssh_path
+      cmd: "echo $( getent passwd {{ local_user_id }} | cut -d: -f6 )/.ssh"
+    register: user_ssh_path
     changed_when: False
 
-  - set_fact:
-      sudo_ssh_path: "{{ sudo_ssh_path.stdout | string }}"
-    when: sudo_ssh_path.rc | int == 0
-
-  - name: Check if current user has a pubkey file
+  - name: Check if op has a pubkey file
     stat:
-      path: "{{ sudo_ssh_path }}/id_rsa.pub"
+      path: "{{ user_ssh_path.stdout }}/id_rsa.pub"
     register: pubkey_current_user_stat
     when: pubkey_from_current_user
 
   - name: Validate file content
     shell:
-      cmd: "ssh-keygen -lf {{ sudo_ssh_path }}/id_rsa.pub"
+      cmd: "ssh-keygen -lf {{ user_ssh_path.stdout }}/id_rsa.pub"
     register: pubkey_current_user_validate
     when: pubkey_current_user_stat.stat['exists']
-    changed_when: False
+    changed_when: pubkey_current_user_validate.rc > -1
 
-  - name: Save pubkey from the current user to a variable
+  - name: Save op's pubkey to a variable
     set_fact:
-      pubkey_current_content: "{{ lookup('file','{{ sudo_ssh_path }}/id_rsa.pub') }}"
+      pubkey_current_content: "{{ lookup('file','{{ user_ssh_path.stdout }}/id_rsa.pub') }}"
     when: pubkey_current_user_validate.rc | int == 0
 
   delegate_to: localhost
