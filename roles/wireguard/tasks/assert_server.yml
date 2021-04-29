@@ -5,13 +5,16 @@
   when:
     - wg_server_ip is defined
     - wg_server_subnet is defined
-- set_fact:
-    wg_srv: false
-  when:
-    - wg_server_ip is not defined
-    - wg_server_subnet is not defined
+    - wg_server_ip | length > 6
+    - wg_server_subnet | length > 8
 
-- name: Assert that registered result is sane
+- name: No valid server IP provided
+  set_fact:
+    wg_srv: false
+  when: (wg_server_ip is not defined and wg_server_subnet is not defined) or
+        (wg_server_ip | length < 7 or wg_server_subnet | length < 9)
+
+- name: Server IP/subnet safety check
   assert:
     that:
       - wg_srv is defined
@@ -29,7 +32,7 @@
                '{{ wg_server_subnet }}'"
   vars:
     net: "{{ wg_server_subnet.split('/')[1] | int }}"
-  when: wg_srv 
+  when: wg_srv
 
 - name: Verify server's IP
   assert:

@@ -5,7 +5,9 @@ wg_endpoints: []
 wg_forward: false
 wg_iface: wg0
 wg_overwrite: false
-wg_peerkey: false
+wg_peerkey: '' # Empty string w. `| bool` evaluates to False
+wg_server_ip: ''
+wg_server_subnet: ''
 wg_port: 51820
 wg_ssh: false
 wg_start: true

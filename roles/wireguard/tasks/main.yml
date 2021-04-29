@@ -22,7 +22,7 @@
 - name: Generate a pair of public/private keys
   import_tasks: genkeys.yml
   become: yes
-  when: not wg_peerkey
+  when: not wg_peerkey | bool
   tags:
     - wg_genkeys
 

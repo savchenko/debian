@@ -1,6 +1,8 @@
 [Interface]
-{% if wg_server_ip is defined %}
+{% if wg_server_ip is defined and wg_srv %}
 Address = {{ wg_server_ip | ipv4('address') }}/{{ wg_server_subnet.split('/')[1] | int }}
+{% else %}
+# Transparent proxy, server is unavailable from VPN subnets.
 {% endif %}
 ListenPort = {{ wg_port }}
 {% if wg_peerkey %}
