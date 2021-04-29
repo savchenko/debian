@@ -7,22 +7,22 @@
 - name: Check if hash of the current moduli matches the default ones
   set_fact:
     moduli_are_default: True
-  when: st_moduli.stat['exists'] == false or (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad" or st_moduli.stat['checksum'] == "77e7851b030f0dfdcddd792890bf7c1f39e63333")
+  when: not st_moduli.stat['exists'] or (st_moduli.stat['checksum'] == "6541fc14923473fcd2e04c98248c9ef2613050b1" or st_moduli.stat['checksum'] == "a4b506a8095b6598a1dad573fd492bbb047b31ad" or st_moduli.stat['checksum'] == "77e7851b030f0dfdcddd792890bf7c1f39e63333" or st_moduli.stat['checksum'] == "6927efa12479c2e0637b31f823b15640c73268a5")
 
 - name: Install non-default moduli
   copy:
     src: conf/moduli
     dest: /etc/ssh
     mode: 0644
-  when: moduli_are_default == True
+  when: not generate_moduli and moduli_are_default
 
 - name: Generate primes pool
-  shell: ssh-keygen -G "{{ ansible_env.HOME }}/moduli.in" -b 4096
-  when: moduli_are_default == True and generate_moduli == True and not WSL2
+  shell: ssh-keygen -M generate -O bits=4096 "{{ ansible_env.HOME }}/moduli.in"
+  when: moduli_are_default and generate_moduli and not WSL2
   register: primes_pool_is_ready
 
 - name: Select primes
-  shell: ssh-keygen -T "{{ ansible_env.HOME }}/moduli.out" -f "{{ ansible_env.HOME }}/moduli.in"
+  shell: ssh-keygen -M screen -f "{{ ansible_env.HOME }}/moduli.in" "{{ ansible_env.HOME }}/moduli.out"
   when: primes_pool_is_ready.changed
   register: primes_are_ok
 
