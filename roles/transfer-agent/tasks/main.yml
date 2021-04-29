@@ -1,4 +1,9 @@
 ---
+- name: Check if operator has a sudo ticket
+  shell:
+    cmd: 'sudo -n true > /dev/null 2>&1; echo $?'
+  delegate_to: localhost
+  register: sudo_ticket
 
 - name: Check if requested user is already present
   shell:
