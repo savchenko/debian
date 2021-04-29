@@ -7,6 +7,16 @@
   when: sshd_installed.rc == 0
   listen: "restart sshd"
 
+- name: Cleanup temp moduli
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ ansible_env.HOME }}/moduli.in"
+    - "{{ ansible_env.HOME }}/moduli.out"
+  when: primes_are_copied.changed
+  listen: "cleanup moduli"
+
 - name: restart ufw
   service:
     name: ufw

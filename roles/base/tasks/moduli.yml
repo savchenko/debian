@@ -34,13 +34,6 @@
     backup: yes
   when: primes_are_ok.changed
   register: primes_are_copied
-  notify: restart sshd
-
-- name: Remove tmp files
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ ansible_env.HOME }}/moduli.in"
-    - "{{ ansible_env.HOME }}/moduli.out"
-  when: primes_are_copied.changed
+  notify:
+    - restart sshd
+    - cleanup moduli
