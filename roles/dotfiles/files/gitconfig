@@ -127,6 +127,3 @@
   root = rev-parse --show-toplevel
   s = -c color.status=always status --branch --short
   t = status
-
-# [url "git@github.com:"]
-#  insteadOf = https://github.com/

@@ -15,8 +15,8 @@ smart_gaps on
 title_align center
 titlebar_border_thickness 0
 
-# Don't set $DISPLAY
-xwayland disable
+# Set $DISPLAY
+xwayland enable
 
 # VRR
 output * adaptive_sync on
@@ -75,8 +75,8 @@ input type:touchpad {
     tap disabled
 }
 
-# Hide cursor when typing, wait for v1.5.1+
-# seat * hide_cursor keyboard enable
+# Hide cursor when typing, available in v1.5.1+
+# seat * hide_cursor when-typing enable
 
 set $swaydir $HOME/.config/sway
 

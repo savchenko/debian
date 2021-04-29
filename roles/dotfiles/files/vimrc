@@ -493,6 +493,9 @@ noremap ? :set hlsearch<cr>?
 " Toggle tabs
 nnoremap gt :call <SID>ToggleTabs()<cr>
 
+" Select pasted text
+nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+
 " --- Plugin hotkeys ---------------------------------------------------------
 
 " FZF
