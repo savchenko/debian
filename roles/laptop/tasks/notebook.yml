@@ -3,7 +3,7 @@
   user:
     append: yes
     groups: i2c
-    name: "{{ ansible_env.USER }}"
+    name: '{{ ansible_env.USER }}'
   when: i2c_user_add
 
 - name: Load `i2c-dev` module on boot
@@ -17,7 +17,7 @@
   # suspend - enter S3
 - name: Unmask sleep and suspend systemd targets
   systemd:
-    name: "{{ item }}"
+    name: '{{ item }}'
     masked: no
   with_items:
     - "sleep.target"
@@ -27,7 +27,7 @@
 - name: Configure sleep and suspend in logind.conf
   lineinfile:
     path: /etc/systemd/logind.conf
-    line: "{{ item.key }}={{ item.value }}"
+    line: '{{ item.key }}={{ item.value }}'
     regexp: '.*"{{ item.key }}"\=.*'
   with_items:
     - { key: 'IdleAction', value: '{{ logind_idle_action }}' }
@@ -39,13 +39,13 @@
 - name: Set VM writeback timeout
   lineinfile:
     path: /etc/sysctl.d/laptop.conf
-    line: "vm.dirty_writeback_centisecs={{ vm_writeback }}"
+    line: 'vm.dirty_writeback_centisecs={{ vm_writeback }}'
     create: true
   become: true
 
 - name: Disable NMI watchdog
   lineinfile:
     path: /etc/sysctl.d/laptop.conf
-    line: "kernel.nmi_watchdog=0"
+    line: 'kernel.nmi_watchdog=0'
   become: true
   when: disable_nmi_watch

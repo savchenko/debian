@@ -8,7 +8,7 @@
   copy:
     remote_src: yes
     src: /etc/asound.conf
-    dest: "/etc/backup_asound_conf_{{ ansible_date_time.epoch }}"
+    dest: '/etc/backup_asound_conf_{{ ansible_date_time.epoch }}'
   when: stat_asound | bool
   become: yes
 
@@ -20,13 +20,13 @@
 
 - name: Check if ~/.asoundrc is present
   stat:
-    path: "{{ ansible_env.HOME }}/.asoundrc"
+    path: '{{ ansible_env.HOME }}/.asoundrc'
   register: stat_asound_local
 
 - name: Set ALSA card and device in ~/.asoundrc
   template:
     src: alsa.j2
-    dest: "{{ ansible_env.HOME }}/.asoundrc"
+    dest: '{{ ansible_env.HOME }}/.asoundrc'
     backup: yes
   when: not stat_asound_local | bool
 
@@ -49,9 +49,9 @@
 - name: Add Intel HDA parameters
   lineinfile:
     path: /etc/modprobe.d/snd-hda-intel.conf
-    line: "options snd-hda-intel {{ item }}"
+    line: 'options snd-hda-intel {{ item }}'
     state: present
-  with_items: "{{ intel_hda_options }}"
+  with_items: '{{ intel_hda_options }}'
   when: intel_hda_options | length > 0
   become: yes
 

@@ -6,8 +6,8 @@
       - ansible_distribution_file_variety == "Debian"
       - ansible_distribution_release == "bullseye"
       - ( ansible_distribution_major_version | int ) == 0 # TODO: Replace with "11" once Bullseye is out
-    fail_msg: "This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing."
-    success_msg: "Running against Debian Bullseye at {{ ansible_host }}"
+    fail_msg: 'This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing.'
+    success_msg: 'Running against Debian Bullseye at {{ ansible_host }}'
 
 - name: Assert that target looks like a laptop
   assert:
@@ -15,11 +15,11 @@
       - ansible_facts.machine == "x86_64"
       - ansible_facts.form_factor == "Notebook"
       - ansible_facts.virtualization_role != "guest"
-    success_msg: "Seems like target is a valid laptop. Proceeding..."
+    success_msg: 'Seems like target is a valid laptop. Proceeding...'
 
 - name: Register user's home folder status
   stat:
-    path: "{{ ansible_facts.user_dir }}"
+    path: '{{ ansible_facts.user_dir }}'
   register: user_homedir
 
 - name: Assert the facts about user's home folder
@@ -30,6 +30,6 @@
 
 - name: Register CPU maker
   shell:
-    cmd: "grep -i vendor /proc/cpuinfo | head -1 | awk '{print $3}'"
+    cmd: 'grep -i vendor /proc/cpuinfo | head -1 | awk "{print $3}"'
   register: cpu_model
   changed_when: false
