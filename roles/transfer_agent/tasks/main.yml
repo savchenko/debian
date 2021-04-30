@@ -1,7 +1,7 @@
 ---
 - name: Check if requested user is already present
   shell:
-    cmd: "grep {{ agent_name }} /etc/passwd"
+    cmd: 'grep {{ agent_name }} /etc/passwd'
   register: user_grep
   failed_when: user_grep.stderr | length > 1
   changed_when: False
@@ -10,7 +10,7 @@
   assert:
     that:
       - "{{ user_grep.rc | int == 1 }}"
-    fail_msg: "User '{{ agent_name }}' is found and 'remove_existing_user' is set to False.\nAborting."
+    fail_msg: 'User "{{ agent_name }}" is found and "remove_existing_user" is set to False.\nAborting.'
   when: not remove_existing_user
 
 - name: Warning message
@@ -20,7 +20,7 @@
 
 - name: Delete pre-existing user
   user:
-    name: "{{ agent_name }}"
+    name: '{{ agent_name }}'
     state: absent
     remove: yes
     force: true
@@ -28,29 +28,29 @@
 
 - name: Ensure agents group is present
   group:
-    name: "{{ agent_group }}"
+    name: '{{ agent_group }}'
     state: present
 
 - name: Throw random seeds
   set_fact:
-    rnd_a: "{{ 4096 | random }}"
-    rnd_b: "{{ 4096 | random }}"
-    rnd_c: "{{ 4096 | random }}"
-    rnd_d: "{{ 4096 | random }}"
-    rnd_e: "{{ 4096 | random }}"
+    rnd_a: '{{ 4096 | random }}'
+    rnd_b: '{{ 4096 | random }}'
+    rnd_c: '{{ 4096 | random }}'
+    rnd_d: '{{ 4096 | random }}'
+    rnd_e: '{{ 4096 | random }}'
   no_log: true
 
 - name: Create random password and salt
   set_fact:
-    password_raw: "{{ lookup('password', '/dev/null') }}"
-    salt: "{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}"
+    password_raw: '{{ lookup("password", "/dev/null") }}'
+    salt: '{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}'
   no_log: true
 
 - name: 'Create "{{ agent_name }}" user with random password'
   user:
-    name: "{{ agent_name }}"
+    name: '{{ agent_name }}'
     shell: /bin/sh
-    password: "{{ password_raw | password_hash('sha512', salt) }}"
+    password: '{{ password_raw | password_hash("sha512", salt) }}'
     groups: agents
   no_log: true
 
@@ -59,26 +59,26 @@
 
   - name: Register operator's username
     set_fact:
-      local_user_id: "{{ lookup('env', 'USER') }}"
+      local_user_id: '{{ lookup("env", "USER") }}'
 
   - name: Get current user's ssh path
     shell:
-      cmd: "echo $( getent passwd {{ local_user_id }} | cut -d: -f6 )/.ssh"
+      cmd: 'echo $( getent passwd {{ local_user_id }} | cut -d: -f6 )/.ssh'
     register: user_ssh_path
     changed_when: False
 
   - set_fact:
-      user_ssh_pubfile: "{{ user_ssh_path.stdout }}/id_rsa.pub"
+      user_ssh_pubfile: '{{ user_ssh_path.stdout }}/id_rsa.pub'
 
   - name: Check if current user has a pubkey file
     stat:
-      path: "{{ user_ssh_pubfile }}"
+      path: '{{ user_ssh_pubfile }}'
     register: pubkey_current_user_stat
     when: pubkey_from_current_user
 
   - name: Validate file content
     shell:
-      cmd: "ssh-keygen -lf {{ user_ssh_pubfile }}"
+      cmd: 'ssh-keygen -lf {{ user_ssh_pubfile }}'
     register: pubkey_current_user_validate
     when: pubkey_current_user_stat.stat['exists']
     changed_when: pubkey_current_user_validate.rc > -1
@@ -93,19 +93,19 @@
 
 - name: Add pubkeys from the user executing this Playbook
   authorized_key:
-    user: "{{ agent_name }}"
+    user: '{{ agent_name }}'
     state: present
-    key: "{{ pubkey_current_content }}"
+    key: '{{ pubkey_current_content }}'
   when:
     - pubkey_from_current_user
     - pubkey_current_content is regex("^ssh-rsa")
 
 - name: Add other pubkeys
   authorized_key:
-    user: "{{ agent_name }}"
+    user: '{{ agent_name }}'
     state: present
     # Lookup is necessary as `authorized_key` expects content, not a file.
-    key: "{{ lookup('file',item) }}"
+    key: '{{ lookup("file",item) }}'
   with_fileglob:
     - "*.pub"
   when: pubkey_from_others
@@ -122,7 +122,7 @@
     path: /home/{{ agent_name }}/data
     state: directory
     mode: 0755
-    owner: "{{ agent_name }}"
+    owner: '{{ agent_name }}'
 
 - name: Create system root dirs within chroot
   file:
@@ -139,23 +139,23 @@
 
 - name: Copy sh to chroot /bin
   copy:
-    src: "/bin/sh"
-    dest: "/home/{{ agent_name }}/bin/sh"
+    src: '/bin/sh'
+    dest: '/home/{{ agent_name }}/bin/sh'
     mode: 0755
     remote_src: yes
 
 - name: Copy rsync to chroot /usr/bin
   copy:
-    src: "/usr/bin/rsync"
-    dest: "/home/{{ agent_name }}/usr/bin/rsync"
+    src: '/usr/bin/rsync'
+    dest: '/home/{{ agent_name }}/usr/bin/rsync'
     mode: 0755
     remote_src: yes
   when: add_rsync
 
 - name: Copy necessary /lib libraries
   copy:
-    src: "/lib/x86_64-linux-gnu/{{ item }}"
-    dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
+    src: '/lib/x86_64-linux-gnu/{{ item }}'
+    dest: '/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}'
     mode: 0755
     remote_src: yes
   with_items:
@@ -174,8 +174,8 @@
 
 - name: Copy necessary /usr/lib libraries
   copy:
-    src: "/usr/lib/x86_64-linux-gnu/{{ item }}"
-    dest: "/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}"
+    src: '/usr/lib/x86_64-linux-gnu/{{ item }}'
+    dest: '/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}'
     mode: 0755
     remote_src: yes
   with_items:
@@ -186,14 +186,14 @@
 
 - name: Copy ld-linux-x86-64.so
   copy:
-    src: "/lib64/ld-linux-x86-64.so.2"
-    dest: "/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2"
+    src: '/lib64/ld-linux-x86-64.so.2'
+    dest: '/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2'
     mode: 0755
     remote_src: yes
 
 - name: Remove unnecessary files
   file:
-    path: "/home/{{ agent_name }}/{{ item }}"
+    path: '/home/{{ agent_name }}/{{ item }}'
     state: absent
   loop:
     - ".bashrc"
