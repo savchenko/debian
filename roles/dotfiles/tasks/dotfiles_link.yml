@@ -1,27 +1,27 @@
 ---
 - name: Add tmux.conf to the list of dotfiles, no prefix change
   set_fact:
-    dotfiles_list: "{{ dotfiles_list | union(dotfiles_list_tmux) }}"
+    dotfiles_list: '{{ dotfiles_list | union(dotfiles_list_tmux) }}'
   when: not change_tmux_prefix
 
 - name: Add `mako` folder to the dotfiles
   set_fact:
-    dotfiles_list: "{{ dotfiles_list | union(dotfiles_list_mako) }}"
+    dotfiles_list: '{{ dotfiles_list | union(dotfiles_list_mako) }}'
   when: ansible_env.USER != 'root'
 
 - name: Add local .gitconfig to the list of dotfiles
   set_fact:
-    dotfiles_list: "{{ dotfiles_list | union(dotfiles_gitconfig_local) }}"
+    dotfiles_list: '{{ dotfiles_list | union(dotfiles_gitconfig_local) }}'
   when: not remote_gitconfig
 
 - name: Add remote .gitconfig to the list of dotfiles
   set_fact:
-    dotfiles_list: "{{ dotfiles_list | union(dotfiles_gitconfig_remote) }}"
+    dotfiles_list: '{{ dotfiles_list | union(dotfiles_gitconfig_remote) }}'
   when: remote_gitconfig
 
 - name: Check pubring and trust-db in ~/.gnupg/
   stat:
-    path: "{{ ansible_env.HOME }}/.gnupg/{{ item }}"
+    path: '{{ ansible_env.HOME }}/.gnupg/{{ item }}'
   with_items:
     - "pubring.kbx"
     - "trustdb.gpg"
@@ -30,13 +30,13 @@
 - name: Set intermediate fact about our findings...
   no_log: true
   set_fact:
-    gpg_files_found: "{{ gpg_files_found + [item.stat.exists] }}"
+    gpg_files_found: '{{ gpg_files_found + [item.stat.exists] }}'
   with_items:
     - '{{ gpg_stat.results }}'
 
 - name: Create single 'GPG-result' variable...
   set_fact:
-    gpg_db_initialised: "{{ gpg_files_found | unique | join() | bool }}"
+    gpg_db_initialised: '{{ gpg_files_found | unique | join() | bool }}'
 
 - name: Initialise ~/.gnupg
   shell: gpg -k
@@ -44,7 +44,7 @@
 
 - name: Create a few config folders
   file:
-    path: "{{ item }}"
+    path: '{{ item }}'
     state: directory
   with_items:
     # TODO: Make this more elegant and unify the list with `copy_dotfiles` below.
@@ -62,7 +62,7 @@
     # TODO: Is this still necessary?
   - name: Create remote dotfiles folders tree
     file:
-      path: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item }}"
+      path: '{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item }}'
       recurse: yes
       state: directory
     with_items:
@@ -73,26 +73,26 @@
 
   - name: Copy primary dotfiles to the remote machine
     copy:
-      src: "{{ item.src }}"
-      dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
-    with_items: "{{ dotfiles_list }}"
+      src: '{{ item.src }}'
+      dest: '{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}'
+    with_items: '{{ dotfiles_list }}'
 
   - name: Copy ~/.config/ folders
     copy:
       # Notice the ending slash to avoid duplicated nested folders
-      src: "{{ item.src }}/"
-      dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
-    with_items: "{{ dotfiles_folders_list }}"
+      src: '{{ item.src }}/'
+      dest: '{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}'
+    with_items: '{{ dotfiles_folders_list }}'
 
   - name: Link dotfiles from ~/.local/etc/dotfiles to $HOME
     file:
-      src: "{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}"
-      dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
-      state: "{{ item.state }}"
+      src: '{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}'
+      dest: '{{ ansible_env.HOME }}/{{ item.dest }}'
+      state: '{{ item.state }}'
       force: yes
     become: yes
-    become_user: "{{ ansible_env.USER }}"
-    with_items: "{{ dotfiles_list | union(dotfiles_folders_list) }}"
+    become_user: '{{ ansible_env.USER }}'
+    with_items: '{{ dotfiles_list | union(dotfiles_folders_list) }}'
     notify: rebuild bat cache
     register: dotfiles_linked
 
@@ -108,19 +108,19 @@
   #
 - name: Link dotfiles from this role to $HOME
   file:
-    src: "{{ role_path }}/files/{{ item.src }}"
-    dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
-    state: "{{ item.state }}"
+    src: '{{ role_path }}/files/{{ item.src }}'
+    dest: '{{ ansible_env.HOME }}/{{ item.dest }}'
+    state: '{{ item.state }}'
     force: yes
-  with_items: "{{ dotfiles_list | union(dotfiles_folders_list) }}"
+  with_items: '{{ dotfiles_list | union(dotfiles_folders_list) }}'
   when: link_to_localhost and not WSL1 and not copy_dotfiles
   notify: rebuild bat cache
   register: dotfiles_linked
 
 - name: Link ~/.local/bin from this role to $HOME
   file:
-    src: "{{ role_path }}/files/bin"
-    dest: "{{ ansible_env.HOME }}/.local/bin"
+    src: '{{ role_path }}/files/bin'
+    dest: '{{ ansible_env.HOME }}/.local/bin'
     state: link
     force: yes
   when: link_to_localhost and not WSL1 and not copy_dotfiles

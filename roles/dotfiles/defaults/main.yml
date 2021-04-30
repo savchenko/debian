@@ -1,7 +1,7 @@
 ---
-WSL1: "{{ ansible_facts.kernel is regex('.*Microsoft$') }}"
-WSL2: "{{ ansible_facts.kernel is regex('.*-microsoft-standard$') }}"
-kernel_version: "{{ ansible_facts['kernel'] }}"
+WSL1: '{{ ansible_facts.kernel is regex(".*Microsoft$") }}'
+WSL2: '{{ ansible_facts.kernel is regex(".*-microsoft-standard$") }}'
+kernel_version: '{{ ansible_facts["kernel"] }}'
 
 gpg_files_found: []
 

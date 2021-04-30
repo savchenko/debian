@@ -1,14 +1,14 @@
 ---
 - name: Hush login message
   file:
-    path: "{{ ansible_env.HOME }}/.hushlogin"
+    path: '{{ ansible_env.HOME }}/.hushlogin'
     state: touch
     modification_time: preserve
     access_time: preserve
 
 - name: Create $XDG and ~/.ssh with proper permissions
   file:
-    path: "{{ item }}"
+    path: '{{ item }}'
     state: directory
     mode: 0700
   with_items:
@@ -32,7 +32,7 @@
   - name: Copy tmux terminfo
     copy:
       src: tmux_terminfo
-      dest: "{{ ansible_env.HOME }}/.tmux_terminfo"
+      dest: '{{ ansible_env.HOME }}/.tmux_terminfo'
 
   - name: Install tmux terminfo
     shell: tic -x "{{ ansible_env.HOME }}/.tmux_terminfo"
@@ -40,7 +40,7 @@
 
   - name: Delete terminfo file
     file:
-      path: "{{ ansible_env.HOME }}/.tmux_terminfo"
+      path: '{{ ansible_env.HOME }}/.tmux_terminfo'
       state: absent
     when: terminfo_installed.changed and not terminfo_installed.failed
 

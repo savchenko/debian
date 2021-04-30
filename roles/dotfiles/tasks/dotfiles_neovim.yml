@@ -1,13 +1,13 @@
 ---
 - name: Create nVim init folder
   file:
-    path: "{{ ansible_env.HOME }}/.config/nvim"
+    path: '{{ ansible_env.HOME }}/.config/nvim'
     state: directory
     mode: 0755
 
 - name: Create auxiliary vim folders
   file:
-    path: "{{ ansible_env.HOME }}/.vim/{{ item }}"
+    path: '{{ ansible_env.HOME }}/.vim/{{ item }}'
     state: directory
     mode: 0755
   with_items:
@@ -20,38 +20,38 @@
     content: "set runtimepath^=~/.vim runtimepath+=~/.vim/after\n
               let &packpath = &runtimepath\n
               source ~/.vimrc\n"
-    dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
+    dest: '{{ ansible_env.HOME }}/.config/nvim/init.vim'
 
 - name: Copy colour-schemes
   copy:
     src: vim/colors
-    dest: "{{ ansible_env.HOME }}/.vim"
+    dest: '{{ ansible_env.HOME }}/.vim'
   when: copy_dotfiles and not link_to_localhost
 
 - name: Link colour-schemes
   file:
-    src: "{{ playbook_dir }}/roles/dotfiles/files/vim/colors"
-    dest: "{{ ansible_env.HOME }}/.vim/colors"
+    src: '{{ playbook_dir }}/roles/dotfiles/files/vim/colors'
+    dest: '{{ ansible_env.HOME }}/.vim/colors'
     state: link
     force: yes
   when: link_to_localhost and not WSL1 and not copy_dotfiles
 
 - name: Create autoload directory
   file:
-    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload"
+    path: '{{ ansible_env.HOME }}/.local/share/nvim/site/autoload'
     state: directory
     mode: 0755
 
 - name: Copy vim-plug
   copy:
     src: vim/vim-plug/plug.vim
-    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
+    dest: '{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim'
   when: copy_dotfiles and not link_to_localhost
 
 - name: Link vim-plug
   file:
-    src: "{{ playbook_dir }}/roles/dotfiles/files/vim/vim-plug/plug.vim"
-    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
+    src: '{{ playbook_dir }}/roles/dotfiles/files/vim/vim-plug/plug.vim'
+    dest: '{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim'
     state: link
     force: yes
   when: link_to_localhost and not WSL1 and not copy_dotfiles
@@ -68,15 +68,15 @@
   retries: 3
   delay: 6
   register: nvim_plugins_installed
-  when: "dig_github.rc == 0 and 'NOERROR' in dig_github.stdout"
+  when: 'dig_github.rc == 0 and "NOERROR" in dig_github.stdout'
   changed_when: false
 
 - debug:
-    msg: "\n-- !! --\nnVim plugins are not installed as '{{ inventory_hostname }}' was not able to resolve github.com\n-- !! --\n"
+    msg: '\n-- !! --\nnVim plugins are not installed as "{{ inventory_hostname }}" was not able to resolve github.com\n-- !! --\n'
   when: dig_github.rc != 0
 
 - name: Make `preview.sh` executable
   file:
-    path: "{{ ansible_env.HOME }}/.vim/plugged/fzf.vim/bin/preview.sh"
+    path: '{{ ansible_env.HOME }}/.vim/plugged/fzf.vim/bin/preview.sh'
     mode: a+x
-  when: "'Done!' in nvim_plugins_installed.stdout and nvim_plugins_installed.rc == 0 and 'fatal' not in nvim_plugins_installed.stdout"
+  when: '"Done!" in nvim_plugins_installed.stdout and nvim_plugins_installed.rc == 0 and "fatal" not in nvim_plugins_installed.stdout'

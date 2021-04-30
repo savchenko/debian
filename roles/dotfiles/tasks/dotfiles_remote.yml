@@ -2,8 +2,8 @@
 - name: Don't use vi mode in remote bash
   lineinfile:
     path: ~/.bashrc
-    line: "set -o emacs"
-    regexp: "set\ -o\ vi"
+    line: 'set -o emacs'
+    regexp: 'set\ -o\ vi'
   when: remote_bash_emacs
 
   #
@@ -13,15 +13,15 @@
 
   - name: Lookup tmux.conf into a var
     set_fact:
-      tmux_conf_orig: "{{ lookup('file', 'tmux.conf').split('\n') | list }}"
+      tmux_conf_orig: '{{ lookup("file", "tmux.conf").split("\n") | list }}'
 
   - name: Remove config options unsuitable for a remote tmux
     set_fact:
-      tmux_conf_changed: "{{ tmux_conf_orig | difference(tmux_remove_lines) }}"
+      tmux_conf_changed: '{{ tmux_conf_orig | difference(tmux_remove_lines) }}'
 
   - name: Strip comments
     set_fact:
-      tmux_conf_changed: "{{ tmux_conf_changed | reject('match', '#') | reject('match', '\n') | list }}"
+      tmux_conf_changed: '{{ tmux_conf_changed | reject("match", "#") | reject("match", "\n") | list }}'
       tmux_conf_cleaned: []
       empty: ['']
 
@@ -29,7 +29,7 @@
     # Additionaly, it does not pollute an output as loop() solution would
   - name: Remove empty lines
     set_fact:
-      tmux_conf_cleaned: "{{ tmux_conf_changed | difference(empty) }}"
+      tmux_conf_cleaned: '{{ tmux_conf_changed | difference(empty) }}'
 
     #
     # Copy tmux-remote.conf to ~/.local/etc/dotfiles and link from there
@@ -38,18 +38,18 @@
 
     - name: Create dotfiles folder
       file:
-        path: "{{ ansible_env.HOME }}/.local/etc/dotfiles"
+        path: '{{ ansible_env.HOME }}/.local/etc/dotfiles'
         state: directory
 
     - name: Write tmux config to a file
       copy:
-        dest: "{{ ansible_env.HOME }}/.local/etc/dotfiles/tmux-remote.conf"
-        content: "{{ tmux_conf_cleaned | join( '\n' ) }}"
+        dest: '{{ ansible_env.HOME }}/.local/etc/dotfiles/tmux-remote.conf'
+        content: '{{ tmux_conf_cleaned | join( "\n" ) }}'
 
     - name: Link remote-specific tmux config
       file:
-        src: "{{ ansible_env.HOME }}/.local/etc/dotfiles/tmux-remote.conf"
-        dest: "{{ ansible_env.HOME }}/.tmux.conf"
+        src: '{{ ansible_env.HOME }}/.local/etc/dotfiles/tmux-remote.conf'
+        dest: '{{ ansible_env.HOME }}/.tmux.conf'
         state: link
         force: yes
 
@@ -62,13 +62,13 @@
 
     - name: Write tmux config to a file within this role
       copy:
-        dest: "{{ role_path }}/files/tmux-remote.conf"
-        content: "{{ tmux_conf_cleaned | join( '\n' ) }}"
+        dest: '{{ role_path }}/files/tmux-remote.conf'
+        content: '{{ tmux_conf_cleaned | join( "\n" ) }}'
 
     - name: Link remote-specific tmux config
       file:
-        src: "{{ role_path }}/files/tmux-remote.conf"
-        dest: "{{ ansible_env.HOME }}/.tmux.conf"
+        src: '{{ role_path }}/files/tmux-remote.conf'
+        dest: '{{ ansible_env.HOME }}/.tmux.conf'
         state: link
         force: yes
 
