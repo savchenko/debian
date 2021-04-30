@@ -6,23 +6,23 @@
       - ansible_distribution_file_variety == "Debian"
       - ansible_distribution_release == "bullseye"
       - ( ansible_distribution_major_version | int ) == 0 # TODO: Replace with "11" once Bullseye is out
-    fail_msg: "This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing."
-    success_msg: "Running against Debian Bullseye at {{ ansible_host }}"
+    fail_msg: 'This playbook is tested exclusively on Debian Bullseye.\nPlease double-check you are executing the right thing.'
+    success_msg: 'Running against Debian Bullseye at {{ ansible_host }}'
 
 - block:
 
   - name: Assert that desirable hostname is valid
     assert:
       that: inventory_hostname is regex('^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$')
-      fail_msg: "Requested hostname is invalid.\nSee the RFC #1123"
-      success_msg: "Will set target's hostname to '{{ inventory_hostname }}'"
+      fail_msg: 'Requested hostname is invalid.\nSee the RFC #1123'
+      success_msg: 'Will set target hostname to "{{ inventory_hostname }}"'
     when: inventory_hostname | string | length > 0
 
   when: set_hostname
 
 - name: Register user's home folder status
   stat:
-    path: "{{ ansible_facts.user_dir }}"
+    path: '{{ ansible_facts.user_dir }}'
   register: user_homedir
 
 - name: Check if this is UEFI boot
@@ -58,4 +58,4 @@
     that:
       - ansible_facts.user_dir == ansible_env.HOME
       - user_homedir.stat.writeable and user_homedir.stat.readable
-    fail_msg: "Houston, we've got a problem.\n$HOME resolves differently or homedir of the target user isn't writeable"
+    fail_msg: '$HOME resolves differently or homedir of the target user isn not writeable'

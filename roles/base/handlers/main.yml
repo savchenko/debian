@@ -5,73 +5,73 @@
     state: restarted
   become: yes
   when: sshd_installed.rc == 0
-  listen: "restart sshd"
+  listen: 'restart sshd'
 
 - name: Cleanup temp moduli
   file:
-    path: "{{ item }}"
+    path: '{{ item }}'
     state: absent
   with_items:
     - "{{ ansible_env.HOME }}/moduli.in"
     - "{{ ansible_env.HOME }}/moduli.out"
   when: primes_are_copied.changed
-  listen: "cleanup moduli"
+  listen: 'cleanup moduli'
 
 - name: restart ufw
   service:
     name: ufw
     state: restarted
   become: yes
-  listen: "restart ufw"
+  listen: 'restart ufw'
 
 - name: restart rsyncd
   service:
     name: rsync
     state: restarted
   become: yes
-  listen: "restart rsyncd"
+  listen: 'restart rsyncd'
 
 - name: reload sysctl
   shell: sysctl --system
   become: yes
-  listen: "reload sysctl"
+  listen: 'reload sysctl'
 
 - name: restart timesyncd
   service:
     name: systemd-timesyncd
     state: restarted
   become: yes
-  listen: "restart timesyncd"
+  listen: 'restart timesyncd'
 
 - name: reconfigure keyboard settings
   shell: dpkg-reconfigure -f noninteractive keyboard-configuration
   become: yes
-  listen: "dpkg_keyboard"
+  listen: 'dpkg_keyboard'
 
 - name: restart sshguard
   service:
     name: sshguard
     state: restarted
   become: yes
-  listen: "restart sshguard"
+  listen: 'restart sshguard'
 
 - name: Restart Knot
   service:
     name: kresd@1
     state: restarted
   become: yes
-  listen: "restart kresd"
+  listen: 'restart kresd'
 
 - name: Update GRUB
   command: grub-mkconfig -o /boot/grub/grub.cfg && update-grub
-  listen: "grub_update"
+  listen: 'grub_update'
   become: yes
   notify: reboot host
 
 - name: Rotate logs
-  command: "logrotate -f /etc/logrotate.conf"
+  command: 'logrotate -f /etc/logrotate.conf'
   become: yes
-  listen: "rotate logs"
+  listen: 'rotate logs'
 
 - name: Reload systemd
   systemd:
@@ -80,14 +80,14 @@
     state: restarted
     name: local-fs.target
   become: yes
-  listen: "reload systemd"
+  listen: 'reload systemd'
 
 - name: Reboot target host
   reboot:
-    msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"
+    msg: 'Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}'
     connect_timeout: 5
     reboot_timeout: 600
     post_reboot_delay: 10
   become: yes
   when: ansible_connection != "local" and allow_reboot
-  listen: "reboot host"
+  listen: 'reboot host'

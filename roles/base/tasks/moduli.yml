@@ -1,7 +1,7 @@
 ---
 - name: Stat /etc/ssh/moduli
   stat:
-    path: "/etc/ssh/moduli"
+    path: '/etc/ssh/moduli'
   register: st_moduli
 
 - name: Check if hash of the current moduli matches the default ones
@@ -28,7 +28,7 @@
 
 - name: Copy output
   copy:
-    src: "{{ ansible_env.HOME }}/moduli.out"
+    src: '{{ ansible_env.HOME }}/moduli.out'
     dest: /etc/ssh/moduli
     remote_src: true
     backup: yes

@@ -130,7 +130,7 @@
 
 - name: Reboot if system can't pick-up updated kernel and/or userland without it
   debug:
-    msg: "Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}"
+    msg: 'Rebooting {{ ansible_hostname | upper }} @ {{ ansible_host }}'
   notify:
     - reboot host
   when: reboot_required.results | json_query( '[*].stat.exists' ) | string == "[True]"

@@ -1,9 +1,9 @@
 ---
 - name: Propagate logrotate configs
   copy:
-    src: "conf/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.mode }}"
+    src: 'conf/{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '{{ item.mode }}'
     directory_mode: 0700
     owner: root
   with_items:

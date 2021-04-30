@@ -1,7 +1,7 @@
 ---
 - name: Install extended list of packages
   apt:
-    name: "{{ pkg }}"
+    name: '{{ pkg }}'
   vars:
     pkg:
       - ack
@@ -51,36 +51,36 @@
 
 - name: Install z.lua and czmod
   copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     mode: a+x
     owner: root
   loop:
-    - { src: "bin/z.lua", dest: "/usr/local/bin/z.lua" }
-    - { src: "bin/czmod.bash", dest: "/usr/local/bin/czmod.bash" }
-    - { src: "bin/czmod", dest: "/usr/local/bin/czmod" }
+    - { src: "bin/z.lua", dest: '/usr/local/bin/z.lua' }
+    - { src: "bin/czmod.bash", dest: '/usr/local/bin/czmod.bash' }
+    - { src: "bin/czmod", dest: '/usr/local/bin/czmod' }
   tags:
     - wtf
 
 - name: Link `bar` and `fd` binaries to their commonly used names
   file:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
   loop:
-    - { src: "/usr/bin/batcat", dest: "/usr/bin/bat" }
-    - { src: "/usr/bin/fdfind", dest: "/usr/bin/fd" }
+    - { src: "/usr/bin/batcat", dest: '/usr/bin/bat' }
+    - { src: "/usr/bin/fdfind", dest: '/usr/bin/fd' }
 
 - name: Create Perl modules folder
   file:
-    path: "/usr/local/lib/site_perl/"
+    path: '/usr/local/lib/site_perl/'
     state: directory
 
 - name: Copy diff-so-fancy and its dependencies
   copy:
-    src: "bin/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.mode }}"
+    src: 'bin/{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '{{ item.mode }}'
   with_items:
     - { src: 'diff-so-fancy.pl', dest: '/usr/local/bin/diff-so-fancy', mode: 'a+x'}
     - { src: 'DiffHighlight.pm', dest: '/usr/local/lib/site_perl/DiffHighlight.pm', mode: '0644'}
@@ -89,11 +89,11 @@
 - block:
 
     - name: Check if user-supplied .DEBs are installed
-      command: "dpkg-query -W {{ item }}"
+      command: 'dpkg-query -W {{ item }}'
       register: dpkg_check
       failed_when: dpkg_check.rc > 1
       changed_when: dpkg_check.rc == 1
-      loop: "{{ debs }}"
+      loop: '{{ debs }}'
 
     - name: Create directory to store .deb files
       file:
@@ -103,17 +103,17 @@
 
     - name: Copy .deb packages to the remote host
       copy:
-        src: "deb/{{ item }}"
-        dest: "/tmp/st_deb/{{ item }}"
-      loop: "{{ debs }}"
+        src: 'deb/{{ item }}'
+        dest: '/tmp/st_deb/{{ item }}'
+      loop: '{{ debs }}'
       register: debs_copy_status
       when: dpkg_check is changed
 
     - name: Install user-supplied .deb packages
       apt:
         allow_unauthenticated: yes
-        deb: "{{ item['dest'] }}"
-      loop: "{{ debs_copy_status.results }}"
+        deb: '{{ item["dest"] }}'
+      loop: '{{ debs_copy_status.results }}'
       when: ansible_architecture == "x86_64" and dpkg_check is changed
 
     - name: Delete /tmp/st_deb

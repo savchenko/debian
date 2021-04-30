@@ -7,7 +7,7 @@
 - name: Disable ipv6
   lineinfile:
     path: /etc/ufw/ufw.conf
-    line: "IPV6=no"
+    line: 'IPV6=no'
     insertafter: EOF
 
 - name: Don't autoconfigure ipv6
@@ -29,28 +29,28 @@
   lineinfile:
     path: /etc/ufw/ufw.conf
     regexp: '^LOGLEVEL'
-    line: "LOGLEVEL=off"
+    line: 'LOGLEVEL=off'
 
 - name: Add UFW rules
   ufw:
-    comment: "{{ item.comment | default(omit) }}"
-    direction: "{{ item.direction | default('in') }}"   # in/out/router
-    from_ip: "{{ item.from | default('any') }}"         # defaults to "any"
-    port: "{{ item.port | default('any') }}"            # destination port
-    proto: "{{ item.proto | default('any') }}"
-    rule: "{{ item.rule }}"                             # allow/deny/limit/reject
-    to_ip: "{{ item.to | default('any') }}"             # defaults to "any"
-  with_items: "{{ ufw_rule }}"
+    comment: '{{ item.comment | default(omit) }}'
+    direction: '{{ item.direction | default("in") }}'   # in/out/router
+    from_ip: '{{ item.from | default("any") }}'         # defaults to "any"
+    port: '{{ item.port | default("any") }}'            # destination port
+    proto: '{{ item.proto | default("any") }}'
+    rule: '{{ item.rule }}'                             # allow/deny/limit/reject
+    to_ip: '{{ item.to | default("any") }}'             # defaults to "any"
+  with_items: '{{ ufw_rule }}'
   when: ufw_rule | length > 0
 
 - name: Add UFW service
   ufw:
-    comment: "{{ item.comment | default(omit) }}"
-    from_ip: "{{ item.from | default('any') }}"         # defaults to "any"
-    rule: "{{ item.rule }}"                             # allow/deny/limit/reject
-    to_ip: "{{ item.to | default('any') }}"             # defaults to "any"
-    name: "{{ item.service }}"                          # /etc/ufw/applications.d
-  with_items: "{{ ufw_service }}"
+    comment: '{{ item.comment | default(omit) }}'
+    from_ip: '{{ item.from | default("any") }}'         # defaults to "any"
+    rule: '{{ item.rule }}'                             # allow/deny/limit/reject
+    to_ip: '{{ item.to | default("any") }}'             # defaults to "any"
+    name: '{{ item.service }}'                          # /etc/ufw/applications.d
+  with_items: '{{ ufw_service }}'
   when: ufw_service | length > 0
 
 - name: Enable UFW

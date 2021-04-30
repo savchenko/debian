@@ -6,7 +6,7 @@
 
 - name: Check if lua v5.4 is setup properly
   stat:
-    path: "{{ item }}"
+    path: '{{ item }}'
   with_items:
     - "/etc/alternatives/lua-interpretor"
     - "/usr/bin/lua"
@@ -15,7 +15,7 @@
 
 # As community `update-alternatives` modules does not support slave invocation, we have to use the shell command
 - name: Set lua5.4 as default `lua` command
-  shell: "{{ item }}"
+  shell: '{{ item }}'
   with_items:
     - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.4 1
     - update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.4 130 --slave /usr/share/man/man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.4.1.gz

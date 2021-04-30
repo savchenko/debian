@@ -8,13 +8,13 @@ disable_hfs_udf: true
 disable_sleep_hibernate: false
 disable_speaker: true
 disable_thunderbolt: true
-fb_font_size: "10x18"
+fb_font_size: '10x18'
 fstab_noexec: true
 generate_moduli: false
 grub_optional: ""
 grub_timeout: 1
 hide_pid: false
-locale: "en_AU.UTF-8"
+locale: 'en_AU.UTF-8'
 pkg_install_extra: false
 pkg_remove_defaults: false
 resolver_blocklist: ""
@@ -35,7 +35,7 @@ sshguard_install: true
 sshguard_path: /etc/sshguard/sshguard.conf
 sudo_cmd_nopwd: ""
 sudo_set: false
-sudo_user: "{{ ansible_env.USER }}"
-timezone: "UTC"
+sudo_user: '{{ ansible_env.USER }}'
+timezone: 'UTC'
 ufw_rule: []
 ufw_service: []

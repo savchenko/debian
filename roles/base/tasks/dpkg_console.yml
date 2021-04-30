@@ -7,8 +7,8 @@
 - name: Re-configure framebuffer
   debconf:
     name: console-setup
-    question: "{{ item.q }}"
-    value: "{{ item.a }}"
+    question: '{{ item.q }}'
+    value: '{{ item.a }}'
     vtype: select
   with_items:
     - { q: 'console-setup/charmap47', a: 'UTF-8' }

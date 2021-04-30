@@ -14,24 +14,24 @@
   debconf:
     name: locales
     question: locales/locales_to_be_generated
-    value: "en_US.UTF-8 UTF-8, {{ locale }} UTF-8"
+    value: 'en_US.UTF-8 UTF-8, {{ locale }} UTF-8'
     vtype: multiselect
 
 - name: Ensure that desirable locale is present
   locale_gen:
-    name: "{{ locale }}"
+    name: '{{ locale }}'
     state: present
 
 - name: Set default locale to "{{ locale }}"
   debconf:
     name: locales
     question: locales/default_environment_locale
-    value: "{{ locale }}"
+    value: '{{ locale }}'
     vtype: select
 
 - name: Set hostname to the value in inventory
   hostname:
-    name: "{{ inventory_hostname }}"
+    name: '{{ inventory_hostname }}'
   when: not WSL2 and ansible_connection != "local" and set_hostname
 
 - name: (WSL2) Add hostname to /etc/hosts
