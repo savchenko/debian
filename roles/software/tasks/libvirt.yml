@@ -1,7 +1,7 @@
 ---
 - name: Install virtio packages
   apt:
-    name: "{{ pkg }}"
+    name: '{{ pkg }}'
   vars:
     pkg:
       - virt-manager
@@ -38,5 +38,5 @@
   user:
     append: yes
     groups: libvirt
-    name: "{{ ansible_env.USER }}"
+    name: '{{ ansible_env.USER }}'
   when: virtio_user_addgroup

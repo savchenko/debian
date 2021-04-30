@@ -155,7 +155,7 @@
 
   - name: Create mpd lyrics folder
     file:
-      path: "{{ ansible_env.HOME }}/.cache/mpd/lyrics/"
+      path: '{{ ansible_env.HOME }}/.cache/mpd/lyrics/'
       state: directory
       recurse: yes
     become: no
