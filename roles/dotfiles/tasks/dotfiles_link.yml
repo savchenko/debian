@@ -63,7 +63,7 @@
   - name: Create remote dotfiles folders tree
     file:
       path: '{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item }}'
-      recurse: yes
+      recurse: True
       state: directory
     with_items:
       - "gnupg"
@@ -89,8 +89,8 @@
       src: '{{ ansible_env.HOME }}/.local/etc/dotfiles/{{ item.src }}'
       dest: '{{ ansible_env.HOME }}/{{ item.dest }}'
       state: '{{ item.state }}'
-      force: yes
-    become: yes
+      force: True
+    become: True
     become_user: '{{ ansible_env.USER }}'
     with_items: '{{ dotfiles_list | union(dotfiles_folders_list) }}'
     notify: rebuild bat cache
@@ -111,7 +111,7 @@
     src: '{{ role_path }}/files/{{ item.src }}'
     dest: '{{ ansible_env.HOME }}/{{ item.dest }}'
     state: '{{ item.state }}'
-    force: yes
+    force: True
   with_items: '{{ dotfiles_list | union(dotfiles_folders_list) }}'
   when: link_to_localhost and not WSL1 and not copy_dotfiles
   notify: rebuild bat cache
@@ -122,5 +122,5 @@
     src: '{{ role_path }}/files/bin'
     dest: '{{ ansible_env.HOME }}/.local/bin'
     state: link
-    force: yes
+    force: True
   when: link_to_localhost and not WSL1 and not copy_dotfiles

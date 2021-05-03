@@ -3,7 +3,7 @@
   shell:
     cmd: 'echo {{ wg_peerkey }} | wg pubkey'
   when: wg_peerkey | string | length == 44
-  ignore_errors: yes
+  ignore_errors: True
   register: wg_peerkey_test
   no_log: true
 

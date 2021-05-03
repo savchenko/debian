@@ -145,7 +145,7 @@
   find:
     paths: /home/
     file_type: directory
-    recurse: no
+    recurse: False
   register: home_dirs
 
 - name: Set existing user home-dirs to 0750
@@ -247,7 +247,7 @@
   systemd:
     name: '{{ item }}'
     state: stopped
-    masked: yes
+    masked: True
   with_items:
     - "sleep.target"
     - "suspend.target"
@@ -277,7 +277,7 @@
     path: /etc/security/limits.conf
     line: '* hard core 0'
     insertbefore: '^#\ End\ of\ file'
-    firstmatch: yes
+    firstmatch: True
     state: present
 
 - name: Prevent applications with setuid from dumping their memory

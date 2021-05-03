@@ -1,20 +1,20 @@
 ---
 - name: Install requested software packages
   import_tasks: software_install.yml
-  become: yes
+  become: True
   tags:
     - software_install
 
 - name: Configure libvirt / KVM
   import_tasks: libvirt.yml
-  become: yes
+  become: True
   when: virtio_install
   tags:
     - software_libvirt
 
 - name: Configure services
   import_tasks: services.yml
-  become: yes
+  become: True
   tags:
     - software_services
 

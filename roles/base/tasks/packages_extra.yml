@@ -42,12 +42,12 @@
   include_tasks:
     file: packages_lua.yml
     apply:
-      become: yes
+      become: True
 
 - name: Install neovim without 'recommended' additions
   apt:
     name: neovim
-    install_recommends: no
+    install_recommends: False
 
 - name: Install z.lua and czmod
   copy:
@@ -111,7 +111,7 @@
 
     - name: Install user-supplied .deb packages
       apt:
-        allow_unauthenticated: yes
+        allow_unauthenticated: True
         deb: '{{ item["dest"] }}'
       loop: '{{ debs_copy_status.results }}'
       when: ansible_architecture == "x86_64" and dpkg_check is changed

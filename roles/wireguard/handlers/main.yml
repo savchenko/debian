@@ -1,12 +1,12 @@
 ---
 - name: Re-read systemd settings
   systemd:
-    daemon_reload: yes
+    daemon_reload: True
   listen: 'reread systemd'
 
 - name: Reload systemd
   systemd:
-    daemon_reexec: yes
+    daemon_reexec: True
   listen: 'reload systemd'
 
 - name: Reload ufw

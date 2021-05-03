@@ -8,33 +8,33 @@
 
 - name: Run sanity-checks
   import_tasks: assert_main.yml
-  become: yes
+  become: True
   tags:
     - wg_assert_main
 
 - name: Process provided private key
   import_tasks: peerkey.yml
-  become: yes
+  become: True
   when: wg_peerkey | string | length == 44
   tags:
     - wg_peerkey
 
 - name: Generate a pair of public/private keys
   import_tasks: genkeys.yml
-  become: yes
+  become: True
   when: not wg_peerkey | bool
   tags:
     - wg_genkeys
 
 - name: Generate config file
   import_tasks: genconfig.yml
-  become: yes
+  become: True
   tags:
     - wg_genconfig
 
 - name: Amend UFW ruleset
   import_tasks: ufw.yml
-  become: yes
+  become: True
   notify: 'reload ufw'
   tags:
     - wg_ufw
@@ -52,8 +52,8 @@
 - name: Enable Wireguard systemd service and make sure it's stopped
   systemd:
     name: 'wg-quick@{{ wg_iface }}.service'
-    enabled: yes
-    masked: no
+    enabled: True
+    masked: False
     state: stopped
   when: wg_autostart
   notify:
@@ -69,7 +69,7 @@
   systemd:
     name: 'wg-quick@{{ wg_iface }}.service'
     state: started
-    enabled: yes
+    enabled: True
   when: wg_start
   tags:
     - wg_systemd

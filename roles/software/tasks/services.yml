@@ -3,20 +3,20 @@
   systemd:
     name: '{{ item }}'
     state: stopped
-    enabled: no
+    enabled: False
   with_items: '{{ systemd_units_disable }}'
   when: systemd_units_disable | length > 0
 
 - name: Enable systemd units
   systemd:
     name: '{{ item }}'
-    enabled: yes
+    enabled: True
   with_items: '{{ systemd_units_enable }}'
   when: systemd_units_enable | length > 0
 
 - name: Mask systemd units
   systemd:
     name: '{{ item }}'
-    masked: yes
+    masked: True
   with_items: '{{ systemd_units_masked }}'
   when: systemd_units_masked | length > 0

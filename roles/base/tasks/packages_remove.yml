@@ -2,8 +2,8 @@
 - name: Purge contradictory packages
   apt:
     state: absent
-    purge: yes
-    autoremove: yes
+    purge: True
+    autoremove: True
     name:
     - wpasupplicant
     - rpcbind

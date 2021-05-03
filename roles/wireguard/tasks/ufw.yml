@@ -51,7 +51,7 @@
     from_ip: '{{ wg_server_subnet }}'
     to_ip: '{{ wg_server_subnet }}'
     interface: '{{ wg_iface }}'
-    route: yes
+    route: True
     comment: 'Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}'
   when: wg_forward and wg_srv
 
@@ -71,7 +71,7 @@
     from_ip: '{{ wg_clients_ips | cidr_merge("span") }}'
     to_ip: '{{ wg_clients_ips | cidr_merge("span") }}'
     interface: '{{ wg_iface }}'
-    route: yes
+    route: True
     comment: 'Allow routing on {{ wg_iface }} within {{ wg_clients_ips | cidr_merge("span") }}'
   when:
     - wg_clients_ips is defined
@@ -84,7 +84,7 @@
     from_ip: '{{ item.allowedips }}'
     to_ip: '{{ item.allowedips }}'
     interface: '{{ wg_iface }}'
-    route: yes
+    route: True
     comment: 'Allow routing on {{ wg_iface }} within {{ item.allowedips }}'
   no_log: true
   loop: '{{ wg_endpoints }}'

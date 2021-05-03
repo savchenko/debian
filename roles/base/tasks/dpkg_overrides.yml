@@ -5,7 +5,7 @@
   register: dpkg_existing_overrides
   changed_when: False
   failed_when: dpkg_existing_overrides.stdout_lines | length < 2
-  become: yes
+  become: True
 - set_fact:
     dpkg_existing_overrides: '{{ dpkg_existing_overrides.stdout_lines }}'
 
@@ -14,10 +14,10 @@
     # read_csv doesn't accept relative path for some reason
     path: '{{ role_path }}/files/conf/dpkg_overrides.csv'
     delimiter: ','
-    strict: yes
+    strict: True
   register: dpkg_overrides
   delegate_to: localhost
-  become: no
+  become: False
 - set_fact:
     dpkg_overrides: '{{ dpkg_overrides | dict2items }}'
 - set_fact:
@@ -26,6 +26,6 @@
 - name: Update permissions overrides if necessary
   shell:
     cmd: '{{ "dpkg-statoverride --update --add " + item["user"] + " " + item["group"] + " " + item["chmod"] + " " + item["path"] }}'
-  become: yes
+  become: True
   with_items: '{{ dpkg_overrides }}'
   when: item['path'] not in dpkg_existing_overrides

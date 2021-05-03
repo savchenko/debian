@@ -22,7 +22,7 @@
   user:
     name: '{{ agent_name }}'
     state: absent
-    remove: yes
+    remove: True
     force: true
   when: user_grep.rc | int == 0 and remove_existing_user
 
@@ -142,14 +142,14 @@
     src: '/bin/sh'
     dest: '/home/{{ agent_name }}/bin/sh'
     mode: 0755
-    remote_src: yes
+    remote_src: True
 
 - name: Copy rsync to chroot /usr/bin
   copy:
     src: '/usr/bin/rsync'
     dest: '/home/{{ agent_name }}/usr/bin/rsync'
     mode: 0755
-    remote_src: yes
+    remote_src: True
   when: add_rsync
 
 - name: Copy necessary /lib libraries
@@ -157,7 +157,7 @@
     src: '/lib/x86_64-linux-gnu/{{ item }}'
     dest: '/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}'
     mode: 0755
-    remote_src: yes
+    remote_src: True
   with_items:
     - "libacl.so.1"
     - "libattr.so.1"
@@ -177,7 +177,7 @@
     src: '/usr/lib/x86_64-linux-gnu/{{ item }}'
     dest: '/home/{{ agent_name }}/lib/x86_64-linux-gnu/{{ item }}'
     mode: 0755
-    remote_src: yes
+    remote_src: True
   with_items:
     - "libattr.so.1"
     - "libacl.so.1"
@@ -189,7 +189,7 @@
     src: '/lib64/ld-linux-x86-64.so.2'
     dest: '/home/{{ agent_name }}/lib64/ld-linux-x86-64.so.2'
     mode: 0755
-    remote_src: yes
+    remote_src: True
 
 - name: Remove unnecessary files
   file:

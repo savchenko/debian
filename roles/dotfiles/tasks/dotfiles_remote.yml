@@ -51,7 +51,7 @@
         src: '{{ ansible_env.HOME }}/.local/etc/dotfiles/tmux-remote.conf'
         dest: '{{ ansible_env.HOME }}/.tmux.conf'
         state: link
-        force: yes
+        force: True
 
     when: copy_dotfiles
 
@@ -70,7 +70,7 @@
         src: '{{ role_path }}/files/tmux-remote.conf'
         dest: '{{ ansible_env.HOME }}/.tmux.conf'
         state: link
-        force: yes
+        force: True
 
     when: link_to_localhost
 

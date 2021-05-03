@@ -1,7 +1,7 @@
 ---
 - name: Download information about latest versions
   apt:
-    update-cache: yes
+    update-cache: True
     cache_valid_time: 3600
 
 - name: Upgrade packages

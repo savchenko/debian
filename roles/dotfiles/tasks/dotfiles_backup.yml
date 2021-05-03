@@ -4,12 +4,12 @@
     dotfiles_backup: '{{ dotfiles_list | union(dotfiles_list_tmux) }}'
 
 - name: Find existing dotfiles
-  become: yes
+  become: True
   become_user: '{{ ansible_env.USER }}'
   find:
     path: '{{ ansible_env.HOME }}'
     file_type: file
-    hidden: yes
+    hidden: True
   register: homedir_files
 
 - name: Sanitize found files
@@ -38,7 +38,7 @@
   when: homedir_files_dotfiles|length > 0
 
 - name: Create a folder for existing dotfiles
-  become: yes
+  become: True
   become_user: '{{ ansible_env.USER }}'
   file:
       path: '{{ ansible_env.HOME }}/.dotfiles_backup'
@@ -47,18 +47,18 @@
   register: dotfiles_backup_folder
 
 - name: Backup existing dotfiles
-  become: yes
+  become: True
   become_user: '{{ ansible_env.USER }}'
   copy:
     src: '{{ ansible_env.HOME }}/{{ item }}'
     dest: '{{ ansible_env.HOME }}/.dotfiles_backup/{{ item }}_{{ ansible_date_time.epoch }}'
-    remote_src: yes
+    remote_src: True
   with_items: '{{ homedir_files_cross }}'
   when: dotfiles_backup_folder.changed
   register: dotfiles_backup_result
 
 - name: Remove pre-existing dotfiles
-  become: yes
+  become: True
   become_user: '{{ ansible_env.USER }}'
   file:
     path: '{{ ansible_env.HOME }}/{{ item }}'

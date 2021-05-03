@@ -8,7 +8,7 @@
   apt:
     name: ['curl', 'apt-transport-https', 'sudo', 'rsync']
     state: present
-    update_cache: yes
+    update_cache: True
 
 - name: Generate locales
   debconf:
@@ -39,7 +39,7 @@
     dest: /etc/hosts
     insertafter: '^127\.0\.0\.1[ \t]+localhost'
     line: '127.0.0.1 localhost {{ inventory_hostname }}'
-    create: yes
+    create: True
     state: present
   when: WSL2
 

@@ -3,7 +3,7 @@
   include_tasks:
     file: packages_lua.yml
     apply:
-      become: yes
+      become: True
 
 - name: Install Knot-resolver
   apt:
@@ -15,7 +15,7 @@
   file:
     path: /etc/NetworkManager/conf.d/
     state: directory
-    recurse: yes
+    recurse: True
 
 - name: Ensure NetworkManager won't override resolv.conf
   copy:
@@ -53,5 +53,5 @@
 - name: Enable Knot resolver
   service:
     name: kresd@1
-    enabled: yes
+    enabled: True
     state: started

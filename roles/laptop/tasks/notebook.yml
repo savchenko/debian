@@ -1,7 +1,7 @@
 ---
 - name: Add user to i2c group
   user:
-    append: yes
+    append: True
     groups: i2c
     name: '{{ ansible_env.USER }}'
   when: i2c_user_add
@@ -18,7 +18,7 @@
 - name: Unmask sleep and suspend systemd targets
   systemd:
     name: '{{ item }}'
-    masked: no
+    masked: False
   with_items:
     - "sleep.target"
     - "suspend.target"

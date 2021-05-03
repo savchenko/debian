@@ -1,26 +1,26 @@
 ---
 - name: Run sanity-checks
   import_tasks: assertions.yml
-  become: yes
+  become: True
   tags:
     - laptop_assert
 
 - name: Install laptop packages
   import_tasks: packages_laptop.yml
-  become: yes
+  become: True
   tags:
     - laptop_packages
 
 - name: Notebook-specific settings
   import_tasks: notebook.yml
-  become: yes
+  become: True
   tags:
     - laptop_notebook
 
 - name: Setup ALSA
   import_tasks: alsa.yml
   when: alsa_setup
-  become: no
+  become: False
   tags:
     - laptop_alsa
 

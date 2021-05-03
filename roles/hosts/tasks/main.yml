@@ -2,14 +2,14 @@
 - name: Download latest hosts from the mirrors
   import_tasks: fetch_hosts.yml
   delegate_to: localhost
-  run_once: yes
+  run_once: True
   tags:
     - hosts_download
 
 - name: Assemble hosts in the single file and clean-up afterwards
   import_tasks: assemble_hosts.yml
   delegate_to: localhost
-  run_once: yes
+  run_once: True
   tags:
     - hosts_assemble
 

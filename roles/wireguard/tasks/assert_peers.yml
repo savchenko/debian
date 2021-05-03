@@ -6,7 +6,7 @@
       - item.name is search("^[a-zA-Z0-9]*$")
     success_msg: 'Deploying peer: {{ item.name }}'
     fail_msg: 'Invalid peer name: {{ item.name }}'
-    quiet: yes
+    quiet: True
   loop: '{{ wg_clients }}'
   loop_control:
       label: '{{ item.name }}'
@@ -17,7 +17,7 @@
       - item.ip | ipv4(wg_server_subnet)
     success_msg: 'Deploying peer with IP: {{ item.ip }}'
     fail_msg: 'Peer {{ item.ip }} is outside of server`s subnet {{ wg_server_subnet }}'
-    quiet: yes
+    quiet: True
   loop: '{{ wg_clients }}'
   loop_control:
       label: '{{ item.ip }}'
@@ -28,7 +28,7 @@
     that:
       - item.pubkey | length == 44
       - item.psk | length == 44
-    quiet: yes
+    quiet: True
     success_msg: 'Client`s keys are 44 symbols long'
     fail_msg: 'Key length is wrong'
   loop: '{{ wg_clients }}'
@@ -40,7 +40,7 @@
     that:
       - item.keepalive | int >= 0
       - item.keepalive | int < 31536000
-    quiet: yes
+    quiet: True
     success_msg: 'Keepalive value of "{{ item.keepalive }}" is OK'
     fail_msg: 'Keepalive value of "{{ item.keepalive }}" is outside of the 0..31536000 range'
   loop: '{{ wg_clients }}'

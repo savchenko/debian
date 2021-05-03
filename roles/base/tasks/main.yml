@@ -1,13 +1,13 @@
 ---
 - name: Run sanity-checks
   import_tasks: assertions.yml
-  become: yes
+  become: True
   tags:
     - base_assert
 
 - name: Register CPU details
   import_tasks: cpu.yml
-  become: yes
+  become: True
   tags:
     - base_cpu
 
@@ -19,97 +19,97 @@
 
 - name: Boostrap vital settings
   import_tasks: bootstrap.yml
-  become: yes
+  become: True
   tags:
     - base_bootstrap
 
 - name: Remove unwanted packages
   import_tasks: packages_remove.yml
-  become: yes
+  become: True
   when: pkg_remove_defaults
   tags:
     - base_pkg_unwanted
 
 - name: Prepare repositories
   import_tasks: packages_setup_repos.yml
-  become: yes
+  become: True
   tags:
     - base_pkg_repos
 
 - name: Update system
   import_tasks: apt_upgrade.yml
-  become: yes
+  become: True
   tags:
     - base_update_system
 
 - name: Install basic packages
   import_tasks: packages_install.yml
-  become: yes
+  become: True
   tags:
     - base_pkg_basic
 
 - name: install extra packages
   import_tasks: packages_extra.yml
-  become: yes
+  become: True
   when: pkg_install_extra
   tags:
     - base_pkg_extra
 
 - name: Configure Knot-resolver
   import_tasks: packages_resolver.yml
-  become: yes
+  become: True
   when: not WSL1 and not WSL2 and resolver_install
   tags:
     - base_knot
 
 - name: Set various settings in "/etc"
   import_tasks: settings.yml
-  become: yes
+  become: True
   tags:
     - base_etc_settings
 
 - name: Configure "sudo"
   import_tasks: sudo.yml
-  become: yes
+  become: True
   tags:
     - base_sudo
 
 - name: Set timezone, locale and "timesyncd"
   import_tasks: time.yml
-  become: yes
+  become: True
   tags:
     - base_timezone
 
 - name: Create unique DH moduli
   import_tasks: moduli.yml
-  become: yes
+  become: True
   tags:
     - base_moduli
 
 - name: Configure UFW
   import_tasks: ufw.yml
-  become: yes
+  become: True
   tags:
     - base_ufw
   when: not WSL1 and not WSL2
 
 - name: Reconfigure console via dpkg
   import_tasks: dpkg_console.yml
-  become: yes
+  become: True
   when: set_dpkg_console
   tags:
     - base_dpkg_console
 
 - name: Configure sshguard
   import_tasks: sshguard.yml
-  become: yes
+  become: True
   when: sshguard_install
   tags:
     - base_sshguard
 
 - name: Configure logrotate
   import_tasks: logrotate.yml
-  become: yes
+  become: True
   tags:
     - base_logrotate
 

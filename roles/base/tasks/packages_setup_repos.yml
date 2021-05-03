@@ -10,5 +10,5 @@
   apt:
     name: '*'
     state: latest
-    update_cache: yes
+    update_cache: True
     force_apt_get: True

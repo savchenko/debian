@@ -1,6 +1,6 @@
 ---
 - name: Copy /etc/hosts_blocked
-  become: yes
+  become: True
   copy:
     src: '{{ st_hosts }}/hosts_blocked'
     dest: /etc/hosts_blocked

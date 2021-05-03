@@ -157,8 +157,8 @@
     file:
       path: '{{ ansible_env.HOME }}/.cache/mpd/lyrics/'
       state: directory
-      recurse: yes
-    become: no
+      recurse: True
+    become: False
     tags:
       - wtf
 

@@ -33,7 +33,7 @@
     src: '{{ playbook_dir }}/roles/dotfiles/files/vim/colors'
     dest: '{{ ansible_env.HOME }}/.vim/colors'
     state: link
-    force: yes
+    force: True
   when: link_to_localhost and not WSL1 and not copy_dotfiles
 
 - name: Create autoload directory
@@ -53,7 +53,7 @@
     src: '{{ playbook_dir }}/roles/dotfiles/files/vim/vim-plug/plug.vim'
     dest: '{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim'
     state: link
-    force: yes
+    force: True
   when: link_to_localhost and not WSL1 and not copy_dotfiles
 
 - name: Check if DNS resolution works

@@ -10,7 +10,7 @@
 
 - name: Deploy clients
   blockinfile:
-    backup: no
+    backup: False
     path: '/etc/wireguard/{{ wg_iface }}.conf'
     block: '{{ lookup("template", "wg_client.j2") }}'
     marker: '# {mark} {{ item.name }}'
@@ -28,7 +28,7 @@
 
 - name: Deploy endpoints
   blockinfile:
-    backup: no
+    backup: False
     path: '/etc/wireguard/{{ wg_iface }}.conf'
     block: '{{ lookup("template", "wg_endpoints.j2") }}'
     marker: '# {mark} {{ item.name }}'

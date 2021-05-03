@@ -31,7 +31,7 @@
     src: '{{ ansible_env.HOME }}/moduli.out'
     dest: /etc/ssh/moduli
     remote_src: true
-    backup: yes
+    backup: True
   when: primes_are_ok.changed
   register: primes_are_copied
   notify:

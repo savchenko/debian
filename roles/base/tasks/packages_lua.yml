@@ -20,5 +20,5 @@
     - update-alternatives --install /etc/alternatives/lua-interpretor lua /usr/bin/lua5.4 1
     - update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.4 130 --slave /usr/share/man/man1/lua.1.gz lua-manual /usr/share/man/man1/lua5.4.1.gz
     - update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.4 130 --slave /usr/share/man/man1/luac.1.gz lua-compiler-manual /usr/share/man/man1/luac5.4.1.gz
-  become: yes
+  become: True
   when: lua_stat.results | json_query( '[*].stat.exists' ) | unique | string != "[True]"
