@@ -342,7 +342,7 @@ exec_always $XDG_CONFIG_HOME/sway/gsettings.sh
 exec_always $XDG_CONFIG_HOME/sway/clamshell.sh
 
 # Notifier
-exec mako
+exec_always mako
 
 # Music daemon
 exec mpd
