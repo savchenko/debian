@@ -11,10 +11,10 @@
 - name: Deploy clients
   blockinfile:
     backup: no
-    path: "/etc/wireguard/{{ wg_iface }}.conf"
-    block: "{{ lookup('template', 'wg_client.j2') }}"
-    marker: "\n# {mark} {{ item.name }}\n"
-  loop: "{{ wg_clients }}"
+    path: '/etc/wireguard/{{ wg_iface }}.conf'
+    block: '{{ lookup("template", "wg_client.j2") }}'
+    marker: '# {mark} {{ item.name }}'
+  loop: '{{ wg_clients }}'
   when: wg_clients | length > 0
   register: wg_clients_deployed
   no_log: true
@@ -29,10 +29,10 @@
 - name: Deploy endpoints
   blockinfile:
     backup: no
-    path: "/etc/wireguard/{{ wg_iface }}.conf"
-    block: "{{ lookup('template', 'wg_endpoints.j2') }}"
-    marker: "\n# {mark} {{ item.name }}\n"
-  loop: "{{ wg_endpoints }}"
+    path: '/etc/wireguard/{{ wg_iface }}.conf'
+    block: '{{ lookup("template", "wg_endpoints.j2") }}'
+    marker: '# {mark} {{ item.name }}'
+  loop: '{{ wg_endpoints }}'
   when: wg_endpoints | length > 0
   no_log: true
   register: wg_endpoints_deployed
