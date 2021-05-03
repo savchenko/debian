@@ -34,7 +34,7 @@
 
 - name: Tear-down the existing Wireguard interface
   shell:
-    cmd: "wg-quick down {{ wg_iface }}"
+    cmd: 'wg-quick down {{ wg_iface }}'
   when:
     - wg_overwrite
     - wg_existing_conf

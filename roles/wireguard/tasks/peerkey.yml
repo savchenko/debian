@@ -1,7 +1,7 @@
 ---
 - name: Test provided private key
   shell:
-    cmd: "echo {{ wg_peerkey }} | wg pubkey"
+    cmd: 'echo {{ wg_peerkey }} | wg pubkey'
   when: wg_peerkey | string | length == 44
   ignore_errors: yes
   register: wg_peerkey_test
@@ -10,8 +10,8 @@
 - name: Assert that private key is accepted by Wireguard
   assert:
     that: wg_peerkey_test.rc == 0
-    fail_msg: "Private key is declined by Wireguard."
-    success_msg: "Private key is accepted by Wireguard, continuing..."
+    fail_msg: 'Private key is declined by Wireguard.'
+    success_msg: 'Private key is accepted by Wireguard, continuing...'
   when: wg_peerkey_test is defined
 
 # Store "clean" keys in variables
@@ -19,16 +19,16 @@
 
   - name: Derive public key from the provided private one
     shell:
-      cmd: "echo {{ wg_peerkey }} | wg pubkey"
+      cmd: 'echo {{ wg_peerkey }} | wg pubkey'
     register: wg_pubkey
 
   - name: Clean-up keypair variables
     set_fact:
-      wg_pubkey: "{{ wg_pubkey.stdout }}"
-      wg_sum_pubkey: "{{ wg_pubkey.stdout }}"
+      wg_pubkey: '{{ wg_pubkey.stdout }}'
+      wg_sum_pubkey: '{{ wg_pubkey.stdout }}'
       # BUG: wg_privkey is overwritten by the block below, even if the block
       #      is skipped. Added conditional in `wg_server.j2` as the workaround.
-      wg_privkey: "{{ wg_peerkey }}"
+      wg_privkey: '{{ wg_peerkey }}'
 
   - name: Verify that both keys are of expected length
     set_fact:

@@ -8,18 +8,18 @@
 
 - name: Register private key
   slurp:
-    src: "/etc/wireguard/privatekey"
+    src: '/etc/wireguard/privatekey'
   register: wg_privkey
 - set_fact:
-    wg_privkey: "{{ wg_privkey.content | b64decode | trim }}"
+    wg_privkey: '{{ wg_privkey.content | b64decode | trim }}'
 
 - name: Register public key
   slurp:
-    src: "/etc/wireguard/publickey"
+    src: '/etc/wireguard/publickey'
   register: wg_pubkey
 - set_fact:
-    wg_pubkey: "{{ wg_pubkey.content | b64decode | trim }}"
-    wg_sum_pubkey: "{{ wg_pubkey.content | b64decode | trim }}"
+    wg_pubkey: '{{ wg_pubkey.content | b64decode | trim }}'
+    wg_sum_pubkey: '{{ wg_pubkey.content | b64decode | trim }}'
 
 - name: Verify that both keys are of expected length
   set_fact:
@@ -32,7 +32,7 @@
 
 - name: Delete keyfiles
   file:
-    path: "/etc/wireguard/{{ item }}"
+    path: '/etc/wireguard/{{ item }}'
     state: absent
   with_items:
     - privatekey

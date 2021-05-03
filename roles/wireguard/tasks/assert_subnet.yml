@@ -3,7 +3,7 @@
   set_fact:
     wg_existing_ifaces: "{{ hostvars[inventory_hostname]\
                           ['ansible_%s' | format(item)]['ipv4'] }}"
-  loop: "{{ ansible_interfaces }}"
+  loop: '{{ ansible_interfaces }}'
   when: hostvars[inventory_hostname]['ansible_%s' | format(item)]['ipv4'] is defined
   register: wg_existing_ifaces_parsed
 
@@ -18,7 +18,7 @@
                             + [item['address'] + '/' + item['netmask']] }}"
     wg_addr_individual: "{{ wg_addr_individual\
                           + [item['address'] | string] }}"
-  with_items: "{{ wg_existing_ifaces_mini }}"
+  with_items: '{{ wg_existing_ifaces_mini }}'
   vars:
     wg_addr_plus_netmask: []
     wg_addr_individual: []
@@ -27,7 +27,7 @@
   set_fact:
     wg_addr_incl_netmask_ready: "{{ wg_addr_incl_netmask_ready\
                                   + [item | ipaddr('network/prefix')] }}"
-  with_items: "{{ wg_addr_plus_netmask }}"
+  with_items: '{{ wg_addr_plus_netmask }}'
   vars:
     wg_addr_incl_netmask_ready: []
 
@@ -39,7 +39,7 @@
                   ['ipv4']['network']\
                   | ipaddr(wg_server_subnet)\
                   | string] }}"
-  loop: "{{ ansible_interfaces }}"
+  loop: '{{ ansible_interfaces }}'
   when: hostvars[inventory_hostname]['ansible_%s' | format(item)]['ipv4'] is defined
   vars:
     - wg_overlap_networks: []
@@ -60,8 +60,8 @@
 
 - name: Filter addresses
   set_fact:
-    wg_addresses_filtered: "{{ wg_addresses_filtered + [item] }}"
-  with_items: "{{ wg_addresses }}"
+    wg_addresses_filtered: '{{ wg_addresses_filtered + [item] }}'
+  with_items: '{{ wg_addresses }}'
   when: item | ipaddr(wg_server_subnet) | ipaddr('bool')
   vars:
     wg_addresses_filtered: []
@@ -75,8 +75,8 @@
 
 - name: Create dictionary to correlate all the findings about network
   set_fact:
-    wg_combodict: "{{ wg_combodict | combine({item:wg_addresses_filtered}) }}"
-  with_items: "{{ wg_networks }}"
+    wg_combodict: '{{ wg_combodict | combine({item:wg_addresses_filtered}) }}'
+  with_items: '{{ wg_networks }}'
   when: wg_networks is defined and wg_addresses_filtered is defined
   vars:
     wg_combodict: {}
@@ -88,7 +88,7 @@
   when:
       - wg_combodict is defined
       - item.1 | ipaddr(item.0.key) | ipaddr('bool')
-  loop: "{{ wg_combodict | dict2items | subelements('value') }}"
+  loop: '{{ wg_combodict | dict2items | subelements("value") }}'
   vars:
     wg_ips_to_correlate: []
 
@@ -101,17 +101,17 @@
 
 - name: Find which interfaces are affected
   findif:
-    address: "{{ item }}"
-  with_items: "{{ wg_ips_to_correlate }}"
+    address: '{{ item }}'
+  with_items: '{{ wg_ips_to_correlate }}'
   when: wg_ips_to_correlate is defined
   changed_when: false
   register: wg_overlap_ifaces
 
 - name: Register affected interfaces
   set_fact:
-    wg_affected_ifaces: "{{ wg_affected_ifaces + [item.interface | string] }}"
-    wg_affected_addresses: "{{ wg_affected_addresses + [item.item] }}"
-  with_items: "{{ wg_overlap_ifaces.results }}"
+    wg_affected_ifaces: '{{ wg_affected_ifaces + [item.interface | string] }}'
+    wg_affected_addresses: '{{ wg_affected_addresses + [item.item] }}'
+  with_items: '{{ wg_overlap_ifaces.results }}'
   when:
     - wg_overlap_ifaces.results is defined
     - item.interface != None
@@ -137,7 +137,7 @@
 
 - name: Extract IP from a Wireguard config we intend to replace
   shell:
-    cmd: "grep Address /etc/wireguard/{{ wg_affected_ifaces[0] }}.conf | cut -d' ' -f3 | xargs"
+    cmd: 'grep Address /etc/wireguard/{{ wg_affected_ifaces[0] }}.conf | cut -d" " -f3 | xargs'
   register: wg_existing_config_ip
   changed_when: false
   when:
@@ -162,7 +162,7 @@
 
 - name: Ensure that found interface is managed by Wireguard _now_
   shell:
-    cmd: "wg show {{ wg_affected_ifaces[0] }}"
+    cmd: 'wg show {{ wg_affected_ifaces[0] }}'
   register: wg_affected_shellcheck
   failed_when: wg_affected_shellcheck.rc > 0
   when:

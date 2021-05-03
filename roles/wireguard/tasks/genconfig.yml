@@ -2,7 +2,7 @@
 - name: Create core of the Wireguard configuration file
   template:
     src: wg_server.j2
-    dest: "/etc/wireguard/{{ wg_iface }}.conf"
+    dest: '/etc/wireguard/{{ wg_iface }}.conf'
     owner: root
     mode: 0600
   register: wg_configured
@@ -22,8 +22,8 @@
 - name: Assert that all clients are provisioned
   assert:
     that: wg_clients | length == wg_clients_deployed.results | length
-    success_msg: "Successfully provisioned {{ wg_clients | length }} clients."
-    fail_msg: "Provisioned {{ wg_clients_deployed.results | length }} clients out of {{ wg_clients | length }} requested."
+    success_msg: 'Successfully provisioned {{ wg_clients | length }} clients.'
+    fail_msg: 'Provisioned {{ wg_clients_deployed.results | length }} clients out of {{ wg_clients | length }} requested.'
   when: wg_clients | length > 0
 
 - name: Deploy endpoints
@@ -40,6 +40,6 @@
 - name: Assert that all endpoints are provisioned
   assert:
     that: wg_endpoints | length == wg_endpoints_deployed.results | length
-    success_msg: "Successfully provisioned {{ wg_endpoints | length }} endpoints."
-    fail_msg: "Provisioned {{ wg_endpoints_deployed.results | length }} endpoints out of {{ wg_endpoints | length }} requested."
+    success_msg: 'Successfully provisioned {{ wg_endpoints | length }} endpoints.'
+    fail_msg: 'Provisioned {{ wg_endpoints_deployed.results | length }} endpoints out of {{ wg_endpoints | length }} requested.'
   when: wg_endpoints | length > 0

@@ -1,7 +1,7 @@
 ---
 - name: Enable forwarding in UFW's sysctl settings
   replace:
-    path: "/etc/ufw/sysctl.conf"
+    path: '/etc/ufw/sysctl.conf'
     regexp: '^#(net\/ipv4\/ip_forward\=1)'
     replace: '\1'
   when: wg_forward
@@ -9,35 +9,35 @@
   # Two packets walk into a public interface...
 - name: Change default UFW forward policy to DROP
   lineinfile:
-    path: "/etc/default/ufw"
+    path: '/etc/default/ufw'
     line: 'DEFAULT_FORWARD_POLICY="DROP"'
     regexp: '^DEFAULT_FORWARD_POLICY'
 
 - name: Register existing Wireguard UFW rules
   shell:
-    cmd: "ufw status numbered | grep -E 'Allow .* on {{ wg_iface }}' | cut -d']' -f1 | sed 's/[^0-9]*//g' | sort -n -r | xargs"
+    cmd: 'ufw status numbered | grep -E "Allow .* on {{ wg_iface }}" | cut -d"]" -f1 | sed "s/[^0-9]*//g" | sort -n -r | xargs'
   register: wg_ufw_existing_rules
   changed_when: wg_ufw_existing_rules.rc > -1
 
 - name: Sanitise output and count the found rules
   set_fact:
-    wg_ufw_existing_rules_count: "{{ wg_ufw_existing_rules.stdout.split(' ') | reject('match', '^$') | list | length | int }}"
+    wg_ufw_existing_rules_count: '{{ wg_ufw_existing_rules.stdout.split(" ") | reject("match", "^$") | list | length | int }}'
 
 - debug:
-    msg: "Found {{ wg_ufw_existing_rules_count }} existing rules that match the description"
+    msg: 'Found {{ wg_ufw_existing_rules_count }} existing rules that match the description'
 
 # If existing rules are found and wg_overwrite is True
 - block:
 
   - name: Delete pre-existing Wireguard UFW rules
     shell:
-      cmd: "for i in {{ wg_ufw_existing_rules.stdout }}; do ufw --force delete $i; done"
+      cmd: 'for i in {{ wg_ufw_existing_rules.stdout }}; do ufw --force delete $i; done'
     register: wg_ufw_deleted_rules
 
   - name: Assert that all rules were indeed deleted
     assert:
       that: wg_ufw_deleted_rules.stdout_lines | length | int == wg_ufw_existing_rules_count | int
-      success_msg: "Deleted {{ wg_ufw_existing_rules_count }} rules."
+      success_msg: 'Deleted {{ wg_ufw_existing_rules_count }} rules.'
       fail_msg: "Detected {{ wg_ufw_existing_rules_count }} rules, but deleted only \
                 {{ wg_ufw_deleted_rules.stdout_lines | length }}"
 
@@ -48,17 +48,17 @@
   ufw:
     rule: allow
     direction: in
-    from_ip: "{{ wg_server_subnet }}"
-    to_ip: "{{ wg_server_subnet }}"
-    interface: "{{ wg_iface }}"
+    from_ip: '{{ wg_server_subnet }}'
+    to_ip: '{{ wg_server_subnet }}'
+    interface: '{{ wg_iface }}'
     route: yes
-    comment: "Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}"
+    comment: 'Allow routing on {{ wg_iface }} within {{ wg_server_subnet }}'
   when: wg_forward and wg_srv
 
 - name: Find smallest subnet that fits all the clients
   set_fact:
-    wg_clients_ips: "{{ wg_clients_ips + [item.ip] }}"
-  loop: "{{ wg_clients }}"
+    wg_clients_ips: '{{ wg_clients_ips + [item.ip] }}'
+  loop: '{{ wg_clients }}'
   no_log: true
   vars:
     wg_clients_ips: []
@@ -68,11 +68,11 @@
   ufw:
     rule: allow
     direction: in
-    from_ip: "{{ wg_clients_ips | cidr_merge('span') }}"
-    to_ip: "{{ wg_clients_ips | cidr_merge('span') }}"
-    interface: "{{ wg_iface }}"
+    from_ip: '{{ wg_clients_ips | cidr_merge("span") }}'
+    to_ip: '{{ wg_clients_ips | cidr_merge("span") }}'
+    interface: '{{ wg_iface }}'
     route: yes
-    comment: "Allow routing on {{ wg_iface }} within {{ wg_clients_ips | cidr_merge('span') }}"
+    comment: 'Allow routing on {{ wg_iface }} within {{ wg_clients_ips | cidr_merge("span") }}'
   when:
     - wg_clients_ips is defined
     - wg_forward and not wg_srv
@@ -81,13 +81,13 @@
   ufw:
     rule: allow
     direction: in
-    from_ip: "{{ item.allowedips }}"
-    to_ip: "{{ item.allowedips }}"
-    interface: "{{ wg_iface }}"
+    from_ip: '{{ item.allowedips }}'
+    to_ip: '{{ item.allowedips }}'
+    interface: '{{ wg_iface }}'
     route: yes
-    comment: "Allow routing on {{ wg_iface }} within {{ item.allowedips }}"
+    comment: 'Allow routing on {{ wg_iface }} within {{ item.allowedips }}'
   no_log: true
-  loop: "{{ wg_endpoints }}"
+  loop: '{{ wg_endpoints }}'
   when: wg_forward and wg_endpoints | length > 0
 
 - name: Allow Wireguard to listen on defined port
@@ -95,18 +95,18 @@
     rule: allow
     direction: in
     from_ip: any
-    port: "{{ wg_port | int }}"
+    port: '{{ wg_port | int }}'
     proto: udp
-    comment: "Allow {{ wg_port }}/UDP on {{ wg_iface }}"
+    comment: 'Allow {{ wg_port }}/UDP on {{ wg_iface }}'
   when: wg_srv
 
 - name: Allow SSH from Wireguard subnet
   ufw:
     rule: allow
     direction: in
-    from_ip: "{{ wg_server_subnet }}"
-    interface: "{{ wg_iface }}"
+    from_ip: '{{ wg_server_subnet }}'
+    interface: '{{ wg_iface }}'
     port: '22'
     proto: tcp
-    comment: "Allow 22/TCP on {{ wg_iface }} from {{ wg_server_subnet }}"
+    comment: 'Allow 22/TCP on {{ wg_iface }} from {{ wg_server_subnet }}'
   when: wg_srv and wg_ssh

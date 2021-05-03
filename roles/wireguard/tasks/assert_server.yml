@@ -20,31 +20,31 @@
       - wg_srv is defined
 
 - debug:
-    msg: "Server's IP and subnet are undefined.\nProvisioning transparent proxy."
+    msg: 'Server`s IP and subnet are undefined.\nProvisioning transparent proxy.'
   when: not wg_srv
 
 - name: Assert that subnet calculation performs correctly
   assert:
     that: wg_server_subnet | ipsubnet(net) | int == 1
-    success_msg: "Subnet validated"
+    success_msg: 'Subnet validated'
     fail_msg: "Subnet calculation failed. Something is very wrong here.\n\
                Please verify `wg_server_subnet` which currently evaluates to \
                '{{ wg_server_subnet }}'"
   vars:
-    net: "{{ wg_server_subnet.split('/')[1] | int }}"
+    net: '{{ wg_server_subnet.split("/")[1] | int }}'
   when: wg_srv
 
 - name: Verify server's IP
   assert:
     that: wg_server_ip | ipv4
-    success_msg: "Server's private IP: {{ wg_server_ip }}"
-    fail_msg: "Incorrect server IP: {{ wg_server_ip }}"
+    success_msg: 'Server"s private IP: {{ wg_server_ip }}'
+    fail_msg: 'Incorrect server IP: {{ wg_server_ip }}'
   when: wg_srv
 
 - name: Verify that server`s IP is within its subnet
   assert:
     that: wg_server_ip | ipv4(wg_server_subnet)
-    success_msg: "Provisioning subnet: {{ wg_server_subnet }}"
+    success_msg: 'Provisioning subnet: {{ wg_server_subnet }}'
     fail_msg: "Server`s ip '{{ wg_server_ip }}' is outside of its own \
                subnet '{{ wg_server_subnet }}'"
   when: wg_srv
@@ -52,14 +52,14 @@
 - name: Verify Wireguard port
   assert:
     that: wg_port | int > 1 and wg_port | int < 65535
-    success_msg: "Server will be listening on port {{ wg_port }}"
-    fail_msg: "Invalid port number: {{ wg_port }}"
+    success_msg: 'Server will be listening on port {{ wg_port }}'
+    fail_msg: 'Invalid port number: {{ wg_port }}'
 
 - name: Verify interface name
   assert:
     that: wg_iface | length > 1
-    success_msg: "Wireguard interface: {{ wg_iface }}"
-    fail_msg: "Invalid interface name: {{ wg_iface }}"
+    success_msg: 'Wireguard interface: {{ wg_iface }}'
+    fail_msg: 'Invalid interface name: {{ wg_iface }}'
 
 - name: Check if there are existing Wireguard interfaces
   command: wg show interfaces
