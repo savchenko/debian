@@ -56,9 +56,9 @@
     mode: a+x
     owner: root
   loop:
-    - { src: "bin/z.lua", dest: '/usr/local/bin/z.lua' }
-    - { src: "bin/czmod.bash", dest: '/usr/local/bin/czmod.bash' }
-    - { src: "bin/czmod", dest: '/usr/local/bin/czmod' }
+    - { src: 'bin/z.lua', dest: '/usr/local/bin/z.lua' }
+    - { src: 'bin/czmod.bash', dest: '/usr/local/bin/czmod.bash' }
+    - { src: 'bin/czmod', dest: '/usr/local/bin/czmod' }
   tags:
     - wtf
 
@@ -68,8 +68,8 @@
     dest: '{{ item.dest }}'
     state: link
   loop:
-    - { src: "/usr/bin/batcat", dest: '/usr/bin/bat' }
-    - { src: "/usr/bin/fdfind", dest: '/usr/bin/fd' }
+    - { src: '/usr/bin/batcat', dest: '/usr/bin/bat' }
+    - { src: '/usr/bin/fdfind', dest: '/usr/bin/fd' }
 
 - name: Create Perl modules folder
   file:

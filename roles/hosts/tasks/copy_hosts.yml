@@ -2,7 +2,7 @@
 - name: Copy /etc/hosts_blocked
   become: yes
   copy:
-    src: "{{ st_hosts }}/hosts_blocked"
+    src: '{{ st_hosts }}/hosts_blocked'
     dest: /etc/hosts_blocked
     owner: root
     mode: 0644
