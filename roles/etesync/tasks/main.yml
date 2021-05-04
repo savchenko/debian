@@ -17,7 +17,7 @@
   tags:
     - esc_configure_nginx
 
-- name: Configure EteSync user
+- name: Configure EteSync system user
   import_tasks: configure_user.yml
   become: True
   tags:
@@ -28,3 +28,19 @@
   become: True
   tags:
     - esc_configure_uvicorn
+
+- name: Show details of the added EteBase superuser
+  debug:
+    msg: |
+      Admin username: {{ esc_admin_out }}
+      Make sure to login into {{ ansible_host }} and run:
+      cd {{ esc_path }} && source ./venv/bin/activate \
+      && ./manage.py changepassword {{ esc_admin }}
+  when: esc_admins_num | int == 0
+
+- name: EteBase superuser is already present
+  debug:
+    msg: >
+      'EteBase has had superuser prior to this playbook run.
+      Investigate manually if needed'
+  when: esc_admins_num | int > 0

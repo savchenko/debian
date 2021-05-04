@@ -30,3 +30,59 @@
   register: esc_collect
   changed_when: '"static files copied" in esc_collect.stdout'
   when: not esc_static.stat.exists
+
+- name: Extract data from EteSync DB
+  shell:
+    cmd: 'source .venv/bin/activate && ./manage.py dumpdata --format yaml'
+    chdir: '{{ esc_path }}'
+    executable: /usr/bin/bash
+  no_log: True
+  register: esc_dump_yml
+  changed_when: False
+
+- name: Find if there are superusers
+  set_fact:
+    esc_admins_num: '{{ esc_dump_yml.stdout | regex_findall("(is_superuser: true)") | length | int }}'
+
+- name: Provision user-provided superuser name
+  set_fact:
+    esc_admin_out: '{{ esc_admin }}'
+  when:
+    - esc_admin | length | int >= 3
+    - esc_admins_num | int == 0
+
+  # Select admin name at random unless defined by an operator
+- block:
+
+  - name: Generate list of possible names for the admin user
+    shell:
+      # Don't ask why there is ^[^f]...
+      cmd: 'cat /usr/share/dict/words | iconv -t ASCII//TRANSLIT | grep -o -x "^[^f][a-z]\{2,6\}[^s,d,y]$" | dd status=none conv=lcase | sort -R 2> /dev/null | uniq -u 2> /dev/null | head -32'
+    no_log: True
+    register: esc_admin_list
+
+  - name: Select name for the admin user at random
+    set_fact:
+      # We can't re-define var with `set_fact`...
+      esc_admin_rnd: '{{ item }}'
+      # No, we can't reference `esc_admin_rnd` just yet
+      esc_admin_out: '{{ item }}'
+      esc_admin_random: True
+    with_random_choice: '{{ esc_admin_list.stdout_lines }}'
+
+  when:
+    - esc_admin | length | int < 3
+    - esc_admins_num | int == 0
+  # Block end
+
+- name: Setup EteSync admin user
+  shell:
+    cmd: 'source .venv/bin/activate && ./manage.py createsuperuser --no-input --username {{ esc_admin_out }} --email {{ esc_admin_email }}'
+    chdir: '{{ esc_path }}'
+  args:
+      executable: /usr/bin/bash
+  register: esc_django_superuser
+  when: esc_admins_num | int == 0
+  notify:
+    - restart nginx
+    - restart etebase

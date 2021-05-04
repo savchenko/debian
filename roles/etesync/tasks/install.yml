@@ -9,13 +9,6 @@
       - python3-virtualenv
       - uvicorn
 
-- name: Stop nginx
-  systemd:
-    name: nginx.service
-    enabled: True
-    masked: False
-    state: stopped
-
 - name: Clone EteSync repository
   git:
     repo: 'https://github.com/etesync/server'

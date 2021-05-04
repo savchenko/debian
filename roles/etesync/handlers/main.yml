@@ -7,3 +7,17 @@
     name: local-fs.target
   become: True
   listen: 'reload systemd'
+
+- name: Restart nginx
+  systemd:
+    name: nginx.service
+    state: restarted
+  become: True
+  listen: 'restart nginx'
+
+- name: Restart EteBase / Uvicorn
+  systemd:
+    name: etebase_server.service
+    state: restarted
+  become: True
+  listen: 'restart etebase'
