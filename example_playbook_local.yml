@@ -71,17 +71,18 @@
     vars:
       alsa_out_card: 3
       alsa_out_device: 0
-      alsa_setup: true
+      alsa_setup: false
       disable_nmi_watch: true
       enable_sleep_suspend: true
+      i2c_load_dev: true
+      i2c_user_add: true
       intel_hda_options: ["model=thinkpad", "power_save_controller=Y"]
       logind_configure: false
       logind_idle_action: suspend
       logind_idle_time: 600
       logind_lid_action: suspend
       logind_powerbutton_action: poweroff
-      i2c_user_add: true
-      i2c_load_dev: true
+      set_trackpoint_drift: 25
       vm_writeback: 1500
 
 

@@ -12,4 +12,5 @@ logind_idle_action: suspend
 logind_idle_time: 600 # seconds
 logind_lid_action: suspend
 logind_powerbutton_action: poweroff
+set_trackpoint_drift: 0
 vm_writeback: 1500

@@ -74,14 +74,15 @@
       alsa_setup: true
       disable_nmi_watch: true
       enable_sleep_suspend: true
+      i2c_load_dev: false
+      i2c_user_add: false
       intel_hda_options: []
       logind_configure: false
       logind_idle_action: suspend
       logind_idle_time: 600
       logind_lid_action: suspend
       logind_powerbutton_action: poweroff
-      i2c_user_add: false
-      i2c_load_dev: false
+      set_trackpoint_drift: 0
       vm_writeback: 1500
 
 

@@ -49,3 +49,11 @@
     line: 'kernel.nmi_watchdog=0'
   become: true
   when: disable_nmi_watch
+
+- name: Create Trackpoint udev rule
+  copy:
+    content: 'ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/drift_time}="{{ set_trackpoint_drift }}"'
+    dest: /etc/udev/rules.d/10-trackpoint.rules
+  become: True
+  when: set_trackpoint_drift | int > 0
+  notify: 'reload udev'

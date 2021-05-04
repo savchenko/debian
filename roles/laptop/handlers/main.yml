@@ -1,2 +1,5 @@
 ---
-# handlers file for laptop
+- name: reconfigure keyboard settings
+  shell: udevadm control --reload-rules
+  become: True
+  listen: 'reload udev'
