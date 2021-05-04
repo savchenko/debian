@@ -9,3 +9,8 @@
   become: True
   tags:
     - esc_configure_server
+- name: Configure nginx
+  import_tasks: configure_nginx.yml
+  become: True
+  tags:
+    - esc_configure_nginx
