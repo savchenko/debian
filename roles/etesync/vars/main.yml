@@ -1,2 +1,9 @@
 ---
-# vars file for etesync
+esc_debug: True
+esc_hosts: ['127.0.0.1']
+esc_path: ''
+esc_port: 8000
+esc_rootdir: ''
+esc_skey: ''
+esc_user: www-uvicorn
+esc_version: ''
