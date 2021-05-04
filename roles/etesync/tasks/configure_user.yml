@@ -1,0 +1,43 @@
+---
+- name: Ensure www-data group is present
+  group:
+    name: www-data
+    state: present
+
+- name: 'Check if "{{ esc_user }}" exists'
+  getent:
+    database: passwd
+    key: '{{ esc_user }}'
+
+  # When user doesn't exist
+- block:
+
+  - name: Throw random seeds
+    set_fact:
+      rnd_a: '{{ 4096 | random }}'
+      rnd_b: '{{ 4096 | random }}'
+      rnd_c: '{{ 4096 | random }}'
+      rnd_d: '{{ 4096 | random }}'
+      rnd_e: '{{ 4096 | random }}'
+    no_log: true
+
+  - name: Create random password and salt
+    set_fact:
+      password_raw: '{{ lookup("password", "/dev/null") }}'
+      salt: '{{ rnd_a+rnd_b+rnd_c+rnd_d+rnd_e }}'
+    no_log: true
+
+  - name: 'Create "{{ esc_user }}" user with random password'
+    user:
+      name: '{{ esc_user }}'
+      append: True
+      create_home: False
+      groups: www-data
+      home: '{{ esc_path }}'
+      move_home: False
+      password: '{{ password_raw | password_hash("sha512", salt) }}'
+      shell: /bin/sh
+    no_log: true
+
+  when: not esc_path in getent_passwd[esc_user]
+  # Block end

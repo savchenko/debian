@@ -14,3 +14,8 @@
   become: True
   tags:
     - esc_configure_nginx
+- name: Configure EteSync user
+  import_tasks: configure_user.yml
+  become: True
+  tags:
+    - esc_configure_user
