@@ -1,2 +1,6 @@
 ---
-# tasks file for etesync
+- name: Install EteSync server
+  import_tasks: install.yml
+  become: True
+  tags:
+    - esc_install
