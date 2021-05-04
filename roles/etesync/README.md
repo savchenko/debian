@@ -1,5 +1,5 @@
 # EteSync
-Configures [EteSync](https://github.com/etesync/server) server on the target host.
+Configures [EteSync server](https://github.com/etesync/server) on the target host.
 
 ## Requirements
 
@@ -9,13 +9,17 @@ Configures [EteSync](https://github.com/etesync/server) server on the target hos
 
 
 ## Role Variables
+
 | Variable    | Description                                    | Default       |
 |-------------|------------------------------------------------|---------------|
-| esc_path    | Installation path                              | ""            |
-| esc_hosts   | List of domains/IPs on which server is served. | 127.0.0.1     |
 | esc_debug   | Deloy in debug mode?                           | False         |
-| esc_rootdir | Path to the user data                          | ""            |
+| esc_hosts   | List of domains/IPs on which server is served. | ['127.0.0.1'] |
+| esc_path    | Installation path                              | ''            |
+| esc_port    | Port of which to serve EteSync HTTPs           | 8000          |
+| esc_rootdir | Path to the user data                          | ''            |
 | esc_skey    | Django's `SECRET_KEY`                          | Random string |
+| esc_user    | User used to run the server                    | 'www-uvicorn' |
+| esc_version | SHA1 hash of the commit to checkout.           | ''            |
 
 
 ## Dependencies
