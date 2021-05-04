@@ -1,0 +1,32 @@
+---
+- name: Provision server config
+  template:
+    src: server.j2
+    dest: '{{ esc_path }}/etebase-server.ini'
+    backup: True
+
+- name: Run migrations
+  shell:
+    # cmd: 'virtualenv -p python3 .venv && source .venv/bin/activate && ./manage.py migrate'
+    cmd: 'source .venv/bin/activate && ./manage.py migrate'
+    chdir: '{{ esc_path }}'
+  args:
+      executable: /usr/bin/bash
+  register: esc_migrate
+  failed_when: esc_migrate.rc != 0
+  changed_when: '"Applying" in esc_migrate.stdout'
+
+- name: Check if static files need to be provisioned
+  stat:
+    path: '{{ esc_rootdir }}/static'
+  register: esc_static
+
+- name: Copy static files under www-root
+  shell:
+    cmd: 'source .venv/bin/activate && ./manage.py collectstatic'
+    chdir: '{{ esc_path }}'
+  args:
+      executable: /usr/bin/bash
+  register: esc_collect
+  changed_when: '"static files copied" in esc_collect.stdout'
+  when: not esc_static.stat.exists

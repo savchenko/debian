@@ -4,3 +4,8 @@
   become: True
   tags:
     - esc_install
+- name: Configure EteSync server
+  import_tasks: configure_server.yml
+  become: True
+  tags:
+    - esc_configure_server
