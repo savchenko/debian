@@ -76,7 +76,7 @@ input type:touchpad {
 }
 
 # Hide cursor when typing, available in v1.5.1+
-# seat * hide_cursor when-typing enable
+seat * hide_cursor when-typing enable
 
 set $swaydir $HOME/.config/sway
 

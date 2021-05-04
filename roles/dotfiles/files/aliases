@@ -70,6 +70,39 @@ emptydirs() {
   fi
 }
 
+wtf() {
+  host  "$1"
+  whois "$1" | grep -i "NetName\|Inetnum\|NetRange\|Creation\|Expiry"
+}
+
+chs() { # chrome-suspend
+  pkill -STOP -f "^chrome-sandbox$"
+  pkill -STOP -f "^chromium$"
+  pkill -STOP -f "^chrome$"
+}
+
+chr() { # chrome-suspend
+  pkill -CONT -f "^chrome$"
+  pkill -CONT -f "^chromium$"
+  pkill -CONT -f "^chrome-sandbox$"
+}
+
+ffs() { # firefox-suspend
+  pkill -STOP -f "(^|/)+iceweasel( |$)+"
+  pkill -STOP -f "(^|/)+firefox(-bin)*( |$)+"
+  pkill -STOP -f "(^|/)+firefox-esr( |$)+"
+  pkill -STOP -f "x-www-browser"
+  pkill -STOP -f "(^|/)+plugin-container( |$)+"
+}
+
+ffr() { # firefox-resume
+  pkill -CONT -f "(^|/)+iceweasel( |$)+"
+  pkill -CONT -f "(^|/)+firefox(-bin)*( |$)+"
+  pkill -CONT -f "(^|/)+firefox-esr( |$)+"
+  pkill -CONT -f "x-www-browser"
+  pkill -CONT -f "(^|/)+plugin-container( |$)+"
+}
+
 # imv-wayland with monitor-mode supression
 im() {
   if [ $# -eq 1 ]; then
@@ -279,6 +312,7 @@ alias bfg="java -jar $HOME/.local/bin/bfg.jar"
 alias c,="cd - > /dev/null"
 alias c="clear"
 alias ca="bat --style plain"
+alias cnull='cat "$1" | xargs --null --max-args=1 echo'
 alias dd="dd bs=4M status=progress oflag=sync"
 alias dmesg="sudo dmesg -Hwx"
 alias fd="fdfind --hidden --no-ignore --follow"
