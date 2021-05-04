@@ -1,0 +1,11 @@
+[Unit]
+Description=EteBase server.
+
+[Service]
+User={{ esc_user }}
+Group=www-data
+WorkingDirectory={{ esc_path }}
+ExecStart={{ esc_path }}/.venv/bin/uvicorn etebase_server.asgi:application --uds /tmp/etebase_server.sock
+
+[Install]
+WantedBy=multi-user.target

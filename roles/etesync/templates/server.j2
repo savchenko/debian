@@ -1,0 +1,12 @@
+[global]
+secret_file = secret.txt
+debug = {{ esc_debug }}
+static_root = {{ esc_rootdir}}/static
+media_root = {{ esc_rootdir}}/media
+
+[allowed_hosts]
+allowed_host1 = *
+
+[database]
+engine = django.db.backends.sqlite3
+name = db.sqlite3
