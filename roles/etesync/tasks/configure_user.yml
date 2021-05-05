@@ -4,10 +4,15 @@
     name: www-data
     state: present
 
-- name: 'Check if "{{ esc_user }}" exists'
+- name: Get passwd DB
   getent:
     database: passwd
-    key: '{{ esc_user }}'
+  no_log: True
+  register: esc_getent
+
+- name: 'Check if "{{ esc_user }}" exists'
+  set_fact:
+    esc_user_found: '{{ esc_user in esc_getent["ansible_facts"]["getent_passwd"] }}'
 
   # When user doesn't exist
 - block:
@@ -39,5 +44,5 @@
       shell: /bin/sh
     no_log: true
 
-  when: not esc_path in getent_passwd[esc_user]
+  when: not esc_user_found
   # Block end

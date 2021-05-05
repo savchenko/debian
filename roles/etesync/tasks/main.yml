@@ -5,6 +5,12 @@
   tags:
     - esc_install
 
+- name: Configure EteSync system user
+  import_tasks: configure_user.yml
+  become: True
+  tags:
+    - esc_configure_user
+
 - name: Configure EteSync server
   import_tasks: configure_server.yml
   become: True
@@ -17,11 +23,6 @@
   tags:
     - esc_configure_nginx
 
-- name: Configure EteSync system user
-  import_tasks: configure_user.yml
-  become: True
-  tags:
-    - esc_configure_user
 
 - name: Configure Uvicorn
   import_tasks: configure_uvicorn.yml
@@ -29,6 +30,7 @@
   tags:
     - esc_configure_uvicorn
 
+  # TODO: Move to handlers?
 - name: Show details of the added EteBase superuser
   debug:
     msg: |

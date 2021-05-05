@@ -1,11 +1,27 @@
 ---
+  # Fails if ipv6 is disabled in kernel, #869799
+- name: Install nginx
+  apt:
+    name: nginx-light
+    state: latest
+  register: esc_nginx_install
+  failed_when: False
+
+- name: Work around bug \#869799
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+  # This must be a separate task due to the certbot-nginx
 - name: Install dependencies
   apt:
     name: '{{ pkg }}'
     state: latest
   vars:
     pkg:
+      - certbot
       - nginx-light
+      - python3-certbot-nginx
       - python3-virtualenv
       - uvicorn
 
@@ -16,7 +32,7 @@
     version: '{{ esc_version }}'
 
 - name: Pip-install requirements into virtualenv
-  pip: 
+  pip:
     requirements: '{{ esc_path }}/requirements.txt'
     virtualenv: '{{ esc_path }}/.venv'
 
