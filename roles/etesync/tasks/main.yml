@@ -34,13 +34,14 @@
     msg: |
       Admin username: {{ esc_admin_out }}
       Make sure to login into {{ ansible_host }} and run:
-      cd {{ esc_path }} && source ./venv/bin/activate \
-      && ./manage.py changepassword {{ esc_admin }}
+
+      cd {{ esc_path }} && source .venv/bin/activate \
+      && ./manage.py changepassword {{ esc_admin_out }}
   when: esc_admins_num | int == 0
 
 - name: EteBase superuser is already present
   debug:
-    msg: >
-      'EteBase has had superuser prior to this playbook run.
-      Investigate manually if needed'
+    msg: |
+      EteBase has had superuser prior to this playbook run.
+      Investigate manually if needed.
   when: esc_admins_num | int > 0

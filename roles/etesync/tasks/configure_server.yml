@@ -86,3 +86,16 @@
   notify:
     - restart nginx
     - restart etebase
+
+- name: Set SQLite DB file permissions
+  file:
+    path: '{{ esc_path }}/db.sqlite3'
+    mode: 0600
+    owner: '{{ esc_user }}'
+    group: '{{ esc_user }}'
+
+- name: 'Set "{{ esc_path }}" permissions'
+  file:
+    path: '{{ esc_path }}'
+    owner: '{{ esc_user }}'
+    group: '{{ esc_user }}'

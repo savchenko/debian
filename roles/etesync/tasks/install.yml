@@ -19,3 +19,17 @@
   pip: 
     requirements: '{{ esc_path }}/requirements.txt'
     virtualenv: '{{ esc_path }}/.venv'
+
+- name: Remove example configs
+  file:
+    path: '{{ item }}'
+    state: absent
+  with_items:
+    - '{{ esc_path }}/etebase-server.ini.example'
+    - '{{ esc_path }}/docker'
+    - '{{ esc_path }}/example-configs'
+    - '{{ esc_path }}/.dockerignore'
+    - '{{ esc_path }}/ChangeLog.md'
+    - '{{ esc_path }}/README.md'
+    - '{{ esc_path }}/requirements-dev.txt'
+    - '{{ esc_path }}/.github'

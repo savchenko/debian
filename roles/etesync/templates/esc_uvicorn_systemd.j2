@@ -5,6 +5,7 @@ Description=EteBase server.
 User={{ esc_user }}
 Group=www-data
 WorkingDirectory={{ esc_path }}
+ExecStartPre=-/usr/bin/rm /tmp/etebase_server.sock
 ExecStart={{ esc_path }}/.venv/bin/uvicorn etebase_server.asgi:application --uds /tmp/etebase_server.sock
 
 [Install]
