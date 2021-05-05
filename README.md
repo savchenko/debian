@@ -42,6 +42,9 @@ Creates jailed user that has access only to `sh` and `rsync`. Supports automatic
 ### Wireguard
 All-inclusive, safe role to provision Wireguard in any mode imaginable. [Readme](https://github.com/savchenko/debian/blob/bullseye/roles/wireguard/README.md). 
 
+### EteSync
+Set-up EteBase server: uvicorn and nginx, includes automatic HTTPs via `certbot`. [Readme](https://github.com/savchenko/debian/blob/role_etesync/roles/etesync/README.md).
+
 ### Hosts  
 _**(Pending update to support Knot-Resolver)**_  
 

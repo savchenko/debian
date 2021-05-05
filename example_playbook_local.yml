@@ -139,12 +139,12 @@
     tags:
       - never # prevents this from running unless requested via --tags never
     vars:
+      add_rsync: true
       agent_group: agents
       agent_name: xfer_agent
       pubkey_from_current_user: true
-      remove_existing_user: true
       pubkey_from_others: true
-      add_rsync: true
+      remove_existing_user: true
 
 
   - name: Execute `wireguard` role
@@ -156,13 +156,13 @@
     tags:
       - never
     vars:
-      wg_autostart: true
       wg_endpoints:
         - { name: 'Foo', pubkey: 'sPHxX6IiLpcJpgDmoXRuAiuZdKNJsZtsIEDJGK6ubmU=', psk: 'g1p3GiazEwyEoM2RkYh148/bu0w4zXg6S1I8ybw3fT0=', ip: '10.2.0.1', port: '12335', keepalive: '0', allowedips: '10.2.0.0/16' }
         - { name: 'Bar', pubkey: 'sPHxX6IiLpcJpgDmoXRuAiuZdKNJsZtsIEDJGK6ubmU=', psk: 'g1p3GiazEwyEoM2RkYh148/bu0w4zXg6S1I8ybw3fT0=', ip: '10.3.0.1', port: '22345', keepalive: '45', allowedips: '10.3.0.0/16' }
       wg_clients:
         - { name: 'Flob', pubkey: 'WC5a0cSWATZwLsQH1REjGcQsomZyEtRTaAqyRK20emY=', psk: 'yKsg+u7zY9N5rjgR3YE6cSu90aFBpxEPA3uKzK9vJc0=', ip: '10.2.1.10', keepalive: '0' }
         - { name: 'Fred', pubkey: 'qOwMjZuaVjfmdCSoOQbTp8MPADN+yB5gjRAmddA7jUM=', psk: 'Fo1UMMLxbyPiYwrJ/vE7tqPa66gblskjIc5xyQPsXgg=', ip: '10.3.1.20', keepalive: '90' }
+      wg_autostart: true
       wg_forward: true
       wg_iface: wg8
       wg_overwrite: true
@@ -173,3 +173,23 @@
       wg_ssh: true
       wg_start: true
       wg_systemd: true
+
+
+  - name: Execute `EteSync` role
+    include_role:
+      name: etesync
+      apply:
+        tags:
+          - role_etesync
+    tags:
+      - never
+    vars:
+      esc_admin: ''
+      esc_admin_email: 'test@example.com'
+      esc_debug: False
+      esc_hosts: ['127.0.0.1','localhost']
+      esc_path: '/var/www/esc_server'
+      esc_port: 8000
+      esc_rootdir: '/var/www/html/esc_server'
+      esc_user: 'www-uvicorn'
+      esc_version: '43d5af32d72d5f59de7f31698076becf2430ccaa'
