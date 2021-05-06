@@ -1,0 +1,10 @@
+---
+- name: Create certbot command
+  set_fact:
+    esc_certbot_cmd: 'certbot -n --nginx --agree-tos -d {{ ",".join(esc_hosts) }} -m {{ esc_email }} run'
+
+- name: Provision EteSync nginx config
+  shell:
+    cmd: '{{ esc_certbot_cmd }}'
+  register: esc_certbot_exec
+

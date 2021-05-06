@@ -1,5 +1,5 @@
 ---
-- name: Check if there is an existing EteSync repo
+- name: Check if there are existing EteSync folders
   stat:
     path: '{{ item }}'
   with_items:

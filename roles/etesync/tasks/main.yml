@@ -29,14 +29,26 @@
   tags:
     - esc_configure_nginx
 
-
 - name: Configure Uvicorn
   import_tasks: configure_uvicorn.yml
   become: True
   tags:
     - esc_configure_uvicorn
 
-  # TODO: Move to handlers?
+- name: Provision HTTPs certificate
+  import_tasks: https.yml
+  become: True
+  when: esc_do_https
+  tags:
+    - esc_https
+
+- name: EteBase superuser is already present
+  debug:
+    msg: |
+      EteBase has had superuser prior to this playbook run.
+      Investigate manually if needed.
+  when: esc_admins_num | int > 0
+
 - name: Show details of the added EteBase superuser
   debug:
     msg: |
@@ -47,9 +59,9 @@
       && ./manage.py changepassword {{ esc_admin_out }}
   when: esc_admins_num | int == 0
 
-- name: EteBase superuser is already present
+- name: LetsEncrypt results
   debug:
     msg: |
-      EteBase has had superuser prior to this playbook run.
-      Investigate manually if needed.
-  when: esc_admins_num | int > 0
+      {{ esc_certbot_exec.stderr }}
+      {{ esc_certbot_exec.stdout }}
+  when: esc_certbot_exec is defined

@@ -49,3 +49,8 @@
     - '{{ esc_path }}/README.md'
     - '{{ esc_path }}/requirements-dev.txt'
     - '{{ esc_path }}/.github'
+
+- name: Empty default index-page
+  copy:
+    dest: '{{ esc_path }}/templates/success.html'
+    content: ''
