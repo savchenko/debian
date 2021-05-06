@@ -39,7 +39,7 @@
 
 - name: Clone EteSync repository
   git:
-    repo: 'https://github.com/etesync/server'
+    repo: '{{ esc_repository }}'
     dest: '{{ esc_path }}'
     version: '{{ esc_version }}'
 

@@ -5,9 +5,10 @@ esc_cert_email: ''
 esc_debug: False
 esc_do_https: True
 esc_hosts: ['127.0.0.1']
-esc_path: ''
+esc_path: '/var/www/esc_server'
 esc_port: 80
+esc_repository: 'https://github.com/etesync/server'
 esc_rm_existing: False
-esc_rootdir: ''
+esc_rootdir: '/var/www/html/esc_server'
 esc_user: www-uvicorn
-esc_version: ''
+esc_version: '43d5af32d72d5f59de7f31698076becf2430ccaa'
