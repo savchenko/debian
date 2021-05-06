@@ -1,0 +1,68 @@
+---
+- name: Check if nginx is/was installed
+  shell:
+    cmd: 'dpkg-query --show nginx'
+  failed_when: false
+  changed_when: false
+  register: esc_nginx_dpkg
+
+  # >> If nginx isn't installed...
+- block:
+
+    # Fails if ipv6 is disabled in kernel, #869799
+  - name: Install nginx
+    apt:
+      name: nginx-light
+      state: latest
+    register: esc_nginx_installed
+    failed_when: False
+    when: esc_nginx_dpkg.rc != 0
+
+  - name: Work around bug `#869799`
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+
+  when: esc_nginx_dpkg.rc != 0
+  # << Block end
+
+- name: Install dependencies
+  apt:
+    name: '{{ pkg }}'
+    state: latest
+  vars:
+    pkg:
+      - certbot
+      - python3-certbot-nginx
+      - python3-virtualenv
+      - uvicorn
+
+- name: Clone EteSync repository
+  git:
+    repo: '{{ esc_repository }}'
+    dest: '{{ esc_path }}'
+    version: '{{ esc_version }}'
+
+- name: Pip-install requirements into virtualenv
+  pip:
+    requirements: '{{ esc_path }}/requirements.txt'
+    virtualenv: '{{ esc_path }}/.venv'
+
+- name: Remove example configs
+  file:
+    path: '{{ item }}'
+    state: absent
+  with_items:
+    - '{{ esc_path }}/etebase-server.ini.example'
+    - '{{ esc_path }}/docker'
+    - '{{ esc_path }}/example-configs'
+    - '{{ esc_path }}/.dockerignore'
+    - '{{ esc_path }}/ChangeLog.md'
+    - '{{ esc_path }}/README.md'
+    - '{{ esc_path }}/requirements-dev.txt'
+    - '{{ esc_path }}/.github'
+
+- name: Empty default index-page
+  copy:
+    dest: '{{ esc_path }}/templates/success.html'
+    content: ''

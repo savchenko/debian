@@ -12,7 +12,7 @@
 -- * compatible with lua 5.1, 5.2 and 5.3+
 --
 -- USE:
---     * z foo      # cd to most frecent dir matching foo
+--     * z foo	    # cd to most frecent dir matching foo
 --     * z foo bar  # cd to most frecent dir matching foo and bar
 --     * z -r foo   # cd to highest ranked dir matching foo
 --     * z -t foo   # cd to most recently accessed dir matching foo
@@ -26,33 +26,33 @@
 --
 -- Bash Install:
 --     * put something like this in your .bashrc:
---         eval "$(lua /path/to/z.lua --init bash)"
+--	   eval "$(lua /path/to/z.lua --init bash)"
 --
 -- Bash Enhanced Mode:
 --     * put something like this in your .bashrc:
---         eval "$(lua /path/to/z.lua --init bash enhanced)"
+--	   eval "$(lua /path/to/z.lua --init bash enhanced)"
 --
 -- Bash fzf tab completion Mode:
 --     * put something like this in your .bashrc:
---         eval "$(lua /path/to/z.lua --init bash fzf)"
+--	   eval "$(lua /path/to/z.lua --init bash fzf)"
 --
 -- Zsh Install:
 --     * put something like this in your .zshrc:
---         eval "$(lua /path/to/z.lua --init zsh)"
+--	   eval "$(lua /path/to/z.lua --init zsh)"
 --
 -- Posix Shell Install:
 --     * put something like this in your .profile:
---         eval "$(lua /path/to/z.lua --init posix)"
+--	   eval "$(lua /path/to/z.lua --init posix)"
 --
 -- Fish Shell Install:
 --     * put something like this in your config file:
---         source (lua /path/to/z.lua --init fish | psub)
+--	   source (lua /path/to/z.lua --init fish | psub)
 --
 -- Power Shell Install:
 --
 --     * put something like this in your config file:
---         Invoke-Expression (& { 
---           (lua /path/to/z.lua --init powershell) -join "`n" })
+--	   Invoke-Expression (& {
+--	     (lua /path/to/z.lua --init powershell) -join "`n" })
 --
 -- Windows Install (with Clink):
 --     * copy z.lua and z.cmd to clink's home directory
@@ -66,7 +66,7 @@
 --
 -- Windows WSL-1:
 --     * Install lua-filesystem module before init z.lua:
---         sudo apt-get install lua-filesystem
+--	   sudo apt-get install lua-filesystem
 --
 -- Configure (optional):
 --   set $_ZL_CMD in .bashrc/.zshrc to change the command (default z).
@@ -269,7 +269,7 @@ function printT(table, level)
 				key = k
 				func(v, level + 1)
 			else
-				local content = string.format("%s%s = %s", indent .. "  ",tostring(k), tostring(v))
+				local content = string.format("%s%s = %s", indent .. "	",tostring(k), tostring(v))
 				print(content)
 			end
 		end
@@ -406,7 +406,7 @@ if os.native.status then
 			return hr ~= nil and ffi.string(buffer) or nil
 		end
 	end
-	function os.native.tickcount() 
+	function os.native.tickcount()
 		if windows then
 			return os.native.GetTickCount()
 		else
@@ -581,7 +581,7 @@ function os.path.exists(name)
 	end
 	local ok, err, code = os.rename(name, name)
 	if not ok then
-		if code == 13 then
+		if code == 13 or code == 17 then
 			return true
 		elseif code == 30 then
 			local f = io.open(name,"r")
@@ -929,8 +929,8 @@ function os.environ(name, default)
 		end
 	elseif type(default) == 'number' then
 		value = tonumber(value)
-		if value == nil then 
-			return default 
+		if value == nil then
+			return default
 		else
 			return value
 		end
@@ -1707,9 +1707,9 @@ end
 
 -----------------------------------------------------------------------
 -- cd to parent directories which contains keyword
--- #args == 0   -> returns to vcs root
--- #args == 1   -> returns to parent dir starts with args[1]
--- #args == 2   -> returns string.replace($PWD, args[1], args[2])
+-- #args == 0	-> returns to vcs root
+-- #args == 1	-> returns to parent dir starts with args[1]
+-- #args == 2	-> returns string.replace($PWD, args[1], args[2])
 -----------------------------------------------------------------------
 function cd_backward(args, options, pwd)
 	local nargs = #args
@@ -1961,7 +1961,7 @@ function main(argv)
 		elseif opts.fish then
 			z_fish_init(opts)
 		elseif opts.powershell then
-		       z_windows_init(opts)
+			z_windows_init(opts)
 		else
 			z_shell_init(opts)
 		end
@@ -2086,7 +2086,7 @@ function z_clink_init()
 	end
 	local z_parser = clink.arg.new_parser()
 	z_parser:set_arguments({ z_match_completion })
-	z_parser:set_flags("-c", "-r", "-i", "--cd", "-e", "-b", "--add", "-x", "--purge", 
+	z_parser:set_flags("-c", "-r", "-i", "--cd", "-e", "-b", "--add", "-x", "--purge",
 		"--init", "-l", "-s", "--complete", "--help", "-h")
 	clink.arg.register_parser("z", z_parser)
 end
@@ -2166,9 +2166,9 @@ esac
 
 local script_init_bash_once = [[
 _zlua_precmd() {
-    [ "$_ZL_PREVIOUS_PWD" = "$PWD" ] && return
-    _ZL_PREVIOUS_PWD="$PWD"
-    (_zlua --add "$PWD" 2> /dev/null &)
+	[ "$_ZL_PREVIOUS_PWD" = "$PWD" ] && return
+	_ZL_PREVIOUS_PWD="$PWD"
+	(_zlua --add "$PWD" 2> /dev/null &)
 }
 case "$PROMPT_COMMAND" in
 	*_zlua_precmd*) ;;
@@ -2185,9 +2185,9 @@ esac
 
 local script_init_posix_once = [[
 _zlua_precmd() {
-    [ "$_ZL_PREVIOUS_PWD" = "$PWD" ] && return
-    _ZL_PREVIOUS_PWD="$PWD"
-    (_zlua --add "$PWD" 2> /dev/null &)
+	[ "$_ZL_PREVIOUS_PWD" = "$PWD" ] && return
+	_ZL_PREVIOUS_PWD="$PWD"
+	(_zlua --add "$PWD" 2> /dev/null &)
 }
 case "$PS1" in
 	*_zlua_precmd*) ;;
@@ -2694,17 +2694,17 @@ end
 -----------------------------------------------------------------------
 function z_help()
 	local cmd = Z_CMD .. ' '
-	print(cmd .. 'foo       # cd to most frecent dir matching foo')
-	print(cmd .. 'foo bar   # cd to most frecent dir matching foo and bar')
-	print(cmd .. '-r foo    # cd to highest ranked dir matching foo')
-	print(cmd .. '-t foo    # cd to most recently accessed dir matching foo')
-	print(cmd .. '-l foo    # list matches instead of cd')
-	print(cmd .. '-c foo    # restrict matches to subdirs of $PWD')
-	print(cmd .. '-e foo    # echo the best match, don\'t cd')
-	print(cmd .. '-x path   # remove path from history')
-	print(cmd .. '-i foo    # cd with interactive selection')
-	print(cmd .. '-I foo    # cd with interactive selection using fzf')
-	print(cmd .. '-b foo    # cd to the parent directory starting with foo')
+	print(cmd .. 'foo	# cd to most frecent dir matching foo')
+	print(cmd .. 'foo bar	# cd to most frecent dir matching foo and bar')
+	print(cmd .. '-r foo	# cd to highest ranked dir matching foo')
+	print(cmd .. '-t foo	# cd to most recently accessed dir matching foo')
+	print(cmd .. '-l foo	# list matches instead of cd')
+	print(cmd .. '-c foo	# restrict matches to subdirs of $PWD')
+	print(cmd .. '-e foo	# echo the best match, don\'t cd')
+	print(cmd .. '-x path	# remove path from history')
+	print(cmd .. '-i foo	# cd with interactive selection')
+	print(cmd .. '-I foo	# cd with interactive selection using fzf')
+	print(cmd .. '-b foo	# cd to the parent directory starting with foo')
 end
 
 
@@ -2725,7 +2725,7 @@ if os.lfs.enable ~= nil then
 			end
 			os.path.isdir = function (name)
 				local mode = lfs.attributes(name)
-				if not mode then 
+				if not mode then
 					return false
 				end
 				return (mode.mode == 'directory') and true or false

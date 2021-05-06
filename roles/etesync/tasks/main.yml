@@ -1,0 +1,67 @@
+---
+- name: Pre-flight checks
+  import_tasks: assert.yml
+  become: True
+  tags:
+    - esc_assert
+
+- name: Install EteSync server
+  import_tasks: install.yml
+  become: True
+  tags:
+    - esc_install
+
+- name: Configure EteSync system user
+  import_tasks: configure_user.yml
+  become: True
+  tags:
+    - esc_configure_user
+
+- name: Configure EteSync server
+  import_tasks: configure_server.yml
+  become: True
+  tags:
+    - esc_configure_server
+
+- name: Configure nginx
+  import_tasks: configure_nginx.yml
+  become: True
+  tags:
+    - esc_configure_nginx
+
+- name: Configure Uvicorn
+  import_tasks: configure_uvicorn.yml
+  become: True
+  tags:
+    - esc_configure_uvicorn
+
+- name: Provision HTTPs certificate
+  import_tasks: https.yml
+  become: True
+  when: esc_do_https
+  tags:
+    - esc_https
+
+- name: EteBase superuser is already present
+  debug:
+    msg: |
+      EteBase has had superuser prior to this playbook run.
+      Investigate manually if needed.
+  when: esc_admins_num | int > 0
+
+- name: Show details of the added EteBase superuser
+  debug:
+    msg: |
+      Admin username: {{ esc_admin_out }}
+      Make sure to login into {{ ansible_host }} and run:
+
+      cd {{ esc_path }} && source .venv/bin/activate \
+      && ./manage.py changepassword {{ esc_admin_out }}
+  when: esc_admins_num | int == 0
+
+- name: LetsEncrypt results
+  debug:
+    msg: |
+      {{ esc_certbot_exec.stderr }}
+      {{ esc_certbot_exec.stdout }}
+  when: esc_certbot_exec is defined

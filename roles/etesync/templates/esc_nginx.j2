@@ -1,0 +1,30 @@
+upstream etebase {
+    server unix:///tmp/etebase_server.sock;
+}
+
+server {
+    listen      {{ esc_port }};
+    server_name{% for host in esc_hosts %} {{ host }}{% endfor %};
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 128M;
+
+    location /static/ {
+        alias {{ esc_rootdir }}/static/;
+    }
+
+    location / {
+        proxy_pass http://etebase;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $server_name;
+    }
+}

@@ -1,0 +1,15 @@
+---
+- name: Create Uvicorn systemd service
+  template:
+    src: esc_uvicorn_systemd.j2
+    dest: /etc/systemd/system/etebase_server.service
+  notify: 'reload systemd'
+  register: esc_uvicorn_systemd
+
+- name: Enable Uvicorn systemd service
+  systemd:
+    name: etebase_server.service
+    state: restarted
+    masked: False
+    enabled: True
+  when: esc_uvicorn_systemd.changed
