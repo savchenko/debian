@@ -1,6 +1,7 @@
 ---
 esc_admin: ''
 esc_admin_email: ''
+esc_cert_email: ''
 esc_debug: False
 esc_do_https: True
 esc_hosts: ['127.0.0.1']

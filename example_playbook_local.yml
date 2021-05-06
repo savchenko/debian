@@ -104,9 +104,9 @@
       setup_office: true
       setup_utils: true
       setup_wayland: true
-      systemd_units_disable: ['tor@default.service', 'tor.service']
+      systemd_units_disable: ['tor@default.service', 'tor.service', 'mpd.service']
       systemd_units_enable: ['syncthing@myusername.service']
-      systemd_units_masked: ['systemd-backlight@backlight:acpi_video0.service']
+      systemd_units_masked: ['systemd-backlight@backlight:acpi_video0.service', 'mpd.service']
       virtio_install: true
       virtio_network_autostart: true
       virtio_use_default_network: true
@@ -185,11 +185,14 @@
       - never
     vars:
       esc_admin: ''
-      esc_admin_email: 'test@example.com'
+      esc_admin_email: 'admin@example.com'
+      esc_cert_email: 'certs@example.com'
       esc_debug: False
-      esc_hosts: ['127.0.0.1','localhost']
+      esc_do_https: True
+      esc_hosts: ['etesync.example.com']
       esc_path: '/var/www/esc_server'
-      esc_port: 8000
+      esc_port: 80
+      esc_rm_existing: True
       esc_rootdir: '/var/www/html/esc_server'
       esc_user: 'www-uvicorn'
       esc_version: '43d5af32d72d5f59de7f31698076becf2430ccaa'
