@@ -4,43 +4,20 @@
 - name: Install utilities
   apt:
     pkg:
-      - archivemount
       - aria2
       - atool
       - bc
-      - catdoc
       - checksec
-      - colortest-python
-      - command-not-found
-      - docx2txt
       - entr
       - fzf
-      - gcolor3
       - gnupg2
-      - hexyl
       - jq
-      - keepassxc
-      - libsixel-bin
-      - light
       - ncal
-      - nmap
-      - odt2txt
       - p7zip-full
-      - pandoc
-      - pmount
       - rar
-      - rlwrap # cht.sh dependency
-      - scdaemon
-      - socat
-      - taskwarrior
-      - undertime
-      - unicode-data
       - unrar
       - wget
       - whois
-      - wordnet
-      - wordnet-sense-index
-      - yubioath-desktop
   when: setup_utils
 
 - name: Install Wayland desktop
@@ -48,22 +25,35 @@
     pkg:
       - adwaita-icon-theme
       - adwaita-qt
+      - archivemount
+      - colortest-python
+      - command-not-found
+      - gcolor3
       - gnome-icon-theme
       - gnome-themes-standard
       - grim
+      - keepassxc
       - libglib2.0-bin # gsettings
+      - libsixel-bin
+      - light
       - mako-notifier
       - qtwayland5
+      - rlwrap # cht.sh dependency
+      - scdaemon
       - slurp # screen area selector
+      - socat
       - sway
       - swaybg
       - swayidle
       - swaylock
+      - undertime
+      - unicode-data
       - waybar
       - wdisplays
       - wf-recorder
       - wl-clipboard
       - wofi
+      - yubioath-desktop
   when: setup_wayland
 
 - name: Install Clevis
@@ -72,15 +62,15 @@
       - clevis
       - clevis-initramfs
       - clevis-luks
-      - clevis-tpm2
       - clevis-systemd
+      - clevis-tpm2
   when: setup_clevis
 
 - name: Install fonts
   apt:
     pkg:
-      - fonts-jetbrains-mono
       - fonts-ibm-plex
+      - fonts-jetbrains-mono
       - fonts-liberation
       - fonts-powerline
       - fonts-recommended
@@ -94,8 +84,8 @@
       - dosfstools
       - exfatprogs
       - fuse-zip
-      - gocryptfs
       - fuseiso
+      - gocryptfs
   when: setup_fs
 
 - name: Install development tools
@@ -104,6 +94,7 @@
       - bpython
       - cargo
       - git
+      - hexyl
       - libxml2-utils # xmllint
       - make
       - pax-utils
@@ -116,8 +107,10 @@
 - name: Install office tools
   apt:
     pkg:
+      - catdoc
       - dbus-x11 # needed by loffice apparently
       - dictionaries-common
+      - docx2txt
       - hunspell
       - hunspell-en-au
       - liblibreofficekitgtk # needed for menus
@@ -126,6 +119,10 @@
       - libreoffice-style-sifr
       - lyx
       - mythes-en-au
+      - odt2txt
+      - pandoc
+      - wordnet
+      - wordnet-sense-index
   when: setup_office
 
 - name: Install internet tools
@@ -134,10 +131,10 @@
       - filezilla
       - firefox-esr
       - firefox-esr-l10n-en-gb
+      - nmap
       - syncthing
       - syncthing-gtk
       - weechat
-      - youtube-dl
   when: setup_internet
 
   # Setup multimedia
@@ -145,12 +142,14 @@
   - name: Install multimedia packages
     apt:
       pkg:
+        - atomicparsley # youtube-dl dependency
         - ffmpeg
         - imv
         - libimage-exiftool-perl
         - mpd
         - mpv
         - ncmpcpp
+        - youtube-dl
     when: setup_multimedia
 
   - name: Create mpd lyrics folder
@@ -159,8 +158,6 @@
       state: directory
       recurse: True
     become: False
-    tags:
-      - wtf
 
   when: setup_multimedia
   # Block end
