@@ -10,6 +10,8 @@
 - name: Assert we can continue with deletion
   assert:
     that: esc_rm_existing
+    success_msg: 'Will proceed with deleting existing EteSync...'
+    fail_msg: 'Existing EteSync detected, but "esc_rm_existing" is set to False'
   when: item.stat.exists
   with_items: '{{ esc_existing.results }}'
   register: esc_assert_rm

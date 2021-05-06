@@ -1,18 +1,31 @@
 ---
-  # Fails if ipv6 is disabled in kernel, #869799
-- name: Install nginx
-  apt:
-    name: nginx-light
-    state: latest
-  register: esc_nginx_install
-  failed_when: False
+- name: Check if nginx is/was installed
+  shell:
+    cmd: 'dpkg-query --show nginx'
+  failed_when: false
+  changed_when: false
+  register: esc_nginx_dpkg
 
-- name: Work around bug `#869799`
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
+  # >> If nginx isn't installed...
+- block:
 
-  # This must be a separate task due to the certbot-nginx
+    # Fails if ipv6 is disabled in kernel, #869799
+  - name: Install nginx
+    apt:
+      name: nginx-light
+      state: latest
+    register: esc_nginx_installed
+    failed_when: False
+    when: esc_nginx_dpkg.rc != 0
+
+  - name: Work around bug `#869799`
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+
+  when: esc_nginx_dpkg.rc != 0
+  # << Block end
+
 - name: Install dependencies
   apt:
     name: '{{ pkg }}'
@@ -20,7 +33,6 @@
   vars:
     pkg:
       - certbot
-      - nginx-light
       - python3-certbot-nginx
       - python3-virtualenv
       - uvicorn
