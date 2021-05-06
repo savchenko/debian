@@ -1,6 +1,7 @@
 # EteSync
 Configures [EteSync server](https://github.com/etesync/server) on the target host.
 
+
 ## Requirements
 
 - Ansible ≥2.9
@@ -31,7 +32,7 @@ Configures [EteSync server](https://github.com/etesync/server) on the target hos
 - It is recommended you do not define `esc_admin` and allow playbook to choose a random word for it.
 - If you _do_ define `esc_admin`, ensure it is at least 3 characters long.
 - Role will not create another superuser if there is already one in DB.
-- UFW/nftables are not covered in this role, use [base role] for it, like so
+- UFW/nftables are not covered in this role, use [base role](https://github.com/savchenko/debian/tree/bullseye/roles/base/) for it, like so:
   ```yaml
   ufw_rule:
   - { comment: 'Allow EteSync admin', direction: 'in', from: 'any', port: '1234', proto: 'tcp', rule: 'allow' }
@@ -41,9 +42,9 @@ Configures [EteSync server](https://github.com/etesync/server) on the target hos
   ```
 - It is strongly advised to keep `esc_port` set to 80. This will allow `certbot` to setup automatic redirect from HTTP to HTTPs.
 
+
 ## Dependencies
-Tested on machine that is already provisioned with the [base role](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md).  
-Likely to complain about missing packages if executed against untouched minimal installation.
+Tested on a remote that is already provisioned with the [base role](https://github.com/savchenko/debian/blob/bullseye/roles/base/README.md).  
 
 
 ## License
