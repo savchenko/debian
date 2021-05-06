@@ -103,8 +103,9 @@ let s:palette.gui.foreground = { 'dark' : "#bfbfbf"        , 'light' : "#000000"
 let s:palette.gui.selection  = { 'dark' : s:gui_selection  , 'light' : "#bcbcbc" }
 let s:palette.gui.line       = { 'dark' : s:gui_line       , 'light' : "#d0d0d0" }
 let s:palette.gui.comment    = { 'dark' : s:gui_comment    , 'light' : "#5f5f5f" }
-let s:palette.gui.red        = { 'dark' : "#cc6666"        , 'light' : "#5f0000" }
-let s:palette.gui.orange     = { 'dark' : "#de935f"        , 'light' : "#875f00" }
+" Red and orange are swapped on purpose!
+let s:palette.gui.red        = { 'dark' : "#de935f"        , 'light' : "#5f0000" }
+let s:palette.gui.orange     = { 'dark' : "#cc6666"        , 'light' : "#875f00" }
 let s:palette.gui.yellow     = { 'dark' : "#f0c674"        , 'light' : "#5f5f00" }
 let s:palette.gui.green      = { 'dark' : "#b5bd68"        , 'light' : "#005f00" }
 let s:palette.gui.aqua       = { 'dark' : "#8abeb7"        , 'light' : "#005f5f" }

@@ -345,7 +345,7 @@ exec_always $XDG_CONFIG_HOME/sway/clamshell.sh
 exec_always mako
 
 # Music daemon
-exec mpd
+exec_always mpd
 
 # https://git.archlinux.org/svntogit/community.git/tree/trunk/50-systemd-user.conf?h=packages/sway
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK

@@ -15,6 +15,8 @@ clr_reset=`tput sgr0`
 # Grep for a process without showing `grep` command itself
 psgrep() { grc ps ax | grep -v grep | grep "$@" -i --color=auto; }
 
+openports() { sudo lsof -Pni4 | awk '{print $1,$3,$8,$9}' | column -t; }
+
 # Make directory and cd into it
 mcd() { mkdir "$1" && cd "$1" || exit; }
 
@@ -30,6 +32,9 @@ tmx() { if [ $# -eq 1 ]; then tar cv "${1%/}" | xz -9 > "${1%/}.tar.xz" ; fi }
 
 # Whois abuse contact
 wabuse() { if [ $# -eq 1 ]; then whois ${1%} | grep -i abuse; fi }
+
+# Host SSH keys
+hostkeys() { for i in /etc/ssh/*key*; do ssh-keygen -l -f $i 2> /dev/null; done | sort -u; }
 
 # Lazy git
 lzg() { git add . && git commit -a -m "$@" && git push; }
@@ -319,7 +324,6 @@ alias fd="fdfind --hidden --no-ignore --follow"
 alias gpg="gpg2"
 alias ip="ip --color=auto"
 alias ipa="ip --color=auto -br addr"
-alias openports='sudo lsof -Pni4'
 alias psudo="sudo --preserve-env"
 alias remount_nfs="sudo mount -a -t cifs"
 alias rm="rm -I"
@@ -388,7 +392,6 @@ alias cmus='tmux attach-session -t cmus || tmux new-session -A -D -s cmus "$(whi
 alias timezones='undertime'
 alias mydnsip="dig +cdflag +dnssec +short myip.opendns.com @resolver1.opendns.com"
 alias myip="curl -s https://www.zx2c4.com/ip | cut -b1-15 | head -n1 | grep -o -P '^\d+\.\d+\.\d+\.\d+' | xargs"
-alias hostkeys="for i in /etc/ssh/*key*; do ssh-keygen -l -f $i 2> /dev/null; done | sort -u"
 alias ncmpcpp="ncmpcpp --quiet"
 alias ft='foot -f "Terminus"'
 
