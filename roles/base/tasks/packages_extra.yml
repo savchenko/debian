@@ -16,7 +16,6 @@
       - curl
       - debian-goodies
       - dfc
-      - universal-ctags
       - fd-find
       - fzf
       - gawk
@@ -35,7 +34,7 @@
       - sudo
       - tmux
       - tree
-      - vifm
+      - universal-ctags
       - wget
 
 - name: Import Lua tasklist
@@ -44,10 +43,14 @@
     apply:
       become: True
 
-- name: Install neovim without 'recommended' additions
+- name: Install neovim and vifm without 'recommended' additions
   apt:
-    name: neovim
+    name: '{{ pkg }}'
     install_recommends: False
+  vars:
+    pkg:
+      - vifm
+      - neovim
 
 - name: Install z.lua and czmod
   copy:

@@ -8,6 +8,6 @@
   apt:
     upgrade: 'yes' # https://serverfault.com/a/993211
 
-- name: Remove unneeded packages
+- name: Run `apt autoremove`
   apt:
     autoremove: true
