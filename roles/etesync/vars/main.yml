@@ -1,10 +1,11 @@
 ---
-esc_debug: True
-esc_hosts: ['127.0.0.1']
 esc_admin: ''
 esc_admin_email: ''
+esc_debug: False
+esc_hosts: ['127.0.0.1']
 esc_path: ''
 esc_port: 8000
+esc_rm_existing: False
 esc_rootdir: ''
 esc_user: www-uvicorn
 esc_version: ''

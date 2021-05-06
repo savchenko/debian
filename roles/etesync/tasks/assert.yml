@@ -1,0 +1,36 @@
+---
+- name: Check if there is an existing EteSync repo
+  stat:
+    path: '{{ item }}'
+  with_items:
+    - '{{ esc_path }}'
+    - '{{ esc_rootdir }}'
+  register: esc_existing
+
+- name: Assert we can continue with deletion
+  assert:
+    that: esc_rm_existing
+  when: item.stat.exists
+  with_items: '{{ esc_existing.results }}'
+  register: esc_assert_rm
+
+- name: Check if EteBase service is present
+  command: systemctl status etebase_server.service
+  register: esc_etebase_status
+  failed_when: esc_etebase_status.rc | int > 5
+
+- name: Ensure that EteBase is stopped
+  systemd:
+    name: etebase_server.service
+    state: stopped
+  when: esc_etebase_status.rc == 0
+
+- name: Delete existing EteSync folders
+  file:
+    path: '{{ item.stat.path }}'
+    state: absent
+  when:
+    - esc_assert_rm is defined
+    - esc_rm_existing
+    - item.stat.exists
+  with_items: '{{ esc_existing.results }}'

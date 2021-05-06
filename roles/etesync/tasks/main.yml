@@ -1,4 +1,10 @@
 ---
+- name: Pre-flight checks
+  import_tasks: assert.yml
+  become: True
+  tags:
+    - esc_assert
+
 - name: Install EteSync server
   import_tasks: install.yml
   become: True

@@ -12,12 +12,13 @@ Configures [EteSync server](https://github.com/etesync/server) on the target hos
 
 | Variable        | Description                                    | Default       |
 |-----------------|------------------------------------------------|---------------|
+| esc_admin       | Name of the EteSync administrator user.        | random word   |
+| esc_admin_email | E-mail of the administrator user.              | ''            |
 | esc_debug       | Deloy in debug mode?                           | False         |
 | esc_hosts       | List of domains/IPs on which server is served. | ['127.0.0.1'] |
 | esc_path        | Installation path                              | ''            |
 | esc_port        | Port of which to serve EteSync HTTPs.          | 8000          |
-| esc_admin       | Name of the EteSync administrator user.        | random word   |
-| esc_admin_email | E-mail of the administrator user.              | ''            |
+| esc_rm_existing | Replace existing EteSync installation?         | False         |
 | esc_rootdir     | Path to the user data                          | ''            |
 | esc_user        | User used to run the server                    | 'www-uvicorn' |
 | esc_version     | SHA1 hash of the commit to checkout.           | ''            |

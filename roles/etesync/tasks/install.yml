@@ -7,7 +7,7 @@
   register: esc_nginx_install
   failed_when: False
 
-- name: Work around bug \#869799
+- name: Work around bug `#869799`
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
