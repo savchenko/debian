@@ -1,5 +1,6 @@
-# EteSync
-Configures [nginx](https://tracker.debian.org/pkg/nginx) on the target host. The purpose of this role is not to expose every parameter imaginable to Ansible, but to provision hosts efficiently and consistently. Edit `.j2` templates if you must.
+# nginx
+
+Configures [nginx](https://tracker.debian.org/pkg/nginx) on a target host. The purpose of this role is not to expose every parameter imaginable to Ansible, but to provision hosts efficiently and consistently. Edit `.j2` templates if you must.
 
 
 ## Requirements
