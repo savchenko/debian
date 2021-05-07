@@ -1,0 +1,47 @@
+location * {
+    limit_req zone=ip burst=16;
+}
+
+location / {
+    try_files $uri $uri/ =404;
+}
+
+location = /favicon.ico {
+    log_not_found off;
+    access_log    off;
+}
+
+location = /robots.txt {
+    log_not_found off;
+    access_log    off;
+}
+
+location ~* \.(?:css(\.map)?|js(\.map)?|jpe?g|png|gif|ico|cur|heic|webp|tiff?|mp3|m4a|aac|ogg|midi?|wav|mp4|mov|webm|mpe?g|avi|ogv|flv|wmv)$ {
+    expires    12h;
+    access_log off;
+}
+
+location ~* \.(?:svgz?|ttf|ttc|otf|eot|woff2?)$ {
+    expires    12h;
+    access_log off;
+}
+
+location ~ /\.(?!well-known) {
+    deny all;
+}
+
+location /security.txt {
+    return 301 /.well-known/security.txt;
+}
+
+location = /.well-known/security.txt {
+    alias ~/security.txt;
+}
+
+location ~* \.(doc|pdf|md|gpg|odt|ods|xls|xlsx|docx|sql|sqlite)$ {
+    add_header  X-Robots-Tag "noindex, noarchive, nosnippet";
+}
+
+location ~ /\.ht {
+    deny all;
+}
