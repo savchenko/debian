@@ -37,13 +37,13 @@ Installation and configuration of various userland packages. [Readme](https://gi
 Distributes dotfiles to the target host. Supports either copying files to the remote host or symlinking from the role's [./files/](https://github.com/savchenko/debian/roles/dotfiles/files) to the destination directories within `$HOME`. Has its own [Readme](https://github.com/savchenko/debian/roles/dotfiles/README.md).
 
 ### Transfer agent
-Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/tree/bullseye/roles/transfer_agent).
+Creates jailed user that has access only to `sh` and `rsync`. Supports automatic propagation of SSH keys to the remote host. Traditionally, has [Readme](https://github.com/savchenko/debian/roles/transfer_agent).
 
 ### Wireguard
 All-inclusive, safe role to provision Wireguard in any mode imaginable. [Readme](https://github.com/savchenko/debian/roles/wireguard/README.md). 
 
 ### nginx
-Laconic, but fully-sufficient provisions an arbitrary number of domains on a remote `nginx` instance. [Readme](https://github.com/savchenko/debian/blob/stable/roles/nginx/README.md)
+Laconic, but fully-sufficient provisions an arbitrary number of domains on a remote `nginx` instance. [Readme](https://github.com/savchenko/debian/roles/nginx/README.md)
 
 ### EteSync
 Set-up EteBase server: uvicorn and nginx, includes automatic HTTPs via `certbot`. [Readme](https://github.com/savchenko/debian/blob/role_etesync/roles/etesync/README.md).
