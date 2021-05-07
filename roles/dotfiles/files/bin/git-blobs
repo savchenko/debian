@@ -3,7 +3,7 @@
 if [[ -d $1 ]]; then
   cd ${1};
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    heap="$(git verify-pack -v .git/objects/pack/*.idx | grep blob | cut -c1-40,48- | cut -d' ' -f1,3 | sort -n -r --key 2 | head -10 | numfmt --field=2 --to=iec-i --suffix=B --invalid=ignore)"
+    heap="$(git verify-pack -v .git/objects/pack/*.idx | grep blob | cut -c1-40,48- | cut -d' ' -f1,3 | sort -n -r --key 2 2> /dev/null | head -10 | numfmt --field=2 --to=iec-i --suffix=B --invalid=ignore)"
   else
     printf "Supplied folder is not a valid git repository.\n"
     exit 1

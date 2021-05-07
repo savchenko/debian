@@ -94,6 +94,7 @@
       - bpython
       - cargo
       - git
+      - git-sizer
       - hexyl
       - libxml2-utils # xmllint
       - make
