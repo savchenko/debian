@@ -20,10 +20,35 @@
 
   when: set_hostname
 
+
+- name: Check if user has an active sudo ticket
+  shell:
+    cmd: 'sudo whoami'
+  failed_when: False
+  changed_when: False
+  register: base_sudo_ticket
+
+- name: Assert that sudo ticket is valid
+  assert:
+    that:
+      - base_sudo_ticket.rc == 0
+      - base_sudo_ticket.stdout == 'root'
+    success_msg: 'sudo ticket is valid, enjoy the show.'
+    fail_msg: |
+      Unable to obtain sudo rights, output:
+        {{ base_sudo_ticket.stderr }}
+
 - name: Register user's home folder status
   stat:
     path: '{{ ansible_facts.user_dir }}'
   register: user_homedir
+
+- name: Assert the facts about user's home folder
+  assert:
+    that:
+      - ansible_facts.user_dir == ansible_env.HOME
+      - user_homedir.stat.writeable and user_homedir.stat.readable
+    fail_msg: '$HOME resolves differently or homedir of the target user isn not writeable'
 
 - name: Check if this is UEFI boot
   shell:
@@ -52,10 +77,3 @@
     - base_bootmode.stdout | bool
     - set_sigenforce
     - sb_status.rc == 0
-
-- name: Assert the facts about user's home folder
-  assert:
-    that:
-      - ansible_facts.user_dir == ansible_env.HOME
-      - user_homedir.stat.writeable and user_homedir.stat.readable
-    fail_msg: '$HOME resolves differently or homedir of the target user isn not writeable'
