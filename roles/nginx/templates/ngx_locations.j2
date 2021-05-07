@@ -39,7 +39,7 @@ location = /.well-known/security.txt {
 }
 
 location ~* \.(doc|pdf|md|gpg|odt|ods|xls|xlsx|docx|sql|sqlite)$ {
-    add_header  X-Robots-Tag "noindex, noarchive, nosnippet";
+    add_header X-Robots-Tag "noindex, noarchive, nosnippet";
 }
 
 location ~ /\.ht {
