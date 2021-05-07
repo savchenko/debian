@@ -192,6 +192,7 @@
       esc_hosts: ['etesync.example.com']
       esc_path: '/var/www/esc_server'
       esc_port: 80
+      esc_repository: 'https://github.com/etesync/server'
       esc_rm_existing: True
       esc_rootdir: '/var/www/html/esc_server'
       esc_user: 'www-uvicorn'
