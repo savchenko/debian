@@ -1,0 +1,8 @@
+---
+- name: Ensure nginx systemd unit is enabled and running
+  systemd:
+    name: nginx.service
+    state: restarted
+    masked: False
+    enabled: True
+  listen: 'restart nginx'
