@@ -11,6 +11,7 @@
   systemd:
     name: '{{ item }}'
     enabled: True
+    masked: False
   with_items: '{{ systemd_units_enable }}'
   when: systemd_units_enable | length > 0
 
@@ -18,5 +19,6 @@
   systemd:
     name: '{{ item }}'
     masked: True
+    enabled: False
   with_items: '{{ systemd_units_masked }}'
   when: systemd_units_masked | length > 0

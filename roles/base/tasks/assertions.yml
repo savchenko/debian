@@ -36,7 +36,7 @@
     success_msg: 'sudo ticket is valid, enjoy the show.'
     fail_msg: |
       Unable to obtain sudo rights, output:
-        {{ base_sudo_ticket.stderr }}
+        {{ base_sudo_ticket | to_nice_yaml }}
 
 - name: Register user's home folder status
   stat:
