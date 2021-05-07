@@ -1,0 +1,59 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+error_log /var/log/nginx/server_error.log warn;
+worker_rlimit_nofile 8192;
+load_module modules/ngx_http_echo_module.so;
+
+events {
+        multi_accept on;
+        worker_connections 8192;
+}
+
+http {
+        include /etc/nginx/sites-enabled/*.conf;
+        include mime.types;
+
+        # Basics
+        charset utf-8;
+        server_tokens off;
+        default_type application/octet-stream;
+        keepalive_timeout 60;
+
+        # Logging
+        log_not_found on;
+        access_log /var/log/nginx/http_access.log combined;
+        error_log /var/log/nginx/http_error.log warn;
+
+        # Performance
+        sendfile on;     # use sendfile for files <1Kb
+        tcp_nodelay on;  # TCP_NODELAY
+        tcp_nopush on;   # TCP_CORK
+
+        # Limits
+        types_hash_max_size 2048;  # MIME hash table
+        types_hash_bucket_size 64;
+        client_max_body_size 32M;
+
+        # Naive anti-ddos
+        limit_req_log_level warn;
+        limit_req_status 429;
+        limit_req_zone $binary_remote_addr zone=ip:4m rate=8r/s;
+
+        # SSL, stapling
+        ssl_stapling on;
+        ssl_stapling_verify on;
+        ssl_dhparam /etc/nginx/dhparam.pem;
+        resolver {{ ngx_resolver }} valid=360s; # Use local Knot instance
+        resolver_timeout 2s;
+
+        # Ciphers
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_prefer_server_ciphers off;
+        ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+
+        # Sessions
+        ssl_session_cache shared:SSL:8m;  # 1mb = ~4K sessions
+        ssl_session_timeout 8h;           # ~1 session per second
+        ssl_session_tickets off;          # Breaks PFS if on
+}
