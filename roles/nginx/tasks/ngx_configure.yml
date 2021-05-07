@@ -1,0 +1,71 @@
+---
+- name: Check if dhparams are already generated
+  stat:
+    path: '/etc/nginx/dhparam.pem'
+  register: ngx_stat_dhparam
+
+- name: Generate dhparams
+  shell:
+    cmd: 'openssl dhparam -out dhparam.pem 2048'
+    chdir: '/etc/nginx'
+  register: ngx_dhparam
+  when: not ngx_stat_dhparam.stat.exists
+
+- name: Verify dhparams
+  shell:
+    cmd: 'openssl dhparam -inform PEM -in dhparam.pem -check | head -0'
+    chdir: '/etc/nginx'
+  register: ngx_dhparam_verify
+  changed_when: False
+
+- name: Assert that `dhparam.pem` has passed verification
+  assert:
+    that:
+      - ngx_dhparam_verify.stderr == 'DH parameters appear to be ok.'
+    success_msg: 'DH parameters verified successfully'
+    fail_msg: |
+      Failed to verify DH parameters, please investigate:
+      {{ ngx_dhparam_verify | to_nice_yaml }}
+
+- name: Provision master nginx template
+  template:
+    src: ngx_nginx_master.j2
+    dest: /etc/nginx/nginx.conf
+  register: ngx_tpl_master
+  notify: 'restart nginx'
+
+  # >> If there are end-points to work on...
+- block:
+
+  - name: Provision endpoints
+    template:
+      src: ngx_endpoint.j2
+      dest: '/etc/nginx/sites-available/{{ item | regex_replace("\.", "-") }}.conf'
+    register: ngx_tpl_endpoint
+    with_items: '{{ ngx_endpoints }}'
+
+  - name: Ensure endpoint root-directories exist
+    file:
+      path: '/var/www/html/{{ item | regex_replace("\.", "-") }}'
+      state: directory
+    with_items: '{{ ngx_endpoints }}'
+
+  - name: Enable endpoints
+    file:
+      src: '/etc/nginx/sites-available/{{ item | regex_replace("\.", "-") }}.conf'
+      dest: '/etc/nginx/sites-enabled/{{ item | regex_replace("\.", "-") }}.conf'
+      state: link
+    with_items: '{{ ngx_endpoints }}'
+    notify: 'restart nginx'
+
+  when: ngx_endpoints | length > 0
+  # << Block end
+
+- name: Provision auxiliary snippets
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  with_items:
+    - { src: 'ngx_headers.j2', dest: '/etc/nginx/snippets/headers.conf' }
+    - { src: 'ngx_locations.j2', dest: '/etc/nginx/snippets/locations.conf' }
+  notify: 'restart nginx'

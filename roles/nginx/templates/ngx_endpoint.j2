@@ -1,0 +1,23 @@
+server {
+    server_name {{ item }};
+    listen 443 ssl http2;
+    root /var/www/html/{{ item | regex_replace("\.", "-") }};
+
+    include /etc/nginx/snippets/locations.conf;
+    include /etc/nginx/snippets/headers.conf;
+
+    index index.html index.htm;
+    add_header Access-Control-Allow-Origin "https://{{ item }}" always;
+
+    ssl_certificate /etc/letsencrypt/live/{{ item }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ item }}/privkey.pem;
+}
+
+server {
+    if ($host = {{ item }}) {
+        return 301 https://$host$request_uri;
+    }
+    listen      80;
+    server_name {{ item }};
+    return 404;
+}

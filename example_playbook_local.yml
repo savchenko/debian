@@ -197,3 +197,18 @@
       esc_rootdir: '/var/www/html/esc_server'
       esc_user: 'www-uvicorn'
       esc_version: '43d5af32d72d5f59de7f31698076becf2430ccaa'
+
+
+  - name: Execute `nginx` role
+    include_role:
+      name: nginx
+      apply:
+        tags:
+          - role_nginx
+    tags:
+      - never
+    vars:
+      ngx_flavour: 'full'
+      ngx_endpoints: ['example.com', 'example.net']
+      ngx_resolver: '127.0.0.1'
+      ngx_cert_email: 'letsencrypt@example.com'

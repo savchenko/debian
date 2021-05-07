@@ -1,0 +1,40 @@
+---
+- name: Detect domains already provisioned
+  shell:
+    cmd: 'certbot certificates | grep "Domains:" | cut -d":" -f2 | xargs'
+  register: ngx_certs_present
+  changed_when: False
+
+- name: Provision missing domains
+  shell:
+    cmd: 'certbot -n --nginx --agree-tos -d {{ item }} -m {{ ngx_cert_email }} run'
+  register: ngx_certbot_exec
+  with_items: '{{ ngx_endpoints }}'
+  when: item not in ngx_certs_present.stdout and ngx_endpoints | length > 0
+  notify: 'restart nginx'
+
+- name: Find all nginx configs
+  find:
+    paths: '/etc/nginx/sites-available/'
+    recurse: false
+    patterns: '*.conf'
+    size: '2'
+  register: ngx_existing_config_find
+
+- name: Comment-out certbot's ssl parameters
+  replace:
+    path: '{{ item.path }}'
+    regexp: '    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot'
+    replace: '    # include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot'
+  register: ngx_certbot_replace_ssl
+  with_items: '{{ ngx_existing_config_find.files }}'
+  when: ngx_existing_config_find.files | length > 0
+
+- name: Comment-out certbot's listen parameters
+  replace:
+    path: '{{ item.path }}'
+    regexp: '    listen 443 ssl; # managed by Certbot'
+    replace: '    # listen 443 ssl; # managed by Certbot'
+  register: ngx_certbot_replace_listen
+  with_items: '{{ ngx_existing_config_find.files }}'
+  when: ngx_existing_config_find.files | length > 0

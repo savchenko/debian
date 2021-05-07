@@ -1,0 +1,5 @@
+---
+ngx_cert_email: ''
+ngx_endpoints: []
+ngx_flavour: 'full'
+ngx_resolver: '127.0.0.1'
