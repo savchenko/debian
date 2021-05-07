@@ -10,6 +10,8 @@ Suggested execution order, all roles after "Base" are optional:
 1. Software
 1. Transfer agent
 1. Wireguard
+1. nginx
+1. EteSync
 1. Hosts
 
 ### Example usage
