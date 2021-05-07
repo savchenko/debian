@@ -51,7 +51,7 @@
       sshguard_path: /etc/sshguard/sshguard.conf
       sudo_cmd_nopwd: "/usr/bin/alsaucm,/usr/bin/apt,/usr/bin/dmesg,/usr/bin/light"
       sudo_set: true
-      sudo_user: tux
+      sudo_user: '{{ ansible_env.USER }}'
       timezone: Australia/Adelaide
       ufw_rule:
         - { comment: 'Drop incoming TCP traffic from 172.16.17.92 to port 22', direction: 'in', from: '172.16.17.92', port: '22', proto: 'tcp', rule: 'deny' }
@@ -105,7 +105,7 @@
       setup_utils: true
       setup_wayland: true
       systemd_units_disable: ['tor@default.service', 'tor.service', 'mpd.service']
-      systemd_units_enable: ['syncthing@myusername.service']
+      systemd_units_enable: ['syncthing@{{ ansible_env.USER }}.service']
       systemd_units_masked: ['systemd-backlight@backlight:acpi_video0.service', 'mpd.service']
       virtio_install: true
       virtio_network_autostart: true
