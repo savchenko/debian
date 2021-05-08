@@ -64,4 +64,4 @@
     msg: |
       {{ esc_certbot_exec.stderr }}
       {{ esc_certbot_exec.stdout }}
-  when: esc_certbot_exec is defined
+  when: esc_certbot_exec is defined and not esc_certbot_exec.skipped
