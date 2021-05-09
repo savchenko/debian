@@ -1,0 +1,15 @@
+*.doc             diff=lesspipe
+*.docx            diff=lesspipe
+*.epub            diff=lesspipe
+*.gif             diff=lesspipe
+*.odt             diff=lesspipe
+*.pdf             diff=lesspipe
+*.png             diff=lesspipe
+*.ppt             diff=lesspipe
+*.pptx            diff=lesspipe
+*.rtf             diff=lesspipe
+*.xls             diff=lesspipe
+*.xlsx            diff=lesspipe
+*.{jar,ja}        diff=lesspipe
+*.{jpg,jpeg}      diff=lesspipe
+*.{rar,7z,zip}    diff=lesspipe
