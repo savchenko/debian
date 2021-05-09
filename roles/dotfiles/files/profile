@@ -24,6 +24,9 @@ export HSTR_CONFIG=hicolor #,hide-help
 export HSTR_PROMPT="> "
 export LESSCHARSET=utf-8
 export LESSCOLOR=yes
+export LESSOPEN="|lesspipe.sh %s"
+export LESSQUIET=1
+export LESS_ADVANCED_PREPROCESSOR=1
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export MANPAGER="nvim -u $HOME/.config/nvim/init.vim -c 'set ft=man' -"
 export MANPATH="$HOME/.local/man:$MANPATH"
