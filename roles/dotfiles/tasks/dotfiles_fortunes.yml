@@ -1,0 +1,24 @@
+---
+- name: Create system-wide fortunes folder
+  file:
+    path: /usr/share/fortune
+    state: directory
+
+- name: Propagate fortunes
+  ansible.builtin.unarchive:
+    creates: /usr/share/fortune/st.txt
+    decrypt: False
+    dest: /usr/share/fortune
+    remote_src: False
+    src: st.zip
+
+- name: Check if DB is already present
+  stat:
+    path: /usr/share/fortune/st.txt.dat
+  register: fortunes_db
+
+- name: Create fortunes search DB
+  shell:
+    cmd: 'strfile st.txt'
+    chdir: '/usr/share/fortune'
+  when: not fortunes_db.stat.exists
