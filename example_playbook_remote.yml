@@ -127,6 +127,7 @@
       link_to_localhost: false
       remote_bash_emacs: false
       remote_gitconfig: true
+      setup_fortunes: true
       setup_neovim: true
 
 

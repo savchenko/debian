@@ -13,7 +13,7 @@ columns=$(tput cols)
 title=$(date +%A,\ %d$suffix\ of\ %B)
 
 if [[ $# -eq 1 && ${1%} == 'clear' ]]; then
-  quote="$(fortune -e ans)"
+  quote="$(fortune -e st.txt)"
   quote=$(printf "$quote\n\n")
   clear -x
 else
