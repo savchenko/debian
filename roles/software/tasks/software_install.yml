@@ -28,6 +28,7 @@
       - archivemount
       - colortest-python
       - command-not-found
+      - fortune
       - gcolor3
       - gnome-icon-theme
       - gnome-themes-standard
