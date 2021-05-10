@@ -1,2 +1,12 @@
 ---
-# tasks file for syncthing_server
+- name: Run sanity-checks
+  import_tasks: sctg_assertions.yml
+  become: True
+  tags:
+    - sctg_assert
+
+- name: Install Syncthing
+  import_tasks: sctg_install.yml
+  become: True
+  tags:
+    - sctg_install
