@@ -23,6 +23,7 @@ dotfiles_list:
   - { src: 'gnupg/gpg-agent.conf' , dest: '.gnupg/gpg-agent.conf' , state: 'link' }
   - { src: 'gnupg/gpg.conf'       , dest: '.gnupg/gpg.conf'       , state: 'link' }
   - { src: 'inputrc'              , dest: '.inputrc'              , state: 'link' }
+  - { src: 'gitattributes'        , dest: '.gitattributes'        , state: 'link' }
   - { src: 'man'                  , dest: '.local/man'            , state: 'link' }
   - { src: 'themes'               , dest: '.themes'               , state: 'link' }
   - { src: 'muttrc'               , dest: '.muttrc'               , state: 'link' }

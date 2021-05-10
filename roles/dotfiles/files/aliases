@@ -394,6 +394,7 @@ alias mydnsip="dig +cdflag +dnssec +short myip.opendns.com @resolver1.opendns.co
 alias myip="curl -s https://www.zx2c4.com/ip | cut -b1-15 | head -n1 | grep -o -P '^\d+\.\d+\.\d+\.\d+' | xargs"
 alias ncmpcpp="ncmpcpp --quiet"
 alias ft='foot -f "Terminus"'
+alias cpu_gcc='gcc -v -E -x c /dev/null -o /dev/null -march=native 2>&1 | grep /cc1'
 
 # Wireless
 alias wifimon='wavemon -g'

@@ -4,9 +4,9 @@
     content: 'Acquire::Languages "none";'
     dest: /etc/apt/apt.conf.d/99disable-translations
 
-- name: Install few packages we will need later on
+- name: Install several packages we will need later on
   apt:
-    name: ['curl', 'apt-transport-https', 'sudo', 'rsync']
+    name: ['curl', 'apt-transport-https', 'sudo', 'rsync', 'unzip']
     state: present
     update_cache: True
 

@@ -31,5 +31,12 @@
   tags:
     - dotfiles_neovim
 
+- name: Setup fortunes
+  import_tasks: dotfiles_fortunes.yml
+  become: True
+  when: setup_fortunes
+  tags:
+    - dotfiles_fortunes
+
 - name: Run all relevant handlers
   meta: flush_handlers

@@ -27,9 +27,9 @@
     dest: /etc/modprobe.d/iwlwifi_antiyoyo.conf
     content: 'options iwlwifi enable_ini=N'
 
-- name: Copy /etc/sysctl.conf
-  copy:
-    src: conf/sysctl.conf
+- name: Template /etc/sysctl.conf
+  template:
+    src: sysctl.j2
     dest: /etc/sysctl.conf
     owner: root
     mode: 0644
