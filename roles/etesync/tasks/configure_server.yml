@@ -99,3 +99,15 @@
     path: '{{ esc_path }}'
     owner: '{{ esc_user }}'
     group: '{{ esc_user }}'
+
+- name: Create ../media folder
+  file:
+    path: '{{ esc_rootdir }}/media'
+    state: directory
+
+- name: 'Set permissions on the {{ esc_rootdir }}'
+  file:
+    path: '{{ esc_rootdir }}'
+    owner: '{{ esc_user }}'
+    group: 'www-data'
+    recurse: True
