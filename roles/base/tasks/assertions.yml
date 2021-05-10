@@ -77,3 +77,28 @@
     - base_bootmode.stdout | bool
     - set_sigenforce
     - sb_status.rc == 0
+
+- name: Calculate max number of inotify watches
+  set_fact:
+    inotify_max_user_watches: '{{ onepc | float | round | int }}'
+  vars:
+    onepc: '{{ ansible_memory_mb.real.total * 1024 * 0.01 }}'
+
+- name: Increase inotify limit to the 8192 (host has <1Gb of RAM!)
+  set_fact:
+    inotify_max_user_watches: 8192
+  when: inotify_max_user_watches | int < 8192
+
+- name: Decrease inotify limit to the 1048576 (host has >128Gb of RAM!)
+  set_fact:
+    inotify_max_user_watches: 1048576
+  when: inotify_max_user_watches | int > 1048575
+
+- name: Assert that inotify value is sane
+  assert:
+    that:
+      - inotify_max_user_watches | int > 8191
+      - inotify_max_user_watches | int < 1048577
+    success_msg: 'Inotify checks passed, limit is {{ inotify_max_user_watches }}'
+    fail_msg: 'inotify limit calculated as {{ inotify_max_user_watches }}, this is wrong.\nPlease investigate'
+
