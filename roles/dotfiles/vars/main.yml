@@ -4,4 +4,5 @@ copy_dotfiles: false
 link_to_localhost: true
 remote_bash_emacs: false
 remote_gitconfig: true
+setup_fortunes: false
 setup_neovim: false

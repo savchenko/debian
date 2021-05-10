@@ -26,6 +26,7 @@
       - adwaita-icon-theme
       - adwaita-qt
       - archivemount
+      - brotli
       - colortest-python
       - command-not-found
       - fortune
@@ -35,8 +36,10 @@
       - grim
       - keepassxc
       - libglib2.0-bin # gsettings
+      - libplist-utils
       - libsixel-bin
       - light
+      - lz4
       - mako-notifier
       - qtwayland5
       - rlwrap # cht.sh dependency
@@ -55,6 +58,7 @@
       - wl-clipboard
       - wofi
       - yubioath-desktop
+      - zstd
   when: setup_wayland
 
 - name: Install Clevis
@@ -83,10 +87,10 @@
   apt:
     pkg:
       - dosfstools
-      - exfatprogs
       - fuse-zip
       - fuseiso
       - gocryptfs
+      - udisks2
   when: setup_fs
 
 - name: Install development tools
@@ -109,10 +113,13 @@
 - name: Install office tools
   apt:
     pkg:
+      - antiword
       - catdoc
       - dbus-x11 # needed by loffice apparently
       - dictionaries-common
+      - djvulibre-bin
       - docx2txt
+      - html2text
       - hunspell
       - hunspell-en-au
       - liblibreofficekitgtk # needed for menus
@@ -123,8 +130,10 @@
       - mythes-en-au
       - odt2txt
       - pandoc
+      - unrtf
       - wordnet
       - wordnet-sense-index
+      - wv
   when: setup_office
 
 - name: Install internet tools
@@ -144,8 +153,9 @@
   - name: Install multimedia packages
     apt:
       pkg:
-        - atomicparsley # youtube-dl dependency
+        - atomicparsley # youtube-dl, merges covers into audio files
         - ffmpeg
+        - id3v2
         - imv
         - libimage-exiftool-perl
         - mpd

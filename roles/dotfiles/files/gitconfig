@@ -112,6 +112,11 @@
 [diff "jpg"]
   textconv = exiftool
 
+[diff "lesspipe"]
+  textconv = LESSQUIET=1 lesspipe.sh
+  binary = true
+  cachetextconv = true
+
 [alias]
   b = blame -s
   c = commit

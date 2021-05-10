@@ -28,6 +28,7 @@ Role Variables
 | link_to_localhost  | Link to the target's $HOME from this role.                          | true    |
 | remote_bash_emacs  | Switch bash to "regular" Emacs-like mode.                           | false   |
 | remote_gitconfig   | Use `.gitconfig` without `gpgsign` and author's information.        | true    |
+| setup_fortunes     | Copy quotes for `fortunes` and generate its search DB.              | false   |
 | setup_neovim       | All-inclusive, 5-stars neovim setup.                                | false   |
  
 Dependencies

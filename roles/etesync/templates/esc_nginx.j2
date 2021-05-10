@@ -7,8 +7,8 @@ server {
     server_name{% for host in esc_hosts %} {{ host }}{% endfor %};
     charset     utf-8;
 
-    # max upload size
-    client_max_body_size 128M;
+    ssl_certificate /etc/letsencrypt/live/{{ item }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ item }}/privkey.pem;
 
     location /static/ {
         alias {{ esc_rootdir }}/static/;
@@ -27,4 +27,13 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Host $server_name;
     }
+}
+
+server {
+    if ($host = {% for host in esc_hosts %} {{ host }}{% endfor %}) {
+        return 301 https://$host$request_uri;
+    }
+    listen      80;
+    server_name {% for host in esc_hosts %} {{ host }}{% endfor %};
+    return 404;
 }
