@@ -1,2 +1,20 @@
 ---
-# TODO
+- name: Collect install steps
+  set_fact:
+    sctg_installs: '{{ sctg_installs | default([]) + [item] }}'
+  with_items: [sctg_install_client, sctg_install_disco, sctg_install_relay]
+
+- name: Check that at least one service is requested
+  assert:
+    that:
+      - sctg | unique == True
+    success_msg: 'Provisioning {{ sctg_installs | length }} units'
+    fail_msg: 'Neither Syncthing client, nor any of the server components are to be provisioned.'
+
+- name: Check that discovery address and ID look legitimate
+  assert:
+    that:
+      - sctg_client_disco_addr | length | int > 15
+      - sctg_client_disco_id | length | int == 63
+    success_msg: 'Discovery server looks about alright'
+  when: sctg_client_disco_addr or sctg_client_disco_id
