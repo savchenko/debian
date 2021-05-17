@@ -1,2 +1,60 @@
 ---
-# TODO
+
+# --- Install / apt -->
+
+- name: Install lxml Python module
+  apt:
+    name: python3-lxml
+    state: present
+
+- name: Ensure there are no Syncthing leftovers
+  apt:
+    name: ['syncthing', 'syncthing-discosrv', 'syncthing-relaysrv']
+    state: absent
+    purge: True
+
+- name: Install Debian`s Syncthing-Client (outdated, will be replaced)
+  apt:
+    name: 'syncthing'
+    state: present
+  when: sctg_install_client
+
+- name: Install Debian`s Discovery-Server (outdated, will be replaced)
+  apt:
+    name: 'syncthing-discosrv'
+    state: present
+  when: sctg_install_disco
+
+- name: Install Debian`s Relay-Server (outdated, will be replaced)
+  apt:
+    name: 'syncthing-relaysrv'
+    state: present
+  when: sctg_install_relay
+
+
+# --- Download -->
+
+
+- name: Download relay server
+  get_url:
+    url: https://github.com/savchenko/syncthing/releases/download/v1.16.2/strelaysrv
+    dest: /usr/bin/strelaysrv
+    mode: '0755'
+    checksum: 'sha256:{{ sctg_relay.shasum }}'
+  when: sctg_install_relay
+
+- name: Download discovery server
+  get_url:
+    url: https://github.com/savchenko/syncthing/releases/download/v1.16.2/stdiscosrv
+    dest: /usr/bin/stdiscosrv
+    mode: '0755'
+    checksum: 'sha256:{{ sctg_disco.shasum }}'
+  when: sctg_install_disco
+
+- name: Download client
+  get_url:
+    url: https://github.com/savchenko/syncthing/releases/download/v1.16.2/syncthing
+    dest: /usr/bin/syncthing
+    mode: '0755'
+    checksum: 'sha256:{{ sctg_client.shasum }}'
+  when: sctg_install_client
