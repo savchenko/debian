@@ -1,0 +1,222 @@
+---
+
+
+# --- Preflight -->
+
+
+- name: 'Ensure {{ sctg_client_home }} exists'
+  file:
+    path: '{{ sctg_client_home }}'
+    state: directory
+
+- name: Check if there is a config present
+  stat:
+    path: '{{ sctg_client_home }}/config.xml'
+  register: sctg_config_existing
+
+- name: Delete existing config
+  file:
+    path: '{{ sctg_client_home }}/config.xml'
+    state: absent
+  when: sctg_config_existing.stat.exists and sctg_client_scratch
+
+- name: Generate config
+  shell:
+    cmd: 'syncthing -generate={{ sctg_client_home }}'
+    chdir: '{{ sctg_client_home }}' # safety!
+  when: not sctg_config_existing.stat.exists
+
+- name: Register current device id
+  shell:
+    cmd: syncthing -device-id
+  register: sctg_device_id
+  failed_when: sctg_device_id.stdout | length | int != 63
+  changed_when: sctg_device_id.rc != 0
+
+- name: Save Syncthing device id
+  set_fact:
+    sctg_client: '{{ sctg_client | combine({"id":sctg_device_id.stdout}) }}'
+
+- name: Remove "defaults" section
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/defaults'
+    state: absent
+
+
+# --- Options -->
+
+
+- name: Listen only on ipv4/tcp:22000
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/listenAddress'
+    value: 'tcp4://0.0.0.0:22000'
+
+  # Broadcast
+- name: 'Set local announcements to {{ sctg_client_disco_local }}'
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/localAnnounceEnabled'
+    value: '{{ sctg_client_disco_local | string | lower }}'
+
+  # Unicast
+- name: 'Set global announcements to {{ sctg_client_disco_global }}'
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/globalAnnounceEnabled'
+    value: '{{ sctg_client_disco_global | string | lower }}'
+
+- name: Set global announcements server address
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/globalAnnounceServer'
+    value: '{{ sctg_client_disco_addr }}'
+  when: sctg_client_disco_global
+
+- name: Disable ipv6 announcements
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/localAnnounceMCAddr'
+    value: ''
+
+- name: Don't open web-browser automatically
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/startBrowser'
+    value: 'false'
+
+- name: Disable usage-reporting
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/urAccepted'
+    value: '-1'
+
+- name: Remove usage-reporting URL
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/urURL'
+    value: ''
+
+- name: Set reporting delay to Mersenne prime
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/urInitialDelayS'
+    value: '2147483647'
+
+- name: 'Set relaying to {{ sctg_client_relay_enable }}'
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/relaysEnabled'
+    value: '{{ sctg_client_relay_enable | string | lower }}'
+
+- name: 'Set NAT to {{ sctg_client_nat_enable }}'
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/natEnabled'
+    value: '{{ sctg_client_nat_enable | string | lower }}'
+
+- name: 'Disable automatic upgrades'
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/autoUpgradeIntervalH'
+    value: '0'
+
+- name: Increase minimum free disk space to 5%
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/minHomeDiskFree'
+    value: '5%'
+
+  # ref. https://github.com/syncthing/syncthing/issues/7682
+- name: Disable STUN servers as we rely on relaying or direct connect
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/stunServer'
+    value: ''
+
+
+# --- Device settings -->
+
+
+- name: Allow connecting to this device only from ipv4
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/device[@id="{{ sctg_client.id }}"]/allowedNetwork'
+    value: 'tcp4://0.0.0.0/0'
+
+- name: Disable GUI
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/gui'
+    attribute: 'enabled'
+    value: '{{ sctg_client_gui | string | lower }}'
+  when: not sctg_client_gui
+
+- name: Enable 'untrusted' feature-flag
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/featureFlag'
+    value: 'untrusted'
+  when: sctg_client_untrusted
+
+- name: Set device as untrusted
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/device/untrusted'
+    value: '{{ sctg_client_untrusted | string | lower }}'
+  when: sctg_client_untrusted
+
+
+# --- Default folder -->
+
+
+  # "One or more folder elements must be present in the file"
+- name: Register default folder path
+  stat:
+    path: '{{ sctg_client_default_dir }}'
+  register: sctg_stat_default
+
+- name: Create default share folder
+  file:
+    path: '{{ sctg_client_default_dir }}'
+    state: directory
+  register: sctg_stat_default_created
+  when: not sctg_stat_default.stat.exists
+
+- name: Assert that default folder path is valid
+  assert:
+    that: sctg_stat_default.stat.exists
+    success_msg: 'Default folder path exists'
+    fail_msg: 'Default folder path does not exist'
+  when: not sctg_stat_default_created is defined
+
+- name: Change default folder path
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/folder[@id="default"]'
+    attribute: 'path'
+    value: '{{ sctg_client_default_dir }}'
+
+- name: Pause default folder / share
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/folder[@id="default"]/paused'
+    value: '{{ sctg_client_default_pause | string | lower }}'
+  when: sctg_client_default_pause
+
+- name: Enforce default folder to be encrypted
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/folder[@id="default"]'
+    attribute: 'type'
+    value: 'receive-encrypted'
+  when: sctg_client_untrusted
+
+- name: Set default folder type
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/folder[@id="default"]'
+    attribute: 'type'
+    value: '{{ sctg_client_default_type }}'
+  when: not sctg_client_untrusted
