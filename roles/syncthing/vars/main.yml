@@ -1,2 +1,26 @@
 ---
-# vars file for syncthing_server
+sctg_client_default_dir: '/dev/null'
+sctg_client_default_pause: True
+sctg_client_default_type: 'sendreceive'
+sctg_client_disco_addr: ''
+sctg_client_disco_global: True
+sctg_client_disco_id: ''
+sctg_client_disco_local: False
+sctg_client_gui: False
+sctg_client_home: '{{ ansible_env.HOME }}/.config/syncthing'
+sctg_client_nat_enable: False
+sctg_client_relay_enable: True
+sctg_client_scratch: False
+sctg_client_untrusted: False
+
+# --- structs -->
+
+sctg_disco: {
+  'shasum': '6988838343dbf98eacb6678d551ae298fa85c1c0a4b0e2b2cff62e7228c442aa'
+}
+sctg_relay: {
+  'shasum': '715525cb0e835153a1ff465f312009c2ffc4d5d28294d850018087ee5727d238'
+}
+sctg_client: {
+  'shasum': '03ba1fb7326d0893fc5664602694144bbdf7717a895fb554fe89fb996f116433'
+}
