@@ -5,8 +5,28 @@
   tags:
     - sctg_assert
 
-- name: Install Syncthing
+- name: Install Syncthing applications
   import_tasks: sctg_install.yml
   become: True
   tags:
     - sctg_install
+
+- name: Configure Syncthing discovery server
+  import_tasks: sctg_configure_disco.yml
+  become: True
+  when: sctg_install_disco
+  tags:
+    - sctg_configure_disco
+
+- name: Configure syncthing client
+  import_tasks: sctg_configure_client.yml
+  become: True
+  when: sctg_install_client
+  tags:
+    - sctg_configure_client
+
+- name: Setup systemd unites
+  import_tasks: sctg_configure_systemd.yml
+  become: True
+  tags:
+    - sctg_configure_client
