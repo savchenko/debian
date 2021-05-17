@@ -68,11 +68,12 @@ input type:keyboard {
 }
 
 input type:touchpad {
-    dwt disabled
-    events disabled
-    middle_emulation disabled
+    dwt enabled
+    events enabled
+    middle_emulation enabled
     natural_scroll disabled
-    tap disabled
+    tap enabled
+    scroll_factor 0.5
 }
 
 # Hide cursor when typing, available in v1.5.1+
@@ -304,7 +305,7 @@ bindsym $mod+Ctrl+f floating toggle
 bindsym $mod+space focus mode_toggle
 
 # Toggles sticky window
-bindsym $mod+Ctrl+s sticky toggle
+bindsym $mod+Shift+s sticky toggle
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -329,6 +330,7 @@ bindsym $mod+Alt+e mode "$mode_system"
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="TfrmFileOp"] floating enable
 for_window [window_role="notification_banner"] floating enable
+for_window [title=".*mpv$"] floating enable, focus;
 
 # Waybar
 bar {

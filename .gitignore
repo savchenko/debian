@@ -8,3 +8,4 @@
 /test_*.yml
 /tmp*.*
 *.log
+roles/dotfiles/files/config/vifm/vifm-help.txt
