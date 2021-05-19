@@ -49,7 +49,7 @@
       sshd_less_secure: false
       sshguard_install: false
       sshguard_path: /etc/sshguard/sshguard.conf
-      sudo_cmd_nopwd: "/usr/bin/alsaucm,/usr/bin/apt,/usr/bin/dmesg,/usr/bin/light"
+      sudo_cmd_nopwd: "/usr/bin/alsaucm,/usr/bin/dmesg,/usr/bin/light"
       sudo_set: true
       sudo_user: '{{ ansible_env.USER }}'
       timezone: Australia/Adelaide

@@ -324,7 +324,7 @@ mode "$mode_system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Alt+e mode "$mode_system"
+bindsym Ctrl+Alt+Delete mode "$mode_system"
 
 # Keep these window roles floating (pop-ups)
 for_window [window_role="pop-up"] floating enable
