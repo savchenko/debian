@@ -395,6 +395,7 @@ alias myip="curl -s https://www.zx2c4.com/ip | cut -b1-15 | head -n1 | grep -o -
 alias ncmpcpp="ncmpcpp --quiet"
 alias ft='foot -f "Terminus"'
 alias cpu_gcc='gcc -v -E -x c /dev/null -o /dev/null -march=native 2>&1 | grep /cc1'
+alias issues_inxi='sudo inxi --audio --basic --battery --disk-full --bluetooth --full --flags --graphics --usb --memory --memory-modules --machine --network-advanced --system --admin -C -D -G -N --extra -A -B -C -D -E -G -N -s -xx -A -B -C -E -G -J --memory-modules -M -N -r -s -S --slots -xxx -A -B -C -D -E -G -J'
 
 # Wireless
 alias wifimon='wavemon -g'
