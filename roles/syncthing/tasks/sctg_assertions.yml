@@ -22,3 +22,30 @@
       - sctg_client_disco_id | length | int == 63
     success_msg: 'Discovery server looks about alright'
   when: sctg_client_disco_addr or sctg_client_disco_id
+
+- name: Check if Syncthing client is installed
+  ansible.builtin.command: dpkg-query --show syncthing
+  failed_when: false
+  changed_when: false
+  register: sctg_query_client
+
+- name: Check if Discovery-server is installed
+  ansible.builtin.command: dpkg-query --show syncthing-discosrv
+  failed_when: false
+  changed_when: false
+  register: sctg_query_disco
+
+- name: Check if Relay-server client is installed
+  ansible.builtin.command: dpkg-query --show syncthing-relaysrv
+  failed_when: false
+  changed_when: false
+  register: sctg_query_relay
+
+- name: Ensure we are allowed to overwrite things
+  assert:
+    that: '{{ not item.install }}'
+  when: item.present | int == 0 and not sctg_wipe
+  with_items:
+    - { install: '{{ sctg_install_client }}', present: '{{ sctg_query_client.rc }}' }
+    - { install: '{{ sctg_install_disco }}', present: '{{ sctg_query_disco.rc }}' }
+    - { install: '{{ sctg_install_relay }}', present: '{{ sctg_query_relay.rc }}' }

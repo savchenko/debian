@@ -25,13 +25,14 @@ Configures [Syncthing](https://github.com/etesync/server) on the target host.
 | sctg_client_home          | Where to store config and DB.         | '~/.config/syncthing' |
 | sctg_client_nat_enable    | Enable NAT-PMP / UPnP?                | False                 |
 | sctg_client_relay_enable  | Connect via relay(s)?                 | True                  |
-| sctg_client_scratch       | Wipe existing config?                 | False                 |
+| sctg_client_scratch       | Wipe existing client config?          | False                 |
 | sctg_client_untrusted     | Mark device as untrusted?             | False                 |
 | sctg_disco                | Hash of discovery server parameters.  | {}                    |
 | sctg_install_client       | Install client?                       | False                 |
 | sctg_install_disco        | Install discovery server?             | False                 |
 | sctg_install_relay        | Install relay server?                 | False                 |
 | sctg_relay                | Hash of relay server parameters.      | {}                    |
+| sctg_wipe                 | Re-write existing setup?              | False                 |
 
 
 ### Notes
