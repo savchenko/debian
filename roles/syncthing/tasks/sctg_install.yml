@@ -31,6 +31,30 @@
     state: present
   when: sctg_install_relay
 
+- name: Ensure Syncthing-Client service is enabled and stopped
+  systemd:
+    name: 'syncthing@{{ ansible_env.USER }}.service'
+    enabled: True
+    masked: False
+    state: stopped
+  when: sctg_install_client
+
+- name: Ensure Discovery-Server service is enabled and stopped
+  systemd:
+    name: 'syncthing-discosrv.service'
+    enabled: True
+    masked: False
+    state: stopped
+  when: sctg_install_disco
+
+- name: Ensure Relay-Server service is enabled and stopped
+  systemd:
+    name: 'syncthing-relaysrv.service'
+    enabled: True
+    masked: False
+    state: stopped
+  when: sctg_install_relay
+
 
 # --- Download -->
 
