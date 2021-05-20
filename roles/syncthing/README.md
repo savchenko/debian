@@ -32,12 +32,17 @@ Configures [Syncthing](https://github.com/etesync/server) on the target host.
 | sctg_install_disco        | Install discovery server?             | False                 |
 | sctg_install_relay        | Install relay server?                 | False                 |
 | sctg_relay                | Hash of relay server parameters.      | {}                    |
+| sctg_disco_override       | Override discovery server address/ID  | False                 |
 | sctg_wipe                 | Re-write existing setup?              | False                 |
 
 
 ### Notes
 
+- If you are running an instance of Syncthing on the discovery server, you must either add that instance to other devices using a static address or bind the discovery server and Syncthing instances to different IP addresses.
+
 - Role executes against user that is used to connect to the target host (`ansible_env.USER`). Ensure that user can `sudo` and provide password with `--ask-become-pass` if necessary.
+
+- If `sctg_disco_override` is set to `True`, playbook will provision Discovery server first and then use newly generated ID to configure client. Otherwise, it will use `sctg_client_disco_addr` and `sctg_client_disco_id` as defined.
 
 - `sctg_client_default_type` will be locked to "receive-encrypted" if `sctg_client_untrusted` is set to `True`.
 
@@ -71,8 +76,9 @@ Configures [Syncthing](https://github.com/etesync/server) on the target host.
 #### Discovery server
 
 ```yaml
-- sctg_relay: {
+- sctg_disco: {
                 'shasum': '03ba1fb7326d089...'
+                'id': 'AAAAAAA-BBBBBBB-...' # populated during run
                }
 ```
 

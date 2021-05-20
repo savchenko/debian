@@ -12,6 +12,7 @@ sctg_client_nat_enable: False
 sctg_client_relay_enable: True
 sctg_client_scratch: False
 sctg_client_untrusted: False
+sctg_disco_override: False
 sctg_wipe: False
 
 # --- structs -->

@@ -5,4 +5,42 @@
 # bind the discovery server and Syncthing instances to different IP
 # addresses.
 
-- name: 
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=985938
+- name: 'Fix Debian bug #985938'
+  lineinfile:
+    path: /etc/systemd/system/stdiscosrv.service
+    regexp: '^ExecStart\=\/usr\/bin\/stdiscosrv\ \$\{STDISCOSRV_OPTS\}'
+    line: 'ExecStart=/usr/bin/stdiscosrv $STDISCOSRV_OPTS'
+
+- name: Ensure that Discovery service is running
+  systemd:
+    name: 'syncthing-discosrv.service'
+    enabled: True
+    masked: False
+    state: started
+
+- name: Register device ID of the Discovery server
+  ansible.builtin.command: stdiscosrv
+  become_user: syncthing
+  args:
+    chdir: /var/lib/syncthing/discosrv
+  register: sctg_disco_out
+  failed_when: '"Server device ID" not in sctg_disco_out.stdout'
+  changed_when: False
+
+- name: Extract ID
+  set_fact:
+    sctg_disco: '{{ sctg_disco | combine({"id":sctg_disco_out.stdout_lines[1].split(" ")[4]}) }}'
+
+- name: Assert ID length
+  assert:
+    that:
+      - sctg_disco.id | length == 63
+    success_msg: 'ID is OK: {{ sctg_disco.id }}'
+    fail_msg: 'ID length is incorrect, here is what we`ve got: {{ sctg_disco.id }}'
+
+- name: Overwrite client variables
+  set_fact:
+    sctg_client_disco_addr: '127.0.0.1'
+    sctg_client_disco_id: '{{ sctg_disco.id }}'
+  when: sctg_disco_override

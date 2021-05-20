@@ -67,11 +67,19 @@
     xpath: '/configuration/options/globalAnnounceEnabled'
     value: '{{ sctg_client_disco_global | string | lower }}'
 
-- name: Set global announcements server address
+- name: Set global announcements server address # aka DISCOVERY server
   community.general.xml:
     path: '{{ sctg_client_home }}/config.xml'
     xpath: '/configuration/options/globalAnnounceServer'
     value: '{{ sctg_client_disco_addr }}'
+  when: sctg_client_disco_global
+
+- name: Set global announcements server ID # aka DISCOVERY server ID
+  community.general.xml:
+    path: '{{ sctg_client_home }}/config.xml'
+    xpath: '/configuration/options/globalAnnounceServer'
+    attribute: 'id'
+    value: '{{ sctg_client_disco_id }}'
   when: sctg_client_disco_global
 
 - name: Disable ipv6 announcements
@@ -158,7 +166,6 @@
     path: '{{ sctg_client_home }}/config.xml'
     xpath: '/configuration/options/featureFlag'
     value: 'untrusted'
-  when: sctg_client_untrusted
 
 - name: Set device as untrusted
   community.general.xml:
