@@ -126,7 +126,7 @@
   community.general.xml:
     path: '{{ sctg_client_home }}/config.xml'
     xpath: '/configuration/options/minHomeDiskFree'
-    value: '5%'
+    value: '5'
 
   # ref. https://github.com/syncthing/syncthing/issues/7682
 - name: Disable STUN servers as we rely on relaying or direct connect
